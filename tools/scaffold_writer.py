@@ -984,6 +984,8 @@ def write_gitignore() -> None:
         tmp/
         temp/
         out/
+        start_metadata.json
+        push
 
         # Backend (Spring/Gradle)
         backend/.gradle/
@@ -1015,8 +1017,13 @@ def write_gitignore() -> None:
         infra/**/*.backup
 
         # Codex / Agents
-        # 기본 정책: 설치된 스킬 결과물은 커밋하지 않는다.
+        # 기본 정책: 에이전트 로컬 자산(.agents/.claude)은 커밋하지 않는다.
+        .agents/
+        .claude/
+        # 아래는 정책 문서화를 위한 명시적 라인.
         .agents/skills/
+        tools/__pycache__/
+        **/*.pyc
         # 필요 시 팀 정책에 따라 아래 예외를 활성화해 특정 스킬만 고정할 수 있다.
         # !.agents/skills/<skill-name>/
         """,

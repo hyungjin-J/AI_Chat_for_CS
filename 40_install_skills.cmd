@@ -5,6 +5,8 @@ cd /d "%~dp0"
 
 set "WORKLOG=docs\ops\CODEX_WORKLOG.md"
 set "CODEX_HOME=%CD%\.agents"
+set "USERPROFILE=%CD%"
+set "HOME=%CD%"
 
 if not exist ".agents" mkdir ".agents"
 if not exist ".agents\skills" mkdir ".agents\skills"
@@ -13,6 +15,7 @@ if not exist ".agents\skills" mkdir ".agents\skills"
 >> "%WORKLOG%" echo - Step: install P0+P1 skills
 >> "%WORKLOG%" echo - CMD: npx skills add ... --skill ...
 >> "%WORKLOG%" echo - CODEX_HOME: %CODEX_HOME%
+>> "%WORKLOG%" echo - USERPROFILE override: %USERPROFILE%
 
 set /a OK_COUNT=0
 set /a FAIL_COUNT=0
@@ -57,13 +60,13 @@ exit /b 0
 
 :runSkill
 set "COMMAND_TO_RUN=%~1"
-echo [RUN] !COMMAND_TO_RUN!
-cmd /c "!COMMAND_TO_RUN!"
+echo [RUN] !COMMAND_TO_RUN! --yes --global
+cmd /c "!COMMAND_TO_RUN! --yes --global"
 if errorlevel 1 (
     set /a FAIL_COUNT+=1
-    >> "%WORKLOG%" echo - FAIL: !COMMAND_TO_RUN!
+    >> "%WORKLOG%" echo - FAIL: !COMMAND_TO_RUN! --yes --global
 ) else (
     set /a OK_COUNT+=1
-    >> "%WORKLOG%" echo - OK: !COMMAND_TO_RUN!
+    >> "%WORKLOG%" echo - OK: !COMMAND_TO_RUN! --yes --global
 )
 exit /b 0

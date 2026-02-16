@@ -123,3 +123,66 @@
 - Next: run 99_git_init_commit_push.cmd
 ## [2026-02-17  2:12:50.59] 99_git_init_commit_push.cmd
 - CMD: git init / git branch -M main / git remote add origin https://github.com/hyungjin-J/AI_Chat_for_CS.git / git add . / git commit / git push
+- Commit message: chore: bootstrap backend frontend infra and cmd automation
+- Result: success
+## [2026-02-17  2:15:00.89] 40_install_skills.cmd
+- Step: install P0+P1 skills
+- CMD: npx skills add ... --skill ...
+- CODEX_HOME: C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\.agents
+- USERPROFILE override: C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot
+- OK: npx skills add https://github.com/yanko-belov/code-craft --skill idempotency --yes --global
+- OK: npx skills add https://github.com/patricio0312rev/skills --skill rate-limiting-abuse-protection --yes --global
+- OK: npx skills add https://github.com/patricio0312rev/skills --skill redis-patterns --yes --global
+- OK: npx skills add https://github.com/patricio0312rev/skills --skill observability-setup --yes --global
+- OK: npx skills add https://github.com/vasilyu1983/ai-agents-public --skill software-backend --yes --global
+- OK: npx skills add https://github.com/patricio0312rev/skills --skill guardrails-safety-filter-builder --yes --global
+- OK: npx skills add https://github.com/patricio0312rev/skills --skill webhook-receiver-hardener --yes --global
+- OK: npx skills add https://github.com/laguagu/claude-code-nextjs-skills --skill postgres-semantic-search --yes --global
+- OK: npx skills add https://github.com/jackspace/claudeskillz --skill openai-api --yes --global
+- OK: npx skills add https://github.com/jeffallan/claude-skills --skill rag-architect --yes --global
+- FAIL: npx skills add https://github.com/yonatangross/orchestkit --skill dashboard-patterns --yes --global
+- OK: npx skills add https://github.com/jmerta/codex-skills --skill release-notes --yes --global
+- OK: npx skills add https://github.com/drillan/speckit-gates --skill release-check --yes --global
+- OK: npx skills add https://github.com/patricio0312rev/skills --skill skill-creator --yes --global
+- Installed OK: 13
+- Installed FAIL: 1
+- .agents\skills tree:
+  - guardrails-safety-filter-builder
+  - idempotency
+  - observability-setup
+  - openai-api
+  - postgres-semantic-search
+  - rag-architect
+  - rate-limiting-abuse-protection
+  - redis-patterns
+  - release-check
+  - release-notes
+  - skill-creator
+  - software-backend
+  - webhook-receiver-hardener
+- Result: partial failure
+- Cause/Fix: network issue or missing npx skills CLI. retry failed items manually.
+- Manual CMD: set CODEX_HOME=%CD%\.agents && npx skills add <repo_url> --skill <skill_name>
+- Next: run 50_generate_gitignore.cmd
+## [2026-02-17  2:15:54.39] 90_verify.cmd
+- Step: backend build + frontend install + docker file validation
+- CMD: cd /d backend && gradlew.bat clean build -x test
+- CMD: cd /d frontend && npm install
+- docker-compose file check: success
+- docker CLI check: not installed; file-only validation performed
+- Result: success
+- Next: run 99_git_init_commit_push.cmd
+## [2026-02-17  2:16:21.25] 50_generate_gitignore.cmd
+- Step: generate project .gitignore
+- CMD: python "tools\scaffold_writer.py" gitignore
+- File: .gitignore
+- Result: success
+- Next: run 60_generate_readme.cmd
+## [2026-02-17  2:16:54.76] 50_generate_gitignore.cmd
+- Step: generate project .gitignore
+- CMD: python "tools\scaffold_writer.py" gitignore
+- File: .gitignore
+- Result: success
+- Next: run 60_generate_readme.cmd
+## [2026-02-17  2:17:05.64] 99_git_init_commit_push.cmd
+- CMD: git init / git branch -M main / git remote add origin https://github.com/hyungjin-J/AI_Chat_for_CS.git / git add . / git commit / git push
