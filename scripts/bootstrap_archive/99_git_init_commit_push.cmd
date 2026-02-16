@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions
 chcp 65001 > nul
-cd /d "%~dp0"
+cd /d "%~dp0..\.."
 
 set "WORKLOG=docs\ops\CODEX_WORKLOG.md"
 set "REPO_URL=https://github.com/hyungjin-J/AI_Chat_for_CS.git"

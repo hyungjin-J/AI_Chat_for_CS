@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions
 chcp 65001 > nul
-cd /d "%~dp0"
+cd /d "%~dp0..\.."
 
 if not exist "docs\ops" mkdir "docs\ops"
 if not exist ".agents" mkdir ".agents"

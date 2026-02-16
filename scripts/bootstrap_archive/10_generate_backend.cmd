@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions
 chcp 65001 > nul
-cd /d "%~dp0"
+cd /d "%~dp0..\.."
 
 set "WORKLOG=docs\ops\CODEX_WORKLOG.md"
 if not exist "docs\ops" mkdir "docs\ops"
@@ -31,6 +31,7 @@ curl -fsSL -G "https://start.spring.io/starter.zip" ^
   --data-urlencode "name=backend" ^
   --data-urlencode "packageName=com.aichatbot" ^
   --data-urlencode "packaging=jar" ^
+  --data-urlencode "bootVersion=3.5.10" ^
   --data-urlencode "javaVersion=17" ^
   --data-urlencode "dependencies=web,actuator,security,validation" ^
   -o "backend.zip"

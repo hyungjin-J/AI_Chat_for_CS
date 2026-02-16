@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 chcp 65001 > nul
-cd /d "%~dp0"
+cd /d "%~dp0..\.."
 
 set "WORKLOG=docs\ops\CODEX_WORKLOG.md"
 set "CODEX_HOME=%CD%\.agents"

@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions
 chcp 65001 > nul
-cd /d "%~dp0"
+cd /d "%~dp0..\.."
 
 set "WORKLOG=docs\ops\CODEX_WORKLOG.md"
 >> "%WORKLOG%" echo ## [%date% %time%] 50_generate_gitignore.cmd
