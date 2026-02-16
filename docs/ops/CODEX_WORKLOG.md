@@ -190,3 +190,17 @@
 - Result: success
 ## [2026-02-17  2:17:35.00] 99_git_init_commit_push.cmd
 - CMD: git init / git branch -M main / git remote add origin https://github.com/hyungjin-J/AI_Chat_for_CS.git / git add . / git commit / git push
+## [2026-02-17  2:18:37.53] post-cleanup
+- Step: final cleanup for repo hygiene and reproducibility
+- CMD: del /f /q push start_metadata.json
+- Files changed:
+  - .gitignore (ignore accidental local debug artifacts)
+  - 40_install_skills.cmd (force --yes --global with USERPROFILE override for local .agents scope)
+  - 99_git_init_commit_push.cmd (avoid post-push worklog dirty state)
+- Skill install note:
+  - 13/14 requested skills installed under .agents/skills
+  - `dashboard-patterns` not found in https://github.com/yonatangross/orchestkit
+  - Manual fallback: choose closest available skill from that repo, for example `ui-components`
+- Result: success
+## [2026-02-17  2:18:55.44] 99_git_init_commit_push.cmd
+- CMD: git init / git branch -M main / git remote add origin https://github.com/hyungjin-J/AI_Chat_for_CS.git / git add . / git commit / git push
