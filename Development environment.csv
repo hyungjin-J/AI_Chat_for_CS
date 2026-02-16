@@ -1,0 +1,88 @@
+﻿section_order,section_name,section_id,item,type,version,description,source_file
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,DBeaver / DataGrip,DB Tool,최신 안정 버전(권장),"PostgreSQL/pgvector 스키마/쿼리 확인, 인덱스 및 성능 점검.
+- 참고 요구사항: KB-001~003, ADM-001~004, OPS-002",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Docker + Docker Compose,Web Server,최신 안정 버전(권장),"로컬 개발 통합 스택 구성(예: PostgreSQL, Redis(선택), Elasticsearch/OpenSearch(선택), Ollama).
+- 참고 요구사항: KB-002~003, LLM-001, OPS-001",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Nginx (선택),Web Server,1.24+(선택),"Reverse Proxy, HTTPS Termination, 정적 파일 서빙, SSE/WebSocket 프록시.
+- 참고 요구사항: UI-001",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,PostgreSQL + pgvector,Database,PostgreSQL 16+ / pgvector(선택),"업무 데이터 저장 + 벡터 저장소(지식베이스 임베딩/검색).
+- 참고 요구사항: KB-001~003, OPS-002",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Postman / Insomnia,IDE,최신 안정 버전(권장),"JWT 인증/권한, RAG/템플릿 추천 API, 관리자 API 테스트.
+- 참고 요구사항: SEC-001~002, RAG-001, TMP-001, TOOL-003",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Redis,Cache DB,7.x (운영 Prod 필수 / 개발용 선택),"세션/semantic cache/승인 답변 캐시/rate-limit 카운터 저장소. 운영(Prod) 필수, 로컬 개발은 선택 적용.
+- 참고 요구사항: CCH-001, CCH-002, SEC-004, LLM-003
+- cache key 네임스페이스/TTL/무효화 정책 필수",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Spring Tool Suite (STS),IDE,sts-4.32.0.RELEASE,"Spring Boot(Java 17) 백엔드 개발 IDE(Eclipse 기반).
+- 참고 요구사항: SEC-001~003, RAG-001~003, TOOL-001~003, ADM-001~006, OPS-001~002",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Vault / Cloud KMS,Security,선택,"외부 API 시크릿키 암호화 저장/회전 및 접근 감사(Audit) 로그.
+- 참고 요구사항: ADM-005, OPS-001",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Visual Studio Code,IDE,최신 안정 버전(권장),"React 프론트엔드 개발, 디버깅, 코드 포맷/린트.
+- 참고 요구사항: UI-001~004, SYS-001, SEC-002",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Elasticsearch/OpenSearch Client ,"API Lib, Network",선택,"하이브리드 검색(BM25) 및 필터링 구현 시 연동.
+- 참고 요구사항: KB-003",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Flyway / Liquibase (선택),Env,선택,"DB 스키마 마이그레이션/버전 관리(운영 롤백 전략과 연계).
+- 참고 요구사항: OPS-002, ADM-001",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,JUnit5 + Testcontainers ,Env,선택,"PostgreSQL/Redis/Elasticsearch/Ollama 등 통합 테스트 환경 구성.
+- 참고 요구사항: OPS-001, KB-002",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Java,Lang,17.0.16,"백엔드 런타임/빌드 타깃.
+- 참고: 주요 기능 문서 메타(Java 17.0.16)",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Micrometer / OpenTelemetry ,Middleware,선택,"메트릭/트레이싱 연동(trace_id 기반 흐름 재현).
+- 참고 요구사항: OPS-001",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Nimbus JOSE + JWT,"API Lib, Auth",Spring Boot BOM,"JWT 서명/검증, JWK/키 로테이션(선택) 구성에 활용.
+- 참고 요구사항: SEC-001",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,PostgreSQL JDBC Driver,API Lib,Spring Boot BOM,"PostgreSQL 연결(업무 DB + pgvector 확장 포함).
+- 참고 요구사항: KB-001~003",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Resilience4j (선택),Middleware,2.x(권장),"재시도/타임아웃/서킷브레이커로 폴백 및 안정성 확보.
+- 참고 요구사항: LLM-003",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring AI,Framework,프로젝트에서 확정,"RAG 오케스트레이션(검색→근거→응답), Structured Output(선택), Tool Calling(@Tool), MCP Client.
+- 참고 요구사항: KB-002~003, RAG-001~003, TOOL-001~003, MCP-001~002, LLM-001~003",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring Batch (선택),Framework,선택,"문서 변경 감지 및 재색인 배치(스케줄링/재시도 정책).
+- 참고 요구사항: ETL-001",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring Boot,Web F/W,3.x(권장),"REST API 서버 및 운영/배치 기반.
+- 적용 영역: 채팅/RAG API(RAG-001), 관리자 API(ADM-001~006), 배치(ETL-001), 알림/홈(SYS-001)",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring Data JPA (Hibernate),ORM,Spring Boot BOM,"템플릿/정책/모델/버전/승인 워크플로우 데이터 영속화.
+- 참고 요구사항: TMP-003, ADM-001~006, OPS-002",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring Security,Auth,Spring Boot BOM,"로그인/JWT 인증, RBAC(역할 기반 접근제어), 엔드포인트 보호.
+- 참고 요구사항: SEC-001, SEC-002, TOOL-003",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring Web (MVC) / WebFlux,"Network, Web F/W",Spring Boot BOM,"SSE 기반 스트리밍 응답 및 API 라우팅.
+- 참고 요구사항: UI-001(스트리밍), LLM-003(타임아웃/폴백)",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,Apache Tika,"Data Ops, Util",2.x,"PDF/HTML/Office 문서 텍스트 추출(파서). 문서 업로드 후 청킹/임베딩 단계 전처리에 사용. (KB-001, KB-002)",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,"Embedding Model (예: bge-m3, nomic-embed-text)",ML,,"문서 임베딩 생성 모델. 청킹/임베딩/인덱싱 파이프라인의 핵심 구성요소. 모델 버전/파라미터는 관리자에서 전환 가능. (KB-002, KB-003, ADM-001)",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,External LLM API Provider (선택),ML,,"외부 API 기반 LLM Provider(OpenAI/Anthropic 등). 에스컬레이션/라우팅/폴백 정책과 연계. 시크릿 키는 Vault/KMS 연동으로 관리(선택). (LLM-001, LLM-002, ADM-005)",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,JSON Schema Validation/Repair,Util,N/A (운영 Prod 필수 / 개발용 선택),"Answer Contract 강제: 구조화 JSON 스키마 검증 + 인용 필수.
+운영(Prod) 필수. 스키마 실패/인용 누락/근거 부족 시 사용자 전송 차단(fail-closed).
+텍스트 fallback 금지(관리자 검토용 draft만 허용).
+- 참고 요구사항: RAG-003, PERF-001, LLM-003",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,Ollama,DL,latest (local),"로컬 LLM/Embedding 런타임. 개발환경에서 빠른 반복을 위해 사용. (LLM-001, LLM-003, RAG-001)",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,RAG 평가/회귀 테스트,"ML/Stat, Stats",N/A (운영 Prod 필수 / 개발용 선택),"근거 일치율, 금지/필수 문구 준수율, 인용 누락률, fail-closed 전환률을 테스트셋으로 회귀 검증.
+운영(Prod) 필수. 배포 전에 기준치 미달 시 배포 중단.
+- 참고 요구사항: RAG-001, RAG-002, RAG-003, OPS-002",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,Reranker Model (선택),ML,,"검색 결과(Top-K) 재정렬로 근거 품질을 개선(선택). 하이브리드 검색과 함께 사용 시 효과적. (KB-003, RAG-001)",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,Tesseract OCR (선택),Data Ops,5.x,"스캔 PDF/이미지 기반 문서의 OCR 추출 보완(선택). 텍스트 추출 품질 이슈 시 적용. (KB-001, KB-002)",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+3,데이터 사이언스 (Data Science Core),fec01e7e95fb4b5c86ceb7bc4adfc5c1,Tokenizer/Token Counter (선택: jtokkit 등),Util,,"토큰 기반 chunk size/overlap 제어 및 비용/latency 추정(선택). 라우팅/에스컬레이션 판단에도 활용 가능. (KB-002, LLM-002)",3 데이터 사이언스 (Data Science Core) fec01e7e95fb4b5c86ceb7bc4adfc5c1_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,Axios (또는 fetch wrapper),Http,1.x,"API 호출(로그인/JWT 갱신, RAG 질의, 템플릿 CRUD 등). 인터셉터로 토큰 처리. (SEC-001, UI-001, ADM-001~006)",4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,DOMPurify (선택),DOM,3.x,"근거 패널/미리보기 렌더링 시 XSS 방지용 HTML Sanitizer(선택). (UI-002, SEC-003)",4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,Editor (TipTap/Monaco 등),Lib,,"답변 편집기 + 템플릿 적용/변경 이력 표시 UI. 복사/되돌리기 UX 포함. (UI-004, TMP-001~004)",4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,Node.js,Lang,22 LTS,"프론트엔드 빌드/개발 서버 런타임. (UI-001~004, SYS-001)",4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,React,Base,18.x,"상담 UI/관리자 UI 기본 프레임워크. (SYS-001, UI-001~004, ADM-001~006)",4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,React Router,DOM,6.x,상담원/관리자 화면 라우팅 및 권한 가드(RBAC) 적용. (SEC-002),4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,SSE Client (EventSource/Fetch stream),Http,,스트리밍 응답 수신(토큰 단위/문장 단위). 네트워크 끊김/재연결 처리 포함. (UI-001),4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,Sentry (선택),Metric,,프론트 오류/성능 모니터링(선택). trace_id 연계 시 디버깅 효율 향상. (OPS-001),4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,State Management (Zustand/Redux Toolkit),State,,대화 상태/근거 패널/템플릿 추천 모달/편집기 상태를 일관되게 관리. (UI-001~004),4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,TypeScript,Lang,5.x,UI 상태/요청 스키마를 타입으로 고정해 런타임 오류를 줄임. (UI-001~004),4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,UI Component Framework (MUI/Ant Design 등),UI F/W,,"모달/Drawer/테이블/폼 등 공통 컴포넌트. 템플릿 추천 UI와 관리자 CRUD 화면 구성에 사용. (UI-003, ADM-001~006)",4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,Vite,Build,5.x,개발 서버(HMR) 및 번들링. 빠른 반복 개발에 사용. (UI-001~004),4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,Vitest + React Testing Library,Build,,채팅/근거 패널/템플릿 추천/편집기 플로우를 테스트로 고정. 회귀 방지. (UI-001~004),4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+4,프론트엔드 (Frontend),593338a0951b4397ba946f9150387748,WebSocket Client (선택),Http,,양방향 통신이 필요할 경우 선택(스트리밍/상태 동기화). SSE 대비 인프라/운영 복잡도 증가. (UI-001),4 프론트엔드 (Frontend) 593338a0951b4397ba946f9150387748_all.csv
+5,로그 및 모니터링 (ELK Stack),d411f56292fe46a3a62b1aef4aad213e,Elastic APM (선택),Viz,,"APM/트레이싱 UI(선택). 도구 호출/LLM 호출까지 trace로 연결해 원인 분석. (OPS-001, LLM-003)",5 로그 및 모니터링 (ELK Stack) d411f56292fe46a3a62b1aef4aad213e_all.csv
+5,로그 및 모니터링 (ELK Stack),d411f56292fe46a3a62b1aef4aad213e,Filebeat / Fluent Bit (선택),Pipe,,애플리케이션 로그 수집/전송(선택). JSON 구조화 로그 + trace_id 필드 유지. (OPS-001),5 로그 및 모니터링 (ELK Stack) d411f56292fe46a3a62b1aef4aad213e_all.csv
+5,로그 및 모니터링 (ELK Stack),d411f56292fe46a3a62b1aef4aad213e,Logstash (선택),Pipe,,"로그 파싱/필드 정규화/마스킹 파이프라인(선택). PII 로그 통제 정책과 연계. (SEC-003, OPS-001)",5 로그 및 모니터링 (ELK Stack) d411f56292fe46a3a62b1aef4aad213e_all.csv
+5,로그 및 모니터링 (ELK Stack),d411f56292fe46a3a62b1aef4aad213e,OpenSearch / Elasticsearch,DB,"2.x / 8.x (운영 권장, 가급적 필수)","로그/감사 이벤트 저장 및 검색 엔진. 운영 권장(가급적 필수).
+- trace_id 인덱싱, 보관주기, 접근제어, PII 마스킹 정책 적용
+- 참고 요구사항: OPS-001, OPS-003, SEC-003",5 로그 및 모니터링 (ELK Stack) d411f56292fe46a3a62b1aef4aad213e_all.csv
+5,로그 및 모니터링 (ELK Stack),d411f56292fe46a3a62b1aef4aad213e,OpenSearch Dashboards / Kibana,Viz,"matching (운영 권장, 가급적 필수)","trace_id 기반 감사 로그 탐색, 대시보드, 알림 운영 도구. 운영 권장(가급적 필수).
+- 지연/오류/폴백/캐시히트율/토큰사용량 임계치 경보 구성
+- 참고 요구사항: OPS-001, OPS-003",5 로그 및 모니터링 (ELK Stack) d411f56292fe46a3a62b1aef4aad213e_all.csv
+5,로그 및 모니터링 (ELK Stack),d411f56292fe46a3a62b1aef4aad213e,OpenTelemetry Collector,Pipe,"0.x (운영 권장, 가급적 필수)","트레이스/메트릭 수집 및 Exporter 중앙화. 운영 권장(가급적 필수).
+- 지연, 오류율, 모델 폴백률, 캐시 히트율, 토큰 사용량 지표 연계
+- 참고 요구사항: OPS-001, OPS-003, PERF-001",5 로그 및 모니터링 (ELK Stack) d411f56292fe46a3a62b1aef4aad213e_all.csv

@@ -1,0 +1,64 @@
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE / Editor
+.idea/
+*.iml
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Environment / Secrets
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.jks
+service-account*.json
+
+# Logs / Temp
+*.log
+*.tmp
+tmp/
+temp/
+out/
+
+# Backend (Spring/Gradle)
+backend/.gradle/
+backend/build/
+backend/out/
+backend/tmp/
+backend/*.log
+backend/**/*.class
+# 산출 JAR/WAR는 기본 제외. 배포 정책이 생기면 예외 규칙으로 관리하세요.
+backend/**/*.jar
+backend/**/*.war
+
+# Frontend (Vite/Node)
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/coverage/
+frontend/*.log
+frontend/.env.local
+frontend/*.local
+
+# Infra local data / dump / backup
+infra/.data/
+infra/data/
+infra/volumes/
+infra/**/*.dump
+infra/**/*.sql
+infra/**/*.bak
+infra/**/*.backup
+
+# Codex / Agents
+# 기본 정책: 설치된 스킬 결과물은 커밋하지 않는다.
+.agents/skills/
+# 필요 시 팀 정책에 따라 아래 예외를 활성화해 특정 스킬만 고정할 수 있다.
+# !.agents/skills/<skill-name>/
