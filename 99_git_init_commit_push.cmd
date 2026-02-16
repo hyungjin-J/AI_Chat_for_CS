@@ -67,7 +67,5 @@ if errorlevel 1 (
     exit /b 1
 )
 
->> "%WORKLOG%" echo - Commit message: %COMMIT_MESSAGE%
->> "%WORKLOG%" echo - Result: success
 echo [OK] 99_git_init_commit_push done
 exit /b 0
