@@ -131,68 +131,57 @@ Notion 각 페이지 상단에 아래 정보를 유지하여 “최신/동기화
 “이번만 예외”, “단순 오타 수정” 등은 예외 사유가 되지 않는다.  
 스펙 파일이 변경된 모든 경우 Notion 동기화는 필수이다.
 
-#### 4. 예외 규정 없음
- ...
- 스펙 파일이 변경된 모든 경우 Notion 동기화는 필수이다.
-
-### 2.2-B Notion 동기화 자동화 (Codex + MCP) — 표준 워크플로우 (권장 → 운영상 사실상 필수)
+### 2.2-B Notion 동기화 자동화 (Codex + MCP) — CI 표준 (권장 → 운영상 사실상 필수)
 
 #### 목적
-스펙 변경 → Notion 반영 과정을 “사람 기억”에 의존하면 누락/분기가 쉽게 발생한다.
-따라서 스펙 파일을 수정하는 작업은 **가능하면 Codex가 MCP를 통해 Notion을 직접 업데이트**한다(자동화 우선).
+스펙/운영 문서 변경 → Notion 반영을 사람 기억에 의존하면 누락/분기가 발생한다.  
+따라서 동기화는 **Codex + MCP로 자동 실행**하는 것을 표준으로 한다(가능한 경우 수동 금지 수준).
 
-#### 적용 범위
-- 2.2의 “동기화 대상 매핑(파일 ↔ Notion)”에 포함된 스펙 파일(.csv/.xlsx) 변경 작업
-- (권장) `docs/ops/**` 등 운영 문서 변경 시, Operations & Governance 허브 페이지에 요약/링크를 반영
+#### 핵심 원칙 (Fail-Closed 유지)
+- 2.2-A의 실패 정의/DoD/예외 없음 규칙은 자동화에도 그대로 적용된다.
+- 동기화 대상 변경이 감지되면 CI에서 `codex exec`로 Notion 동기화를 실행한다.
+- Notion MCP 초기화 실패 또는 동기화 실패 시: **CI 실패 처리 → 병합/배포 금지**.
+- Notion은 “단일 진실원천”이 아니다. 진실원천은 레포의 스펙/문서 파일이며, Notion은 가시화 레이어다.
 
-#### 기본 원칙
-- 2.2-A의 **실패 정의 / DoD / 예외 없음** 규칙은 자동화에도 동일하게 적용된다.
-- 자동화가 가능한 환경(권한/토큰/네트워크 준비)에서는 **수동 업데이트 대신 MCP 자동화를 사용**한다.
-- MCP 자동화가 실패하면: Notion 동기화 미이행으로 간주(=작업 실패), PR 병합/배포 금지.
-- “Notion에서 먼저 편집 → 나중에 스펙 반영”은 분기 원인이므로 지양한다.
-  스펙이 단일 진실원천이며, Notion은 스펙을 **설명/요약/가시화**하는 레이어다.
+#### Codex MCP 구성 (필수)
+Codex MCP 설정은 `~/.codex/config.toml` 또는 프로젝트 `.codex/config.toml`로 구성할 수 있다.  
+CI에서는 `~/.codex/config.toml`을 런타임에 생성하여 사용한다.
 
-#### MCP 설정 (Codex)
-Codex는 MCP 서버 설정을 `~/.codex/config.toml` 또는 프로젝트 `.codex/config.toml`에서 읽는다.
-(프로젝트 스코프는 trusted project에서만 허용)
+**(필수) 네트워크 설정**
+Codex 기본 sandbox에서는 네트워크가 꺼져 있으므로, workspace-write에서 네트워크를 명시적으로 허용해야 한다.
+```toml
+approval_policy = "never"
+sandbox_mode = "workspace-write"
 
-**Notion 연결 옵션**
-1) (권장: CI/자동화) Token 기반 STDIO 서버: `npx -y @notionhq/notion-mcp-server`
-   - 환경 변수: `NOTION_TOKEN`
-   - 장점: CI에서 OAuth 없이 동작(구성 단순)
-2) (대안: 로컬/대화형) Notion Hosted MCP(HTTP/OAuth): `https://mcp.notion.com/mcp`
-   - 장점: OAuth 기반 “원클릭” 연결(도구 지원 환경에 유리)
+[sandbox_workspace_write]
+network_access = true
+```
 
-⚠️ Notion은 Hosted MCP(원격, OAuth)를 우선 지원하며, 로컬 MCP 서버의 지원 정책은 변동될 수 있다.
-자동화에 로컬 서버를 사용할 경우, 버전 고정/대체 경로(Hosted MCP 전환)까지 고려한다.
+**(필수) Notion MCP fail-closed**
+- CI에서는 `required = true`를 사용하여 Notion MCP 초기화 실패 시 즉시 작업을 실패 처리한다.
+- Notion은 Hosted MCP(OAuth)를 제공하며, CI는 일반적으로 `npx -y @notionhq/notion-mcp-server` + `NOTION_TOKEN` 조합을 사용한다.
 
-**예시: .codex/config.toml (CI 권장 형태)**
 ```toml
 [mcp_servers.notion]
 command = "npx"
-args = ["-y", "@notionhq/notion-mcp-server"]
+args = ["-y", "@notionhq/notion-mcp-server@2.1.0"]
 env_vars = ["NOTION_TOKEN"]
 required = true
 ```
 
-- `required = true`: MCP 초기화 실패 시 작업을 실패 처리(“MCP 없이 통과” 금지)
-- `NOTION_TOKEN`: 절대 레포에 커밋하지 말고, 로컬 `.env`(gitignore) 또는 CI secrets에서 주입
+#### CI 실행 표준
+- Codex CLI는 버전 고정을 위해 `@openai/codex@0.101.0`을 사용한다.
+- 동기화 대상이 변경된 PR에서 CI는 `codex exec`를 실행한다.
+- 동기화 대상 변경이 없으면 CI는 안전하게 스킵한다.
+- 동기화 대상 변경이 있는데 동기화가 실패하면 CI를 실패시켜 병합을 차단한다.
 
-#### 자동 동기화 수행 규칙 (에이전트)
-스펙 파일이 변경된 작업에서 에이전트(Codex)는 아래를 수행한다:
-1) Git diff로 변경된 스펙 파일(.csv/.xlsx) 목록을 확정한다.
-2) 2.2 매핑에 따라 해당 Notion 페이지를 MCP로 열고 업데이트한다.
-   - 페이지 상단 메타(Last synced at / Source file / Version(or commit) / Change summary) 갱신
-   - 변경된 내용 반영(표/섹션/첨부 파일)
-   - (권장) 자동화 섹션은 `[[AUTO_SYNC:...]]` 마커로 감싸 사람이 수정하지 않도록 한다
-3) `spec_sync_report.md`에 아래를 기록한다:
-   - 변경 파일, Notion URL, 반영 범위(요약), synced time(KST), commit hash, 수행자(에이전트/사람)
-4) 멱등성(Idempotency):
-   - 동일 commit이 이미 Notion 메타/리포트에 반영되어 있으면 중복 업데이트 금지(스킵)
+#### 비밀정보/토큰 정책 (강제)
+- `NOTION_TOKEN`, `OPENAI_API_KEY` 등 시크릿은 저장소에 절대 커밋하지 않는다.
+- 시크릿은 CI Secrets 또는 로컬 `.env`(gitignored)로만 주입한다.
 
-#### CI 적용 권장(강력 권고)
-- PR/merge 시 `.csv/.xlsx` 변경이 감지되면, CI에서 `codex exec`로 Notion 동기화를 실행하여 병합을 차단한다.
-- CI에서는 Notion MCP server를 `required = true`로 두어 “MCP 없이 통과”를 금지한다.
+#### 자동화 마커 (멱등성)
+- Notion 페이지 자동 동기화 블록은 `[[AUTO_SYNC:...]]` 마커로 식별한다.
+- `spec_sync_report.md`에도 커밋/동기화 키 기반 마커를 남겨 재실행 시 중복 반영을 방지한다.
 
 ### 2.3 스펙 정합성 자동 검증(권장)
 스펙 간 정합성은 사람 점검만으로는 회귀(regression)되기 쉽다. 가능하면 아래 검증을 자동화한다(예: `spec_consistency_check.py`).

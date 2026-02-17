@@ -1,0 +1,156 @@
+name: notion-zero-touch-sync
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    notion_sync:
+        runs-on: ubuntu-latest
+        timeout-minutes: 40
+
+        steps:
+            - name: Checkout PR head
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - name: Setup Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.11"
+
+            - name: Fetch base branch for diff
+              run: git fetch --no-tags --prune --depth=1 origin "${{ github.base_ref }}"
+
+            - name: Detect sync target changes
+              id: detect
+              run: |
+                  python scripts/notion_zero_touch_gate.py \
+                    --base-ref "origin/${{ github.base_ref }}" \
+                    --head-ref "${{ github.event.pull_request.head.sha }}" \
+                    --output-json "tmp/ci_notion_sync_context.json" \
+                    --github-output "$GITHUB_OUTPUT"
+
+            - name: Skip when sync targets did not change
+              if: steps.detect.outputs.notion_sync_changed != 'true'
+              run: echo "No Notion sync targets changed. Skip."
+
+            - name: Skip when already synced (idempotent)
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced == 'true'
+              run: |
+                  echo "Sync marker already exists for this sync key."
+                  echo "No-op to keep idempotency."
+
+            - name: Fail on fork PR when sync is required
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true' && github.event.pull_request.head.repo.full_name != github.repository
+              run: |
+                  echo "Fail-Closed: sync target changed but PR is from fork."
+                  echo "This workflow requires NOTION_TOKEN + OPENAI_API_KEY and push permission to PR branch."
+                  exit 1
+
+            - name: Setup Node
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+
+            - name: Validate required secrets
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              env:
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+                  NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+              run: |
+                  if [ -z "${OPENAI_API_KEY:-}" ]; then
+                    echo "OPENAI_API_KEY is required for codex exec."
+                    exit 1
+                  fi
+                  if [ -z "${NOTION_TOKEN:-}" ]; then
+                    echo "NOTION_TOKEN is required for Notion MCP."
+                    exit 1
+                  fi
+
+            - name: Generate Codex config (fail-closed MCP)
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              run: |
+                  mkdir -p "$HOME/.codex"
+                  cat > "$HOME/.codex/config.toml" <<'EOF'
+                  approval_policy = "never"
+                  sandbox_mode = "workspace-write"
+
+                  [sandbox_workspace_write]
+                  network_access = true
+
+                  [mcp_servers.notion]
+                  command = "npx"
+                  args = ["-y", "@notionhq/notion-mcp-server@2.1.0"]
+                  env_vars = ["NOTION_TOKEN"]
+                  required = true
+                  EOF
+
+            - name: Build Codex sync prompt
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              run: |
+                  python scripts/build_notion_sync_prompt.py \
+                    --context-json "tmp/ci_notion_sync_context.json" \
+                    --sync-key "${{ steps.detect.outputs.notion_sync_key }}" \
+                    --commit-sha "${{ github.event.pull_request.head.sha }}" \
+                    --pr-number "${{ github.event.pull_request.number }}" \
+                    --out "tmp/ci_notion_sync_prompt.md"
+
+            - name: Run Codex Notion sync (zero-touch)
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              env:
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+                  NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+              run: |
+                  npx -y @openai/codex@0.101.0 exec \
+                    --sandbox workspace-write \
+                    --cd "$GITHUB_WORKSPACE" \
+                    --output-last-message "tmp/ci_notion_sync_last_message.txt" \
+                    - < "tmp/ci_notion_sync_prompt.md"
+
+            - name: Validate sync marker and file scope
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              run: |
+                  marker="${{ steps.detect.outputs.notion_sync_marker }}"
+                  if ! grep -F "$marker" spec_sync_report.md >/dev/null; then
+                    echo "spec_sync_report.md is missing required auto-sync marker: $marker"
+                    exit 1
+                  fi
+
+                  if git diff --quiet -- spec_sync_report.md; then
+                    echo "spec_sync_report.md was not updated despite required sync."
+                    exit 1
+                  fi
+
+                  unexpected="$(git diff --name-only | grep -v '^spec_sync_report.md$' || true)"
+                  if [ -n "$unexpected" ]; then
+                    echo "Unexpected local modifications from codex sync:"
+                    echo "$unexpected"
+                    exit 1
+                  fi
+
+            - name: Commit and push sync report update
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git add spec_sync_report.md
+                  git commit -m "chore(ci): zero-touch notion sync (${{ steps.detect.outputs.notion_sync_key }})"
+                  git push origin "HEAD:${{ github.head_ref }}"
+
+            - name: Upload sync artifacts
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: notion-zero-touch-sync-artifacts
+                  path: |
+                      tmp/ci_notion_sync_context.json
+                      tmp/ci_notion_sync_prompt.md
+                      tmp/ci_notion_sync_last_message.txt
