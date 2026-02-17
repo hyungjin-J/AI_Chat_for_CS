@@ -23,24 +23,185 @@
 
 > 아래 파일들은 구현의 기준선입니다. **코드/테스트/문서가 스펙과 충돌하면 “코드가 틀린 것”** 으로 간주합니다.
 
-### 2.1 프로젝트 포함 스펙 파일 4종(업데이트됨)
-1. **`Summary of key features.csv`**  
-   - 핵심 기능 목록, 요구사항ID, 수용 기준(AC)/테스트 케이스, 필요한 스킬을 요약한 “기능 지도”.
-2. **`CS AI Chatbot_Requirements Statement.csv`**  
-   - ReqID 별 상세 구현 가이드(로직/예외/입출력/메트릭/보안) + 시나리오 단계 + 사전 조건.
-3. **`Development environment.csv`**  
-   - 개발/운영에 필요한 도구·인프라·버전 권장치(예: Java 17.0.16, Spring Boot 3.x, Node 22 LTS, Postgres 16+ 등).
-4. **`google_ready_api_spec_v0.3_20260216.xlsx`**  
-   - REST API 명세(Endpoint/Method/Role/Request/Response/비고) + 워크북 운영 규칙(_guide).
-
-### 2.2 스펙 변경 규칙(문서 무결성)
+### 2.1 스펙 변경 규칙(문서 무결성)
 - 스펙 파일의 컬럼/시트 구조는 **임의로 바꾸지 않는다**(자동화/문서화 파이프라인이 깨질 수 있음).
 - 스펙을 바꿨다면, 같은 PR/커밋에서 **구현/테스트도 함께** 업데이트한다.
 - 요구사항ID(예: `API-003`, `AI-009`, `TMP-001`)는 **추적성(tracing)** 을 위해 유지한다.
+- ReqID(요구사항ID) 마스터(단일 진실원천)는 `CS AI Chatbot_Requirements Statement.csv`로 고정한다.
+  - 다른 스펙/문서는 **Requirements에 존재하는 ReqID만 참조**해야 한다.
+  - 새로운 ReqID가 필요하면 “먼저 Requirements에 등록 → 나머지 문서 반영” 순서를 지킨다.
 - API 워크북(`google_ready_api_spec...xlsx`)은 **_guide의 규칙을 따른다**:  
   - API 행 편집은 **`전체API목록` 시트에서만** 수행한다.  
   - 카테고리별 시트/프로그램ID 목록 시트는 수동 편집 금지(자동 동기화 영역).  
   - 수식/드롭다운/자동 생성 셀을 덮어쓰지 않는다.
+
+### 2.2 레퍼런스 문서 변경 시 Notion 동기화 의무 (필수)
+
+#### 목적
+레퍼런스 스펙 파일(CSV/XLSX)과 Notion 문서가 분기되면, 요구사항/추적성/구현이 즉시 깨진다.  
+따라서 아래 파일 중 하나라도 수정하면, 해당 내용을 담고 있는 Notion 페이지도 **같은 작업 흐름(같은 PR/커밋/작업 세션)에서 즉시 업데이트**해야 한다.  
+(자동화 가능하면 자동화, 자동화가 어렵다면 “변경 요약 + 표/DB 업데이트 + 최신 파일 첨부”까지 수행)
+
+#### 동기화 대상 매핑(파일 ↔ Notion)
+- `Summary of key features.csv`
+  - https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149
+- `CS AI Chatbot_Requirements Statement.csv`
+  - https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+- `Development environment.csv`
+  - https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7
+- `google_ready_api_spec_v0.3_20260216.xlsx`
+  - https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+  - ※ Requirements 페이지와 동일 링크일 수 있음. 페이지 내부에 “API Spec” 섹션/토글을 분리해 관리한다.
+- `CS_AI_CHATBOT_DB.xlsx`
+  - https://www.notion.so/2ed405a3a720812180d9d508b77f31a4
+- `CS_RAG_UI_UX_설계서.xlsx`
+  - https://www.notion.so/UI-UX-2ee405a3a72080a58c93d967ef0f2444
+  - ※ 이미지 업로드/등록 시도 금지
+  - ※ 각 시트별로 제목 토글로 나누어 작성
+  - ※ 필요 시 Notion DB 적용 가능(단 토글 구조 유지)
+
+#### Notion 페이지 메타데이터(권장 → 운영상 사실상 필수)
+Notion 각 페이지 상단에 아래 정보를 유지하여 “최신/동기화 여부”를 사람이 즉시 판단할 수 있어야 한다.
+- `Last synced at` (날짜/시간)
+- `Source file` (파일명)
+- `Version` 또는 `Git commit/tag`
+- `Change summary` (핵심 변경 3~10줄)
+
+#### 체크리스트(작업 종료 조건)
+- (필수) 수정된 파일 내용이 Notion 페이지에 반영되었다.
+- (필수) Notion 페이지 상단 메타(`Last synced at / Source file / Version(or commit)`)가 갱신되었다.
+- (권장) 변경 요약과 TBD(근거 부족 항목)가 명확히 기록되었다.
+
+---
+
+### 2.2-A Notion 동기화 미이행 시 실패 처리 규칙 (강제 집행 레이어)
+
+⚠️ 이 규칙은 권고가 아니다. 집행 규칙이다.
+
+#### 1. 실패 정의
+
+다음 중 하나라도 충족하지 않으면 작업은 “실패(Failed)”로 간주한다.
+
+- 스펙 파일(.csv / .xlsx)이 변경되었으나 해당 Notion 페이지가 업데이트되지 않은 경우
+- Notion 페이지 상단 메타 정보가 갱신되지 않은 경우
+  - Last synced at
+  - Source file
+  - Version 또는 commit
+  - Change summary
+- spec_sync_report.md에 Notion 반영 내역이 기록되지 않은 경우
+
+위 조건 중 하나라도 누락되면:
+
+→ 작업 미완료  
+→ PR 병합 금지  
+→ 배포 금지  
+→ 재작업 대상  
+
+---
+
+#### 2. Definition of Done(DoD) 재정의
+
+스펙 파일이 변경된 작업은 다음을 모두 만족해야 “완료”로 인정한다:
+
+- [ ] 로컬 스펙 파일 수정 완료
+- [ ] 해당 Notion 페이지 동기화 완료
+- [ ] Notion 메타 정보 갱신 완료
+- [ ] spec_sync_report.md 작성 완료
+
+이 네 가지가 모두 충족되지 않으면 작업 완료로 인정하지 않는다.
+
+---
+
+#### 3. 자동 검증 권장(강력 권고)
+
+가능한 경우 다음을 자동화한다:
+
+- Git diff에서 .csv/.xlsx 변경 감지
+- spec_sync_report.md 존재 여부 확인
+- 커밋 메시지 또는 PR 템플릿에 Notion 동기화 체크 항목 포함
+
+자동 검증 실패 시:
+→ CI 실패 처리
+→ 병합 차단
+
+---
+
+#### 4. 예외 규정 없음
+
+“이번만 예외”, “단순 오타 수정” 등은 예외 사유가 되지 않는다.  
+스펙 파일이 변경된 모든 경우 Notion 동기화는 필수이다.
+
+#### 4. 예외 규정 없음
+ ...
+ 스펙 파일이 변경된 모든 경우 Notion 동기화는 필수이다.
+
+### 2.2-B Notion 동기화 자동화 (Codex + MCP) — 표준 워크플로우 (권장 → 운영상 사실상 필수)
+
+#### 목적
+스펙 변경 → Notion 반영 과정을 “사람 기억”에 의존하면 누락/분기가 쉽게 발생한다.
+따라서 스펙 파일을 수정하는 작업은 **가능하면 Codex가 MCP를 통해 Notion을 직접 업데이트**한다(자동화 우선).
+
+#### 적용 범위
+- 2.2의 “동기화 대상 매핑(파일 ↔ Notion)”에 포함된 스펙 파일(.csv/.xlsx) 변경 작업
+- (권장) `docs/ops/**` 등 운영 문서 변경 시, Operations & Governance 허브 페이지에 요약/링크를 반영
+
+#### 기본 원칙
+- 2.2-A의 **실패 정의 / DoD / 예외 없음** 규칙은 자동화에도 동일하게 적용된다.
+- 자동화가 가능한 환경(권한/토큰/네트워크 준비)에서는 **수동 업데이트 대신 MCP 자동화를 사용**한다.
+- MCP 자동화가 실패하면: Notion 동기화 미이행으로 간주(=작업 실패), PR 병합/배포 금지.
+- “Notion에서 먼저 편집 → 나중에 스펙 반영”은 분기 원인이므로 지양한다.
+  스펙이 단일 진실원천이며, Notion은 스펙을 **설명/요약/가시화**하는 레이어다.
+
+#### MCP 설정 (Codex)
+Codex는 MCP 서버 설정을 `~/.codex/config.toml` 또는 프로젝트 `.codex/config.toml`에서 읽는다.
+(프로젝트 스코프는 trusted project에서만 허용)
+
+**Notion 연결 옵션**
+1) (권장: CI/자동화) Token 기반 STDIO 서버: `npx -y @notionhq/notion-mcp-server`
+   - 환경 변수: `NOTION_TOKEN`
+   - 장점: CI에서 OAuth 없이 동작(구성 단순)
+2) (대안: 로컬/대화형) Notion Hosted MCP(HTTP/OAuth): `https://mcp.notion.com/mcp`
+   - 장점: OAuth 기반 “원클릭” 연결(도구 지원 환경에 유리)
+
+⚠️ Notion은 Hosted MCP(원격, OAuth)를 우선 지원하며, 로컬 MCP 서버의 지원 정책은 변동될 수 있다.
+자동화에 로컬 서버를 사용할 경우, 버전 고정/대체 경로(Hosted MCP 전환)까지 고려한다.
+
+**예시: .codex/config.toml (CI 권장 형태)**
+```toml
+[mcp_servers.notion]
+command = "npx"
+args = ["-y", "@notionhq/notion-mcp-server"]
+env_vars = ["NOTION_TOKEN"]
+required = true
+```
+
+- `required = true`: MCP 초기화 실패 시 작업을 실패 처리(“MCP 없이 통과” 금지)
+- `NOTION_TOKEN`: 절대 레포에 커밋하지 말고, 로컬 `.env`(gitignore) 또는 CI secrets에서 주입
+
+#### 자동 동기화 수행 규칙 (에이전트)
+스펙 파일이 변경된 작업에서 에이전트(Codex)는 아래를 수행한다:
+1) Git diff로 변경된 스펙 파일(.csv/.xlsx) 목록을 확정한다.
+2) 2.2 매핑에 따라 해당 Notion 페이지를 MCP로 열고 업데이트한다.
+   - 페이지 상단 메타(Last synced at / Source file / Version(or commit) / Change summary) 갱신
+   - 변경된 내용 반영(표/섹션/첨부 파일)
+   - (권장) 자동화 섹션은 `[[AUTO_SYNC:...]]` 마커로 감싸 사람이 수정하지 않도록 한다
+3) `spec_sync_report.md`에 아래를 기록한다:
+   - 변경 파일, Notion URL, 반영 범위(요약), synced time(KST), commit hash, 수행자(에이전트/사람)
+4) 멱등성(Idempotency):
+   - 동일 commit이 이미 Notion 메타/리포트에 반영되어 있으면 중복 업데이트 금지(스킵)
+
+#### CI 적용 권장(강력 권고)
+- PR/merge 시 `.csv/.xlsx` 변경이 감지되면, CI에서 `codex exec`로 Notion 동기화를 실행하여 병합을 차단한다.
+- CI에서는 Notion MCP server를 `required = true`로 두어 “MCP 없이 통과”를 금지한다.
+
+### 2.3 스펙 정합성 자동 검증(권장)
+스펙 간 정합성은 사람 점검만으로는 회귀(regression)되기 쉽다. 가능하면 아래 검증을 자동화한다(예: `spec_consistency_check.py`).
+
+**최소 체크(권장)**
+- Summary/DevEnv/API Spec/UIUX가 참조하는 모든 ReqID가 Requirements에 존재
+- API Spec의 `비고(ReqID:)` 목록 오타/누락 없음
+- 표준 용어(예: `secret_ref`, ROLE, SSE 이벤트 타입)가 문서/스펙에 일관되게 사용
+- UIUX “미매핑 처분”에 placeholder(예: `-`, 공백 key)가 남지 않음
 
 ---
 
@@ -65,7 +226,6 @@
 - LLM: Ollama(로컬) + 외부 API Provider(선택) **이중 지원**
 - Answer Contract: JSON Schema validation/repair + citations 강제
 - RAG 평가/회귀 테스트(운영 필수 권장)
-
 
 ### 3.4 로컬 개발 빠른 시작(에이전트용)
 
@@ -98,7 +258,7 @@
 
 ---
 
-## 4) 절대 규칙(Non‑negotiables) — 위반 시 “버그”
+## 4) 절대 규칙(Non-negotiables) — 위반 시 “버그”
 
 ### 4.1 Answer Contract / Fail-Closed
 - 사용자에게 노출되는 답변은 **항상 검증 가능한 구조화 결과**여야 한다.
@@ -124,6 +284,8 @@
 ### 4.4 테넌트 격리 / RBAC
 - `X-Tenant-Key` 기준으로 정책/스킨/지식베이스/캐시를 완전히 분리한다.
 - 권한(role)은 **서버에서 최종 검증**한다(UI는 보조).
+- ROLE 표준: `AGENT`, `CUSTOMER`, `ADMIN`, `OPS`, `SYSTEM`
+  - `Manager`, `System Admin` 같은 표현은 “ROLE”이 아니라 `ADMIN` 내부의 **권한 레벨(permissions)** 로 문서/기능에서 표기한다.
 - 권한 없는 호출은 403. 권한 변경 시 활성 세션 권한 재평가.
 
 ### 4.5 예산(Budget) & Abuse Defense
@@ -168,8 +330,9 @@
 ## 6) Backend 컨벤션 (Java / Spring Boot)
 
 ### 6.1 패키지/레이어 구조(권장)
-- 루트 패키지(예): `com.aichatbot`
-- 도메인 기준 패키지 분리 + 글로벌 공통 영역 분리
+루트 패키지(예): `com.aichatbot`
+
+도메인 기준 패키지 분리 + 글로벌 공통 영역 분리
 
 예시:
 ```
@@ -190,64 +353,67 @@ com.aichatbot
 └─ ops
 ```
 
-레이어 원칙:
-- Controller: 요청 검증/매핑/권한 체크/trace 컨텍스트 설정까지만(Thin)
-- Service: 비즈니스 로직(단, 너무 비대해지면 도메인 서비스로 분해)
-- Repository/DAO: 영속화/조회
-- DTO/VO: 외부 계약(API)과 내부 모델을 명확히 분리
+**레이어 원칙:**
+- `Controller`: 요청 검증/매핑/권한 체크/trace 컨텍스트 설정까지만(Thin)
+- `Service`: 비즈니스 로직(단, 너무 비대해지면 도메인 서비스로 분해)
+- `Repository/DAO`: 영속화/조회
+- `DTO/VO`: 외부 계약(API)과 내부 모델을 명확히 분리
 
 ### 6.2 네이밍 규칙
 - 변수/메서드: `camelCase`
 - 클래스/레코드: `PascalCase`
 - 상수: `UPPER_SNAKE_CASE`
-- 패키지: lower-case
+- 패키지: `lower-case`
 
 ### 6.3 API 구현 규칙(워크북 준수)
-- Endpoint/Method/Role/Request/Response는 **`google_ready_api_spec...xlsx`의 `전체API목록`** 을 1순위 기준으로 구현한다.
-- 공통 헤더(대표):
-  - `X-Trace-Id: <uuid>`
-  - `X-Tenant-Key: <tenant_key>`
-  - `Idempotency-Key: <uuid>` (POST/재시도 가능 요청)
-  - 인증 필요 시 `Authorization: Bearer <access_token>`
-- JSON 필드 네이밍: **snake_case** 를 기본으로 한다(예: `session_id`, `message_id`, `top_k`).
-  - Java DTO/record는 `camelCase`로 작성하되, Jackson naming strategy(예: SnakeCase)로 직렬화/역직렬화를 통일한다.
+Endpoint/Method/Role/Request/Response는 `google_ready_api_spec...xlsx`의 `전체API목록` 을 1순위 기준으로 구현한다.
 
+**공통 헤더(대표):**
+- `X-Trace-Id`: `<uuid>`
+- `X-Tenant-Key`: `<tenant_key>`
+- `Idempotency-Key`: `<uuid>` (POST/재시도 가능 요청)
+- 인증 필요 시 `Authorization`: `Bearer <access_token>`
+
+JSON 필드 네이밍: `snake_case` 를 기본으로 한다(예: `session_id`, `message_id`, `top_k`).
+
+Java DTO/record는 `camelCase`로 작성하되, Jackson naming strategy(예: SnakeCase)로 직렬화/역직렬화를 통일한다.
 
 ### 6.4 Idempotency(필수)
 - `Idempotency-Key` + (가능하다면) `client_nonce` 기반으로 중복 요청을 안전하게 처리한다.
 - 재시도에 대해 “중복 처리”가 발생하지 않게 저장/락/캐시 전략을 갖춘다.
 
 ### 6.5 데이터베이스(PostgreSQL) 규칙(권장)
-- 마이그레이션: Flyway/Liquibase 중 하나로 **버전 관리**
-- 테이블/컬럼: 기본은 `snake_case`(Postgres 관례)  
+- 마이그레이션: Flyway/Liquibase 중 하나로 버전 관리
+- 테이블/컬럼: 기본은 `snake_case`(Postgres 관례)
   - 예: `tb_session`, `tb_message`, `created_at`, `updated_at`
 - 공통 컬럼(권장): `created_at`, `updated_at`, `created_by`, `updated_by`, `tenant_key`
 - PII 컬럼은 암호화/마스킹 정책을 명확히 하고, 로그로 평문이 새지 않게 한다.
 
 ### 6.6 관측(Observability) 구현 규칙
-- 로그는 가급적 JSON 구조화 로그로 남기고, 최소 포함 필드:
-  - `trace_id`, `tenant_key`, `session_id`, `message_id`, `user_role`, `event_type`, `latency_ms`
-- OpenTelemetry/Micrometer로:
-  - API latency, SSE first-token latency, tool call latency
-  - fail-closed block count, answer_contract pass rate
-  - rate limited / quota exceeded count
+로그는 가급적 JSON 구조화 로그로 남기고, 최소 포함 필드:
+- `trace_id`, `tenant_key`, `session_id`, `message_id`, `user_role`, `event_type`, `latency_ms`
+
+OpenTelemetry/Micrometer로:
+- API latency, SSE first-token latency, tool call latency
+- fail-closed block count, answer_contract pass rate
+- rate limited / quota exceeded count
 
 ### 6.7 안정성(Resilience)
-- 외부 LLM/검색/스토리지 호출:
-  - timeout, retry(지수 백오프), circuit breaker 적용
-  - 단, 실패 시 **자유 텍스트**로 우회 금지(안전 응답/에러코드로 종료)
+외부 LLM/검색/스토리지 호출:
+- timeout, retry(지수 백오프), circuit breaker 적용
+- 단, 실패 시 자유 텍스트로 우회 금지(안전 응답/에러코드로 종료)
 
 ---
 
 ## 7) Frontend 컨벤션 (React / TypeScript)
 
 ### 7.1 기본 규칙
-- TypeScript `strict` 지향(가능한 `any` 금지)
+- TypeScript strict 지향(가능한 any 금지)
 - 컴포넌트: `PascalCase.tsx`
 - 훅: `useSomething.ts`
 - 상태/비즈니스 로직은 UI 컴포넌트에서 분리(커스텀 훅/서비스 레이어)
 
-권장 구조:
+**권장 구조:**
 ```
 src/
 ├─ api/              # axios/fetch wrapper, interceptors
@@ -261,10 +427,11 @@ src/
 ```
 
 ### 7.2 SSE 스트리밍 UX(필수)
-- 스트리밍 이벤트는 서버 계약을 따른다:
-  - `token`, `tool`, `citation`, `done`, `error`, `heartbeat`, `safe_response`
-- 네트워크 단절 시 자동 재연결 + `Last-Event-ID`/resume 처리(UI-005).
-- first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Contract를 만족해야 한다.
+스트리밍 이벤트는 서버 계약을 따른다:
+- `token`, `tool`, `citation`, `done`, `error`, `heartbeat`, `safe_response`
+
+네트워크 단절 시 자동 재연결 + Last-Event-ID/resume 처리(UI-005).
+first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Contract를 만족해야 한다.
 
 ### 7.3 보안/PII
 - 근거 패널/미리보기 HTML 렌더링 시 XSS 방지(예: DOMPurify).
@@ -278,8 +445,9 @@ src/
 - 폰트(권장): Pretendard 우선(Title 24px/Bold, Body 14px/Regular)
 
 **컬러 토큰(초기 권장값 — 필요 시 테넌트/스킨별 오버라이드)**
+
 | Token | Hex | 용도 |
-|---|---|---|
+| :--- | :--- | :--- |
 | Primary | #1e3a8a | 주요 버튼/헤더/선택 |
 | Success | #059669 | 완료/승인/성공 |
 | Warning | #d97706 | 경고/주의 |
@@ -294,27 +462,26 @@ src/
 - 컬럼 리사이즈
 - 컬럼 초기화(Reset) 액션
 
-
 ---
 
 ## 8) AI/RAG 구현 규칙 (핵심)
 
 ### 8.1 RAG 파이프라인(요약)
-1) 입력 전처리/필터(PII/금칙어/길이 제한)  
-2) 의도 분류/라우팅(FAQ/RAG/Tool/Handoff)  
-3) 검색(벡터 + BM25 하이브리드 + 필터링)  
-4) (선택) rerank  
-5) 답변 생성(근거 포함)  
-6) Answer Contract 검증(스키마/인용/근거점수)  
-7) 통과 시만 사용자 노출, 실패 시 fail-closed 또는 safe_response
+1. 입력 전처리/필터(PII/금칙어/길이 제한)
+2. 의도 분류/라우팅(FAQ/RAG/Tool/Handoff)
+3. 검색(벡터 + BM25 하이브리드 + 필터링)
+4. (선택) rerank
+5. 답변 생성(근거 포함)
+6. Answer Contract 검증(스키마/인용/근거점수)
+7. 통과 시만 사용자 노출, 실패 시 fail-closed 또는 safe_response
 
 ### 8.2 금지/필수 문구 정책(RAG-002)
 - 카테고리별 정책 번들(필수/금지 문구)을 버전 관리하고 즉시 반영 가능해야 한다.
 - 금지 표현이 발견되면 경고/재생성/차단 규칙을 적용한다.
 
 ### 8.3 템플릿 추천/치환(TMP-001~005)
-- 템플릿 추천 도구는 **기본 채팅 흐름에서 자동 실행 금지**.  
-  **오직 UI 버튼 액션**으로만 실행(쿨다운/세션 상한/예산 적용).
+- 템플릿 추천 도구는 기본 채팅 흐름에서 자동 실행 금지.
+- 오직 UI 버튼 액션으로만 실행(쿨다운/세션 상한/예산 적용).
 - placeholder 자동 채움 시:
   - 근거/질문/모델 출력에서 변수 추출
   - 미존재 변수는 빈칸/가이드로 남김
@@ -326,7 +493,6 @@ src/
 - semantic cache + session summary memory:
   - PII 제외
   - TTL + invalidation 정책 필수
-
 
 ### 8.5 오프라인/배치/평가 스크립트(Python 등) 컨벤션(사용 시)
 - 스타일: PEP 8 준수, 함수/변수 `snake_case`, 클래스 `PascalCase`, 상수 `UPPER_SNAKE_CASE`
@@ -354,11 +520,11 @@ src/
 - `safe_response`: fail-closed 시 안전 응답
 
 ### 9.3 상태 코드 가이드(권장)
-- 200 OK: 정상 조회/스트림
-- 201 Created / 202 Accepted: 비동기/큐잉 성격의 요청
-- 401/403: 인증/권한
-- 409/422: Answer Contract 실패 등 검증 에러
-- 429: rate-limit/quota/budget 초과
+- `200 OK`: 정상 조회/스트림
+- `201 Created` / `202 Accepted`: 비동기/큐잉 성격의 요청
+- `401`/`403`: 인증/권한
+- `409`/`422`: Answer Contract 실패 등 검증 에러
+- `429`: rate-limit/quota/budget 초과
 
 ---
 
@@ -391,8 +557,7 @@ src/
 ---
 
 ## 11) 문서/스프레드시트/PDF 등 산출물 작업 규칙 (Codex Skills 적용)
-
-> 이 프로젝트는 “스펙 파일(표)”과 “운영 문서”의 비중이 큽니다. 에이전트는 코드뿐 아니라 **문서 품질**도 동일하게 책임집니다.
+이 프로젝트는 “스펙 파일(표)”과 “운영 문서”의 비중이 큽니다. 에이전트는 코드뿐 아니라 문서 품질도 동일하게 책임집니다.
 
 ### 11.1 CSV/XLSX 편집 원칙
 - 컬럼/시트 구조, 헤더명, 데이터 타입을 임의 변경 금지.
@@ -400,31 +565,33 @@ src/
   - 관련 코드/테스트/문서 업데이트 동반
   - 스펙 내 요구사항ID/프로그램ID의 참조 무결성 유지
 - API 워크북은 `_guide` 시트의 운영 규칙을 따른다.
-- CSV 저장 규칙(권장): **UTF-8**, 구분자 `,`, 헤더 유지. (엑셀 호환이 필요하면 BOM 사용 여부는 팀 규칙에 따름)
+- CSV 저장 규칙(권장): UTF-8, 구분자 `,`, 헤더 유지. (엑셀 호환이 필요하면 BOM 사용 여부는 팀 규칙에 따름)
 - CSV의 컬럼명/순서/의미(스키마)는 “API/요구사항 추적성”의 일부이므로 임의 변경 금지.
-- XLSX 편집 시: **수식/드롭다운/서식/시트명**을 보존하고, 자동 생성 셀을 덮어쓰지 않는다.
+- XLSX 편집 시: 수식/드롭다운/서식/시트명을 보존하고, 자동 생성 셀을 덮어쓰지 않는다.
 - 수식이 있는 시트는 계산 오류(#REF!, #DIV/0! 등)가 없도록 확인하고, 엑셀 호환성이 낮은 동적 배열 함수(FILTER/XLOOKUP 등) 사용을 피한다.
 
 ### 11.2 DOCX/PDF 생성·수정(있을 경우)
-- 문서는 “보이는 결과물”이 중요하므로, 렌더링 결과(레이아웃/표/폰트 깨짐)를 반드시 확인한다.
-- 인용/링크/참조는 사람이 읽을 수 있는 형태로 유지한다(도구 내부 토큰 금지).
-- DOCX 편집(권장):
-  - 구조/스타일을 코드로 제어할 수 있는 도구(예: `python-docx`)를 사용해 재현 가능하게 수정한다.
-  - 큰 변경(섹션/표/스타일) 후에는 PDF로 렌더링하여 **페이지 단위로 레이아웃을 검수**한다(표 깨짐/줄바꿈/폰트 누락 방지).
-- PDF 생성/수정(권장):
-  - 코드로 생성 시(예: `reportlab`) 페이지 렌더링 이미지를 확인해 **잘림/겹침/가독성 문제**를 제거한다.
-- 산출물 품질 기준:
-  - 깨진 표/겹치는 텍스트/잘린 요소/임시 문구(placeholder) 남김은 금지.
+문서는 “보이는 결과물”이 중요하므로, 렌더링 결과(레이아웃/표/폰트 깨짐)를 반드시 확인한다.
+인용/링크/참조는 사람이 읽을 수 있는 형태로 유지한다(도구 내부 토큰 금지).
 
+**DOCX 편집(권장):**
+- 구조/스타일을 코드로 제어할 수 있는 도구(예: `python-docx`)를 사용해 재현 가능하게 수정한다.
+- 큰 변경(섹션/표/스타일) 후에는 PDF로 렌더링하여 페이지 단위로 레이아웃을 검수한다(표 깨짐/줄바꿈/폰트 누락 방지).
+
+**PDF 생성/수정(권장):**
+- 코드로 생성 시(예: `reportlab`) 페이지 렌더링 이미지를 확인해 잘림/겹침/가독성 문제를 제거한다.
+
+**산출물 품질 기준:**
+- 깨진 표/겹치는 텍스트/잘린 요소/임시 문구(placeholder) 남김은 금지.
 
 ---
 
 ## 12) 에이전트 작업 방식(권장 워크플로우)
 
 ### 12.1 작업 시작 시
-1) 변경하려는 기능의 요구사항ID(예: `AI-009`, `API-003`)를 먼저 확인한다.  
-2) API 변경이면 워크북 `전체API목록`에서 계약(요청/응답/권한)을 확인한다.  
-3) 설계/구현/테스트/문서 업데이트 범위를 짧게 계획한다.
+1. 변경하려는 기능의 요구사항ID(예: AI-009, API-003)를 먼저 확인한다.
+2. API 변경이면 워크북 `전체API목록`에서 계약(요청/응답/권한)을 확인한다.
+3. 설계/구현/테스트/문서 업데이트 범위를 짧게 계획한다.
 
 ### 12.2 작업 종료(Definition of Done)
 - 스펙과 구현이 일치한다(요구사항ID 기준).
@@ -432,6 +599,7 @@ src/
 - PII/보안/trace_id/예산/정책 위반이 없다.
 - 운영 관측(로그/메트릭/트레이스)이 누락 없이 남는다.
 - 변경 사항이 문서화되어 다음 사람이 이해 가능하다.
+- (스펙 수정 시 필수) Notion 동기화가 완료되지 않으면 작업 완료로 인정하지 않는다. (2.2-A 참조)
 
 ---
 
@@ -445,23 +613,22 @@ src/
 
 ---
 
----
-
 ## 14) 인코딩(Encoding) 전역 규칙 (필수)
 
 ### 14.1 UTF-8 강제 규칙
-- 본 프로젝트에서 작성·수정·생성되는 **모든 한글 텍스트는 반드시 UTF-8 인코딩을 사용한다.**
-- 적용 대상(예시):
-  - 소스/설정: `.java`, `.kt`, `.ts`, `.tsx`, `.js`, `.py`, `.md`, `.json`, `.yml`, `.yaml`, `.properties`, `.sql`
-  - 데이터/산출물: `.csv`, `.txt`, 생성되는 `.xlsx`, `.docx` 내부 텍스트, 로그 및 배치 산출물
-- CSV 저장 시 기본 인코딩은 **UTF-8**로 한다. (엑셀 호환이 필요하면 **UTF-8 BOM** 사용 여부를 명확히 결정하고 일관되게 적용)
+본 프로젝트에서 작성·수정·생성되는 모든 한글 텍스트는 반드시 **UTF-8 인코딩**을 사용한다.
+
+**적용 대상(예시):**
+- 소스/설정: `.java`, `.kt`, `.ts`, `.tsx`, `.js`, `.py`, `.md`, `.json`, `.yml`, `.yaml`, `.properties`, `.sql`
+- 데이터/산출물: `.csv`, `.txt`, 생성되는 `.xlsx`, `.docx` 내부 텍스트, 로그 및 배치 산출물
+- CSV 저장 시 기본 인코딩은 UTF-8로 한다. (엑셀 호환이 필요하면 UTF-8 BOM 사용 여부를 명확히 결정하고 일관되게 적용)
 - 서버/컨테이너 기본 파일 인코딩은 UTF-8로 설정한다.
   - Java: `-Dfile.encoding=UTF-8`
   - Linux/Container: `LANG=C.UTF-8` 또는 `LANG=en_US.UTF-8`
 
 ### 14.2 금지 사항
 - EUC-KR, CP949 등 레거시 인코딩 사용 금지
-- 한글 깨짐(�)이 발생하는 상태로 커밋 금지
+- 한글 깨짐()이 발생하는 상태로 커밋 금지
 - Excel 기본 ANSI 저장 후 재업로드 금지
 
 ### 14.3 검증 규칙(권장)
@@ -472,19 +639,17 @@ src/
 ---
 
 ## 15) Agent Skills 운영 규칙 (Codex Skills 적용 지침)
-
-> 목적: “스킬을 설치만 하고 방치”하는 상황을 막고, 이 프로젝트의 **P0 위험 구간(사고/운영 장애)** 을 스킬 기반 워크플로우로 고정한다.
+목적: “스킬을 설치만 하고 방치”하는 상황을 막고, 이 프로젝트의 **P0 위험 구간(사고/운영 장애)** 을 스킬 기반 워크플로우로 고정한다.
 
 ### 15.1 원칙
-- 스킬은 **프로젝트 표준 워크플로우(절차 지식)** 를 제공하는 도구이며, AGENTS.md의 전역 규칙(보안/계약/PII/테넌트)을 **대체하지 않는다**.
+- 스킬은 **프로젝트 표준 워크플로우(절차 지식)** 를 제공하는 도구이며, `AGENTS.md`의 전역 규칙(보안/계약/PII/테넌트)을 대체하지 않는다.
 - 스킬 설치/업데이트는 “외부 코드를 받아 실행”할 수 있으므로, 다음을 지킨다:
   - 신뢰 가능한 저장소만 사용
   - 가능하면 커밋/태그로 버전 고정(핀ning)
-  - 신규 도입 시: (1) SKILL.md 검토 → (2) 샌드박스 적용 → (3) 프로젝트 규칙과 충돌 여부 확인
+  - 신규 도입 시: (1) `SKILL.md` 검토 → (2) 샌드박스 적용 → (3) 프로젝트 규칙과 충돌 여부 확인
 
 ### 15.2 P0 설치 세트(요구사항 Must 안전장치)
 아래 스킬들은 멱등/레이트리밋/Redis/관측/가드레일/웹훅/pgvector 등 **운영 사고가 가장 자주 나는 구간**을 직접 커버한다.
-
 - `idempotency`
 - `rate-limiting-abuse-protection`
 - `redis-patterns`
@@ -515,24 +680,83 @@ src/
 - 릴리즈 산출물/체크리스트 자동화 → `release-notes`, `release-check`
 
 ### 15.5 “범용 스킬로는 위험한” 영역은 커스텀 스킬로 고정(권장)
-요구사항이 프로젝트 특화 계약(버튼 트리거, 스트리밍 순서, fail-closed 등)을 강제하는 영역은 범용 스킬로 억지 해결하지 말고,
-**프로젝트 전용 커스텀 스킬**로 “절대 규칙”을 박아둔다.
+요구사항이 **프로젝트 특화 계약(버튼 트리거, 스트리밍 순서, fail-closed 등)** 을 강제하는 영역은 범용 스킬로 억지 해결하지 말고,
+프로젝트 전용 커스텀 스킬로 “절대 규칙”을 박아둔다.
 
-권장 커스텀 스킬 후보:
-- `template-recommend-tool-gating`  
+**권장 커스텀 스킬 후보:**
+- `template-recommend-tool-gating`
   - 버튼 클릭/스코프 토큰 없이는 템플릿 추천 Tool 호출 금지
   - ToolContext는 LLM 입력에 포함하지 않음(서버 내부 컨텍스트로만 유지)
-- `citation-fail-closed-streaming`  
+- `citation-fail-closed-streaming`
   - citation 매핑 실패/파싱 실패 시 스트림 전송 차단 + 안전 전환(error/safe_response)
-  - `done` 이전 종료 및 resume token 규약 포함
-- `tenant-routing-and-isolation`  
-  - session_id ↔ tenant_key 강결합, 인덱스/캐시 prefix 규칙 강제
+  - done 이전 종료 및 resume token 규약 포함
+- `tenant-routing-and-isolation`
+  - `session_id` ↔ `tenant_key` 강결합, 인덱스/캐시 prefix 규칙 강제
   - 테넌트 경계 침범 차단(쿼리 필터/정책)
-- `approval-versioning-only`  
+- `approval-versioning-only`
   - 운영 read path는 “approved version”만 참조
   - 롤백은 “이전 approved”로만 가능
   - 변경 이벤트는 감사로그(trace_id)와 연결
 
----
+  ## 16) Repository Hygiene & Artifacts Policy (강제)
 
-끝.
+### 16.1 아티팩트 분류(필수)
+본 저장소의 “구현 코드 외 산출물”은 반드시 아래 4분류 중 하나로 귀속한다.
+
+- Source of Truth: 사람이 편집하는 공식 스펙/문서
+  - 예: docs/references/*.csv|*.xlsx, docs/uiux/*.xlsx, AGENTS.md, spec_sync_report.md
+- Generated: 스크립트로 재생성 가능한 산출물(수정 금지)
+  - 예: docs/references/generated/**
+- Reports: 검증/게이트/추적성 결과(기록 가치가 있는 리포트)
+  - 예: docs/**/reports/**
+- Temp/Cache/Backup: 임시/캐시/덤프/백업(원칙적으로 git 추적 금지)
+
+### 16.2 디렉터리 계약(Directory Contract)
+- 새로운 최상위 폴더 생성 금지.
+- 예외가 필요하면:
+  1) docs/ops/AUXILIARY_FILE_INDEX.md 업데이트
+  2) AGENTS.md에 규칙 추가
+  3) CI gate 업데이트
+  를 같은 PR에서 완료한다.
+
+### 16.3 Generated/Reports 편집 규칙(강제)
+- generated/ 또는 reports/ 하위 파일은 기본적으로 “수정 금지(Do not edit by hand)”를 원칙으로 한다.
+- 생성 스크립트/명령/생성일(또는 run_id)을 파일 헤더 또는 인접 README에 남긴다.
+- 생성 위치는 원본과 섞지 말고, 반드시 generated/ 또는 reports/로 격리한다.
+
+### 16.4 tmp/ 정책(강제)
+- tmp/는 로컬 작업용 임시 폴더이며, git에는 tmp/.gitkeep만 허용한다.
+- tmp/** 하위의 JSON/CSV/MD 덤프 파일 커밋 금지.
+- tmp/**가 PR diff에 포함되면 CI에서 실패 처리하는 것을 권장한다.
+
+### 16.5 캐시/파이썬 바이트코드 커밋 금지(강제)
+- **/__pycache__/**, *.pyc, .pytest_cache/, .mypy_cache/ 등 캐시는 절대 커밋 금지.
+- PR diff에 포함되면 “버그”로 간주하고 제거한다.
+
+### 16.6 _backup/ 정책(선택 -> 팀에서 1개로 고정)
+아래 중 하나를 저장소 표준으로 채택한다(혼용 금지).
+- (권장) _backup/은 레포에 커밋하지 않고, tag/release/CI artifact/외부 스토리지로 대체
+- (대안) _backup/은 zip 압축 + 최근 N개만 유지 + 보관정책 README 필수
+
+## 17) Repository Hygiene & Artifacts Policy
+
+### 17.1 tmp/ 커밋 금지
+- `tmp/`는 로컬 임시 작업 전용 폴더다.
+- Git에는 `tmp/.gitkeep`만 허용한다.
+- `tmp/**` 하위 파일(JSON/CSV/MD/덤프 등) 커밋은 금지한다.
+
+### 17.2 캐시 파일 커밋 금지
+- `**/__pycache__/`, `*.pyc`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`는 커밋 금지다.
+- PR diff에 포함되면 위생 위반으로 간주하고 제거한다.
+
+### 17.3 generated/reports 편집 규칙
+- `generated/`, `reports/` 폴더의 파일은 기본적으로 수동 편집 금지다.
+- 변경은 원본 스크립트 수정 후 재생성으로만 반영한다.
+- 스크립트, 명령, 생성시각(또는 run id)을 함께 기록한다.
+
+### 17.4 새 최상위 폴더 생성 금지 + 예외 절차
+- 새로운 최상위 디렉터리 생성은 금지한다.
+- 예외가 필요하면 같은 PR에서 아래 3가지를 모두 수행한다.
+1. `docs/ops/AUXILIARY_FILE_INDEX.md` 갱신
+2. 본 `AGENTS.md` 규칙 반영
+3. CI/검증 스크립트 영향 범위 점검 결과 첨부

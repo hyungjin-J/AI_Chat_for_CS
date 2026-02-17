@@ -981,7 +981,8 @@ def write_gitignore() -> None:
         # Logs / Temp
         *.log
         *.tmp
-        tmp/
+        tmp/**
+        !tmp/.gitkeep
         temp/
         out/
         start_metadata.json
@@ -1022,8 +1023,17 @@ def write_gitignore() -> None:
         .claude/
         # 아래는 정책 문서화를 위한 명시적 라인.
         .agents/skills/
+        **/__pycache__/
+        *.pyc
+        .pytest_cache/
+        .mypy_cache/
+        .ruff_cache/
+        scripts/__pycache__/
         tools/__pycache__/
-        **/*.pyc
+        tests/__pycache__/
+        _backup/**
+        !_backup/README.md
+        !_backup/.gitkeep
         # 필요 시 팀 정책에 따라 아래 예외를 활성화해 특정 스킬만 고정할 수 있다.
         # !.agents/skills/<skill-name>/
         """,
@@ -1054,17 +1064,17 @@ def write_readme() -> None:
 
         ## 3) 자동화 스크립트 실행 순서 (CMD)
         ```cmd
-        00_bootstrap.cmd
-        10_generate_backend.cmd
-        11_backend_skeleton.cmd
-        20_generate_frontend.cmd
-        21_frontend_skeleton.cmd
-        30_generate_infra.cmd
-        40_install_skills.cmd
-        50_generate_gitignore.cmd
-        60_generate_readme.cmd
-        90_verify.cmd
-        99_git_init_commit_push.cmd
+        tools\bootstrap_archive\00_bootstrap.cmd
+        tools\bootstrap_archive\10_generate_backend.cmd
+        tools\bootstrap_archive\11_backend_skeleton.cmd
+        tools\bootstrap_archive\20_generate_frontend.cmd
+        tools\bootstrap_archive\21_frontend_skeleton.cmd
+        tools\bootstrap_archive\30_generate_infra.cmd
+        tools\bootstrap_archive\40_install_skills.cmd
+        tools\bootstrap_archive\50_generate_gitignore.cmd
+        tools\bootstrap_archive\60_generate_readme.cmd
+        tools\bootstrap_archive\90_verify.cmd
+        tools\bootstrap_archive\99_git_init_commit_push.cmd
         ```
 
         ## 4) 개별 실행 가이드

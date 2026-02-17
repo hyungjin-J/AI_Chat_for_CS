@@ -1,0 +1,615 @@
+erDiagram
+    TB_TENANT {
+        UUID id PK
+        VARCHAR tenant_key
+        VARCHAR tenant_name
+        VARCHAR status
+        VARCHAR plan_tier
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_TENANT_DOMAIN {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR host
+        VARCHAR locale
+        BOOLEAN is_default
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_USER {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR login_id
+        VARCHAR display_name
+        VARCHAR status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_ROLE {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR role_code
+        VARCHAR role_name
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_PERMISSION {
+        UUID id PK
+        VARCHAR perm_code
+        VARCHAR perm_name
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_USER_ROLE {
+        UUID id PK
+        UUID tenant_id FK
+        UUID user_id FK
+        UUID role_id FK
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_ROLE_PERMISSION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID role_id FK
+        UUID permission_id FK
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_AUTH_SESSION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID user_id FK
+        VARCHAR session_token_hash
+        TIMESTAMP expires_at
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_CHANNEL {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR channel_code
+        VARCHAR channel_name
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_WIDGET_INSTANCE {
+        UUID id PK
+        UUID tenant_id FK
+        UUID channel_id FK
+        VARCHAR widget_key
+        JSONB theme_json
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_CUSTOMER {
+        UUID id PK
+        UUID tenant_id FK
+        UUID channel_id FK
+        VARCHAR display_name_masked
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_CUSTOMER_IDENTITY {
+        UUID id PK
+        UUID tenant_id FK
+        UUID customer_id FK
+        VARCHAR identity_type
+        VARCHAR customer_token_hash
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_CONVERSATION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID channel_id FK
+        UUID customer_id FK
+        VARCHAR status
+        UUID trace_id
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_MESSAGE {
+        UUID id PK
+        UUID tenant_id FK
+        UUID conversation_id FK
+        VARCHAR role
+        TEXT message_text
+        UUID trace_id
+        UUID policy_version_id
+        UUID template_version_id
+        UUID prompt_version_id
+        UUID index_version_id
+        TIMESTAMP created_at PK
+        TIMESTAMP updated_at
+    }
+    TB_ATTACHMENT {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR storage_key
+        VARCHAR file_name
+        VARCHAR mime_type
+        INT size_bytes
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_MESSAGE_ATTACHMENT {
+        UUID id PK
+        UUID tenant_id FK
+        UUID message_id FK
+        TIMESTAMP message_created_at FK
+        UUID attachment_id FK
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_MESSAGE_FEEDBACK {
+        UUID id PK
+        UUID tenant_id FK
+        UUID message_id FK
+        TIMESTAMP message_created_at FK
+        VARCHAR feedback_type
+        INT score
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_STREAM_EVENT {
+        UUID id PK
+        UUID tenant_id FK
+        UUID message_id FK
+        TIMESTAMP message_created_at FK
+        VARCHAR event_type
+        INT event_seq
+        JSONB payload_json
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_TOOL_DEFINITION {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR tool_name
+        VARCHAR tool_version
+        JSONB schema_json
+        INT timeout_ms
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_TOOL_CALL_LOG {
+        UUID id PK
+        UUID tenant_id FK
+        UUID conversation_id
+        VARCHAR tool_name
+        INT http_status
+        INT latency_ms
+        UUID trace_id
+        TIMESTAMP created_at PK
+        TIMESTAMP updated_at
+    }
+    TB_KB {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR kb_key
+        VARCHAR kb_name
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_KB_SOURCE {
+        UUID id PK
+        UUID tenant_id FK
+        UUID kb_id FK
+        VARCHAR source_type
+        TEXT source_uri
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_KB_DOCUMENT {
+        UUID id PK
+        UUID tenant_id FK
+        UUID kb_id FK
+        UUID source_id FK
+        VARCHAR title
+        VARCHAR status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_KB_DOCUMENT_VERSION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID document_id FK
+        INT version_no
+        VARCHAR status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_KB_CHUNK {
+        UUID id PK
+        UUID tenant_id FK
+        UUID kb_id FK
+        UUID document_version_id FK
+        INT chunk_no
+        TEXT chunk_text
+        VARCHAR opensearch_doc_id
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_KB_INGEST_JOB {
+        UUID id PK
+        UUID tenant_id FK
+        UUID kb_id FK
+        VARCHAR status
+        INT total_docs
+        INT processed_docs
+        INT failed_docs
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_KB_INDEX_VERSION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID kb_id FK
+        INT index_version
+        VARCHAR status
+        VARCHAR opensearch_index_name
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_KB_CHUNK_EMBEDDING {
+        UUID id PK
+        UUID tenant_id FK
+        UUID kb_chunk_id FK
+        UUID index_version_id FK
+        VECTOR embedding
+        INT embedding_dim
+        VARCHAR model_name
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_ANSWER_BANK {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR question_fingerprint
+        JSONB answer_json
+        JSONB citation_json
+        UUID policy_version_id
+        UUID index_version_id
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_SEMANTIC_CACHE {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR cache_key
+        VECTOR query_embedding
+        JSONB answer_json
+        TEXT session_summary
+        TIMESTAMP expires_at
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_RAG_SEARCH_LOG {
+        UUID id PK
+        UUID tenant_id FK
+        UUID conversation_id
+        TEXT query_text_masked
+        INT top_k
+        UUID trace_id
+        TIMESTAMP created_at PK
+        TIMESTAMP updated_at
+    }
+    TB_RAG_CITATION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID message_id FK
+        TIMESTAMP message_created_at FK
+        UUID chunk_id FK
+        INT rank_no
+        TEXT excerpt_masked
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_GENERATION_LOG {
+        UUID id PK
+        UUID tenant_id FK
+        UUID message_id FK
+        TIMESTAMP message_created_at FK
+        UUID provider_id
+        UUID model_id
+        INT input_tokens
+        INT output_tokens
+        UUID trace_id
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_GUARDRAIL_EVENT {
+        UUID id PK
+        UUID tenant_id FK
+        UUID conversation_id
+        UUID message_id
+        TIMESTAMP message_created_at
+        VARCHAR rule_code
+        VARCHAR action
+        UUID trace_id
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_TEMPLATE {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR template_key
+        VARCHAR category
+        VARCHAR status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_TEMPLATE_VERSION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID template_id FK
+        INT version_no
+        TEXT body_text
+        VARCHAR approval_status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_TEMPLATE_PLACEHOLDER {
+        UUID id PK
+        UUID tenant_id FK
+        UUID template_version_id FK
+        VARCHAR placeholder_key
+        VARCHAR data_type
+        BOOLEAN required
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_POLICY {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR policy_key
+        VARCHAR category
+        VARCHAR status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_POLICY_VERSION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID policy_id FK
+        INT version_no
+        JSONB rule_json
+        JSONB answer_contract_json
+        VARCHAR approval_status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_PROMPT {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR prompt_key
+        VARCHAR prompt_type
+        VARCHAR status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_PROMPT_VERSION {
+        UUID id PK
+        UUID tenant_id FK
+        UUID prompt_id FK
+        INT version_no
+        TEXT system_prompt_text
+        JSONB schema_json
+        VARCHAR approval_status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_TEMPLATE_POLICY_MAP {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR category
+        UUID template_id FK
+        UUID template_version_id FK
+        UUID policy_id FK
+        UUID policy_version_id FK
+        TIMESTAMP effective_from
+        TIMESTAMP effective_to
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_LLM_PROVIDER {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR provider_code
+        VARCHAR provider_name
+        TEXT endpoint_url
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_LLM_MODEL {
+        UUID id PK
+        UUID tenant_id FK
+        UUID provider_id FK
+        VARCHAR model_code
+        INT context_window
+        INT max_output_tokens
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_PROVIDER_KEY {
+        UUID id PK
+        UUID tenant_id FK
+        UUID provider_id FK
+        VARCHAR key_name
+        VARCHAR secret_ref
+        INT rotation_cycle_days
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_LLM_ROUTE {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR route_name
+        UUID provider_id FK
+        UUID model_id FK
+        INT timeout_ms
+        UUID fallback_route_id
+        BOOLEAN enabled
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_AUDIT_LOG {
+        UUID id PK
+        UUID tenant_id FK
+        UUID actor_user_id
+        VARCHAR action_type
+        VARCHAR target_type
+        VARCHAR target_id
+        UUID trace_id
+        TIMESTAMP created_at PK
+        TIMESTAMP updated_at
+    }
+    TB_OPS_EVENT {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR event_type
+        VARCHAR severity
+        VARCHAR component
+        TEXT message
+        UUID trace_id
+        TIMESTAMP created_at PK
+        TIMESTAMP updated_at
+    }
+    TB_ERROR_CATALOG {
+        UUID id PK
+        VARCHAR error_code
+        INT http_status
+        VARCHAR user_message_ko
+        BOOLEAN retryable
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_NOTIFICATION_RULE {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR rule_name
+        VARCHAR event_type
+        VARCHAR severity_threshold
+        VARCHAR channel_type
+        BOOLEAN enabled
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_WEBHOOK_ENDPOINT {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR integration_type
+        TEXT endpoint_url
+        VARCHAR secret_ref
+        VARCHAR status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_INTEGRATION_LOG {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR integration_type
+        UUID endpoint_id
+        INT http_status
+        INT latency_ms
+        UUID trace_id
+        TIMESTAMP created_at PK
+        TIMESTAMP updated_at
+    }
+    TB_EXPORT_JOB {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR job_type
+        VARCHAR status
+        VARCHAR output_uri
+        INT row_count
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+    TB_TENANT ||--o{ TB_TENANT_DOMAIN : references
+    TB_TENANT ||--o{ TB_USER : references
+    TB_TENANT ||--o{ TB_ROLE : references
+    TB_TENANT ||--o{ TB_USER_ROLE : references
+    TB_USER ||--o{ TB_USER_ROLE : references
+    TB_ROLE ||--o{ TB_USER_ROLE : references
+    TB_TENANT ||--o{ TB_ROLE_PERMISSION : references
+    TB_ROLE ||--o{ TB_ROLE_PERMISSION : references
+    TB_PERMISSION ||--o{ TB_ROLE_PERMISSION : references
+    TB_TENANT ||--o{ TB_AUTH_SESSION : references
+    TB_USER ||--o{ TB_AUTH_SESSION : references
+    TB_TENANT ||--o{ TB_CHANNEL : references
+    TB_TENANT ||--o{ TB_WIDGET_INSTANCE : references
+    TB_CHANNEL ||--o{ TB_WIDGET_INSTANCE : references
+    TB_TENANT ||--o{ TB_CUSTOMER : references
+    TB_CHANNEL ||--o{ TB_CUSTOMER : references
+    TB_TENANT ||--o{ TB_CUSTOMER_IDENTITY : references
+    TB_CUSTOMER ||--o{ TB_CUSTOMER_IDENTITY : references
+    TB_TENANT ||--o{ TB_CONVERSATION : references
+    TB_CHANNEL ||--o{ TB_CONVERSATION : references
+    TB_CUSTOMER ||--o{ TB_CONVERSATION : references
+    TB_TENANT ||--o{ TB_MESSAGE : references
+    TB_CONVERSATION ||--o{ TB_MESSAGE : references
+    TB_TENANT ||--o{ TB_ATTACHMENT : references
+    TB_TENANT ||--o{ TB_MESSAGE_ATTACHMENT : references
+    TB_MESSAGE ||--o{ TB_MESSAGE_ATTACHMENT : references
+    TB_ATTACHMENT ||--o{ TB_MESSAGE_ATTACHMENT : references
+    TB_TENANT ||--o{ TB_MESSAGE_FEEDBACK : references
+    TB_MESSAGE ||--o{ TB_MESSAGE_FEEDBACK : references
+    TB_TENANT ||--o{ TB_STREAM_EVENT : references
+    TB_MESSAGE ||--o{ TB_STREAM_EVENT : references
+    TB_TENANT ||--o{ TB_TOOL_DEFINITION : references
+    TB_TENANT ||--o{ TB_KB : references
+    TB_TENANT ||--o{ TB_KB_SOURCE : references
+    TB_KB ||--o{ TB_KB_SOURCE : references
+    TB_TENANT ||--o{ TB_KB_DOCUMENT : references
+    TB_KB ||--o{ TB_KB_DOCUMENT : references
+    TB_KB_SOURCE ||--o{ TB_KB_DOCUMENT : references
+    TB_TENANT ||--o{ TB_KB_DOCUMENT_VERSION : references
+    TB_KB_DOCUMENT ||--o{ TB_KB_DOCUMENT_VERSION : references
+    TB_TENANT ||--o{ TB_KB_CHUNK : references
+    TB_KB ||--o{ TB_KB_CHUNK : references
+    TB_KB_DOCUMENT_VERSION ||--o{ TB_KB_CHUNK : references
+    TB_TENANT ||--o{ TB_KB_INGEST_JOB : references
+    TB_KB ||--o{ TB_KB_INGEST_JOB : references
+    TB_TENANT ||--o{ TB_KB_INDEX_VERSION : references
+    TB_KB ||--o{ TB_KB_INDEX_VERSION : references
+    TB_TENANT ||--o{ TB_KB_CHUNK_EMBEDDING : references
+    TB_KB_CHUNK ||--o{ TB_KB_CHUNK_EMBEDDING : references
+    TB_KB_INDEX_VERSION ||--o{ TB_KB_CHUNK_EMBEDDING : references
+    TB_TENANT ||--o{ TB_ANSWER_BANK : references
+    TB_TENANT ||--o{ TB_SEMANTIC_CACHE : references
+    TB_TENANT ||--o{ TB_RAG_CITATION : references
+    TB_MESSAGE ||--o{ TB_RAG_CITATION : references
+    TB_KB_CHUNK ||--o{ TB_RAG_CITATION : references
+    TB_TENANT ||--o{ TB_GENERATION_LOG : references
+    TB_MESSAGE ||--o{ TB_GENERATION_LOG : references
+    TB_TENANT ||--o{ TB_GUARDRAIL_EVENT : references
+    TB_TENANT ||--o{ TB_TEMPLATE : references
+    TB_TENANT ||--o{ TB_TEMPLATE_VERSION : references
+    TB_TEMPLATE ||--o{ TB_TEMPLATE_VERSION : references
+    TB_TENANT ||--o{ TB_TEMPLATE_PLACEHOLDER : references
+    TB_TEMPLATE_VERSION ||--o{ TB_TEMPLATE_PLACEHOLDER : references
+    TB_TENANT ||--o{ TB_POLICY : references
+    TB_TENANT ||--o{ TB_POLICY_VERSION : references
+    TB_POLICY ||--o{ TB_POLICY_VERSION : references
+    TB_TENANT ||--o{ TB_PROMPT : references
+    TB_TENANT ||--o{ TB_PROMPT_VERSION : references
+    TB_PROMPT ||--o{ TB_PROMPT_VERSION : references
+    TB_TENANT ||--o{ TB_TEMPLATE_POLICY_MAP : references
+    TB_TEMPLATE ||--o{ TB_TEMPLATE_POLICY_MAP : references
+    TB_TEMPLATE_VERSION ||--o{ TB_TEMPLATE_POLICY_MAP : references
+    TB_POLICY ||--o{ TB_TEMPLATE_POLICY_MAP : references
+    TB_POLICY_VERSION ||--o{ TB_TEMPLATE_POLICY_MAP : references
+    TB_TENANT ||--o{ TB_LLM_PROVIDER : references
+    TB_TENANT ||--o{ TB_LLM_MODEL : references
+    TB_LLM_PROVIDER ||--o{ TB_LLM_MODEL : references
+    TB_TENANT ||--o{ TB_PROVIDER_KEY : references
+    TB_LLM_PROVIDER ||--o{ TB_PROVIDER_KEY : references
+    TB_TENANT ||--o{ TB_LLM_ROUTE : references
+    TB_LLM_PROVIDER ||--o{ TB_LLM_ROUTE : references
+    TB_LLM_MODEL ||--o{ TB_LLM_ROUTE : references
+    TB_TENANT ||--o{ TB_NOTIFICATION_RULE : references
+    TB_TENANT ||--o{ TB_WEBHOOK_ENDPOINT : references
+    TB_TENANT ||--o{ TB_EXPORT_JOB : references

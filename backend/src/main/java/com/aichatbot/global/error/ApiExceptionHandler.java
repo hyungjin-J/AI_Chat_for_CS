@@ -1,22 +1,81 @@
 package com.aichatbot.global.error;
 
 import com.aichatbot.global.observability.TraceContext;
+import java.util.List;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+    @ExceptionHandler(QuotaExceededException.class)
+    public ResponseEntity<ApiErrorResponse> handleQuotaExceeded(QuotaExceededException exception) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Retry-After", String.valueOf(exception.retryAfterSeconds()));
+        headers.add("X-RateLimit-Limit", String.valueOf(exception.limit()));
+        headers.add("X-RateLimit-Remaining", String.valueOf(exception.remaining()));
+        headers.add("X-RateLimit-Reset", String.valueOf(exception.resetEpochSeconds()));
+
+        ApiErrorResponse error = new ApiErrorResponse(
+            exception.errorCode(),
+            exception.getMessage(),
+            TraceContext.getTraceId(),
+            exception.details()
+        );
+        return new ResponseEntity<>(error, headers, exception.status());
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiErrorResponse> handleApiException(ApiException exception) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            exception.errorCode(),
+            exception.getMessage(),
+            TraceContext.getTraceId(),
+            exception.details()
+        );
+        return ResponseEntity.status(exception.status()).body(error);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDenied(AccessDeniedException exception) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            "API-403",
+            "Forbidden",
+            TraceContext.getTraceId(),
+            List.of("rbac_denied")
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidation(MethodArgumentNotValidException exception) {
+        List<String> details = exception.getBindingResult().getFieldErrors().stream()
+            .map(error -> error.getField() + ": " + error.getDefaultMessage())
+            .toList();
+        ApiErrorResponse error = new ApiErrorResponse(
+            "OPS-102-INVALID_INPUT",
+            "Request validation failed",
+            TraceContext.getTraceId(),
+            details
+        );
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleException(Exception exception) {
-        // 왜 필요한가: 예외 형태를 통일해야 프론트/운영이 일관되게 대응할 수 있다.
+        // Why: 예외 응답 스키마를 고정해야 운영 파이프라인에서 자동 파싱과 경보 라우팅이 가능하다.
         ApiErrorResponse error = new ApiErrorResponse(
             "SYS-003-UNEXPECTED",
             "예상하지 못한 오류가 발생했습니다.",
-            TraceContext.getTraceId()
+            TraceContext.getTraceId(),
+            List.of(exception.getClass().getSimpleName())
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
+

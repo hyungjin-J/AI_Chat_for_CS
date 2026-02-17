@@ -17,19 +17,19 @@ cd /d "C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot"
 ```
 
 ## 3) 자동화 스크립트 실행 순서 (CMD)
-초기 부트스트랩 스크립트는 루트 오염을 피하기 위해 `scripts\bootstrap_archive\`에 분리 보관합니다.
+초기 부트스트랩 스크립트는 루트 오염을 피하기 위해 `tools\bootstrap_archive\`에 분리 보관합니다.
 ```cmd
-scripts\bootstrap_archive\00_bootstrap.cmd
-scripts\bootstrap_archive\10_generate_backend.cmd
-scripts\bootstrap_archive\11_backend_skeleton.cmd
-scripts\bootstrap_archive\20_generate_frontend.cmd
-scripts\bootstrap_archive\21_frontend_skeleton.cmd
-scripts\bootstrap_archive\30_generate_infra.cmd
-scripts\bootstrap_archive\40_install_skills.cmd
-scripts\bootstrap_archive\50_generate_gitignore.cmd
-scripts\bootstrap_archive\60_generate_readme.cmd
-scripts\bootstrap_archive\90_verify.cmd
-scripts\bootstrap_archive\99_git_init_commit_push.cmd
+tools\bootstrap_archive\00_bootstrap.cmd
+tools\bootstrap_archive\10_generate_backend.cmd
+tools\bootstrap_archive\11_backend_skeleton.cmd
+tools\bootstrap_archive\20_generate_frontend.cmd
+tools\bootstrap_archive\21_frontend_skeleton.cmd
+tools\bootstrap_archive\30_generate_infra.cmd
+tools\bootstrap_archive\40_install_skills.cmd
+tools\bootstrap_archive\50_generate_gitignore.cmd
+tools\bootstrap_archive\60_generate_readme.cmd
+tools\bootstrap_archive\90_verify.cmd
+tools\bootstrap_archive\99_git_init_commit_push.cmd
 ```
 
 ## 4) 개별 실행 가이드

@@ -1,0 +1,13 @@
+# MIGRATION_DEV_STG_PROD
+- Flyway/Liquibase 권장:
+  - SQL 중심이면 Flyway, 복잡 롤백/다중 DB면 Liquibase
+- 파티션/인덱스:
+  - 부모 테이블 배포 후 ensure_future_partitions()로 선생성
+- CONCURRENTLY 분리:
+  - CREATE INDEX CONCURRENTLY는 트랜잭션 분리(post-deploy)로 실행
+  - Flyway/Liquibase 기본 트랜잭션과 분리 필요
+- 시드 데이터:
+  - 권한/에러코드/기본 정책 버전 관리
+- 롤백:
+  - expand/contract 패턴
+  - 스키마 호환성 + 성능 게이트 + index gap 점검

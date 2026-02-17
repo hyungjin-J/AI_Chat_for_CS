@@ -1,0 +1,12 @@
+# OPENSEARCH_HYBRID
+- 매핑:
+  - keyword/BM25 필드 + vector 필드 동시 운영
+- 검색 플로우:
+  - keyword topK + vector topK -> RRF 병합
+- 필터/부스팅:
+  - tenant_id/kb_id 필수 필터
+  - freshness boosting, 정책/필수문구 가중치
+- 운영:
+  - reindex -> alias swap -> blue/green -> 롤백
+- 버전 연동:
+  - TB_KB_INDEX_VERSION.opensearch_index_name으로 동기화 관리

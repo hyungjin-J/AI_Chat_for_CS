@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-02-17T11:19:08.675671+00:00",
+  "summary": {
+    "req_id": {
+      "total": 78,
+      "missing": 1
+    },
+    "api_endpoint": {
+      "total": 71,
+      "missing": 0
+    },
+    "db_table": {
+      "total": 61,
+      "missing": 0
+    }
+  },
+  "missing": {
+    "req_ids": [
+      "API-403"
+    ],
+    "api_endpoints": [],
+    "db_tables": []
+  },
+  "sources": {
+    "requirements_csv": "C:\\Users\\hjjmj\\OneDrive\\바탕 화면\\AI_Chatbot\\docs\\references\\CS AI Chatbot_Requirements Statement.csv",
+    "features_csv": "C:\\Users\\hjjmj\\OneDrive\\바탕 화면\\AI_Chatbot\\docs\\references\\Summary of key features.csv",
+    "api_xlsx": "C:\\Users\\hjjmj\\OneDrive\\바탕 화면\\AI_Chatbot\\docs\\references\\google_ready_api_spec_v0.3_20260216.xlsx",
+    "db_xlsx": "C:\\Users\\hjjmj\\OneDrive\\바탕 화면\\AI_Chatbot\\docs\\references\\CS_AI_CHATBOT_DB.xlsx",
+    "spec_md": "C:\\Users\\hjjmj\\OneDrive\\바탕 화면\\AI_Chatbot\\docs\\uiux\\UIUX_Spec.md"
+  }
+}

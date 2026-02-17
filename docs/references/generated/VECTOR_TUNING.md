@@ -1,0 +1,15 @@
+# VECTOR_TUNING
+- HNSW vs IVFFlat 선택:
+  - HNSW: 재현율/저지연 우선, 메모리 사용량 큼
+  - IVFFlat: 대용량/비용 효율 우선, probes 튜닝 필수
+- HNSW 파라미터:
+  - M, ef_construction, ef_search를 Recall@K + p95 latency로 동시 검증
+- IVFFlat 튜닝:
+  - lists/probes를 데이터 규모별 조정, 도메인 변화 시 재학습/리빌드
+- 운영:
+  - 벡터 테이블 ANALYZE 주기 유지
+  - 대량 변경 후 REINDEX 검토
+  - index_version_id 기반 blue/green 재색인
+- 필터링 결합:
+  - tenant_id/kb_id/language 사전 필터 우선
+  - 과도한 필터로 recall 하락 가능성 점검

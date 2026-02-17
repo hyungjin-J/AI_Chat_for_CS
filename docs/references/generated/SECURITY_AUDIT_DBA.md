@@ -1,0 +1,17 @@
+# SECURITY_AUDIT_DBA
+- 암호화:
+  - at-rest(KMS), in-transit(TLS)
+- 시크릿 저장:
+  - secret_ref만 저장, 평문 금지
+- 권한 분리:
+  - 운영/개발/감사 역할 최소권한
+- RLS 주의:
+  - 성능/인덱스/정책 테스트 동반
+- 변경 감사:
+  - 정책/템플릿/프롬프트/키/권한 변경 이벤트 기록
+- trace_id 상관관계:
+  - 메시지-툴-검색-생성 로그 연결
+- 운영 점검:
+  - 파티션 생성 누락
+  - ops.v_partition_index_gaps 인덱스 누락
+  - vacuum/analyze 상태

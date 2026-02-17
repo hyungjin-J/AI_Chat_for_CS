@@ -24,7 +24,8 @@ service-account*.json
 # Logs / Temp
 *.log
 *.tmp
-tmp/
+tmp/**
+!tmp/.gitkeep
 temp/
 out/
 start_metadata.json
@@ -65,7 +66,23 @@ infra/**/*.backup
 .claude/
 # 아래는 정책 문서화를 위한 명시적 라인.
 .agents/skills/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+# Explicit subpaths requested by hygiene policy
 tools/__pycache__/
-**/*.pyc
+tests/__pycache__/
+scripts/__pycache__/
+# Backup policy: keep policy docs only, backup payloads are local/CI artifacts
+_backup/**
+!_backup/README.md
+!_backup/.gitkeep
 # 필요 시 팀 정책에 따라 아래 예외를 활성화해 특정 스킬만 고정할 수 있다.
 # !.agents/skills/<skill-name>/
+
+# Generated reference by docs/references/generate_all.py
+docs/references/generated/csv_package/
+docs/references/generated/CS_AI_CHATBOT_DB_CSV_Package.zip
+docs/references/generated/google_sheets_result.txt

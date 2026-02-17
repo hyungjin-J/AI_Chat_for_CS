@@ -1,0 +1,828 @@
+// CS AI Chatbot DBML
+Table core.TB_TENANT {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_key varchar(100) [not null]
+  tenant_name varchar(200) [not null]
+  status varchar(20) [not null, default: `'active'`]
+  plan_tier varchar(20) [not null, default: `'standard'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_key) [unique]
+  }
+}
+
+Table core.TB_TENANT_DOMAIN {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  host varchar(255) [not null]
+  locale varchar(10) [not null, default: `'ko-KR'`]
+  is_default boolean [not null, default: `false`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (host) [unique]
+  }
+}
+
+Table core.TB_USER {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  login_id varchar(120) [not null]
+  display_name varchar(120) [not null]
+  status varchar(20) [not null, default: `'active'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, login_id) [unique]
+  }
+}
+
+Table core.TB_ROLE {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  role_code varchar(60) [not null]
+  role_name varchar(120) [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, role_code) [unique]
+  }
+}
+
+Table core.TB_PERMISSION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  perm_code varchar(120) [not null]
+  perm_name varchar(150) [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (perm_code) [unique]
+  }
+}
+
+Table core.TB_USER_ROLE {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  user_id uuid [not null]
+  role_id uuid [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, user_id, role_id) [unique]
+  }
+}
+
+Table core.TB_ROLE_PERMISSION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  role_id uuid [not null]
+  permission_id uuid [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, role_id, permission_id) [unique]
+  }
+}
+
+Table core.TB_AUTH_SESSION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  user_id uuid [not null]
+  session_token_hash varchar(128) [not null]
+  expires_at timestamptz [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (session_token_hash) [unique]
+  }
+}
+
+Table core.TB_CHANNEL {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  channel_code varchar(60) [not null]
+  channel_name varchar(120) [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, channel_code) [unique]
+  }
+}
+
+Table core.TB_WIDGET_INSTANCE {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  channel_id uuid [not null]
+  widget_key varchar(120) [not null]
+  theme_json jsonb [default: `'{}'::jsonb`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, widget_key) [unique]
+  }
+}
+
+Table core.TB_CUSTOMER {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  channel_id uuid [not null]
+  display_name_masked varchar(120)
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_CUSTOMER_IDENTITY {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  customer_id uuid [not null]
+  identity_type varchar(30) [not null]
+  customer_token_hash varchar(128) [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, identity_type, customer_token_hash) [unique]
+  }
+}
+
+Table core.TB_CONVERSATION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  channel_id uuid [not null]
+  customer_id uuid [not null]
+  status varchar(20) [not null, default: `'active'`]
+  trace_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_MESSAGE {
+  id uuid [not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  conversation_id uuid [not null]
+  role varchar(20) [not null]
+  message_text text
+  trace_id uuid
+  policy_version_id uuid
+  template_version_id uuid
+  prompt_version_id uuid
+  index_version_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (id, created_at) [pk]
+  }
+}
+
+Table core.TB_ATTACHMENT {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  storage_key varchar(255) [not null]
+  file_name varchar(255) [not null]
+  mime_type varchar(120) [not null]
+  size_bytes bigint [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, storage_key) [unique]
+  }
+}
+
+Table core.TB_MESSAGE_ATTACHMENT {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  message_id uuid [not null]
+  message_created_at timestamptz [not null]
+  attachment_id uuid [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, message_id, message_created_at, attachment_id) [unique]
+  }
+}
+
+Table core.TB_MESSAGE_FEEDBACK {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  message_id uuid [not null]
+  message_created_at timestamptz [not null]
+  feedback_type varchar(30) [not null]
+  score smallint
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_STREAM_EVENT {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  message_id uuid [not null]
+  message_created_at timestamptz [not null]
+  event_type varchar(30) [not null]
+  event_seq integer [not null]
+  payload_json jsonb [default: `'{}'::jsonb`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, message_id, message_created_at, event_seq) [unique]
+  }
+}
+
+Table core.TB_TOOL_DEFINITION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  tool_name varchar(120) [not null]
+  tool_version varchar(40) [not null, default: `'v1'`]
+  schema_json jsonb [not null, default: `'{}'::jsonb`]
+  timeout_ms integer [not null, default: `8000`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, tool_name, tool_version) [unique]
+  }
+}
+
+Table core.TB_TOOL_CALL_LOG {
+  id uuid [not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  conversation_id uuid [not null]
+  tool_name varchar(120) [not null]
+  http_status integer
+  latency_ms integer
+  trace_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (id, created_at) [pk]
+  }
+}
+
+Table core.TB_KB {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  kb_key varchar(100) [not null]
+  kb_name varchar(200) [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, kb_key) [unique]
+  }
+}
+
+Table core.TB_KB_SOURCE {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  kb_id uuid [not null]
+  source_type varchar(30) [not null]
+  source_uri text [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_KB_DOCUMENT {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  kb_id uuid [not null]
+  source_id uuid
+  title varchar(255) [not null]
+  status varchar(20) [not null, default: `'ingested'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_KB_DOCUMENT_VERSION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  document_id uuid [not null]
+  version_no integer [not null]
+  status varchar(20) [not null, default: `'draft'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (document_id, version_no) [unique]
+  }
+}
+
+Table core.TB_KB_CHUNK {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  kb_id uuid [not null]
+  document_version_id uuid [not null]
+  chunk_no integer [not null]
+  chunk_text text [not null]
+  opensearch_doc_id varchar(120)
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (document_version_id, chunk_no) [unique]
+  }
+}
+
+Table core.TB_KB_INGEST_JOB {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  kb_id uuid [not null]
+  status varchar(20) [not null, default: `'queued'`]
+  total_docs integer [not null, default: `0`]
+  processed_docs integer [not null, default: `0`]
+  failed_docs integer [not null, default: `0`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_KB_INDEX_VERSION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  kb_id uuid [not null]
+  index_version integer [not null]
+  status varchar(20) [not null, default: `'building'`]
+  opensearch_index_name varchar(200)
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (kb_id, index_version) [unique]
+  }
+}
+
+Table vec.TB_KB_CHUNK_EMBEDDING {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  kb_chunk_id uuid [not null]
+  index_version_id uuid [not null]
+  embedding vector(1536) [not null]
+  embedding_dim integer [not null, default: `1536`]
+  model_name varchar(120) [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (kb_chunk_id, index_version_id) [unique]
+  }
+}
+
+Table vec.TB_ANSWER_BANK {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  question_fingerprint varchar(128) [not null]
+  answer_json jsonb [not null]
+  citation_json jsonb [not null]
+  policy_version_id uuid
+  index_version_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, question_fingerprint, policy_version_id, index_version_id) [unique]
+  }
+}
+
+Table vec.TB_SEMANTIC_CACHE {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  cache_key varchar(128) [not null]
+  query_embedding vector(1536)
+  answer_json jsonb [not null]
+  session_summary text
+  expires_at timestamptz [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, cache_key) [unique]
+  }
+}
+
+Table core.TB_RAG_SEARCH_LOG {
+  id uuid [not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  conversation_id uuid [not null]
+  query_text_masked text [not null]
+  top_k integer [not null, default: `5`]
+  trace_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (id, created_at) [pk]
+  }
+}
+
+Table core.TB_RAG_CITATION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  message_id uuid [not null]
+  message_created_at timestamptz [not null]
+  chunk_id uuid
+  rank_no integer [not null]
+  excerpt_masked text [not null]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_GENERATION_LOG {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  message_id uuid [not null]
+  message_created_at timestamptz [not null]
+  provider_id uuid
+  model_id uuid
+  input_tokens integer
+  output_tokens integer
+  trace_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_GUARDRAIL_EVENT {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  conversation_id uuid
+  message_id uuid
+  message_created_at timestamptz
+  rule_code varchar(80) [not null]
+  action varchar(40) [not null]
+  trace_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_TEMPLATE {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  template_key varchar(100) [not null]
+  category varchar(60) [not null]
+  status varchar(20) [not null, default: `'active'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, template_key) [unique]
+  }
+}
+
+Table core.TB_TEMPLATE_VERSION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  template_id uuid [not null]
+  version_no integer [not null]
+  body_text text [not null]
+  approval_status varchar(20) [not null, default: `'draft'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (template_id, version_no) [unique]
+  }
+}
+
+Table core.TB_TEMPLATE_PLACEHOLDER {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  template_version_id uuid [not null]
+  placeholder_key varchar(80) [not null]
+  data_type varchar(30) [not null, default: `'string'`]
+  required boolean [not null, default: `false`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (template_version_id, placeholder_key) [unique]
+  }
+}
+
+Table core.TB_POLICY {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  policy_key varchar(100) [not null]
+  category varchar(60) [not null]
+  status varchar(20) [not null, default: `'active'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, policy_key) [unique]
+  }
+}
+
+Table core.TB_POLICY_VERSION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  policy_id uuid [not null]
+  version_no integer [not null]
+  rule_json jsonb [not null, default: `'{}'::jsonb`]
+  answer_contract_json jsonb [default: `'{}'::jsonb`]
+  approval_status varchar(20) [not null, default: `'draft'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (policy_id, version_no) [unique]
+  }
+}
+
+Table core.TB_PROMPT {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  prompt_key varchar(100) [not null]
+  prompt_type varchar(30) [not null]
+  status varchar(20) [not null, default: `'active'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, prompt_key) [unique]
+  }
+}
+
+Table core.TB_PROMPT_VERSION {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  prompt_id uuid [not null]
+  version_no integer [not null]
+  system_prompt_text text [not null]
+  schema_json jsonb [default: `'{}'::jsonb`]
+  approval_status varchar(20) [not null, default: `'draft'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (prompt_id, version_no) [unique]
+  }
+}
+
+Table core.TB_TEMPLATE_POLICY_MAP {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  category varchar(60) [not null]
+  template_id uuid [not null]
+  template_version_id uuid
+  policy_id uuid [not null]
+  policy_version_id uuid
+  effective_from timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  effective_to timestamptz
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table core.TB_LLM_PROVIDER {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  provider_code varchar(60) [not null]
+  provider_name varchar(120) [not null]
+  endpoint_url text
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, provider_code) [unique]
+  }
+}
+
+Table core.TB_LLM_MODEL {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  provider_id uuid [not null]
+  model_code varchar(100) [not null]
+  context_window integer
+  max_output_tokens integer
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (provider_id, model_code) [unique]
+  }
+}
+
+Table core.TB_PROVIDER_KEY {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  provider_id uuid [not null]
+  key_name varchar(120) [not null]
+  secret_ref varchar(255) [not null]
+  rotation_cycle_days integer [not null, default: `90`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (provider_id, key_name) [unique]
+  }
+}
+
+Table core.TB_LLM_ROUTE {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  route_name varchar(120) [not null]
+  provider_id uuid [not null]
+  model_id uuid [not null]
+  timeout_ms integer [not null, default: `15000`]
+  fallback_route_id uuid
+  enabled boolean [not null, default: `true`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (tenant_id, route_name) [unique]
+  }
+}
+
+Table ops.TB_AUDIT_LOG {
+  id uuid [not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  actor_user_id uuid
+  action_type varchar(80) [not null]
+  target_type varchar(80)
+  target_id varchar(120)
+  trace_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (id, created_at) [pk]
+  }
+}
+
+Table ops.TB_OPS_EVENT {
+  id uuid [not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  event_type varchar(80) [not null]
+  severity varchar(20) [not null]
+  component varchar(80) [not null]
+  message text [not null]
+  trace_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (id, created_at) [pk]
+  }
+}
+
+Table ops.TB_ERROR_CATALOG {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  error_code varchar(80) [not null]
+  http_status integer [not null]
+  user_message_ko varchar(255) [not null]
+  retryable boolean [not null, default: `false`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (error_code) [unique]
+  }
+}
+
+Table ops.TB_NOTIFICATION_RULE {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  rule_name varchar(120) [not null]
+  event_type varchar(80) [not null]
+  severity_threshold varchar(20) [not null, default: `'warning'`]
+  channel_type varchar(30) [not null]
+  enabled boolean [not null, default: `true`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table ops.TB_WEBHOOK_ENDPOINT {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  integration_type varchar(60) [not null]
+  endpoint_url text [not null]
+  secret_ref varchar(255) [not null]
+  status varchar(20) [not null, default: `'active'`]
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table ops.TB_INTEGRATION_LOG {
+  id uuid [not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  integration_type varchar(60) [not null]
+  endpoint_id uuid
+  http_status integer
+  latency_ms integer
+  trace_id uuid
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (id, created_at) [pk]
+  }
+}
+
+Table ops.TB_EXPORT_JOB {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  tenant_id uuid [not null]
+  job_type varchar(40) [not null]
+  status varchar(20) [not null, default: `'queued'`]
+  output_uri varchar(255)
+  row_count bigint
+  created_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Ref: core.tb_tenant.(id) < core.TB_TENANT_DOMAIN.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_USER.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_ROLE.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_USER_ROLE.(tenant_id)
+Ref: core.tb_user.(id) < core.TB_USER_ROLE.(user_id)
+Ref: core.tb_role.(id) < core.TB_USER_ROLE.(role_id)
+Ref: core.tb_tenant.(id) < core.TB_ROLE_PERMISSION.(tenant_id)
+Ref: core.tb_role.(id) < core.TB_ROLE_PERMISSION.(role_id)
+Ref: core.tb_permission.(id) < core.TB_ROLE_PERMISSION.(permission_id)
+Ref: core.tb_tenant.(id) < core.TB_AUTH_SESSION.(tenant_id)
+Ref: core.tb_user.(id) < core.TB_AUTH_SESSION.(user_id)
+Ref: core.tb_tenant.(id) < core.TB_CHANNEL.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_WIDGET_INSTANCE.(tenant_id)
+Ref: core.tb_channel.(id) < core.TB_WIDGET_INSTANCE.(channel_id)
+Ref: core.tb_tenant.(id) < core.TB_CUSTOMER.(tenant_id)
+Ref: core.tb_channel.(id) < core.TB_CUSTOMER.(channel_id)
+Ref: core.tb_tenant.(id) < core.TB_CUSTOMER_IDENTITY.(tenant_id)
+Ref: core.tb_customer.(id) < core.TB_CUSTOMER_IDENTITY.(customer_id)
+Ref: core.tb_tenant.(id) < core.TB_CONVERSATION.(tenant_id)
+Ref: core.tb_channel.(id) < core.TB_CONVERSATION.(channel_id)
+Ref: core.tb_customer.(id) < core.TB_CONVERSATION.(customer_id)
+Ref: core.tb_tenant.(id) < core.TB_MESSAGE.(tenant_id)
+Ref: core.tb_conversation.(id) < core.TB_MESSAGE.(conversation_id)
+Ref: core.tb_tenant.(id) < core.TB_ATTACHMENT.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_MESSAGE_ATTACHMENT.(tenant_id)
+Ref: core.tb_message.(id, created_at) < core.TB_MESSAGE_ATTACHMENT.(message_id, message_created_at)
+Ref: core.tb_attachment.(id) < core.TB_MESSAGE_ATTACHMENT.(attachment_id)
+Ref: core.tb_tenant.(id) < core.TB_MESSAGE_FEEDBACK.(tenant_id)
+Ref: core.tb_message.(id, created_at) < core.TB_MESSAGE_FEEDBACK.(message_id, message_created_at)
+Ref: core.tb_tenant.(id) < core.TB_STREAM_EVENT.(tenant_id)
+Ref: core.tb_message.(id, created_at) < core.TB_STREAM_EVENT.(message_id, message_created_at)
+Ref: core.tb_tenant.(id) < core.TB_TOOL_DEFINITION.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_KB.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_KB_SOURCE.(tenant_id)
+Ref: core.tb_kb.(id) < core.TB_KB_SOURCE.(kb_id)
+Ref: core.tb_tenant.(id) < core.TB_KB_DOCUMENT.(tenant_id)
+Ref: core.tb_kb.(id) < core.TB_KB_DOCUMENT.(kb_id)
+Ref: core.tb_kb_source.(id) < core.TB_KB_DOCUMENT.(source_id)
+Ref: core.tb_tenant.(id) < core.TB_KB_DOCUMENT_VERSION.(tenant_id)
+Ref: core.tb_kb_document.(id) < core.TB_KB_DOCUMENT_VERSION.(document_id)
+Ref: core.tb_tenant.(id) < core.TB_KB_CHUNK.(tenant_id)
+Ref: core.tb_kb.(id) < core.TB_KB_CHUNK.(kb_id)
+Ref: core.tb_kb_document_version.(id) < core.TB_KB_CHUNK.(document_version_id)
+Ref: core.tb_tenant.(id) < core.TB_KB_INGEST_JOB.(tenant_id)
+Ref: core.tb_kb.(id) < core.TB_KB_INGEST_JOB.(kb_id)
+Ref: core.tb_tenant.(id) < core.TB_KB_INDEX_VERSION.(tenant_id)
+Ref: core.tb_kb.(id) < core.TB_KB_INDEX_VERSION.(kb_id)
+Ref: core.tb_tenant.(id) < vec.TB_KB_CHUNK_EMBEDDING.(tenant_id)
+Ref: core.tb_kb_chunk.(id) < vec.TB_KB_CHUNK_EMBEDDING.(kb_chunk_id)
+Ref: core.tb_kb_index_version.(id) < vec.TB_KB_CHUNK_EMBEDDING.(index_version_id)
+Ref: core.tb_tenant.(id) < vec.TB_ANSWER_BANK.(tenant_id)
+Ref: core.tb_tenant.(id) < vec.TB_SEMANTIC_CACHE.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_RAG_CITATION.(tenant_id)
+Ref: core.tb_message.(id, created_at) < core.TB_RAG_CITATION.(message_id, message_created_at)
+Ref: core.tb_kb_chunk.(id) < core.TB_RAG_CITATION.(chunk_id)
+Ref: core.tb_tenant.(id) < core.TB_GENERATION_LOG.(tenant_id)
+Ref: core.tb_message.(id, created_at) < core.TB_GENERATION_LOG.(message_id, message_created_at)
+Ref: core.tb_tenant.(id) < core.TB_GUARDRAIL_EVENT.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_TEMPLATE.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_TEMPLATE_VERSION.(tenant_id)
+Ref: core.tb_template.(id) < core.TB_TEMPLATE_VERSION.(template_id)
+Ref: core.tb_tenant.(id) < core.TB_TEMPLATE_PLACEHOLDER.(tenant_id)
+Ref: core.tb_template_version.(id) < core.TB_TEMPLATE_PLACEHOLDER.(template_version_id)
+Ref: core.tb_tenant.(id) < core.TB_POLICY.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_POLICY_VERSION.(tenant_id)
+Ref: core.tb_policy.(id) < core.TB_POLICY_VERSION.(policy_id)
+Ref: core.tb_tenant.(id) < core.TB_PROMPT.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_PROMPT_VERSION.(tenant_id)
+Ref: core.tb_prompt.(id) < core.TB_PROMPT_VERSION.(prompt_id)
+Ref: core.tb_tenant.(id) < core.TB_TEMPLATE_POLICY_MAP.(tenant_id)
+Ref: core.tb_template.(id) < core.TB_TEMPLATE_POLICY_MAP.(template_id)
+Ref: core.tb_template_version.(id) < core.TB_TEMPLATE_POLICY_MAP.(template_version_id)
+Ref: core.tb_policy.(id) < core.TB_TEMPLATE_POLICY_MAP.(policy_id)
+Ref: core.tb_policy_version.(id) < core.TB_TEMPLATE_POLICY_MAP.(policy_version_id)
+Ref: core.tb_tenant.(id) < core.TB_LLM_PROVIDER.(tenant_id)
+Ref: core.tb_tenant.(id) < core.TB_LLM_MODEL.(tenant_id)
+Ref: core.tb_llm_provider.(id) < core.TB_LLM_MODEL.(provider_id)
+Ref: core.tb_tenant.(id) < core.TB_PROVIDER_KEY.(tenant_id)
+Ref: core.tb_llm_provider.(id) < core.TB_PROVIDER_KEY.(provider_id)
+Ref: core.tb_tenant.(id) < core.TB_LLM_ROUTE.(tenant_id)
+Ref: core.tb_llm_provider.(id) < core.TB_LLM_ROUTE.(provider_id)
+Ref: core.tb_llm_model.(id) < core.TB_LLM_ROUTE.(model_id)
+Ref: core.tb_tenant.(id) < ops.TB_NOTIFICATION_RULE.(tenant_id)
+Ref: core.tb_tenant.(id) < ops.TB_WEBHOOK_ENDPOINT.(tenant_id)
+Ref: core.tb_tenant.(id) < ops.TB_EXPORT_JOB.(tenant_id)

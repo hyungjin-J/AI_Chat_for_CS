@@ -1,0 +1,8 @@
+case_id,tenant_id,scenario,from_ts,to_ts,expected_contract_pass_rate_min,expected_citation_coverage_min,expected_zero_evidence_rate_max,expected_fail_closed_rate_max,expected_fallback_leak_count_max,expected_trace_coverage_min,expected_pii_leak_count_max,expected_p95_e2e_ms_max,expected_p95_first_token_ms_max,expected_stream_completion_rate_min,expected_tool_success_rate_min,expected_feedback_positive_rate_min,notes
+RAG-KPI-0001,tenant-alpha,normal_rag_window,2026-02-10T00:00:00Z,2026-02-10T23:59:59Z,99.5,99.0,1.0,2.0,0,99.99,0,12000,1800,99.0,99.0,70.0,"정상 트래픽 기준선 검증"
+RAG-KPI-0002,tenant-alpha,citation_missing_spike,2026-02-11T00:00:00Z,2026-02-11T23:59:59Z,99.0,98.0,2.0,5.0,0,99.9,0,15000,2000,98.0,97.0,65.0,"AI-009-409-CITATION 급증 시나리오"
+RAG-KPI-0003,tenant-beta,zero_evidence_spike,2026-02-12T00:00:00Z,2026-02-12T23:59:59Z,99.0,98.0,2.0,5.0,0,99.9,0,15000,2000,98.0,97.0,60.0,"AI-009-409-EVIDENCE 급증 시나리오"
+RAG-KPI-0004,tenant-beta,stream_latency_degradation,2026-02-13T00:00:00Z,2026-02-13T23:59:59Z,99.0,98.0,2.0,5.0,0,99.9,0,15000,2000,98.0,97.0,60.0,"PERF-001 임계치 점검"
+RAG-KPI-0005,tenant-gamma,trace_propagation_check,2026-02-14T00:00:00Z,2026-02-14T23:59:59Z,99.5,99.0,1.0,2.0,0,99.99,0,12000,1800,99.0,99.0,70.0,"SYS-004 trace coverage 검증"
+RAG-KPI-0006,tenant-gamma,pii_redaction_check,2026-02-15T00:00:00Z,2026-02-15T23:59:59Z,99.5,99.0,1.0,2.0,0,99.99,0,12000,1800,99.0,99.0,70.0,"마스킹 컬럼 PII 패턴 0건 검증"
+

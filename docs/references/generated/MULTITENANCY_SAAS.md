@@ -1,0 +1,16 @@
+# MULTITENANCY_SAAS
+- 모델 비교:
+  - Shared DB + tenant_id(+RLS)
+  - DB per tenant
+  - Schema per tenant
+- 권장안:
+  - Shared + 선택적 RLS + 대형 테넌트 셀 분리
+- 분리 수준:
+  - 논리 분리(tenant_id), 물리 분리(셀), 키 분리(KMS alias)
+- 온보딩/오프보딩:
+  - tenant 생성 -> seed 주입 -> 도메인/키 설정
+  - 오프보딩은 export -> freeze -> 보존기간 후 파기
+- 테넌트 쿼터/비용:
+  - 토큰/툴콜/검색 예산 + 세션 누적 예산
+- noisy neighbor 방지:
+  - rate-limit, queue 분리, read replica, vec 워크로드 분리
