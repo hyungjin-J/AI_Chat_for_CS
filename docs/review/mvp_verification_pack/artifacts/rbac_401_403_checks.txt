@@ -1,0 +1,6 @@
+﻿# RBAC checks final3 2026-02-18T14:20:11.2771974+09:00
+401_response={"error_code":"SEC-001-401","message":"인증이 만료되었습니다. 다시 로그인해 주세요.","trace_id":"trace-final3-401","details":["authentication_required"]}
+agent_login_raw={"result":"accepted","access_token":"***","refresh_token":"***","user_id":"00000000-0000-0000-0000-000000000201","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["AGENT"],"trace_id":"trace-final3-login-agent"}
+admin_login_raw={"result":"accepted","access_token":"***","refresh_token":"***","user_id":"00000000-0000-0000-0000-000000000202","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["ADMIN"],"trace_id":"trace-final3-login-admin"}
+403_response={"error_code":"SEC-002-403","message":"해당 기능에 접근 권한이 없습니다.","trace_id":"trace-final3-403","details":["rbac_denied"]}
+

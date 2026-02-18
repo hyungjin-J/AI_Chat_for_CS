@@ -60,7 +60,7 @@ class TenantBillingRbacTest {
             800L,
             3L,
             new BigDecimal("1.230000"),
-            "trace-daily",
+            "99999999-9999-4999-8999-999999999999",
             Instant.parse("2026-02-17T10:00:00Z")
         ));
         tenantUsageMonthlyRepository.save(new TenantMonthlyUsage(
@@ -71,25 +71,27 @@ class TenantBillingRbacTest {
             5000L,
             20L,
             new BigDecimal("8.990000"),
-            "trace-monthly",
+            "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
             Instant.parse("2026-02-17T10:00:00Z")
         ));
     }
 
     @Test
     void opsCanReadUsageReport() throws Exception {
+        String traceReadOps = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
         mockMvc.perform(get("/v1/admin/tenants/tenant-a/usage-report")
-                .header("X-Trace-Id", "trace-read-ops")
+                .header("X-Trace-Id", traceReadOps)
                 .header("X-Tenant-Key", "tenant-a")
                 .header("X-User-Id", "ops-user")
                 .header("X-User-Role", "OPS"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.tenant_id").value("tenant-a"))
-            .andExpect(jsonPath("$.trace_id").value("trace-read-ops"));
+            .andExpect(jsonPath("$.trace_id").value(traceReadOps));
     }
 
     @Test
     void opsCannotUpsertQuota() throws Exception {
+        String traceWriteOps = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
         String body = """
             {
               "max_qps": 20,
@@ -100,7 +102,7 @@ class TenantBillingRbacTest {
             }
             """;
         mockMvc.perform(put("/v1/admin/tenants/tenant-a/quota")
-                .header("X-Trace-Id", "trace-write-ops")
+                .header("X-Trace-Id", traceWriteOps)
                 .header("X-Tenant-Key", "tenant-a")
                 .header("X-User-Id", "ops-user")
                 .header("X-User-Role", "OPS")
@@ -108,11 +110,12 @@ class TenantBillingRbacTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andExpect(status().isForbidden())
-            .andExpect(jsonPath("$.error_code").value("API-403"));
+            .andExpect(jsonPath("$.error_code").value("SEC-002-403"));
     }
 
     @Test
     void adminCanUpsertQuotaAndAuditIsWritten() throws Exception {
+        String traceWriteAdmin = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
         String body = """
             {
               "max_qps": 50,
@@ -123,7 +126,7 @@ class TenantBillingRbacTest {
             }
             """;
         mockMvc.perform(put("/v1/admin/tenants/tenant-a/quota")
-                .header("X-Trace-Id", "trace-write-admin")
+                .header("X-Trace-Id", traceWriteAdmin)
                 .header("X-Tenant-Key", "tenant-a")
                 .header("X-User-Id", "admin-user")
                 .header("X-User-Role", "ADMIN")
@@ -131,16 +134,15 @@ class TenantBillingRbacTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andExpect(status().isOk())
-            .andExpect(header().string("X-Trace-Id", "trace-write-admin"))
+            .andExpect(header().string("X-Trace-Id", traceWriteAdmin))
             .andExpect(jsonPath("$.result").value("updated"))
             .andExpect(jsonPath("$.tenant_id").value("tenant-a"))
-            .andExpect(jsonPath("$.trace_id").value("trace-write-admin"));
+            .andExpect(jsonPath("$.trace_id").value(traceWriteAdmin));
 
         assertThat(tenantQuotaRepository.findLatest("tenant-a")).isPresent();
         assertThat(tenantQuotaRepository.findLatest("tenant-a").get().breachAction()).isEqualTo(BreachAction.BLOCK_403);
         assertThat(auditLogRepository.findByTenant("tenant-a")).hasSize(1);
         assertThat(auditLogRepository.findByTenant("tenant-a").get(0).actorUserId()).isEqualTo("admin-user");
-        assertThat(auditLogRepository.findByTenant("tenant-a").get(0).traceId()).isEqualTo("trace-write-admin");
+        assertThat(auditLogRepository.findByTenant("tenant-a").get(0).traceId()).isEqualTo(traceWriteAdmin);
     }
 }
-

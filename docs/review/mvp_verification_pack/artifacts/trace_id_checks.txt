@@ -1,0 +1,10 @@
+﻿http_post_message_trace_id=b3bba9d9-3661-44fd-89c8-07420496c36b
+message_response_trace_id=b3bba9d9-3661-44fd-89c8-07420496c36b
+db_message_trace_id=b3bba9d9-3661-44fd-89c8-07420496c36b
+message_id=916a177e-2fad-406d-a04a-b5ca906cf984
+session_id=7b9aa93c-e65d-4d89-8eb3-45dbd39b1971
+sse_events_with_trace:
+data:{"retrieval_mode":"keyword_fallback","trace_id":"b3bba9d9-3661-44fd-89c8-07420496c36b","status":"completed","tool_name":"rag_retrieve"}
+event:done
+data:{"response_type":"answer","trace_id":"b3bba9d9-3661-44fd-89c8-07420496c36b","message_id":"916a177e-2fad-406d-a04a-b5ca906cf984"}
+

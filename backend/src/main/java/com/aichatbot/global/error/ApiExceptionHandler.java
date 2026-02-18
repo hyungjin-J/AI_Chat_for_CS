@@ -9,9 +9,13 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ExceptionHandler(QuotaExceededException.class)
     public ResponseEntity<ApiErrorResponse> handleQuotaExceeded(QuotaExceededException exception) {
@@ -44,8 +48,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiErrorResponse> handleAccessDenied(AccessDeniedException exception) {
         ApiErrorResponse error = new ApiErrorResponse(
-            "API-403",
-            "Forbidden",
+            "SEC-002-403",
+            ErrorCatalog.messageOf("SEC-002-403"),
             TraceContext.getTraceId(),
             List.of("rbac_denied")
         );
@@ -58,24 +62,35 @@ public class ApiExceptionHandler {
             .map(error -> error.getField() + ": " + error.getDefaultMessage())
             .toList();
         ApiErrorResponse error = new ApiErrorResponse(
-            "OPS-102-INVALID_INPUT",
-            "Request validation failed",
+            "API-003-422",
+            ErrorCatalog.messageOf("API-003-422"),
             TraceContext.getTraceId(),
             details
         );
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiErrorResponse> handleIllegalArgument(IllegalArgumentException exception) {
+        ApiErrorResponse error = new ApiErrorResponse(
+            "API-003-422",
+            ErrorCatalog.messageOf("API-003-422"),
+            TraceContext.getTraceId(),
+            List.of(exception.getMessage())
+        );
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleException(Exception exception) {
+        log.error("Unhandled exception trace_id={}", TraceContext.getTraceId(), exception);
         // Why: 예외 응답 스키마를 고정해야 운영 파이프라인에서 자동 파싱과 경보 라우팅이 가능하다.
         ApiErrorResponse error = new ApiErrorResponse(
-            "SYS-003-UNEXPECTED",
-            "예상하지 못한 오류가 발생했습니다.",
+            "SYS-003-500",
+            ErrorCatalog.messageOf("SYS-003-500"),
             TraceContext.getTraceId(),
             List.of(exception.getClass().getSimpleName())
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
-

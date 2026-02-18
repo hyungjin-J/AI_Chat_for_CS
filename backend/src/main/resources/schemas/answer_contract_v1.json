@@ -1,0 +1,88 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://aichatbot.local/schemas/answer_contract_v1.json",
+    "title": "Answer Contract v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "response_type",
+        "answer",
+        "citations",
+        "evidence"
+    ],
+    "properties": {
+        "schema_version": {
+            "type": "string",
+            "const": "v1"
+        },
+        "response_type": {
+            "type": "string",
+            "enum": ["answer", "safe"]
+        },
+        "answer": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["text"],
+            "properties": {
+                "text": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "citations": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "citation_id",
+                    "message_id",
+                    "chunk_id",
+                    "rank_no",
+                    "excerpt_masked"
+                ],
+                "properties": {
+                    "citation_id": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "message_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "chunk_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "rank_no": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "excerpt_masked": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["score", "threshold"],
+            "properties": {
+                "score": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                },
+                "threshold": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                }
+            }
+        }
+    }
+}

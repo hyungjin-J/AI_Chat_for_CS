@@ -1,0 +1,25 @@
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: 'frontend@0.0.0',
+npm warn EBADENGINE   required: { node: '>=22 <23' },
+npm warn EBADENGINE   current: { node: 'v24.11.1', npm: '11.6.2' }
+npm warn EBADENGINE }
+
+added 176 packages, and audited 177 packages in 4s
+
+45 packages are looking for funding
+  run `npm fund` for details
+
+10 moderate severity vulnerabilities
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
+
+> frontend@0.0.0 build
+> tsc -b
+
+BUILD_SUCCESS

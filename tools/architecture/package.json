@@ -1,0 +1,13 @@
+{
+  "name": "architecture-tools",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "generate:icons": "node generate_icons.mjs"
+  },
+  "dependencies": {
+    "sharp": "^0.34.4",
+    "simple-icons": "^13.16.0"
+  }
+}

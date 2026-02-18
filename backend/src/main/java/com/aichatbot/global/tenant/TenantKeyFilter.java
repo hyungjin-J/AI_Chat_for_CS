@@ -1,13 +1,18 @@
 package com.aichatbot.global.tenant;
 
 import com.aichatbot.global.error.ApiErrorResponse;
+import com.aichatbot.global.error.ErrorCatalog;
 import com.aichatbot.global.observability.TraceContext;
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -18,6 +23,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Order(Ordered.HIGHEST_PRECEDENCE + 1)
 public class TenantKeyFilter extends OncePerRequestFilter {
 
+    private final TenantResolverRepository tenantResolverRepository;
+    private final ObjectMapper objectMapper;
+
+    public TenantKeyFilter(TenantResolverRepository tenantResolverRepository, ObjectMapper objectMapper) {
+        this.tenantResolverRepository = tenantResolverRepository;
+        this.objectMapper = objectMapper;
+    }
+
     @Override
     protected void doFilterInternal(
         HttpServletRequest request,
@@ -26,13 +39,19 @@ public class TenantKeyFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         String tenantKey = request.getHeader("X-Tenant-Key");
 
-        // 왜 필요한가: 테넌트 키가 없으면 데이터가 섞일 수 있으므로 서버에서 즉시 차단한다.
         if (tenantKey == null || tenantKey.isBlank()) {
-            writeBadRequest(response);
+            writeForbidden(response, List.of("missing_tenant_key"));
+            return;
+        }
+
+        Optional<UUID> tenantIdOptional = tenantResolverRepository.findTenantIdByKey(tenantKey.trim());
+        if (tenantIdOptional.isEmpty()) {
+            writeForbidden(response, List.of("tenant_not_found"));
             return;
         }
 
         TenantContext.setTenantKey(tenantKey.trim());
+        TenantContext.setTenantId(tenantIdOptional.get().toString());
         try {
             filterChain.doFilter(request, response);
         } finally {
@@ -40,33 +59,24 @@ public class TenantKeyFilter extends OncePerRequestFilter {
         }
     }
 
-    private void writeBadRequest(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
+    private void writeForbidden(HttpServletResponse response, List<String> details) throws IOException {
+        response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
-
         ApiErrorResponse body = new ApiErrorResponse(
-            "SEC-001-TENANT-KEY-REQUIRED",
-            "X-Tenant-Key 헤더가 필요합니다.",
-            TraceContext.getTraceId()
+            "SYS-002-403",
+            ErrorCatalog.messageOf("SYS-002-403"),
+            TraceContext.getTraceId(),
+            details
         );
-        response.getWriter().write(toJson(body));
-    }
-
-    private String toJson(ApiErrorResponse body) {
-        // 왜 필요한가: 빌드 의존성을 최소화하면서도 표준 JSON 에러 형태를 유지하기 위함이다.
-        String safeMessage = escapeJson(body.message());
-        String safeTraceId = escapeJson(body.traceId() == null ? "" : body.traceId());
-        return "{\"error_code\":\"" + body.errorCode() + "\",\"message\":\"" + safeMessage + "\",\"trace_id\":\"" + safeTraceId + "\"}";
-    }
-
-    private String escapeJson(String value) {
-        return value.replace("\\", "\\\\").replace("\"", "\\\"");
+        response.getWriter().write(objectMapper.writeValueAsString(body));
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return Objects.equals(request.getRequestURI(), "/health")
-            || Objects.equals(request.getRequestURI(), "/actuator/health");
+        String uri = request.getRequestURI();
+        return Objects.equals(uri, "/health")
+            || Objects.equals(uri, "/actuator/health")
+            || uri.startsWith("/error");
     }
 }

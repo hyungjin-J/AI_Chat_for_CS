@@ -17,12 +17,23 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class RoleHeaderAuthenticationFilter extends OncePerRequestFilter {
 
+    private final boolean enabled;
+
+    public RoleHeaderAuthenticationFilter(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     protected void doFilterInternal(
         HttpServletRequest request,
         HttpServletResponse response,
         FilterChain filterChain
     ) throws ServletException, IOException {
+        if (!enabled) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             String roleHeader = request.getHeader("X-User-Role");
             String userIdHeader = request.getHeader("X-User-Id");

@@ -45,24 +45,24 @@ class BudgetEnforcementHttpTest {
             null,
             BreachAction.THROTTLE_429,
             "admin",
-            "trace-seed",
+            "77777777-7777-4777-8777-777777777777",
             Instant.parse("2026-01-01T00:00:00Z")
         ));
     }
 
     @Test
     void shouldReturn429WithStandardHeadersWhenTokenBudgetExceeded() throws Exception {
+        String traceBudget = "88888888-8888-4888-8888-888888888888";
         mockMvc.perform(get("/api/v1/sessions/s1/messages/stream")
                 .param("prompt", "이 프롬프트는 길어서 토큰 예산을 초과하도록 만든 테스트 입력입니다.")
-                .header("X-Trace-Id", "trace-budget")
+                .header("X-Trace-Id", traceBudget)
                 .header("X-Tenant-Key", "tenant-budget"))
             .andExpect(status().isTooManyRequests())
             .andExpect(jsonPath("$.error_code").value("API-008-429-BUDGET"))
-            .andExpect(jsonPath("$.trace_id").value("trace-budget"))
+            .andExpect(jsonPath("$.trace_id").value(traceBudget))
             .andExpect(header().exists("Retry-After"))
             .andExpect(header().exists("X-RateLimit-Limit"))
             .andExpect(header().exists("X-RateLimit-Remaining"))
             .andExpect(header().exists("X-RateLimit-Reset"));
     }
 }
-
