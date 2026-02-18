@@ -43,6 +43,7 @@ public class MessageGenerationService {
     private final AnswerContractValidator answerContractValidator;
     private final PiiMaskingService piiMaskingService;
     private final BudgetGuardService budgetGuardService;
+    private final MvpObservabilityMetrics mvpObservabilityMetrics;
     private final AppProperties appProperties;
     private final ObjectMapper objectMapper;
 
@@ -58,6 +59,7 @@ public class MessageGenerationService {
         AnswerContractValidator answerContractValidator,
         PiiMaskingService piiMaskingService,
         BudgetGuardService budgetGuardService,
+        MvpObservabilityMetrics mvpObservabilityMetrics,
         AppProperties appProperties,
         ObjectMapper objectMapper
     ) {
@@ -72,6 +74,7 @@ public class MessageGenerationService {
         this.answerContractValidator = answerContractValidator;
         this.piiMaskingService = piiMaskingService;
         this.budgetGuardService = budgetGuardService;
+        this.mvpObservabilityMetrics = mvpObservabilityMetrics;
         this.appProperties = appProperties;
         this.objectMapper = objectMapper;
     }
@@ -144,6 +147,8 @@ public class MessageGenerationService {
             validationErrorCode = validationErrorCode == null ? "AI-009-200-SAFE" : validationErrorCode;
             finalAnswerText = ErrorCatalog.messageOf("AI-009-200-SAFE");
         }
+
+        mvpObservabilityMetrics.recordGenerationOutcome(safeResponse, citationsForAnswer.size());
 
         MessageView answerMessage = messageRepository.create(
             tenantId,

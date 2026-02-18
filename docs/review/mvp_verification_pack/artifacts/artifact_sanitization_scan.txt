@@ -1,0 +1,4 @@
+﻿artifact_scan_status=PASS
+scanned_files=59
+checked_patterns=5
+allowlist_entries=7

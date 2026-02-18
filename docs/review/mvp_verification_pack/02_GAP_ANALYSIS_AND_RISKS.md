@@ -8,9 +8,9 @@
   - `docs/references/CS_AI_CHATBOT_DB.xlsx`
   - `docs/uiux/CS_RAG_UI_UX_설계서.xlsx` (`01_에러메시지코드`)
 
-## MUST-FIX (Blocker)
+## 반드시 수정 (차단 이슈)
 
-### 1) 정상 answer+citation 스트리밍 증거 부재 리스크 (해소 완료)
+### 1) 정상 답변+근거 인용 스트리밍 증거 부재 리스크 (해소 완료)
 - 증상:
   - 정상 시나리오 증거가 없으면 fail-closed만 증명되고 정상 경로 신뢰성이 낮아짐
 - 중요성:
@@ -18,7 +18,7 @@
 - 재현/검증:
   - `artifacts/sse_stream_normal.log` 확인 (`tool -> citation -> token -> done`)
 - 상태:
-  - 현재 PASS로 해소
+  - 현재 통과로 해소
 
 ### 2) Evidence score/threshold 의미 약화 리스크
 - 증상:
@@ -38,7 +38,7 @@
 - 재현/검증:
   - `artifacts/trace_id_checks.txt`에서 HTTP/SSE/DB 동일 값 확인
 - 상태:
-  - UUID 정책 강제 + 불일치 방지로 PASS
+  - UUID 정책 강제 + 불일치 방지로 통과
 
 ### 4) PostgreSQL + Flyway 부팅 경로 실패 리스크 (해소 완료)
 - 증상:
@@ -48,7 +48,7 @@
 - 재현/검증:
   - `artifacts/backend_bootrun_postgres_output.txt`
 - 상태:
-  - PG 16.12 + 마이그레이션 적용 PASS
+  - PG 16.12 + 마이그레이션 적용 통과
 
 ### 5) Tenant filter 누락으로 교차 접근 리스크 (해소 완료)
 - 증상:
@@ -58,9 +58,9 @@
 - 재현/검증:
   - `artifacts/tenant_isolation_403_checks.txt`
 - 상태:
-  - 403 + 일관 코드로 PASS
+  - 403 + 일관 코드로 통과
 
-## SHOULD-FIX
+## 권장 수정
 
 ### 6) Fail-Closed 전환 케이스 확장
 - 현재:
@@ -74,13 +74,13 @@
 - 추가 권장:
   - Redis/DB 기반 키 저장과 TTL 정책 강화
 
-### 8) SSE resume 다중 환경 검증 확대
+### 8) SSE 이어받기 다중 환경 검증 확대
 - 현재:
-  - 1개 환경 재현 PASS
+  - 1개 환경 재현 통과
 - 추가 권장:
   - 네트워크 지연/재접속 조건별 재현 스위트 추가
 
-## NICE-TO-HAVE
+## 추가 개선 권장
 
 ### 9) 프론트 빌드 표준화 강화
 - Node/npm 버전 핀 고도화, CI 캐시 전략 명시

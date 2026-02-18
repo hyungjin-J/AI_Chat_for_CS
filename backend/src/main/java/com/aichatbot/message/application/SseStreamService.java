@@ -2,6 +2,7 @@ package com.aichatbot.message.application;
 
 import com.aichatbot.global.error.ApiException;
 import com.aichatbot.global.error.ErrorCatalog;
+import com.aichatbot.global.config.AppProperties;
 import com.aichatbot.global.security.UserPrincipal;
 import com.aichatbot.message.infrastructure.MessageRepository;
 import com.aichatbot.message.infrastructure.StreamEventRepository;
@@ -19,18 +20,24 @@ public class SseStreamService {
     private final MessageRepository messageRepository;
     private final StreamEventRepository streamEventRepository;
     private final SseConcurrencyGuard sseConcurrencyGuard;
+    private final MvpObservabilityMetrics mvpObservabilityMetrics;
     private final ObjectMapper objectMapper;
+    private final AppProperties appProperties;
 
     public SseStreamService(
         MessageRepository messageRepository,
         StreamEventRepository streamEventRepository,
         SseConcurrencyGuard sseConcurrencyGuard,
-        ObjectMapper objectMapper
+        MvpObservabilityMetrics mvpObservabilityMetrics,
+        ObjectMapper objectMapper,
+        AppProperties appProperties
     ) {
         this.messageRepository = messageRepository;
         this.streamEventRepository = streamEventRepository;
         this.sseConcurrencyGuard = sseConcurrencyGuard;
+        this.mvpObservabilityMetrics = mvpObservabilityMetrics;
         this.objectMapper = objectMapper;
+        this.appProperties = appProperties;
     }
 
     public SseEmitter stream(
@@ -66,6 +73,8 @@ public class SseStreamService {
         emitter.onError(ex -> sseConcurrencyGuard.release(userKey));
 
         try {
+            long streamOpenedAtNanos = System.nanoTime();
+            boolean firstTokenRecorded = false;
             if (fromEventSeqExclusive <= 0) {
                 send(emitter, 0, "heartbeat", objectMapper.createObjectNode().put("status", "alive"));
             }
@@ -73,8 +82,20 @@ public class SseStreamService {
             for (StreamEventView event : events) {
                 Object payload = parsePayload(event.payloadJson());
                 send(emitter, event.eventSeq(), event.eventType(), payload);
+                if (!firstTokenRecorded && "token".equals(event.eventType())) {
+                    long elapsedMs = (System.nanoTime() - streamOpenedAtNanos) / 1_000_000L;
+                    mvpObservabilityMetrics.recordSseFirstToken(elapsedMs);
+                    firstTokenRecorded = true;
+                }
+            }
+            long holdMs = Math.max(0L, appProperties.getBudget().getSseHoldMs());
+            if (holdMs > 0L) {
+                Thread.sleep(holdMs);
             }
             emitter.complete();
+        } catch (InterruptedException interruptedException) {
+            Thread.currentThread().interrupt();
+            emitter.completeWithError(interruptedException);
         } catch (Exception exception) {
             try {
                 send(

@@ -1,5 +1,6 @@
-﻿input_raw=refund policy. contact refund-team@example.com or +82 10-1234-5678 order AB-123456
+﻿input_sample=refund policy. contact [EMAIL] or [PHONE] order [ORDER_ID]
 masked_in_rag_search_log=[mode=keyword_fallback] refund policy. contact ***@*** or ***-**** order ORDER-***
 citation_excerpt_masked=Refund policy: approved refunds are returned to original payment method within 3-5 business days. 문의 이메일 ***@***
-contains_raw_email=False
+contains_raw_email_pattern=False
+contains_raw_phone_pattern=False
 contains_masked_email=True

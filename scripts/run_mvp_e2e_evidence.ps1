@@ -12,6 +12,25 @@ function Write-JsonFile($path, $jsonText) {
     $jsonText | Out-File -FilePath $path -Encoding utf8
 }
 
+function Mask-SensitiveJson {
+    param([string]$rawJson)
+    if ([string]::IsNullOrWhiteSpace($rawJson)) {
+        return $rawJson
+    }
+    try {
+        $obj = $rawJson | ConvertFrom-Json
+        if ($obj.PSObject.Properties.Name -contains "access_token") {
+            $obj.access_token = "***"
+        }
+        if ($obj.PSObject.Properties.Name -contains "refresh_token") {
+            $obj.refresh_token = "***"
+        }
+        return ($obj | ConvertTo-Json -Depth 20 -Compress)
+    } catch {
+        return $rawJson
+    }
+}
+
 # Ensure clean backend process on 8080.
 $existing = Get-NetTCPConnection -LocalPort 8080 -State Listen -ErrorAction SilentlyContinue |
     Select-Object -ExpandProperty OwningProcess -Unique
@@ -60,6 +79,7 @@ try {
     Write-JsonFile $loginBodyPath '{"login_id":"agent1","password":"agent1-pass","channel_id":"test","client_nonce":"nonce-login"}'
     $loginRespRaw = cmd /c "curl -sS http://localhost:8080/v1/auth/login -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $traceLogin"" -H ""Idempotency-Key: $idemLogin"" -H ""Content-Type: application/json"" --data-binary @$loginBodyPath 2>nul"
     $login = $loginRespRaw | ConvertFrom-Json
+    $loginRespMasked = Mask-SensitiveJson $loginRespRaw
     $token = $login.access_token
     if ([string]::IsNullOrWhiteSpace($token)) {
         throw "login_failed: $loginRespRaw"
@@ -92,6 +112,22 @@ try {
     $normalSsePath = Join-Path $artifactDir "sse_stream_normal.log"
     $normalSse | Out-File -FilePath $normalSsePath -Encoding utf8
 
+    $traceFailMsg = New-Uuid
+    $idemFailMsg = New-Uuid
+    $failMessageBodyPath = "tmp/message_body_fail_closed.json"
+    Write-JsonFile $failMessageBodyPath '{"text":"zzzzzz qqqqq not-found-knowledge","top_k":1,"client_nonce":"nonce-fail-closed"}'
+    $failMsgRespRaw = cmd /c "curl -sS http://localhost:8080/v1/sessions/$sessionId/messages -H ""Authorization: Bearer $token"" -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $traceFailMsg"" -H ""Idempotency-Key: $idemFailMsg"" -H ""Content-Type: application/json"" --data-binary @$failMessageBodyPath 2>nul"
+    $failMsg = $failMsgRespRaw | ConvertFrom-Json
+    $failMessageId = $failMsg.id
+    if ([string]::IsNullOrWhiteSpace($failMessageId)) {
+        throw "post_fail_message_failed: $failMsgRespRaw"
+    }
+
+    $traceFailStream = New-Uuid
+    $failSse = cmd /c "curl -sS -N http://localhost:8080/v1/sessions/$sessionId/messages/$failMessageId/stream -H ""Authorization: Bearer $token"" -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $traceFailStream"" 2>nul"
+    $failSsePath = Join-Path $artifactDir "sse_stream_fail_closed.log"
+    $failSse | Out-File -FilePath $failSsePath -Encoding utf8
+
     $traceCitation = New-Uuid
     $citResp = cmd /c "curl -sS http://localhost:8080/v1/rag/answers/$messageId/citations -H ""Authorization: Bearer $token"" -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $traceCitation"" 2>nul"
     $citPath = Join-Path $artifactDir "citations_api_response.json"
@@ -113,7 +149,7 @@ try {
     $tenantPath = Join-Path $artifactDir "tenant_isolation_403_checks.txt"
     $tenantResp | Out-File -FilePath $tenantPath -Encoding utf8
 
-    $dbTrace = docker exec aichatbot-postgres psql -U aichatbot -d aichatbot -t -A -c "SELECT trace_id::text FROM tb_message WHERE id = '$messageId' LIMIT 1;"
+    $dbTrace = (docker exec aichatbot-postgres psql -U aichatbot -d aichatbot -t -A -c "SELECT trace_id::text FROM tb_message WHERE id = '$messageId' LIMIT 1;").Trim()
     $tracePath = Join-Path $artifactDir "trace_id_checks.txt"
     @"
 http_post_message_trace_id=$traceMsg
@@ -128,11 +164,12 @@ $($normalSse -split "`n" | Where-Object { $_ -like "*trace_id*" -or $_ -like "ev
     $excerpt = $citJson.data[0].excerpt_masked
     $dbMasked = docker exec aichatbot-postgres psql -U aichatbot -d aichatbot -t -A -c "SELECT query_text_masked FROM tb_rag_search_log ORDER BY created_at DESC LIMIT 1;"
     $piiPath = Join-Path $artifactDir "pii_masking_checks.txt"
-    @"
-input_raw=refund policy. contact refund-team@example.com or +82 10-1234-5678 order AB-123456
+@"
+input_sample=refund policy. contact [EMAIL] or [PHONE] order [ORDER_ID]
 masked_in_rag_search_log=$dbMasked
 citation_excerpt_masked=$excerpt
-contains_raw_email=$($excerpt -like "*@example.com*")
+contains_raw_email_pattern=$($excerpt -match "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+contains_raw_phone_pattern=$($excerpt -match "\b\d{2,3}[- ]?\d{3,4}[- ]?\d{4}\b")
 contains_masked_email=$($excerpt -like "*@***")
 "@ | Out-File -FilePath $piiPath -Encoding utf8
 
@@ -149,7 +186,7 @@ $resumeSse
     $e2ePath = Join-Path $artifactDir "e2e_curl_transcripts.txt"
     @"
 LOGIN_TRACE=$traceLogin
-$loginRespRaw
+$loginRespMasked
 
 CREATE_SESSION_TRACE=$traceSession
 $sessionRespRaw

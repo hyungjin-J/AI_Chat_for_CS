@@ -1,5 +1,6 @@
 package com.aichatbot.global.idempotency;
 
+import com.aichatbot.global.config.AppProperties;
 import com.aichatbot.global.error.ApiException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -14,7 +15,10 @@ class IdempotencyServiceTest {
 
     @Test
     void shouldReturn409WhenDuplicateRequestArrivesDuringProcessing() throws Exception {
-        IdempotencyService idempotencyService = new IdempotencyService();
+        IdempotencyService idempotencyService = new IdempotencyService(
+            new InMemoryIdempotencyRecordStore(),
+            new AppProperties()
+        );
         CountDownLatch started = new CountDownLatch(1);
         CountDownLatch release = new CountDownLatch(1);
 
@@ -38,5 +42,20 @@ class IdempotencyServiceTest {
         release.countDown();
         assertThat(first.get()).isEqualTo("ok");
         executor.shutdownNow();
+    }
+
+    @Test
+    void shouldReturn409WhenDuplicateRequestArrivesAfterCompletion() {
+        IdempotencyService idempotencyService = new IdempotencyService(
+            new InMemoryIdempotencyRecordStore(),
+            new AppProperties()
+        );
+
+        String first = idempotencyService.execute("scope", "same-key", () -> "first");
+
+        assertThat(first).isEqualTo("first");
+        assertThatThrownBy(() -> idempotencyService.execute("scope", "same-key", () -> "second"))
+            .isInstanceOf(ApiException.class)
+            .satisfies(exception -> assertThat(((ApiException) exception).errorCode()).isEqualTo("API-003-409"));
     }
 }

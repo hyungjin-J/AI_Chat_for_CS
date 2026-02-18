@@ -1,23 +1,21 @@
-version: "3.9"
-services:
+﻿services:
   postgres:
     image: postgres:16.12
     container_name: aichatbot-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: aichatbot
-      POSTGRES_USER: aichatbot
-      # 로컬 예시 비밀번호: 운영에서는 환경변수/시크릿 매니저로 반드시 교체해야 합니다.
-      POSTGRES_PASSWORD: local-dev-only-password
+      POSTGRES_DB: ${POSTGRES_DB:-aichatbot}
+      POSTGRES_USER: ${POSTGRES_USER:-aichatbot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-dev-only-password}
     ports:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U aichatbot -d aichatbot"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aichatbot} -d ${POSTGRES_DB:-aichatbot}"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   redis:
     image: redis:7
@@ -32,8 +30,67 @@ services:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+
+  backend:
+    image: eclipse-temurin:17-jdk
+    container_name: aichatbot-backend
+    restart: unless-stopped
+    working_dir: /workspace/backend
+    command: ["bash", "-lc", "./gradlew bootRun --no-daemon"]
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      APP_LLM_PROVIDER: ${APP_LLM_PROVIDER:-mock}
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-aichatbot}
+      DB_USERNAME: ${POSTGRES_USER:-aichatbot}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-local-dev-only-password}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      APP_IDEMPOTENCY_STORE: ${APP_IDEMPOTENCY_STORE:-redis}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../backend:/workspace/backend
+      - gradle_cache:/root/.gradle
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles: ["demo-stack"]
+
+  frontend:
+    image: node:22
+    container_name: aichatbot-frontend
+    restart: unless-stopped
+    working_dir: /workspace/frontend
+    command: ["bash", "-lc", "npm ci && npm run build:web && npm run preview -- --host 0.0.0.0 --port 4173"]
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
+    ports:
+      - "4173:4173"
+    volumes:
+      - ../frontend:/workspace/frontend
+      - frontend_node_modules:/workspace/frontend/node_modules
+    depends_on:
+      backend:
+        condition: service_started
+    profiles: ["demo-stack"]
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: aichatbot-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    profiles: ["llm"]
 
 volumes:
   pg_data:
   redis_data:
+  gradle_cache:
+  frontend_node_modules:
+  ollama_data:
+

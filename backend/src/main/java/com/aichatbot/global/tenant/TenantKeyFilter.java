@@ -77,6 +77,7 @@ public class TenantKeyFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
         return Objects.equals(uri, "/health")
             || Objects.equals(uri, "/actuator/health")
+            || Objects.equals(uri, "/actuator/prometheus")
             || uri.startsWith("/error");
     }
 }

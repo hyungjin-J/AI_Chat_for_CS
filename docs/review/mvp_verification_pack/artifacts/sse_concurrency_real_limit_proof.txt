@@ -1,0 +1,10 @@
+﻿mode=real_limit
+sse_concurrency_limit=2
+sse_hold_ms=3000
+third_status=429
+third_error_code=API-008-429-SSE
+expected_status=429
+expected_error_code=API-008-429-SSE
+third_raw=HTTP/1.1 429  X-Trace-Id: 2e41bcb4-4b3e-47f0-9d1e-5c3d297e9609 Retry-After: 10 X-RateLimit-Limit: 2 X-RateLimit-Remaining: 0 X-RateLimit-Reset: 1771412346 X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Transfer-Encoding: chunked Date: Wed, 18 Feb 2026 10:58:56 GMT  {"error_code":"API-008-429-SSE","message":"동시 스트리밍 연결 수를 초과했습니다.","trace_id":"2e41bcb4-4b3e-47f0-9d1e-5c3d297e9609","details":["quota_exceeded"]}
+first_stream_has_done=event:done
+second_stream_has_done=event:done

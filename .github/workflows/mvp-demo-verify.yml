@@ -1,0 +1,99 @@
+name: mvp-demo-verify
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened, ready_for_review]
+    workflow_dispatch:
+
+jobs:
+    verify:
+        runs-on: windows-latest
+        timeout-minutes: 90
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Java 17
+              uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: "17"
+                  cache: gradle
+
+            - name: Setup Node 22
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+                  cache-dependency-path: "frontend/package-lock.json"
+
+            - name: Setup Python 3.11
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.11"
+
+            - name: Docker compose up
+              shell: pwsh
+              run: docker compose -f infra/docker-compose.yml up -d
+
+            - name: Backend tests
+              shell: pwsh
+              working-directory: backend
+              run: .\gradlew.bat test --no-daemon
+
+            - name: Frontend build
+              shell: pwsh
+              working-directory: frontend
+              run: |
+                  npm ci
+                  npm run build
+
+            - name: Run MVP E2E evidence
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/run_mvp_e2e_evidence.ps1
+
+            - name: Run MVP negative tests
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/run_mvp_negative_tests.ps1
+
+            - name: Run idempotency redis e2e
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/run_idempotency_redis_e2e.ps1
+
+            - name: Run SSE resume fault injection
+              shell: pwsh
+              run: python tests/sse_resume_fault_injection_test.py
+
+            - name: Generate metrics report
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/run_metrics_sampling.ps1 -SampleCount 20
+
+            - name: Run SSE real concurrency limit proof
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/run_sse_concurrency_real_limit_test.ps1
+
+            - name: Check branch protection status (manual/pass)
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/check_branch_protection.ps1
+
+            - name: Scan artifacts for secret/PII leakage
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/scan_artifacts_for_secrets_and_pii.ps1
+
+            - name: Assert verification pack consistency
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/assert_verification_pack_consistency.ps1
+
+            - name: Upload MVP verification artifacts
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: mvp-verification-pack-artifacts
+                  path: |
+                      docs/review/mvp_verification_pack/artifacts/**
+
+            - name: Docker compose down
+              if: always()
+              shell: pwsh
+              run: docker compose -f infra/docker-compose.yml down -v

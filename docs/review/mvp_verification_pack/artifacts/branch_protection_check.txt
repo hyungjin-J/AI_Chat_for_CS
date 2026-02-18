@@ -1,0 +1,5 @@
+﻿status=MANUAL
+reason=gh_cli_not_installed
+required_check=mvp-demo-verify / verify
+repo=hyungjin-J/AI_Chat_for_CS
+action=gh 설치 또는 웹 UI에서 수동 확인

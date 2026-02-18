@@ -1,8 +1,8 @@
-﻿LOGIN_TRACE=425057b8-9c18-451e-a07c-0df8ae5c3bd0
-{"result":"accepted","access_token":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAyMDEiLCJ0ZW5hbnRfaWQiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDEiLCJsb2dpbl9pZCI6ImFnZW50MSIsInJvbGVzIjpbIkFHRU5UIl0sInRva2VuX3R5cGUiOiJhY2Nlc3MiLCJ0cmFjZV9pZCI6IjQyNTA1N2I4LTljMTgtNDUxZS1hMDdjLTBkZjhhZTVjM2JkMCIsImlhdCI6MTc3MTM5OTY4OSwiZXhwIjoxNzcxNDAzMjg5fQ.KoTM1dfs54OxpHs6PM9auNIuzSka0NzOVm1HWIixZWg","refresh_token":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAyMDEiLCJ0ZW5hbnRfaWQiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDEiLCJsb2dpbl9pZCI6ImFnZW50MSIsInJvbGVzIjpbIkFHRU5UIl0sInRva2VuX3R5cGUiOiJyZWZyZXNoIiwidHJhY2VfaWQiOiI0MjUwNTdiOC05YzE4LTQ1MWUtYTA3Yy0wZGY4YWU1YzNiZDAiLCJpYXQiOjE3NzEzOTk2ODksImV4cCI6MTc3MjYwOTI4OX0.MDoa6dXGELLYNwO_adkorO1AHfdzf1AOTRJ_I4lWNAA","user_id":"00000000-0000-0000-0000-000000000201","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["AGENT"],"trace_id":"425057b8-9c18-451e-a07c-0df8ae5c3bd0"}
+﻿LOGIN_TRACE=e06d888f-0bc9-4980-b603-bb8c93fdf239
+{"result":"accepted","access_token":"***","refresh_token":"***","user_id":"00000000-0000-0000-0000-000000000201","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["AGENT"],"trace_id":"e06d888f-0bc9-4980-b603-bb8c93fdf239"}
 
-CREATE_SESSION_TRACE=63455dd1-cf5d-415c-9646-469f3d3552cf
-{"result":"accepted","session_id":"7b9aa93c-e65d-4d89-8eb3-45dbd39b1971","status":"active","trace_id":"63455dd1-cf5d-415c-9646-469f3d3552cf"}
+CREATE_SESSION_TRACE=abd84ff8-ac47-4184-aec9-931efb01de60
+{"result":"accepted","session_id":"8c911d8d-3f6e-45f5-a907-f47570fd2c08","status":"active","trace_id":"abd84ff8-ac47-4184-aec9-931efb01de60"}
 
-POST_MESSAGE_TRACE=b3bba9d9-3661-44fd-89c8-07420496c36b
-{"result":"accepted","id":"916a177e-2fad-406d-a04a-b5ca906cf984","session_id":"7b9aa93c-e65d-4d89-8eb3-45dbd39b1971","trace_id":"b3bba9d9-3661-44fd-89c8-07420496c36b"}
+POST_MESSAGE_TRACE=15b2f7b4-7706-429d-bcd7-589fe5fce6d0
+{"result":"accepted","id":"39c9430e-46a0-474c-85b0-ceaa557f7572","session_id":"8c911d8d-3f6e-45f5-a907-f47570fd2c08","trace_id":"15b2f7b4-7706-429d-bcd7-589fe5fce6d0"}

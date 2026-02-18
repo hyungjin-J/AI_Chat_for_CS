@@ -1,0 +1,64 @@
+name: provider-regression-nightly
+
+on:
+    schedule:
+        - cron: "0 18 * * *"
+    workflow_dispatch:
+
+jobs:
+    ollama-regression:
+        runs-on: windows-latest
+        timeout-minutes: 90
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Java 17
+              uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: "17"
+
+            - name: Setup Node 22
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+
+            - name: Docker compose up
+              shell: pwsh
+              run: docker compose -f infra/docker-compose.yml up -d
+
+            - name: Docker compose ollama up
+              shell: pwsh
+              run: docker compose -f infra/docker-compose.ollama.yml up -d
+
+            - name: Run provider regression (SKIPPED allowed)
+              shell: pwsh
+              env:
+                  APP_OLLAMA_BASE_URL: ${{ secrets.APP_OLLAMA_BASE_URL }}
+              run: |
+                  powershell -ExecutionPolicy Bypass -File scripts/run_provider_regression.ps1
+                  if (Test-Path "docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log") {
+                    $content = Get-Content "docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log" -Raw
+                    if ($content -match "status=SKIPPED") {
+                      Write-Error "provider regression nightly skipped (NEEDS_ENV)"
+                      exit 1
+                    }
+                  }
+
+            - name: Upload provider regression artifact
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: provider-regression-artifacts
+                  path: |
+                      docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log
+                      docs/review/mvp_verification_pack/artifacts/provider_regression_backend.log
+
+            - name: Docker compose down
+              if: always()
+              shell: pwsh
+              run: |
+                  docker compose -f infra/docker-compose.yml down -v
+                  docker compose -f infra/docker-compose.ollama.yml down -v

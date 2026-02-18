@@ -1,35 +1,47 @@
-# MVP 검증 요약 (Demo Ready)
+﻿# MVP 검증 요약 (SSOT 연동)
 
-## 결론
-- 상태: **Demo Ready**
-- 근거: FAIL 대상 7개 항목을 실행 증빙(artifacts)으로 PASS 확인
+- Last synced at: 2026-02-18 20:00 (KST)
+- Version(commit): `3e057a3+working-tree`
+- Status: Demo Ready
+- SSOT source: `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 
-## 이번에 PASS로 확정한 항목
-1. `AUTO-FE-001` 프론트 빌드 재현
-2. `SSE-NORMAL-001` 정상 스트림(citation 포함)
-3. `NEG-TENANT-001` 교차 테넌트 403 차단
-4. `PII-RESP-001` citation excerpt PII 마스킹
-5. `OBS-TRACE-001` HTTP/SSE/DB trace_id 일치
-6. PostgreSQL 16.12 + Flyway + bootRun
-7. `SSE-RESUME-001` Last-Event-ID resume 재현
+## 핵심 결론
+- Fail-Closed, PII 마스킹, trace_id 종단 추적, tenant/RBAC 격리, budget/concurrency 방어는 모두 증빙 파일로 확인되었다.
+- Provider 회귀는 현재 환경에서 `SKIPPED`이며, 실행 방법은 `scripts/run_provider_regression.ps1`와 `infra/docker-compose.ollama.yml`에 명시했다.
 
-## 핵심 증빙 파일
-- `docs/review/mvp_verification_pack/artifacts/backend_bootrun_postgres_output.txt`
-- `docs/review/mvp_verification_pack/artifacts/frontend_build_output.txt`
-- `docs/review/mvp_verification_pack/artifacts/sse_stream_normal.log`
-- `docs/review/mvp_verification_pack/artifacts/citations_api_response.json`
-- `docs/review/mvp_verification_pack/artifacts/tenant_isolation_403_checks.txt`
-- `docs/review/mvp_verification_pack/artifacts/trace_id_checks.txt`
-- `docs/review/mvp_verification_pack/artifacts/pii_masking_checks.txt`
-- `docs/review/mvp_verification_pack/artifacts/sse_resume_proof.log`
+## 상태 매트릭스 (04_TEST_RESULTS와 동일)
 
-## SSE 표준 경로(문서 통일)
-- `GET /v1/sessions/{session_id}/messages/{message_id}/stream`
-- `GET /v1/sessions/{session_id}/messages/{message_id}/stream/resume?last_event_id={n}`
+| Test ID | 상태 |
+|---|---|
+| AUTO-BE-001 | PASS |
+| AUTO-PY-001 | PASS |
+| AUTO-FE-001 | PASS |
+| BOOT-PG-001 | PASS |
+| E2E-AUTH-401 | PASS |
+| E2E-AUTH-403 | PASS |
+| E2E-SESSION-001 | PASS |
+| E2E-MSG-001 | PASS |
+| SSE-NORMAL-001 | PASS |
+| SSE-FAIL-001 | PASS |
+| SSE-RESUME-001 | PASS |
+| SSE-RESUME-NET-001 | PASS |
+| SSE-CONC-429 | PASS |
+| SSE-CONC-REAL-001 | PASS |
+| NEG-422-IDEM | PASS |
+| NEG-IDEM-409 | PASS |
+| NEG-IDEM-REDIS-001 | PASS |
+| NEG-TENANT-001 | PASS |
+| NEG-BUDGET-001 | PASS |
+| PII-REQ-001 | PASS |
+| PII-RESP-001 | PASS |
+| OBS-TRACE-001 | PASS |
+| OBS-METRICS-001 | PASS |
+| SEC-ARTIFACT-SCAN-001 | PASS |
+| LLM-PROVIDER-001 | SKIPPED |
+| VER-CONSIST-001 | PASS |
 
-## 10분 재현 순서
-1. `docker compose -f infra/docker-compose.yml up -d`
-2. `cd backend && gradlew.bat test`
-3. `cd frontend && npm ci && npm run build`
-4. `powershell -ExecutionPolicy Bypass -File scripts/run_mvp_e2e_evidence.ps1`
-5. 위 핵심 증빙 파일 8개 확인
+## 즉시 조치 권고
+1. GitHub Branch Protection에서 `mvp-demo-verify / verify`를 Required check로 설정
+2. 스테이징에서 `LLM-PROVIDER-001` 1회 PASS 확보
+3. Node 22.12.0 표준 사용(로컬 오버라이드는 임시 목적에 한정)
+

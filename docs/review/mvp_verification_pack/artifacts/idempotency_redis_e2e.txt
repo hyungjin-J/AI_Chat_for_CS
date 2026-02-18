@@ -1,0 +1,13 @@
+﻿idempotency_store=redis
+fixed_idempotency_key=idem-redis-session-d008f970-f5f8-4493-944f-93e7b9dd06a5
+first_request_status=201
+second_request_status_after_restart=409
+second_request_error_code=API-003-409
+expected_second_status=409
+expected_second_error_code=API-003-409
+
+--- first_response ---
+HTTP/1.1 201  X-Trace-Id: adebcb83-c626-4f52-91c8-cff049a6f389 X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Transfer-Encoding: chunked Date: Wed, 18 Feb 2026 10:57:51 GMT  {"result":"accepted","session_id":"2455e0af-a653-4b0b-b0bb-db5a25ee0f12","status":"active","trace_id":"adebcb83-c626-4f52-91c8-cff049a6f389"}
+
+--- second_response ---
+HTTP/1.1 409  X-Trace-Id: fdd777bf-4916-4bce-8214-96cc95906cfb X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Transfer-Encoding: chunked Date: Wed, 18 Feb 2026 10:58:07 GMT  {"error_code":"API-003-409","message":"동일 요청이 이미 처리 중입니다.","trace_id":"fdd777bf-4916-4bce-8214-96cc95906cfb","details":["duplicate_completed"]}

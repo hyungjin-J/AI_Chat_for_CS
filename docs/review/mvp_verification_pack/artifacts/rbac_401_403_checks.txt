@@ -1,6 +1,10 @@
-﻿# RBAC checks final3 2026-02-18T14:20:11.2771974+09:00
-401_response={"error_code":"SEC-001-401","message":"인증이 만료되었습니다. 다시 로그인해 주세요.","trace_id":"trace-final3-401","details":["authentication_required"]}
-agent_login_raw={"result":"accepted","access_token":"***","refresh_token":"***","user_id":"00000000-0000-0000-0000-000000000201","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["AGENT"],"trace_id":"trace-final3-login-agent"}
-admin_login_raw={"result":"accepted","access_token":"***","refresh_token":"***","user_id":"00000000-0000-0000-0000-000000000202","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["ADMIN"],"trace_id":"trace-final3-login-admin"}
-403_response={"error_code":"SEC-002-403","message":"해당 기능에 접근 권한이 없습니다.","trace_id":"trace-final3-403","details":["rbac_denied"]}
+﻿401_status=401
+401_error_code=SEC-001-401
+401_raw=HTTP/1.1 401  X-Trace-Id: f6d7001a-f101-4715-871d-c48a026db149 X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Content-Length: 192 Date: Wed, 18 Feb 2026 10:57:35 GMT  {"error_code":"SEC-001-401","message":"인증이 만료되었습니다. 다시 로그인해 주세요.","trace_id":"f6d7001a-f101-4715-871d-c48a026db149","details":["authentication_required"]}
 
+403_status=403
+403_error_code=SEC-002-403
+403_raw=HTTP/1.1 403  X-Trace-Id: 39403031-a177-4d46-9d47-5fa9c7540ee9 X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Content-Length: 164 Date: Wed, 18 Feb 2026 10:57:35 GMT  {"error_code":"SEC-002-403","message":"해당 기능에 접근 권한이 없습니다.","trace_id":"39403031-a177-4d46-9d47-5fa9c7540ee9","details":["rbac_denied"]}
+
+agent_login_masked={"result":"accepted","access_token":"***","refresh_token":"***","user_id":"00000000-0000-0000-0000-000000000201","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["AGENT"],"trace_id":"8b013b17-1652-4772-ae3a-48054f47211f"}
+admin_login_masked={"result":"accepted","access_token":"***","refresh_token":"***","user_id":"00000000-0000-0000-0000-000000000202","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["ADMIN"],"trace_id":"e5533c22-f661-4b9c-b558-27fee060cb51"}

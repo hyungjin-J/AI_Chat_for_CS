@@ -1,4 +1,4 @@
-﻿job=1 error={"error_code":"API-008-429-SSE","message":"동시 스트리밍 연결 수를 초과했습니다.","trace_id":"trace-sse-cc-1","details":["quota_exceeded"]}
-job=2 error={"error_code":"API-008-429-SSE","message":"동시 스트리밍 연결 수를 초과했습니다.","trace_id":"trace-sse-cc-2","details":["quota_exceeded"]}
-job=3 error={"error_code":"API-008-429-SSE","message":"동시 스트리밍 연결 수를 초과했습니다.","trace_id":"trace-sse-cc-3","details":["quota_exceeded"]}
-job=4 error={"error_code":"API-008-429-SSE","message":"동시 스트리밍 연결 수를 초과했습니다.","trace_id":"trace-sse-cc-4","details":["quota_exceeded"]}
+﻿status=429
+error_code=API-008-429-SSE
+policy_note=forced APP_BUDGET_SSE_CONCURRENCY_MAX_PER_USER=0 for deterministic 429 proof
+raw=HTTP/1.1 429  X-Trace-Id: 261e655d-fcea-42e5-bc73-e1fc062d1154 Retry-After: 10 X-RateLimit-Limit: 0 X-RateLimit-Remaining: 0 X-RateLimit-Reset: 1771412265 X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Transfer-Encoding: chunked Date: Wed, 18 Feb 2026 10:57:35 GMT  {"error_code":"API-008-429-SSE","message":"동시 스트리밍 연결 수를 초과했습니다.","trace_id":"261e655d-fcea-42e5-bc73-e1fc062d1154","details":["quota_exceeded"]}

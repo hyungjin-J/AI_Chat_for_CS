@@ -45,7 +45,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/error").permitAll()
-                .requestMatchers("/health", "/actuator/health").permitAll()
+                .requestMatchers("/health", "/actuator/health", "/actuator/prometheus").permitAll()
                 .requestMatchers("/v1/auth/login", "/v1/auth/refresh").permitAll()
                 .requestMatchers("/api/v1/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/v1/chat/bootstrap").hasRole("AGENT")

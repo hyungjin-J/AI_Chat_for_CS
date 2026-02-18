@@ -1,0 +1,3 @@
+﻿status=422
+error_code=API-003-422
+raw=HTTP/1.1 422  X-Trace-Id: 0e5401b9-4476-4db9-b004-755a9c99085c X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Transfer-Encoding: chunked Date: Wed, 18 Feb 2026 10:57:35 GMT  {"error_code":"API-003-422","message":"입력값 형식이 올바르지 않습니다.","trace_id":"0e5401b9-4476-4db9-b004-755a9c99085c","details":["idempotency_key_required"]}

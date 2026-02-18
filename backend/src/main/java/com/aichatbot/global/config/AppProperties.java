@@ -11,6 +11,7 @@ public class AppProperties {
     private final Answer answer = new Answer();
     private final Rag rag = new Rag();
     private final Budget budget = new Budget();
+    private final Idempotency idempotency = new Idempotency();
     private final Llm llm = new Llm();
 
     public Jwt getJwt() {
@@ -35,6 +36,10 @@ public class AppProperties {
 
     public Budget getBudget() {
         return budget;
+    }
+
+    public Idempotency getIdempotency() {
+        return idempotency;
     }
 
     public Llm getLlm() {
@@ -134,6 +139,7 @@ public class AppProperties {
         private int toolCallMax = 3;
         private int sessionBudgetMax = 10000;
         private int sseConcurrencyMaxPerUser = 2;
+        private long sseHoldMs = 0L;
 
         public int getInputTokenMax() {
             return inputTokenMax;
@@ -174,6 +180,14 @@ public class AppProperties {
         public void setSseConcurrencyMaxPerUser(int sseConcurrencyMaxPerUser) {
             this.sseConcurrencyMaxPerUser = sseConcurrencyMaxPerUser;
         }
+
+        public long getSseHoldMs() {
+            return sseHoldMs;
+        }
+
+        public void setSseHoldMs(long sseHoldMs) {
+            this.sseHoldMs = sseHoldMs;
+        }
     }
 
     public static class Llm {
@@ -190,6 +204,45 @@ public class AppProperties {
 
         public Ollama getOllama() {
             return ollama;
+        }
+    }
+
+    public static class Idempotency {
+        private String store = "memory";
+        private long ttlSeconds = 86400L;
+        private String redisKeyPrefix = "idempotency:";
+        private String redisFailStrategy = "fallback_memory";
+
+        public String getStore() {
+            return store;
+        }
+
+        public void setStore(String store) {
+            this.store = store;
+        }
+
+        public long getTtlSeconds() {
+            return ttlSeconds;
+        }
+
+        public void setTtlSeconds(long ttlSeconds) {
+            this.ttlSeconds = ttlSeconds;
+        }
+
+        public String getRedisKeyPrefix() {
+            return redisKeyPrefix;
+        }
+
+        public void setRedisKeyPrefix(String redisKeyPrefix) {
+            this.redisKeyPrefix = redisKeyPrefix;
+        }
+
+        public String getRedisFailStrategy() {
+            return redisFailStrategy;
+        }
+
+        public void setRedisFailStrategy(String redisFailStrategy) {
+            this.redisFailStrategy = redisFailStrategy;
         }
     }
 

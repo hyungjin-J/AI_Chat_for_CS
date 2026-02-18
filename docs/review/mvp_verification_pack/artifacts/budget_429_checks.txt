@@ -1,20 +1,3 @@
-﻿# Budget checks final3 2026-02-18T14:20:11.2797929+09:00
-session_raw={"result":"accepted","session_id":"34689607-aedc-4824-9f99-2fe79a55cd38","status":"active","trace_id":"trace-final3-session"}
-budget_response={"result":"accepted","id":"c51cc4bd-b187-44d4-9eec-058a31f695bb","session_id":"34689607-aedc-4824-9f99-2fe79a55cd38","trace_id":"trace-final3-budget"}
-
-# budget accumulation rerun 2026-02-18T14:20:43.6738157+09:00
-budget_loop_session=3fc6e84b-1065-4a9f-98cd-66a737152784
-loop_1={"result":"accepted","id":"21d3d6ea-8f36-43e2-a253-c7e539ce3b26","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-1"}
-loop_2={"result":"accepted","id":"d84a64ce-b8d7-4afc-8a27-a30862787e38","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-2"}
-loop_3={"result":"accepted","id":"2df64c38-06b0-4b52-9003-32237e2ff955","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-3"}
-loop_4={"result":"accepted","id":"d98432a4-786d-4cf7-b305-11660ff17161","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-4"}
-loop_5={"result":"accepted","id":"0583fc83-74bf-4662-8f5c-7217c0e78369","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-5"}
-loop_6={"result":"accepted","id":"4369d811-ad18-4dc0-af55-3924f2cdc33b","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-6"}
-loop_7={"result":"accepted","id":"ac25c178-5dd5-4d6c-937e-e9752af8785c","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-7"}
-loop_8={"result":"accepted","id":"0e0db544-1882-4043-aaf9-eb6d1d08074d","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-8"}
-loop_9={"result":"accepted","id":"9613a1ff-ab34-41a3-ac57-d61e03eb1d40","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-9"}
-loop_10={"result":"accepted","id":"d6b294e6-fa7e-43e2-8134-c0f3f61251ef","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-10"}
-loop_11={"result":"accepted","id":"9e1f0826-8b55-4bfb-9cdc-1220adec9b87","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-11"}
-loop_12={"result":"accepted","id":"9a5fb513-fadd-4d75-a16c-0f0d79684106","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-12"}
-loop_13={"result":"accepted","id":"3b1c3ba1-27a9-4647-84ef-2d6735b75848","session_id":"3fc6e84b-1065-4a9f-98cd-66a737152784","trace_id":"trace-budget-loop-13"}
-loop_14={"error_code":"API-008-429-BUDGET","message":"요청 한도를 초과했습니다. 잠시 후 재시도해 주세요.","trace_id":"trace-budget-loop-14","details":["quota_exceeded"]}
+﻿status=429
+error_code=API-008-429-BUDGET
+raw=HTTP/1.1 429  X-Trace-Id: 1c845740-da68-43e2-9bd2-1b1b0ca2278d Retry-After: 30 X-RateLimit-Limit: 50 X-RateLimit-Remaining: 0 X-RateLimit-Reset: 1771412285 X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Transfer-Encoding: chunked Date: Wed, 18 Feb 2026 10:57:35 GMT  {"error_code":"API-008-429-BUDGET","message":"요청 한도를 초과했습니다. 잠시 후 재시도해 주세요.","trace_id":"1c845740-da68-43e2-9bd2-1b1b0ca2278d","details":["quota_exceeded"]}

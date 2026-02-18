@@ -66,6 +66,7 @@ public class RoleHeaderAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         return Objects.equals(request.getRequestURI(), "/health")
-            || Objects.equals(request.getRequestURI(), "/actuator/health");
+            || Objects.equals(request.getRequestURI(), "/actuator/health")
+            || Objects.equals(request.getRequestURI(), "/actuator/prometheus");
     }
 }
