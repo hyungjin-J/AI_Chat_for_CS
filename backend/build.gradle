@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+	implementation 'org.springframework.ai:spring-ai-core:1.0.0-M6'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
 	// Why: JWT는 API 인증/권한 부여의 핵심이라 스켈레톤 단계에서 기본 라이브러리를 미리 고정해둔다.

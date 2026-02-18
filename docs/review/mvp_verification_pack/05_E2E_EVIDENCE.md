@@ -33,4 +33,5 @@
 
 ## Provider 회귀
 - 파일: `artifacts/provider_regression_ollama.log`
-- 결과: PASS 또는 SKIPPED(실행 가이드 포함, 조용한 SKIPPED 금지)
+- 결과: PASS (`status=PASS` 확인)
+

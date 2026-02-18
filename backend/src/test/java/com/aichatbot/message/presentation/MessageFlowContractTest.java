@@ -16,7 +16,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(properties = "spring.task.scheduling.enabled=false")
+@SpringBootTest(properties = {
+    "spring.task.scheduling.enabled=false",
+    "app.llm.provider=mock",
+    "app.answer.evidence-threshold=0.0"
+})
 @AutoConfigureMockMvc
 class MessageFlowContractTest {
 
@@ -80,6 +84,44 @@ class MessageFlowContractTest {
                 .header("X-Tenant-Key", "demo-tenant"))
             .andExpect(status().isForbidden())
             .andExpect(jsonPath("$.error_code").value("SEC-002-403"));
+    }
+
+    @Test
+    void shouldEmitPolicyToolEventWithoutLeakingToolContext() throws Exception {
+        String accessToken = login("agent1", "agent1-pass", "77777777-7777-4777-8777-777777777777");
+        String sessionId = createSession(accessToken, "88888888-8888-4888-8888-888888888888");
+
+        MvcResult messageResult = mockMvc.perform(post("/v1/sessions/{session_id}/messages", sessionId)
+                .header("Authorization", "Bearer " + accessToken)
+                .header("X-Trace-Id", "99999999-9999-4999-8999-999999999999")
+                .header("X-Tenant-Key", "demo-tenant")
+                .header("Idempotency-Key", "idem-message-tool")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "text": "please summarize refund policy",
+                      "top_k": 3,
+                      "client_nonce": "nonce-tool"
+                    }
+                    """))
+            .andExpect(status().isAccepted())
+            .andReturn();
+
+        String answerId = objectMapper.readTree(messageResult.getResponse().getContentAsString()).get("id").asText();
+
+        MvcResult streamResult = mockMvc.perform(get("/v1/sessions/{session_id}/messages/{message_id}/stream", sessionId, answerId)
+                .header("Authorization", "Bearer " + accessToken)
+                .header("X-Trace-Id", "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa")
+                .header("X-Tenant-Key", "demo-tenant"))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String body = streamResult.getResponse().getContentAsString();
+        assertThat(body).contains("event:tool");
+        assertThat(body).contains("policy_lookup");
+        assertThat(body).contains("TOOL_CITATION");
+        assertThat(body).doesNotContain("tenant_key");
+        assertThat(body).doesNotContain("user_role");
     }
 
     private String login(String loginId, String password, String traceId) throws Exception {

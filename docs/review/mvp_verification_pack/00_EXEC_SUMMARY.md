@@ -7,7 +7,7 @@
 
 ## 핵심 결론
 - Fail-Closed, PII 마스킹, trace_id 종단 추적, tenant/RBAC 격리, budget/concurrency 방어는 모두 증빙 파일로 확인되었다.
-- Provider 회귀는 현재 환경에서 `SKIPPED`이며, 실행 방법은 `scripts/run_provider_regression.ps1`와 `infra/docker-compose.ollama.yml`에 명시했다.
+- Provider 회귀는 최신 실행에서 `PASS`를 확보했으며, 증빙은 `artifacts/provider_regression_ollama.log`에 기록되어 있다.
 
 ## 상태 매트릭스 (04_TEST_RESULTS와 동일)
 
@@ -37,11 +37,11 @@
 | OBS-TRACE-001 | PASS |
 | OBS-METRICS-001 | PASS |
 | SEC-ARTIFACT-SCAN-001 | PASS |
-| LLM-PROVIDER-001 | SKIPPED |
+| LLM-PROVIDER-001 | PASS |
 | VER-CONSIST-001 | PASS |
 
 ## 즉시 조치 권고
 1. GitHub Branch Protection에서 `mvp-demo-verify / verify`를 Required check로 설정
-2. 스테이징에서 `LLM-PROVIDER-001` 1회 PASS 확보
 3. Node 22.12.0 표준 사용(로컬 오버라이드는 임시 목적에 한정)
+
 

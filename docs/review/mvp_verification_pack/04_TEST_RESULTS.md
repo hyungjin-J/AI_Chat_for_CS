@@ -1,6 +1,6 @@
 ﻿# MVP 테스트 결과 (SSOT)
 
-- Last synced at: 2026-02-18 20:00 (KST)
+- Last synced at: 2026-02-19 00:40 (KST)
 - Version(commit): `3e057a3+working-tree`
 - Status: Demo Ready
 
@@ -46,19 +46,13 @@
 | OBS-TRACE-001 | PASS | `artifacts/trace_id_checks.txt` |
 | OBS-METRICS-001 | PASS (n=2, 경고표시) | `artifacts/metrics_raw.txt`, `artifacts/metrics_report.md` |
 | SEC-ARTIFACT-SCAN-001 | PASS | `artifacts/artifact_sanitization_scan.txt` |
-| LLM-PROVIDER-001 | SKIPPED | `artifacts/provider_regression_ollama.log` |
+| LLM-PROVIDER-001 | PASS | `artifacts/provider_regression_ollama.log`, `artifacts/analysis_llm_provider_001.md` |
 | VER-CONSIST-001 | PASS | `artifacts/e2e_runner_stdout.txt` |
-
-## SKIPPED 사유 및 해결법
-- `LLM-PROVIDER-001` 사유: ollama endpoint 미준비 또는 환경변수 미설정
-- 해결 순서:
-1. `docker compose -f infra/docker-compose.ollama.yml up -d`
-2. `set APP_OLLAMA_BASE_URL=http://localhost:11434`
-3. `powershell -ExecutionPolicy Bypass -File scripts/run_provider_regression.ps1`
 
 ## 정책 확인 포인트
 - trace_id 정책: UUID 형식만 허용 (`SYS-004-409-TRACE`)
 - tenant mismatch: `403 + SYS-002-403 + details=["tenant_mismatch"]`
 - Node 정책: 기본은 22.12.0 강제이며, 로컬 임시 진단 시에만 APP_VERIFY_ALLOW_NON_22_NODE=true 오버라이드 허용 (`artifacts/node_version_check.txt`)
+
 
 

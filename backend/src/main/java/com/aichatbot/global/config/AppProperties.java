@@ -249,6 +249,8 @@ public class AppProperties {
     public static class Ollama {
         private String baseUrl = "http://localhost:11434";
         private String model = "llama3.2";
+        private double temperature = 0.0d;
+        private double topP = 0.8d;
 
         public String getBaseUrl() {
             return baseUrl;
@@ -264,6 +266,22 @@ public class AppProperties {
 
         public void setModel(String model) {
             this.model = model;
+        }
+
+        public double getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(double temperature) {
+            this.temperature = temperature;
+        }
+
+        public double getTopP() {
+            return topP;
+        }
+
+        public void setTopP(double topP) {
+            this.topP = topP;
         }
     }
 }

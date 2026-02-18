@@ -1,6 +1,6 @@
 ﻿# 아티팩트 요약본 (교차 검증용 SSOT)
 
-- Last synced at: 2026-02-18 20:00 (KST)
+- Last synced at: 2026-02-19 00:40 (KST)
 - Version(commit): `3e057a3+working-tree`
 - Status source: `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 
@@ -32,7 +32,7 @@
 | OBS-TRACE-001 | PASS |
 | OBS-METRICS-001 | PASS |
 | SEC-ARTIFACT-SCAN-001 | PASS |
-| LLM-PROVIDER-001 | SKIPPED |
+| LLM-PROVIDER-001 | PASS |
 | VER-CONSIST-001 | PASS |
 
 ## 핵심 증빙 파일
@@ -46,10 +46,13 @@
 - Idempotency: `artifacts/idempotency_negative_422.txt`, `artifacts/idempotency_409_proof.txt`, `artifacts/idempotency_redis_e2e.txt`
 - Metrics: `artifacts/metrics_raw.txt`, `artifacts/metrics_report.md`
 - Artifact scan: `artifacts/artifact_sanitization_scan.txt`
-- Provider: `artifacts/provider_regression_ollama.log`
+- Provider: `artifacts/provider_regression_ollama.log`, `artifacts/analysis_llm_provider_001.md`
 
 ## 주의
-- `LLM-PROVIDER-001`은 SKIPPED이며, 조용한 스킵이 아니라 실행 가이드가 로그에 기록된다.
+- `LLM-PROVIDER-001`은 최신 provider 회귀 로그에서 `status=PASS`가 확인된 상태다.
+- 향후 상태 변경 시에도 `provider_regression_ollama.log` 실증빙 없이는 상태 변경 금지.
+
 
 
 - consistency 게이트 로그: `artifacts/e2e_runner_stdout.txt`
+

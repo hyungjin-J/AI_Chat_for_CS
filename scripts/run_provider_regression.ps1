@@ -6,6 +6,12 @@ New-Item -ItemType Directory -Force -Path "tmp" | Out-Null
 
 $logPath = Join-Path $artifactDir "provider_regression_ollama.log"
 $backendLog = Join-Path $artifactDir "provider_regression_backend.log"
+$composeFile = "infra/docker-compose.ollama.yml"
+$ollamaService = "ollama"
+$ollamaContainer = "aichatbot-ollama"
+$defaultModel = if ([string]::IsNullOrWhiteSpace($env:APP_OLLAMA_MODEL)) { "qwen2.5:7b-instruct" } else { $env:APP_OLLAMA_MODEL }
+$autoPullModel = if ($env:APP_PROVIDER_AUTO_PULL_MODEL -eq "false") { $false } else { $true }
+$script:ProviderExitCode = 0
 
 function New-Uuid {
     [guid]::NewGuid().ToString()
@@ -21,7 +27,43 @@ generated_at=$(Get-Date -Format "yyyy-MM-dd HH:mm:ssK")
 "@ | Out-File -FilePath $logPath -Encoding utf8
 }
 
-function Ensure-OllamaReachable {
+function Ensure-DockerCompose {
+    try {
+        $null = docker compose version
+        return $true
+    } catch {
+        Write-Result "SKIPPED" "docker_compose_not_available" "Install Docker Desktop and verify docker compose version"
+        $script:ProviderExitCode = 2
+        Write-Host "SKIPPED: docker compose not available."
+        Write-Host "How to run:"
+        Write-Host "1) Install Docker Desktop"
+        Write-Host "2) Start Docker Desktop"
+        Write-Host "3) Confirm: docker compose version"
+        return $false
+    }
+}
+
+function Ensure-OllamaContainerHealthy {
+    try {
+        $running = docker inspect -f "{{.State.Running}}" $ollamaContainer 2>$null
+        if ($running -ne "true") {
+            return $false
+        }
+        $health = docker inspect -f "{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}" $ollamaContainer 2>$null
+        if ($health -eq "healthy" -or $health -eq "none") {
+            return $true
+        }
+        return $false
+    } catch {
+        return $false
+    }
+}
+
+function Ensure-OllamaReachableAndModel {
+    if (-not (Ensure-DockerCompose)) {
+        return $false
+    }
+
     if (-not $env:APP_OLLAMA_BASE_URL) {
         $env:APP_OLLAMA_BASE_URL = "http://localhost:11434"
         Write-Host "[provider] APP_OLLAMA_BASE_URL not set. default=http://localhost:11434"
@@ -29,46 +71,84 @@ function Ensure-OllamaReachable {
 
     $ollamaBase = $env:APP_OLLAMA_BASE_URL.TrimEnd("/")
 
-    try {
-        $null = Invoke-RestMethod -Uri "$ollamaBase/api/tags" -Method GET -TimeoutSec 3
-        return $true
-    } catch {
-        Write-Host "[provider] ollama endpoint not reachable. trying docker compose profile..."
-    }
-
-    try {
-        docker compose -f infra/docker-compose.ollama.yml up -d | Out-Null
-    } catch {
-        Write-Result "SKIPPED" "ollama_compose_start_failed" "docker compose -f infra/docker-compose.ollama.yml up -d"
-        Write-Host "SKIPPED: ollama compose start failed"
-        Write-Host "How to run:"
-        Write-Host "1) docker compose -f infra/docker-compose.ollama.yml up -d"
-        Write-Host "2) set APP_OLLAMA_BASE_URL=http://localhost:11434"
-        Write-Host "3) rerun scripts/run_provider_regression.ps1"
-        return $false
+    if (-not (Ensure-OllamaContainerHealthy)) {
+        Write-Host "[provider] ollama service not healthy. starting via docker compose..."
+        try {
+            docker compose -f $composeFile up -d $ollamaService | Out-Null
+        } catch {
+            Write-Result "SKIPPED" "ollama_compose_start_failed" "docker compose -f $composeFile up -d $ollamaService"
+            $script:ProviderExitCode = 2
+            Write-Host "SKIPPED: ollama compose start failed"
+            Write-Host "How to run:"
+            Write-Host "1) docker compose -f $composeFile up -d $ollamaService"
+            Write-Host "2) set APP_OLLAMA_BASE_URL=http://localhost:11434"
+            Write-Host "3) rerun scripts/run_provider_regression.ps1"
+            return $false
+        }
     }
 
     for ($i = 0; $i -lt 60; $i++) {
         try {
             $null = Invoke-RestMethod -Uri "$ollamaBase/api/tags" -Method GET -TimeoutSec 3
-            return $true
+            break
         } catch {
             Start-Sleep -Seconds 2
+            if ($i -eq 59) {
+                Write-Result "SKIPPED" "ollama_not_ready_after_compose" "docker compose -f $composeFile logs $ollamaService"
+                $script:ProviderExitCode = 2
+                Write-Host "SKIPPED: ollama is not ready."
+                Write-Host "How to run:"
+                Write-Host "1) docker compose -f $composeFile up -d $ollamaService"
+                Write-Host "2) docker compose -f $composeFile logs $ollamaService"
+                Write-Host "3) set APP_OLLAMA_BASE_URL=http://localhost:11434"
+                Write-Host "4) rerun scripts/run_provider_regression.ps1"
+                return $false
+            }
         }
     }
 
-    Write-Result "SKIPPED" "ollama_not_ready_after_compose" "docker logs aichatbot-ollama"
-    Write-Host "SKIPPED: ollama is not ready."
-    Write-Host "How to run:"
-    Write-Host "1) docker compose -f infra/docker-compose.ollama.yml up -d"
-    Write-Host "2) docker logs aichatbot-ollama"
-    Write-Host "3) set APP_OLLAMA_BASE_URL=http://localhost:11434"
-    Write-Host "4) rerun scripts/run_provider_regression.ps1"
-    return $false
+    try {
+        $tags = Invoke-RestMethod -Uri "$ollamaBase/api/tags" -Method GET -TimeoutSec 5
+        $found = $false
+        if ($tags.models) {
+            foreach ($m in $tags.models) {
+                if ($m.name -eq $defaultModel) {
+                    $found = $true
+                    break
+                }
+            }
+        }
+        if (-not $found) {
+            if (-not $autoPullModel) {
+                Write-Result "SKIPPED" "ollama_model_missing" "docker compose -f $composeFile exec $ollamaService ollama pull $defaultModel"
+                $script:ProviderExitCode = 2
+                Write-Host "SKIPPED: model missing -> $defaultModel"
+                Write-Host "How to run:"
+                Write-Host "1) docker compose -f $composeFile exec $ollamaService ollama pull $defaultModel"
+                Write-Host "2) set APP_OLLAMA_MODEL=$defaultModel"
+                Write-Host "3) rerun scripts/run_provider_regression.ps1"
+                return $false
+            }
+            Write-Host "[provider] model not found. pulling $defaultModel ..."
+            docker compose -f $composeFile exec $ollamaService ollama pull $defaultModel | Out-Null
+        }
+    } catch {
+        Write-Result "SKIPPED" "ollama_model_check_failed" "docker compose -f $composeFile exec $ollamaService ollama list"
+        $script:ProviderExitCode = 2
+        Write-Host "SKIPPED: unable to verify model state."
+        Write-Host "How to run:"
+        Write-Host "1) docker compose -f $composeFile exec $ollamaService ollama list"
+        Write-Host "2) docker compose -f $composeFile exec $ollamaService ollama pull $defaultModel"
+        Write-Host "3) rerun scripts/run_provider_regression.ps1"
+        return $false
+    }
+
+    $env:APP_OLLAMA_MODEL = $defaultModel
+    return $true
 }
 
-if (-not (Ensure-OllamaReachable)) {
-    exit 0
+if (-not (Ensure-OllamaReachableAndModel)) {
+    exit $script:ProviderExitCode
 }
 
 $existing = Get-NetTCPConnection -LocalPort 8080 -State Listen -ErrorAction SilentlyContinue |
@@ -177,15 +257,30 @@ $failSse
 "@ | Out-File -FilePath $logPath -Encoding utf8
 
     if ($status -eq "FAIL") {
-        throw "provider_regression_failed"
+        $script:ProviderExitCode = 1
+    } elseif ($status -eq "SKIPPED") {
+        $script:ProviderExitCode = 2
+    } else {
+        $script:ProviderExitCode = 0
     }
 } catch {
     if (-not (Test-Path $logPath)) {
         Write-Result "FAIL" $_.Exception.Message
     }
-    throw
+    $script:ProviderExitCode = 1
 } finally {
     if ($backendProc -and -not $backendProc.HasExited) {
         Stop-Process -Id $backendProc.Id -Force -ErrorAction SilentlyContinue
     }
 }
+
+if ($script:ProviderExitCode -eq 0) {
+    Write-Host "provider_regression=PASS exit_code=0"
+    exit 0
+}
+if ($script:ProviderExitCode -eq 2) {
+    Write-Host "provider_regression=SKIPPED exit_code=2"
+    exit 2
+}
+Write-Host "provider_regression=FAIL exit_code=1"
+exit 1

@@ -42,11 +42,23 @@ public class LlmService {
         }
     }
 
+    public String repairAnswerContractJson(String rawCandidate, String originalPrompt, String messageId) {
+        String provider = appProperties.getLlm().getProvider();
+        try {
+            if ("ollama".equalsIgnoreCase(provider)) {
+                return ollamaClient.repairContractJson(rawCandidate, originalPrompt);
+            }
+        } catch (Exception ignored) {
+            // Keep fail-closed behavior. If repair fails, return original and let validator block unsafe output.
+        }
+        return rawCandidate;
+    }
+
     private String buildSafeContract(double score, double threshold) {
         Map<String, Object> payload = Map.of(
             "schema_version", "v1",
             "response_type", "safe",
-            "answer", Map.of("text", "확인 가능한 근거를 확보한 후 다시 안내드리겠습니다."),
+            "answer", Map.of("text", "근거 검증에 실패하여 안전 응답으로 전환되었습니다."),
             "citations", List.of(),
             "evidence", Map.of("score", score, "threshold", threshold)
         );
