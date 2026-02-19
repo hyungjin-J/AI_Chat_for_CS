@@ -1,34 +1,24 @@
 package com.aichatbot.global.tenant;
 
+import com.aichatbot.global.tenant.domain.mapper.TenantResolverMapper;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class TenantResolverRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final TenantResolverMapper tenantResolverMapper;
 
-    public TenantResolverRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public TenantResolverRepository(TenantResolverMapper tenantResolverMapper) {
+        this.tenantResolverMapper = tenantResolverMapper;
     }
 
     public Optional<UUID> findTenantIdByKey(String tenantKey) {
-        return jdbcTemplate.query(
-            """
-            SELECT id
-            FROM tb_tenant
-            WHERE tenant_key = ?
-              AND status = 'active'
-            """,
-            rs -> {
-                if (rs.next()) {
-                    return Optional.of(UUID.fromString(rs.getString("id")));
-                }
-                return Optional.empty();
-            },
-            tenantKey
-        );
+        String tenantId = tenantResolverMapper.findTenantIdByKey(tenantKey);
+        if (tenantId == null) {
+            return Optional.empty();
+        }
+        return Optional.of(UUID.fromString(tenantId));
     }
 }

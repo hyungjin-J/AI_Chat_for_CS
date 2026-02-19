@@ -2,6 +2,8 @@
 
 > **적용 범위**: 이 파일은 `AI_Chatbot` 저장소(프로젝트 루트)에 위치하며, 이 저장소에서 작업하는 **모든 AI 코딩 에이전트(Codex, Cursor, Claude 등)** 에게 동일하게 적용됩니다.  
 > **프로젝트 루트(사용자 기준)**: `C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot`
+> **DB 접근 표준**: 본 프로젝트의 DB 접근은 **MyBatis 기반으로 통일**한다(아래 6.8 참조).
+
 
 ---
 
@@ -200,6 +202,7 @@ required = true
 - Java **17.0.16**, Spring Boot **3.x**
 - Spring Web(MVC) 또는 WebFlux(스트리밍 요구 고려)
 - Spring Security(JWT + RBAC)
+- **MyBatis (mybatis-spring-boot-starter) — DB 접근 표준**
 - PostgreSQL 16+ (+ pgvector 선택), Redis(운영 필수/개발 선택)
 - Micrometer / OpenTelemetry(관측), Resilience4j(재시도/서킷)
 - Spring AI(도구 호출/오케스트레이션), (선택) OpenSearch/Elasticsearch(하이브리드 검색)
@@ -377,6 +380,9 @@ Java DTO/record는 `camelCase`로 작성하되, Jackson naming strategy(예: Sna
   - 예: `tb_session`, `tb_message`, `created_at`, `updated_at`
 - 공통 컬럼(권장): `created_at`, `updated_at`, `created_by`, `updated_by`, `tenant_key`
 - PII 컬럼은 암호화/마스킹 정책을 명확히 하고, 로그로 평문이 새지 않게 한다.
+**추가 원칙(필수):**
+- DB 접근은 **MyBatis Mapper 계층을 통해서만** 수행한다(6.8 참조).
+- `tenant_key`는 모든 조회/변경 쿼리에서 누락되면 보안 결함으로 간주한다(테넌트 격리 4.4와 동일 레벨).
 
 ### 6.6 관측(Observability) 구현 규칙
 로그는 가급적 JSON 구조화 로그로 남기고, 최소 포함 필드:
@@ -391,6 +397,38 @@ OpenTelemetry/Micrometer로:
 외부 LLM/검색/스토리지 호출:
 - timeout, retry(지수 백오프), circuit breaker 적용
 - 단, 실패 시 자유 텍스트로 우회 금지(안전 응답/에러코드로 종료)
+
+### 6.8 Data Access 표준 — MyBatis 강제 (필수)
+> 목적: JDBC 직접 사용을 제거하고, 일관된 데이터 접근/트랜잭션/보안 규칙을 강제한다.
+
+#### 6.8.1 금지 사항(Non-negotiables)
+- **JDBC 직접 사용 금지**: `DriverManager`, `Connection`, `PreparedStatement`, `ResultSet`, `JdbcTemplate`, `NamedParameterJdbcTemplate` 등 사용 금지.
+- **문자열 치환 기반 동적 SQL 금지**: MyBatis에서 `${}` 사용 금지. 기본은 `#{}`로만 바인딩한다.
+- 예외가 필요하면 “왜 필요한지(Why) + 입력 검증 + 화이트리스트”를 코드/리뷰에 남기고, 보안 위험을 제거한다.
+
+#### 6.8.2 표준 구조/위치 규칙
+- Mapper 인터페이스: `src/main/java/**/domain/**/mapper/*Mapper.java` (도메인 기준 패키지 내부 권장)
+- Mapper XML: `src/main/resources/mappers/**/**/*Mapper.xml`
+- XML namespace는 Mapper 인터페이스 FQCN(완전한 클래스명)으로 통일한다.
+
+#### 6.8.3 네이밍/SQL 작성 규칙
+- SQL id는 메서드명과 1:1 매핑한다.
+- `resultMap`을 적극 사용하여 컬럼↔필드 매핑을 명시한다(복잡 조인/중첩 결과는 특히 필수).
+- 페이징/정렬은 파라미터 바인딩으로만 처리하며, 정렬 컬럼이 동적이면 반드시 화이트리스트로 제한한다.
+
+#### 6.8.4 트랜잭션 경계
+- 트랜잭션 경계는 **Service 계층(@Transactional)** 을 원칙으로 한다.
+- Mapper/DAO는 트랜잭션을 “생성”하지 않으며, 기존 트랜잭션 컨텍스트에 참여한다.
+
+#### 6.8.5 테넌트/RBAC/감사 연동(필수)
+- 모든 쿼리는 `tenant_key` 조건을 포함한다(조회/수정/삭제 동일).
+- 감사/추적이 필요한 변경 쿼리는 `trace_id`와 연계 가능한 형태(서비스 레이어에서 이벤트/로그)를 유지한다.
+
+#### 6.8.6 Definition of Done (DB 접근 리팩토링)
+- [ ] 저장소 전체에서 JDBC 직접 사용이 **0건**이어야 한다(검색으로 증명).
+- [ ] 모든 DB 접근이 MyBatis Mapper를 통해서만 수행된다.
+- [ ] `${}` 사용이 **0건**이어야 한다(검색으로 증명).
+- [ ] 주요 쿼리에서 `tenant_key` 필터 누락이 없다(샘플 점검 + 코드 리뷰 기준).
 
 ---
 

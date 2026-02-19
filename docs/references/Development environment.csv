@@ -40,7 +40,7 @@
 - 참고 요구사항: ETL-001",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
 2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring Boot,Web F/W,3.x(권장),"REST API 서버 및 운영/배치 기반.
 - 적용 영역: 채팅/RAG API(RAG-001), 관리자 API(ADM-001,ADM-002,ADM-003,ADM-004,ADM-005,ADM-006), 배치(ETL-001), 알림/홈(SYS-001)",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
-2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring Data JPA (Hibernate),ORM,Spring Boot BOM,"템플릿/정책/모델/버전/승인 워크플로우 데이터 영속화.
+2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,MyBatis (mybatis-spring-boot-starter),Data Access,Spring Boot BOM,"DB 접근 표준(Mapper + XML) 및 SQL 매핑 계층.
 - 참고 요구사항: TMP-003, ADM-001,ADM-002,ADM-003,ADM-004,ADM-005,ADM-006, OPS-002",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
 2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Spring Security,Auth,Spring Boot BOM,"로그인/JWT 인증, RBAC(역할 기반 접근제어), 엔드포인트 보호.
 - 참고 요구사항: SEC-001, SEC-002, TOOL-003",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv

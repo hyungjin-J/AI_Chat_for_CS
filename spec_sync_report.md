@@ -39,3 +39,22 @@
 - [x] 글로서리 xlsx 최신화
 - [x] Notion 글로서리 페이지 동기화
 - [x] UTF-8 깨짐 재점검
+
+## 6) 이번 세션(2026-02-19) 스펙 변경 및 동기화 기록
+- 변경 파일:
+  - `docs/references/Development environment.csv`
+- 추가 점검 결과:
+  - Notion 동기화 매핑 대상 파일(`Summary of key features.csv`, `CS AI Chatbot_Requirements Statement.csv`,
+    `google_ready_api_spec_v0.3_20260216.xlsx`, `CS_AI_CHATBOT_DB.xlsx`, `CS_RAG_UI_UX_설계서.xlsx`)은
+    이번 세션 Git 변경분에서 추가 변경 없음
+- 변경 요약:
+  - Backend & Analytics 섹션의 DB 접근 라이브러리 표기를 `Spring Data JPA (Hibernate)`에서
+    `MyBatis (mybatis-spring-boot-starter)`로 변경
+  - 설명을 Mapper/XML 기반 DB 접근 표준으로 정합화
+- 연관 코드 반영:
+  - backend JDBC repository -> MyBatis Mapper/XML 전환
+- Notion 동기화 대상:
+  - `https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7`
+- Notion 반영 상태:
+  - 반영 완료 (2026-02-19 20:06:22 +09:00)
+  - 반영 항목: Last synced at / Source file / Version(or commit) / Change summary 갱신

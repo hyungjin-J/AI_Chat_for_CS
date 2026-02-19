@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.message.domain.mapper.StreamEventMapper">
+
+    <resultMap id="StreamEventViewMap" type="com.aichatbot.message.application.StreamEventView">
+        <constructor>
+            <arg column="event_seq" javaType="_int" name="eventSeq"/>
+            <arg column="event_type" javaType="java.lang.String" name="eventType"/>
+            <arg column="payload_json" javaType="java.lang.String" name="payloadJson"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="save">
+        INSERT INTO tb_stream_event(
+            id,
+            tenant_id,
+            message_id,
+            message_created_at,
+            event_type,
+            event_seq,
+            payload_json,
+            created_at,
+            updated_at
+        ) VALUES (#{streamEventId}, #{tenantId}, #{messageId}, #{messageCreatedAt}, #{eventType}, #{eventSeq},
+                  CAST(#{payloadJson} AS JSON), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="findByMessageFromSeq" resultMap="StreamEventViewMap">
+        SELECT event_seq, event_type, CAST(payload_json AS VARCHAR) AS payload_json
+        FROM tb_stream_event
+        WHERE tenant_id = #{tenantId}
+          AND message_id = #{messageId}
+          AND event_seq > #{fromEventSeqExclusive}
+        ORDER BY event_seq ASC
+    </select>
+
+</mapper>

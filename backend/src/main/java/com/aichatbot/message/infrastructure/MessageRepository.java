@@ -2,95 +2,61 @@ package com.aichatbot.message.infrastructure;
 
 import com.aichatbot.global.observability.TraceIdNormalizer;
 import com.aichatbot.message.application.MessageView;
-import java.sql.Timestamp;
-import java.time.Instant;
+import com.aichatbot.message.domain.mapper.MessageMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class MessageRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final MessageMapper messageMapper;
 
-    public MessageRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public MessageRepository(MessageMapper messageMapper) {
+        this.messageMapper = messageMapper;
     }
 
     public MessageView create(UUID tenantId, UUID conversationId, String role, String messageText, String traceId) {
         UUID messageId = UUID.randomUUID();
-        jdbcTemplate.update(
-            """
-            INSERT INTO tb_message(
-                id,
-                tenant_id,
-                conversation_id,
-                role,
-                message_text,
-                trace_id,
-                created_at,
-                updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-            """,
-            messageId,
-            tenantId,
-            conversationId,
+        messageMapper.create(
+            messageId.toString(),
+            tenantId.toString(),
+            conversationId.toString(),
             role,
             messageText,
-            TraceIdNormalizer.toUuid(traceId)
+            TraceIdNormalizer.toUuid(traceId).toString()
         );
         return findById(tenantId, messageId).orElseThrow();
     }
 
     public Optional<MessageView> findById(UUID tenantId, UUID messageId) {
-        List<MessageView> messages = jdbcTemplate.query(
-            """
-            SELECT id, tenant_id, conversation_id, role, message_text, trace_id, created_at
-            FROM tb_message
-            WHERE tenant_id = ?
-              AND id = ?
-            """,
-            (rs, rowNum) -> new MessageView(
-                UUID.fromString(rs.getString("id")),
-                UUID.fromString(rs.getString("tenant_id")),
-                UUID.fromString(rs.getString("conversation_id")),
-                rs.getString("role"),
-                rs.getString("message_text"),
-                rs.getString("trace_id"),
-                toInstant(rs.getTimestamp("created_at"))
-            ),
-            tenantId,
-            messageId
-        );
-        return messages.stream().findFirst();
+        MessageRow row = messageMapper.findById(tenantId.toString(), messageId.toString());
+        if (row == null) {
+            return Optional.empty();
+        }
+        return Optional.of(toMessageView(row));
     }
 
     public List<MessageView> findByConversation(UUID tenantId, UUID conversationId) {
-        return jdbcTemplate.query(
-            """
-            SELECT id, tenant_id, conversation_id, role, message_text, trace_id, created_at
-            FROM tb_message
-            WHERE tenant_id = ?
-              AND conversation_id = ?
-            ORDER BY created_at ASC
-            """,
-            (rs, rowNum) -> new MessageView(
-                UUID.fromString(rs.getString("id")),
-                UUID.fromString(rs.getString("tenant_id")),
-                UUID.fromString(rs.getString("conversation_id")),
-                rs.getString("role"),
-                rs.getString("message_text"),
-                rs.getString("trace_id"),
-                toInstant(rs.getTimestamp("created_at"))
-            ),
-            tenantId,
-            conversationId
-        );
+        List<MessageRow> rows = messageMapper.findByConversation(tenantId.toString(), conversationId.toString());
+        List<MessageView> views = new ArrayList<>(rows.size());
+        for (MessageRow row : rows) {
+            views.add(toMessageView(row));
+        }
+        return views;
     }
 
-    private Instant toInstant(Timestamp timestamp) {
-        return timestamp == null ? Instant.now() : timestamp.toInstant();
+    private MessageView toMessageView(MessageRow row) {
+        return new MessageView(
+            UUID.fromString(row.id()),
+            UUID.fromString(row.tenantId()),
+            UUID.fromString(row.conversationId()),
+            row.role(),
+            row.messageText(),
+            row.traceId(),
+            row.createdAt()
+        );
     }
 }

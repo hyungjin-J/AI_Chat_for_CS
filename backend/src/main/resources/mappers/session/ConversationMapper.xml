@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.session.domain.mapper.ConversationMapper">
+
+    <resultMap id="ConversationRowMap" type="com.aichatbot.session.infrastructure.ConversationRow">
+        <constructor>
+            <arg column="id" javaType="java.lang.String" name="id"/>
+            <arg column="tenant_id" javaType="java.lang.String" name="tenantId"/>
+            <arg column="channel_id" javaType="java.lang.String" name="channelId"/>
+            <arg column="customer_id" javaType="java.lang.String" name="customerId"/>
+            <arg column="status" javaType="java.lang.String" name="status"/>
+            <arg column="trace_id" javaType="java.lang.String" name="traceId"/>
+            <arg column="created_at" javaType="java.time.Instant" name="createdAt"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="create">
+        INSERT INTO tb_conversation(id, tenant_id, channel_id, customer_id, status, trace_id, created_at, updated_at)
+        VALUES (#{conversationId}, #{tenantId}, #{channelId}, #{customerId}, 'active', #{traceId},
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="findById" resultMap="ConversationRowMap">
+        SELECT id, tenant_id, channel_id, customer_id, status, trace_id, created_at
+        FROM tb_conversation
+        WHERE tenant_id = #{tenantId}
+          AND id = #{conversationId}
+    </select>
+
+    <select id="estimateSessionTokenUsage" resultType="java.lang.Integer">
+        SELECT COALESCE(SUM(LENGTH(COALESCE(message_text, ''))), 0)
+        FROM tb_message
+        WHERE tenant_id = #{tenantId}
+          AND conversation_id = #{conversationId}
+    </select>
+
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.auth.domain.mapper.AuthMapper">
+
+    <resultMap id="AuthUserProjectionMap" type="com.aichatbot.auth.domain.AuthUserProjection">
+        <constructor>
+            <arg column="user_id" javaType="java.lang.String" name="userId"/>
+            <arg column="tenant_id" javaType="java.lang.String" name="tenantId"/>
+            <arg column="tenant_key" javaType="java.lang.String" name="tenantKey"/>
+            <arg column="login_id" javaType="java.lang.String" name="loginId"/>
+            <arg column="display_name" javaType="java.lang.String" name="displayName"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findActiveUserByTenantAndLoginId" resultMap="AuthUserProjectionMap">
+        SELECT u.id AS user_id,
+               u.tenant_id AS tenant_id,
+               t.tenant_key AS tenant_key,
+               u.login_id AS login_id,
+               u.display_name AS display_name
+        FROM tb_user u
+        JOIN tb_tenant t ON t.id = u.tenant_id
+        WHERE t.tenant_key = #{tenantKey}
+          AND t.status = 'active'
+          AND u.login_id = #{loginId}
+          AND u.status = 'active'
+    </select>
+
+    <select id="findActiveUserById" resultMap="AuthUserProjectionMap">
+        SELECT u.id AS user_id,
+               u.tenant_id AS tenant_id,
+               t.tenant_key AS tenant_key,
+               u.login_id AS login_id,
+               u.display_name AS display_name
+        FROM tb_user u
+        JOIN tb_tenant t ON t.id = u.tenant_id
+        WHERE u.id = #{userId}
+          AND t.status = 'active'
+          AND u.status = 'active'
+    </select>
+
+    <select id="findRolesByUserId" resultType="java.lang.String">
+        SELECT r.role_code
+        FROM tb_user_role ur
+        JOIN tb_role r ON r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+        ORDER BY r.role_code
+    </select>
+
+    <insert id="saveAuthSession">
+        INSERT INTO tb_auth_session(id, tenant_id, user_id, session_token_hash, expires_at, created_at, updated_at)
+        VALUES (#{id}, #{tenantId}, #{userId}, #{tokenHash}, #{expiresAt}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="countValidSessionByTokenHash" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM tb_auth_session
+        WHERE session_token_hash = #{tokenHash}
+          AND expires_at >= CURRENT_TIMESTAMP
+    </select>
+
+    <delete id="deleteSessionByTokenHash">
+        DELETE FROM tb_auth_session
+        WHERE session_token_hash = #{tokenHash}
+    </delete>
+
+</mapper>

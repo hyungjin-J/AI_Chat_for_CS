@@ -1,40 +1,28 @@
 package com.aichatbot.rag.infrastructure;
 
 import com.aichatbot.global.observability.TraceIdNormalizer;
+import com.aichatbot.rag.domain.mapper.RagSearchLogMapper;
 import java.util.UUID;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class RagSearchLogRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final RagSearchLogMapper ragSearchLogMapper;
 
-    public RagSearchLogRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public RagSearchLogRepository(RagSearchLogMapper ragSearchLogMapper) {
+        this.ragSearchLogMapper = ragSearchLogMapper;
     }
 
     public void save(UUID tenantId, UUID conversationId, String queryTextMasked, int topK, String traceId, String retrievalMode) {
         String payload = "[mode=" + retrievalMode + "] " + queryTextMasked;
-        jdbcTemplate.update(
-            """
-            INSERT INTO tb_rag_search_log(
-                id,
-                tenant_id,
-                conversation_id,
-                query_text_masked,
-                top_k,
-                trace_id,
-                created_at,
-                updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-            """,
-            UUID.randomUUID(),
-            tenantId,
-            conversationId,
+        ragSearchLogMapper.save(
+            UUID.randomUUID().toString(),
+            tenantId.toString(),
+            conversationId.toString(),
             payload,
             topK,
-            TraceIdNormalizer.toUuid(traceId)
+            TraceIdNormalizer.toUuid(traceId).toString()
         );
     }
 }

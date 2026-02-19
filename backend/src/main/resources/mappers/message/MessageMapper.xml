@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.message.domain.mapper.MessageMapper">
+
+    <resultMap id="MessageRowMap" type="com.aichatbot.message.infrastructure.MessageRow">
+        <constructor>
+            <arg column="id" javaType="java.lang.String" name="id"/>
+            <arg column="tenant_id" javaType="java.lang.String" name="tenantId"/>
+            <arg column="conversation_id" javaType="java.lang.String" name="conversationId"/>
+            <arg column="role" javaType="java.lang.String" name="role"/>
+            <arg column="message_text" javaType="java.lang.String" name="messageText"/>
+            <arg column="trace_id" javaType="java.lang.String" name="traceId"/>
+            <arg column="created_at" javaType="java.time.Instant" name="createdAt"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="create">
+        INSERT INTO tb_message(
+            id,
+            tenant_id,
+            conversation_id,
+            role,
+            message_text,
+            trace_id,
+            created_at,
+            updated_at
+        ) VALUES (#{messageId}, #{tenantId}, #{conversationId}, #{role}, #{messageText}, #{traceId},
+                  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="findById" resultMap="MessageRowMap">
+        SELECT id, tenant_id, conversation_id, role, message_text, trace_id, created_at
+        FROM tb_message
+        WHERE tenant_id = #{tenantId}
+          AND id = #{messageId}
+    </select>
+
+    <select id="findByConversation" resultMap="MessageRowMap">
+        SELECT id, tenant_id, conversation_id, role, message_text, trace_id, created_at
+        FROM tb_message
+        WHERE tenant_id = #{tenantId}
+          AND conversation_id = #{conversationId}
+        ORDER BY created_at ASC
+    </select>
+
+</mapper>
