@@ -18,9 +18,9 @@ public class StreamEventRepository {
 
     public void save(UUID tenantId, UUID messageId, Instant messageCreatedAt, int eventSeq, String eventType, String payloadJson) {
         streamEventMapper.save(
-            UUID.randomUUID().toString(),
-            tenantId.toString(),
-            messageId.toString(),
+            UUID.randomUUID(),
+            tenantId,
+            messageId,
             messageCreatedAt,
             eventSeq,
             eventType,
@@ -29,6 +29,6 @@ public class StreamEventRepository {
     }
 
     public List<StreamEventView> findByMessageFromSeq(UUID tenantId, UUID messageId, int fromEventSeqExclusive) {
-        return streamEventMapper.findByMessageFromSeq(tenantId.toString(), messageId.toString(), fromEventSeqExclusive);
+        return streamEventMapper.findByMessageFromSeq(tenantId, messageId, fromEventSeqExclusive);
     }
 }

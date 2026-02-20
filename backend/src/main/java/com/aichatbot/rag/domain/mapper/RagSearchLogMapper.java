@@ -1,13 +1,14 @@
 package com.aichatbot.rag.domain.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import java.util.UUID;
 
 public interface RagSearchLogMapper {
 
-    int save(@Param("ragSearchLogId") String ragSearchLogId,
-             @Param("tenantId") String tenantId,
-             @Param("conversationId") String conversationId,
+    int save(@Param("ragSearchLogId") UUID ragSearchLogId,
+             @Param("tenantId") UUID tenantId,
+             @Param("conversationId") UUID conversationId,
              @Param("queryTextMasked") String queryTextMasked,
              @Param("topK") int topK,
-             @Param("traceId") String traceId);
+             @Param("traceId") UUID traceId);
 }

@@ -248,7 +248,7 @@ public class AppProperties {
 
     public static class Ollama {
         private String baseUrl = "http://localhost:11434";
-        private String model = "llama3.2";
+        private String model = "qwen2.5:3b-instruct";
         private double temperature = 0.0d;
         private double topP = 0.8d;
 

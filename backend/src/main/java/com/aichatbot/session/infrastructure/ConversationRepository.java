@@ -22,17 +22,17 @@ public class ConversationRepository {
     public ConversationView create(UUID tenantId, String traceId) {
         UUID conversationId = UUID.randomUUID();
         conversationMapper.create(
-            conversationId.toString(),
-            tenantId.toString(),
-            DEFAULT_CHANNEL_ID.toString(),
-            DEFAULT_CUSTOMER_ID.toString(),
-            TraceIdNormalizer.toUuid(traceId).toString()
+            conversationId,
+            tenantId,
+            DEFAULT_CHANNEL_ID,
+            DEFAULT_CUSTOMER_ID,
+            TraceIdNormalizer.toUuid(traceId)
         );
         return findById(tenantId, conversationId).orElseThrow();
     }
 
     public Optional<ConversationView> findById(UUID tenantId, UUID conversationId) {
-        ConversationRow row = conversationMapper.findById(tenantId.toString(), conversationId.toString());
+        ConversationRow row = conversationMapper.findById(tenantId, conversationId);
         if (row == null) {
             return Optional.empty();
         }
@@ -48,7 +48,7 @@ public class ConversationRepository {
     }
 
     public int estimateSessionTokenUsage(UUID tenantId, UUID conversationId) {
-        Integer usage = conversationMapper.estimateSessionTokenUsage(tenantId.toString(), conversationId.toString());
+        Integer usage = conversationMapper.estimateSessionTokenUsage(tenantId, conversationId);
         int chars = usage == null ? 0 : usage;
         return Math.max(0, chars / 4);
     }

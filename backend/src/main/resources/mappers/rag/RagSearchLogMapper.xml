@@ -14,7 +14,12 @@
             trace_id,
             created_at,
             updated_at
-        ) VALUES (#{ragSearchLogId}, #{tenantId}, #{conversationId}, #{queryTextMasked}, #{topK}, #{traceId},
+        ) VALUES (CAST(#{ragSearchLogId} AS UUID),
+                  CAST(#{tenantId} AS UUID),
+                  CAST(#{conversationId} AS UUID),
+                  #{queryTextMasked},
+                  #{topK},
+                  CAST(#{traceId} AS UUID),
                   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     </insert>
 

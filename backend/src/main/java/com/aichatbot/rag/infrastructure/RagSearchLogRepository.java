@@ -16,12 +16,12 @@ public class RagSearchLogRepository {
 
     public void save(UUID tenantId, UUID conversationId, String queryTextMasked, int topK, String traceId, String retrievalMode) {
         ragSearchLogMapper.save(
-            UUID.randomUUID().toString(),
-            tenantId.toString(),
-            conversationId == null ? null : conversationId.toString(),
+            UUID.randomUUID(),
+            tenantId,
+            conversationId,
             queryTextMasked,
             topK,
-            TraceIdNormalizer.toUuid(traceId).toString()
+            TraceIdNormalizer.toUuid(traceId)
         );
     }
 }

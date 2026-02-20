@@ -15,6 +15,6 @@ public class KbSearchRepository {
     }
 
     public List<ChunkSearchRow> findApprovedChunksByTenant(UUID tenantId) {
-        return kbSearchMapper.findApprovedChunksByTenant(tenantId.toString());
+        return kbSearchMapper.findApprovedChunksByTenant(tenantId);
     }
 }

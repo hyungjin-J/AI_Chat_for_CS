@@ -27,15 +27,22 @@
             excerpt_masked,
             created_at,
             updated_at
-        ) VALUES (#{citationId}, #{tenantId}, #{messageId}, #{messageCreatedAt}, #{chunkId}, #{rankNo},
-                  #{excerptMasked}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ) VALUES (CAST(#{citationId} AS UUID),
+                  CAST(#{tenantId} AS UUID),
+                  CAST(#{messageId} AS UUID),
+                  #{messageCreatedAt},
+                  CAST(#{chunkId} AS UUID),
+                  #{rankNo},
+                  #{excerptMasked},
+                  CURRENT_TIMESTAMP,
+                  CURRENT_TIMESTAMP)
     </insert>
 
     <select id="findByMessageId" resultMap="CitationRowMap">
         SELECT id, tenant_id, message_id, chunk_id, rank_no, excerpt_masked, created_at
         FROM tb_rag_citation
-        WHERE tenant_id = #{tenantId}
-          AND message_id = #{messageId}
+        WHERE tenant_id = CAST(#{tenantId} AS UUID)
+          AND message_id = CAST(#{messageId} AS UUID)
           <if test="cursorRankNo != null">
             AND rank_no &gt; #{cursorRankNo}
           </if>

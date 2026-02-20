@@ -24,7 +24,7 @@ public class AuthRepository {
             return Optional.empty();
         }
 
-        List<String> roles = findRolesByUserId(user.userId());
+        List<String> roles = findRolesByUserId(UUID.fromString(user.userId()));
         return Optional.of(new AuthUser(
             UUID.fromString(user.userId()),
             UUID.fromString(user.tenantId()),
@@ -36,12 +36,12 @@ public class AuthRepository {
     }
 
     public Optional<AuthUser> findActiveUserById(UUID userId) {
-        AuthUserProjection user = authMapper.findActiveUserById(userId.toString());
+        AuthUserProjection user = authMapper.findActiveUserById(userId);
         if (user == null) {
             return Optional.empty();
         }
 
-        List<String> roles = findRolesByUserId(user.userId());
+        List<String> roles = findRolesByUserId(UUID.fromString(user.userId()));
         return Optional.of(new AuthUser(
             UUID.fromString(user.userId()),
             UUID.fromString(user.tenantId()),
@@ -53,15 +53,11 @@ public class AuthRepository {
     }
 
     public List<String> findRolesByUserId(UUID userId) {
-        return findRolesByUserId(userId.toString());
-    }
-
-    private List<String> findRolesByUserId(String userId) {
         return authMapper.findRolesByUserId(userId);
     }
 
     public void saveAuthSession(UUID id, UUID tenantId, UUID userId, String tokenHash, Instant expiresAt) {
-        authMapper.saveAuthSession(id.toString(), tenantId.toString(), userId.toString(), tokenHash, expiresAt);
+        authMapper.saveAuthSession(id, tenantId, userId, tokenHash, expiresAt);
     }
 
     public boolean existsValidSessionByTokenHash(String tokenHash) {

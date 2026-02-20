@@ -9,7 +9,7 @@ $backendLog = Join-Path $artifactDir "provider_regression_backend.log"
 $composeFile = "infra/docker-compose.ollama.yml"
 $ollamaService = "ollama"
 $ollamaContainer = "aichatbot-ollama"
-$defaultModel = if ([string]::IsNullOrWhiteSpace($env:APP_OLLAMA_MODEL)) { "qwen2.5:7b-instruct" } else { $env:APP_OLLAMA_MODEL }
+$defaultModel = if ([string]::IsNullOrWhiteSpace($env:APP_OLLAMA_MODEL)) { "qwen2.5:3b-instruct" } else { $env:APP_OLLAMA_MODEL }
 $autoPullModel = if ($env:APP_PROVIDER_AUTO_PULL_MODEL -eq "false") { $false } else { $true }
 $script:ProviderExitCode = 0
 
@@ -201,6 +201,7 @@ try {
     $sessionResp = cmd /c "curl -sS http://localhost:8080/v1/sessions -H ""Authorization: Bearer $token"" -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $(New-Uuid)"" -H ""Idempotency-Key: $(New-Uuid)"" -H ""Content-Type: application/json"" --data-binary @$sessionBodyPath 2>nul"
     $session = $sessionResp | ConvertFrom-Json
     $sessionId = $session.session_id
+    if ([string]::IsNullOrWhiteSpace($sessionId)) { throw "session_create_failed" }
 
     $normalBodyPath = "tmp/provider_normal.json"
     '{"text":"refund policy","top_k":3,"client_nonce":"provider-normal"}' |
@@ -208,6 +209,7 @@ try {
     $normalResp = cmd /c "curl -sS http://localhost:8080/v1/sessions/$sessionId/messages -H ""Authorization: Bearer $token"" -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $(New-Uuid)"" -H ""Idempotency-Key: $(New-Uuid)"" -H ""Content-Type: application/json"" --data-binary @$normalBodyPath 2>nul"
     $normal = $normalResp | ConvertFrom-Json
     $normalId = $normal.id
+    if ([string]::IsNullOrWhiteSpace($normalId)) { throw "normal_message_create_failed" }
 
     $normalSse = cmd /c "curl -sS -N http://localhost:8080/v1/sessions/$sessionId/messages/$normalId/stream -H ""Authorization: Bearer $token"" -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $(New-Uuid)"" 2>nul"
     $normalHasCitation = $normalSse -like "*event:citation*"
@@ -219,6 +221,7 @@ try {
     $failResp = cmd /c "curl -sS http://localhost:8080/v1/sessions/$sessionId/messages -H ""Authorization: Bearer $token"" -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $(New-Uuid)"" -H ""Idempotency-Key: $(New-Uuid)"" -H ""Content-Type: application/json"" --data-binary @$failBodyPath 2>nul"
     $fail = $failResp | ConvertFrom-Json
     $failId = $fail.id
+    if ([string]::IsNullOrWhiteSpace($failId)) { throw "fail_message_create_failed" }
     $failSse = cmd /c "curl -sS -N http://localhost:8080/v1/sessions/$sessionId/messages/$failId/stream -H ""Authorization: Bearer $token"" -H ""X-Tenant-Key: $tenant"" -H ""X-Trace-Id: $(New-Uuid)"" 2>nul"
     $failHasSafeResponse = $failSse -like "*event:safe_response*"
     $failLeaksToken = ($failSse -like "*event:token*")

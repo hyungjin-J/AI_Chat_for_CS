@@ -19,11 +19,11 @@ public class CitationRepository {
 
     public void save(UUID tenantId, UUID messageId, Instant messageCreatedAt, UUID chunkId, int rankNo, String excerptMasked) {
         citationMapper.save(
-            UUID.randomUUID().toString(),
-            tenantId.toString(),
-            messageId.toString(),
+            UUID.randomUUID(),
+            tenantId,
+            messageId,
             messageCreatedAt,
-            chunkId == null ? null : chunkId.toString(),
+            chunkId,
             rankNo,
             excerptMasked
         );
@@ -31,8 +31,8 @@ public class CitationRepository {
 
     public List<CitationView> findByMessageId(UUID tenantId, UUID messageId, Integer cursorRankNo, int limit) {
         List<CitationRow> rows = citationMapper.findByMessageId(
-            tenantId.toString(),
-            messageId.toString(),
+            tenantId,
+            messageId,
             cursorRankNo,
             limit
         );

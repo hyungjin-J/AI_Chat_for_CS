@@ -2,7 +2,7 @@
 
 - 대상: AI_Chatbot 프로젝트 개발/검증 환경
 - 기본 원칙: **Ollama는 로컬 설치가 아닌 Docker Compose 실행을 표준으로 사용**
-- 기본 모델: `qwen2.5:7b-instruct`
+- 기본 모델: `qwen2.5:3b-instruct`
 
 ## 1) 빠른 시작 (Windows PowerShell)
 
@@ -23,7 +23,7 @@ docker compose -f infra/docker-compose.ollama.yml logs -f ollama
 
 4. 모델 다운로드
 ```powershell
-docker compose -f infra/docker-compose.ollama.yml exec ollama ollama pull qwen2.5:7b-instruct
+docker compose -f infra/docker-compose.ollama.yml exec ollama ollama pull qwen2.5:3b-instruct
 ```
 
 5. 모델 목록/헬스 확인
@@ -39,7 +39,7 @@ curl.exe -s http://localhost:11434/api/tags
 권장 환경변수:
 ```text
 APP_OLLAMA_BASE_URL=http://localhost:11434
-APP_OLLAMA_MODEL=qwen2.5:7b-instruct
+APP_OLLAMA_MODEL=qwen2.5:3b-instruct
 ```
 
 ## 3) provider regression 실행 순서
@@ -70,7 +70,7 @@ docker compose -f infra/docker-compose.ollama.yml restart ollama
 
 ### 4.3 모델 다운로드 지연
 - 증상: 첫 `pull`이 오래 걸림
-- 원인: 모델 크기(7B 약 수 GB) + 네트워크 속도
+- 원인: 모델 크기(3B 약 2GB 내외) + 네트워크 속도
 - 조치: 충분한 시간 확보, 완료 후 `api/tags`로 확인
 
 ### 4.4 디스크 용량 부족
@@ -89,3 +89,17 @@ docker compose -f infra/docker-compose.ollama.yml restart ollama
 ## 6) 선택 사항 (비표준)
 
 - 로컬 네이티브 Ollama 설치 방식은 선택 사항이며, 본 프로젝트 표준 경로는 Docker Compose입니다.
+
+## 7) 최근 검증 메모 (2026-02-20)
+
+- 모델 정리:
+  - 삭제: `qwen2.5:7b-instruct`, `qwen2.5:1.5b`
+  - 유지: `qwen2.5:3b-instruct` (약 1.9GB)
+- 단독 모델 응답 확인:
+  - `POST /api/generate` (`prompt: Reply with exactly: OK`) 응답 `OK` 확인
+- 회귀 스크립트 실행:
+  - `scripts/run_provider_regression.ps1` 실행 결과 `PASS`
+  - 상세 로그: `docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log`
+- 이슈 해결 메모:
+  - 초기 실패 원인: 여러 Mapper에서 UUID 컬럼에 문자열 파라미터가 바인딩되어 DB 타입 충돌
+  - 조치: Mapper/Repository UUID 타입 정합성 보강 + SQL `CAST(... AS UUID)` 적용 후 재검증 완료

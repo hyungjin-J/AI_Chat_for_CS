@@ -21,18 +21,18 @@ public class MessageRepository {
     public MessageView create(UUID tenantId, UUID conversationId, String role, String messageText, String traceId) {
         UUID messageId = UUID.randomUUID();
         messageMapper.create(
-            messageId.toString(),
-            tenantId.toString(),
-            conversationId.toString(),
+            messageId,
+            tenantId,
+            conversationId,
             role,
             messageText,
-            TraceIdNormalizer.toUuid(traceId).toString()
+            TraceIdNormalizer.toUuid(traceId)
         );
         return findById(tenantId, messageId).orElseThrow();
     }
 
     public Optional<MessageView> findById(UUID tenantId, UUID messageId) {
-        MessageRow row = messageMapper.findById(tenantId.toString(), messageId.toString());
+        MessageRow row = messageMapper.findById(tenantId, messageId);
         if (row == null) {
             return Optional.empty();
         }
@@ -40,7 +40,7 @@ public class MessageRepository {
     }
 
     public List<MessageView> findByConversation(UUID tenantId, UUID conversationId) {
-        List<MessageRow> rows = messageMapper.findByConversation(tenantId.toString(), conversationId.toString());
+        List<MessageRow> rows = messageMapper.findByConversation(tenantId, conversationId);
         List<MessageView> views = new ArrayList<>(rows.size());
         for (MessageRow row : rows) {
             views.add(toMessageView(row));
