@@ -23,9 +23,9 @@
             payload_json,
             created_at,
             updated_at
-        ) VALUES (CAST(#{streamEventId} AS UUID),
-                  CAST(#{tenantId} AS UUID),
-                  CAST(#{messageId} AS UUID),
+        ) VALUES (#{streamEventId},
+                  #{tenantId},
+                  #{messageId},
                   #{messageCreatedAt},
                   #{eventType},
                   #{eventSeq},
@@ -35,8 +35,8 @@
     <select id="findByMessageFromSeq" resultMap="StreamEventViewMap">
         SELECT event_seq, event_type, CAST(payload_json AS VARCHAR) AS payload_json
         FROM tb_stream_event
-        WHERE tenant_id = CAST(#{tenantId} AS UUID)
-          AND message_id = CAST(#{messageId} AS UUID)
+        WHERE tenant_id = #{tenantId}
+          AND message_id = #{messageId}
           AND event_seq > #{fromEventSeqExclusive}
         ORDER BY event_seq ASC
     </select>

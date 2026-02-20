@@ -49,7 +49,7 @@
         LEFT JOIN tb_kb_chunk_embedding e
           ON e.chunk_id = c.id
          AND e.tenant_id = c.tenant_id
-        WHERE c.tenant_id = CAST(#{tenantId} AS UUID)
+        WHERE c.tenant_id = #{tenantId}
           AND dv.status = 'approved'
     </select>
 

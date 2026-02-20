@@ -1,14 +1,11 @@
 package com.aichatbot.message.presentation;
 
-import com.aichatbot.global.error.ApiException;
-import com.aichatbot.global.error.ErrorCatalog;
 import com.aichatbot.global.security.PrincipalUtils;
 import com.aichatbot.global.security.UserPrincipal;
 import com.aichatbot.global.tenant.TenantContext;
+import com.aichatbot.global.util.UuidParser;
 import com.aichatbot.message.application.SseStreamService;
-import java.util.List;
 import java.util.UUID;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +36,8 @@ public class MessageStreamV1Controller {
         int fromSeq = parseEventSeq(lastEventIdQuery != null ? lastEventIdQuery : lastEventId);
         return sseStreamService.stream(
             UUID.fromString(TenantContext.getTenantId()),
-            parseUuid(sessionId, "session_id"),
-            parseUuid(messageId, "message_id"),
+            UuidParser.parseRequired(sessionId, "session_id"),
+            UuidParser.parseRequired(messageId, "message_id"),
             fromSeq,
             principal
         );
@@ -57,8 +54,8 @@ public class MessageStreamV1Controller {
         int fromSeq = parseEventSeq(lastEventIdQuery != null ? lastEventIdQuery : lastEventId);
         return sseStreamService.stream(
             UUID.fromString(TenantContext.getTenantId()),
-            parseUuid(sessionId, "session_id"),
-            parseUuid(messageId, "message_id"),
+            UuidParser.parseRequired(sessionId, "session_id"),
+            UuidParser.parseRequired(messageId, "message_id"),
             fromSeq,
             principal
         );
@@ -75,16 +72,4 @@ public class MessageStreamV1Controller {
         }
     }
 
-    private UUID parseUuid(String raw, String field) {
-        try {
-            return UUID.fromString(raw);
-        } catch (IllegalArgumentException exception) {
-            throw new ApiException(
-                HttpStatus.UNPROCESSABLE_ENTITY,
-                "API-003-422",
-                ErrorCatalog.messageOf("API-003-422"),
-                List.of(field + "_invalid")
-            );
-        }
-    }
 }

@@ -10,6 +10,7 @@ public final class ErrorCatalog {
         Map.entry("SYS-002-403", "허용되지 않은 테넌트 또는 도메인입니다."),
         Map.entry("API-003-409", "동일 요청이 이미 처리 중입니다."),
         Map.entry("API-003-422", "입력값 형식이 올바르지 않습니다."),
+        Map.entry("API-004-404", "요청한 리소스를 찾을 수 없습니다."),
         Map.entry("API-008-429-BUDGET", "요청 한도를 초과했습니다. 잠시 후 재시도해 주세요."),
         Map.entry("API-008-429-SSE", "동시 스트리밍 연결 수를 초과했습니다."),
         Map.entry("AI-009-422-SCHEMA", "응답 형식 검증에 실패하여 전송할 수 없습니다."),

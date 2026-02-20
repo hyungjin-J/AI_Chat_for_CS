@@ -39,6 +39,14 @@ public class MessageRepository {
         return Optional.of(toMessageView(row));
     }
 
+    public Optional<MessageView> findByIdWithoutTenant(UUID messageId) {
+        MessageRow row = messageMapper.findByIdWithoutTenant(messageId);
+        if (row == null) {
+            return Optional.empty();
+        }
+        return Optional.of(toMessageView(row));
+    }
+
     public List<MessageView> findByConversation(UUID tenantId, UUID conversationId) {
         List<MessageRow> rows = messageMapper.findByConversation(tenantId, conversationId);
         List<MessageView> views = new ArrayList<>(rows.size());

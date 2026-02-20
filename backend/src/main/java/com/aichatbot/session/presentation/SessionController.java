@@ -7,6 +7,7 @@ import com.aichatbot.global.observability.TraceGuard;
 import com.aichatbot.global.security.PrincipalUtils;
 import com.aichatbot.global.security.UserPrincipal;
 import com.aichatbot.global.tenant.TenantContext;
+import com.aichatbot.global.util.UuidParser;
 import com.aichatbot.message.application.MessageGenerationResult;
 import com.aichatbot.message.application.MessageView;
 import com.aichatbot.message.presentation.dto.MessageAcceptedResponse;
@@ -77,7 +78,7 @@ public class SessionController {
     @GetMapping("/sessions/{session_id}")
     public ResponseEntity<SessionResponse> getSession(@PathVariable("session_id") String sessionId) {
         UUID tenantId = UUID.fromString(TenantContext.getTenantId());
-        ConversationView session = sessionService.getSession(tenantId, parseUuid(sessionId, "session_id"));
+        ConversationView session = sessionService.getSession(tenantId, UuidParser.parseRequired(sessionId, "session_id"));
         SessionResponse response = new SessionResponse(
             "ok",
             session.id().toString(),
@@ -90,7 +91,7 @@ public class SessionController {
     @GetMapping("/sessions/{session_id}/messages")
     public ResponseEntity<MessageListResponse> listMessages(@PathVariable("session_id") String sessionId) {
         UUID tenantId = UUID.fromString(TenantContext.getTenantId());
-        List<MessageView> messages = sessionService.listMessages(tenantId, parseUuid(sessionId, "session_id"));
+        List<MessageView> messages = sessionService.listMessages(tenantId, UuidParser.parseRequired(sessionId, "session_id"));
         List<MessageListResponse.MessageItem> items = messages.stream()
             .map(message -> new MessageListResponse.MessageItem(
                 message.id().toString(),
@@ -110,7 +111,7 @@ public class SessionController {
         @Valid @RequestBody com.aichatbot.message.presentation.dto.PostMessageRequest request
     ) {
         UUID tenantId = UUID.fromString(TenantContext.getTenantId());
-        UUID conversationId = parseUuid(sessionId, "session_id");
+        UUID conversationId = UuidParser.parseRequired(sessionId, "session_id");
         String key = requireIdempotencyKey(idempotencyKey);
 
         MessageGenerationResult result = idempotencyService.execute(
@@ -126,19 +127,6 @@ public class SessionController {
             TraceGuard.requireTraceId()
         );
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
-    }
-
-    private UUID parseUuid(String raw, String field) {
-        try {
-            return UUID.fromString(raw);
-        } catch (IllegalArgumentException exception) {
-            throw new ApiException(
-                HttpStatus.UNPROCESSABLE_ENTITY,
-                "API-003-422",
-                ErrorCatalog.messageOf("API-003-422"),
-                List.of(field + "_invalid")
-            );
-        }
     }
 
     private String requireIdempotencyKey(String idempotencyKey) {

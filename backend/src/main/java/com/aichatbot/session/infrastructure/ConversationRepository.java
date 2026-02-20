@@ -47,6 +47,11 @@ public class ConversationRepository {
         ));
     }
 
+    public Optional<UUID> findTenantIdByConversationId(UUID conversationId) {
+        UUID tenantId = conversationMapper.findTenantIdByConversationId(conversationId);
+        return Optional.ofNullable(tenantId);
+    }
+
     public int estimateSessionTokenUsage(UUID tenantId, UUID conversationId) {
         Integer usage = conversationMapper.estimateSessionTokenUsage(tenantId, conversationId);
         int chars = usage == null ? 0 : usage;

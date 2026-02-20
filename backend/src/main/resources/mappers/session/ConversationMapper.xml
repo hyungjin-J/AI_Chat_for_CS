@@ -18,27 +18,33 @@
 
     <insert id="create">
         INSERT INTO tb_conversation(id, tenant_id, channel_id, customer_id, status, trace_id, created_at, updated_at)
-        VALUES (CAST(#{conversationId} AS UUID),
-                CAST(#{tenantId} AS UUID),
-                CAST(#{channelId} AS UUID),
-                CAST(#{customerId} AS UUID),
+        VALUES (#{conversationId},
+                #{tenantId},
+                #{channelId},
+                #{customerId},
                 'active',
-                CAST(#{traceId} AS UUID),
+                #{traceId},
                 CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     </insert>
 
     <select id="findById" resultMap="ConversationRowMap">
         SELECT id, tenant_id, channel_id, customer_id, status, trace_id, created_at
         FROM tb_conversation
-        WHERE tenant_id = CAST(#{tenantId} AS UUID)
-          AND id = CAST(#{conversationId} AS UUID)
+        WHERE tenant_id = #{tenantId}
+          AND id = #{conversationId}
     </select>
 
     <select id="estimateSessionTokenUsage" resultType="java.lang.Integer">
         SELECT COALESCE(SUM(LENGTH(COALESCE(message_text, ''))), 0)
         FROM tb_message
-        WHERE tenant_id = CAST(#{tenantId} AS UUID)
-          AND conversation_id = CAST(#{conversationId} AS UUID)
+        WHERE tenant_id = #{tenantId}
+          AND conversation_id = #{conversationId}
+    </select>
+
+    <select id="findTenantIdByConversationId" resultType="java.util.UUID">
+        SELECT tenant_id
+        FROM tb_conversation
+        WHERE id = #{conversationId}
     </select>
 
 </mapper>

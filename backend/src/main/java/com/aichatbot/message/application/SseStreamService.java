@@ -6,6 +6,7 @@ import com.aichatbot.global.config.AppProperties;
 import com.aichatbot.global.security.UserPrincipal;
 import com.aichatbot.message.infrastructure.MessageRepository;
 import com.aichatbot.message.infrastructure.StreamEventRepository;
+import com.aichatbot.session.infrastructure.ConversationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseStreamService {
 
     private final MessageRepository messageRepository;
+    private final ConversationRepository conversationRepository;
     private final StreamEventRepository streamEventRepository;
     private final SseConcurrencyGuard sseConcurrencyGuard;
     private final MvpObservabilityMetrics mvpObservabilityMetrics;
@@ -26,6 +28,7 @@ public class SseStreamService {
 
     public SseStreamService(
         MessageRepository messageRepository,
+        ConversationRepository conversationRepository,
         StreamEventRepository streamEventRepository,
         SseConcurrencyGuard sseConcurrencyGuard,
         MvpObservabilityMetrics mvpObservabilityMetrics,
@@ -33,6 +36,7 @@ public class SseStreamService {
         AppProperties appProperties
     ) {
         this.messageRepository = messageRepository;
+        this.conversationRepository = conversationRepository;
         this.streamEventRepository = streamEventRepository;
         this.sseConcurrencyGuard = sseConcurrencyGuard;
         this.mvpObservabilityMetrics = mvpObservabilityMetrics;
@@ -47,20 +51,15 @@ public class SseStreamService {
         int fromEventSeqExclusive,
         UserPrincipal principal
     ) {
-        MessageView answerMessage = messageRepository.findById(tenantId, messageId)
-            .orElseThrow(() -> new ApiException(
-                HttpStatus.UNPROCESSABLE_ENTITY,
-                "API-003-422",
-                ErrorCatalog.messageOf("API-003-422"),
-                List.of("message_not_found")
-            ));
+        MessageView answerMessage = requireMessageInTenant(tenantId, messageId);
+        requireSessionInTenant(tenantId, sessionId);
 
         if (!answerMessage.conversationId().equals(sessionId)) {
             throw new ApiException(
-                HttpStatus.UNPROCESSABLE_ENTITY,
-                "API-003-422",
-                ErrorCatalog.messageOf("API-003-422"),
-                List.of("session_message_mismatch")
+                HttpStatus.NOT_FOUND,
+                "API-004-404",
+                ErrorCatalog.messageOf("API-004-404"),
+                List.of("session_message_not_found")
             );
         }
 
@@ -119,6 +118,55 @@ public class SseStreamService {
             return objectMapper.createObjectNode();
         }
         return objectMapper.readTree(payloadJson);
+    }
+
+    private MessageView requireMessageInTenant(UUID tenantId, UUID messageId) {
+        MessageView message = messageRepository.findById(tenantId, messageId).orElse(null);
+        if (message != null) {
+            return message;
+        }
+
+        MessageView anyTenantMessage = messageRepository.findByIdWithoutTenant(messageId).orElse(null);
+        // Why: 메시지가 존재해도 다른 tenant 소유면 404가 아니라 403으로 응답해야 권한 오류를 명확히 전달할 수 있습니다.
+        if (anyTenantMessage != null && !anyTenantMessage.tenantId().equals(tenantId)) {
+            throw new ApiException(
+                HttpStatus.FORBIDDEN,
+                "SEC-002-403",
+                ErrorCatalog.messageOf("SEC-002-403"),
+                List.of("cross_tenant_message_access")
+            );
+        }
+
+        throw new ApiException(
+            HttpStatus.NOT_FOUND,
+            "API-004-404",
+            ErrorCatalog.messageOf("API-004-404"),
+            List.of("message_not_found")
+        );
+    }
+
+    private void requireSessionInTenant(UUID tenantId, UUID sessionId) {
+        if (conversationRepository.findById(tenantId, sessionId).isPresent()) {
+            return;
+        }
+
+        // Why: 세션 소유 tenant를 직접 확인해야 "미존재"와 "타 테넌트 접근"을 안정적으로 구분할 수 있습니다.
+        UUID ownerTenantId = conversationRepository.findTenantIdByConversationId(sessionId).orElse(null);
+        if (ownerTenantId != null && !ownerTenantId.equals(tenantId)) {
+            throw new ApiException(
+                HttpStatus.FORBIDDEN,
+                "SEC-002-403",
+                ErrorCatalog.messageOf("SEC-002-403"),
+                List.of("cross_tenant_session_access")
+            );
+        }
+
+        throw new ApiException(
+            HttpStatus.NOT_FOUND,
+            "API-004-404",
+            ErrorCatalog.messageOf("API-004-404"),
+            List.of("session_not_found")
+        );
     }
 
     private void send(SseEmitter emitter, int eventSeq, String eventName, Object payload) throws IOException {

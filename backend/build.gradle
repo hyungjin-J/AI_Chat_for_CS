@@ -41,6 +41,17 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+tasks.register('lintUuidMapperParams', Exec) {
+	group = 'verification'
+	description = 'Fail when MyBatis mapper ID params regress to String.'
+	commandLine 'python', '../scripts/lint_uuid_params.py', '--root', 'src/main/java/com/aichatbot'
+}
+
 tasks.named('test') {
+	dependsOn tasks.named('lintUuidMapperParams')
 	useJUnitPlatform()
+}
+
+tasks.named('check') {
+	dependsOn tasks.named('lintUuidMapperParams')
 }

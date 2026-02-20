@@ -1,7 +1,8 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { SseEventType } from "./types/sse";
 import { maskSensitiveText } from "./utils/piiMasking";
 import { SseParser } from "./utils/sseParser";
+import { isValidUuid } from "./utils/uuid";
 import "./index.css";
 
 type ChatMessage = {
@@ -20,6 +21,11 @@ type CitationItem = {
 type ErrorBanner = {
     errorCode: string;
     message: string;
+};
+
+type ApiErrorPayload = {
+    error_code?: string;
+    message?: string;
 };
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
@@ -47,8 +53,27 @@ function App() {
     }, [tenantKey, loginId, password]);
 
     const canSend = useMemo(() => {
-        return Boolean(accessToken && sessionId && prompt.trim()) && !isStreaming;
+        return Boolean(accessToken && sessionId && prompt.trim() && isValidUuid(sessionId)) && !isStreaming;
     }, [accessToken, sessionId, prompt, isStreaming]);
+
+    useEffect(() => {
+        const urlSessionId = new URLSearchParams(window.location.search).get("session_id");
+        if (!urlSessionId) {
+            return;
+        }
+
+        // Why: URL에서 주입된 session_id를 바로 호출에 쓰면 잘못된 값이 반복 실패를 유발하므로 먼저 차단합니다.
+        if (isValidUuid(urlSessionId)) {
+            setSessionId(urlSessionId);
+            return;
+        }
+
+        setErrorBanner({
+            errorCode: "API-003-422",
+            message: "Session ID format is invalid.",
+        });
+        setStatusText("Invalid session id");
+    }, []);
 
     const commonHeaders = (includeAuth = true): Record<string, string> => {
         const headers: Record<string, string> = {
@@ -139,6 +164,15 @@ function App() {
         setSafeBanner("");
         setCitations([]);
 
+        if (!isValidUuid(sessionId)) {
+            setErrorBanner({
+                errorCode: "API-003-422",
+                message: "Session ID format is invalid.",
+            });
+            setStatusText("Invalid session id");
+            return;
+        }
+
         const questionText = prompt.trim();
         const tempAssistantId = `assistant-${crypto.randomUUID()}`;
         setMessages((prev) => [
@@ -168,10 +202,7 @@ function App() {
 
             const postJson = await postRes.json();
             if (!postRes.ok) {
-                setErrorBanner({
-                    errorCode: postJson.error_code ?? "SYS-003-500",
-                    message: postJson.message ?? "Message post failed",
-                });
+                setErrorBanner(toUserError(postRes.status, postJson, "Session does not exist."));
                 setStatusText("Post failed");
                 setIsStreaming(false);
                 return;
@@ -194,6 +225,15 @@ function App() {
     };
 
     const streamAnswer = async (messageId: string, tempAssistantId: string, resume: boolean): Promise<boolean> => {
+        if (!isValidUuid(messageId)) {
+            setErrorBanner({
+                errorCode: "API-003-422",
+                message: "Message ID format is invalid.",
+            });
+            setStatusText("Invalid message id");
+            return true;
+        }
+
         const endpoint = resume
             ? `${API_BASE_URL}/v1/sessions/${sessionId}/messages/${messageId}/stream/resume`
             : `${API_BASE_URL}/v1/sessions/${sessionId}/messages/${messageId}/stream`;
@@ -216,10 +256,7 @@ function App() {
         if (!streamRes.ok || !streamRes.body) {
             const text = await streamRes.text();
             const parsed = tryParseJson(text);
-            setErrorBanner({
-                errorCode: parsed?.error_code ?? "SYS-003-500",
-                message: parsed?.message ?? "Stream connect failed",
-            });
+            setErrorBanner(toUserError(streamRes.status, parsed, "Message or session does not exist."));
             setStatusText("Stream failed");
             return true;
         }
@@ -396,6 +433,34 @@ function App() {
             </section>
         </main>
     );
+}
+
+function toUserError(status: number, payload: ApiErrorPayload | null, notFoundMessage: string): ErrorBanner {
+    if (status === 400 || status === 422) {
+        return {
+            errorCode: payload?.error_code ?? "API-003-422",
+            message: "Request format is invalid. Please verify session/message identifiers.",
+        };
+    }
+
+    if (status === 403) {
+        return {
+            errorCode: payload?.error_code ?? "SEC-002-403",
+            message: "You do not have permission to access this tenant resource.",
+        };
+    }
+
+    if (status === 404) {
+        return {
+            errorCode: payload?.error_code ?? "API-004-404",
+            message: notFoundMessage,
+        };
+    }
+
+    return {
+        errorCode: payload?.error_code ?? "SYS-003-500",
+        message: payload?.message ?? "Request failed",
+    };
 }
 
 function tryParseJson(raw: string): Record<string, any> | null {

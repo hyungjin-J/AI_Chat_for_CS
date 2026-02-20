@@ -15,4 +15,6 @@ public interface ConversationMapper {
     ConversationRow findById(@Param("tenantId") UUID tenantId, @Param("conversationId") UUID conversationId);
 
     Integer estimateSessionTokenUsage(@Param("tenantId") UUID tenantId, @Param("conversationId") UUID conversationId);
+
+    UUID findTenantIdByConversationId(@Param("conversationId") UUID conversationId);
 }

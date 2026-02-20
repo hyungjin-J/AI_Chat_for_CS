@@ -36,7 +36,7 @@
                u.display_name AS display_name
         FROM tb_user u
         JOIN tb_tenant t ON t.id = u.tenant_id
-        WHERE u.id = CAST(#{userId} AS UUID)
+        WHERE u.id = #{userId}
           AND t.status = 'active'
           AND u.status = 'active'
     </select>
@@ -45,16 +45,16 @@
         SELECT r.role_code
         FROM tb_user_role ur
         JOIN tb_role r ON r.id = ur.role_id
-        WHERE ur.user_id = CAST(#{userId} AS UUID)
+        WHERE ur.user_id = #{userId}
         ORDER BY r.role_code
     </select>
 
     <insert id="saveAuthSession">
         INSERT INTO tb_auth_session(id, tenant_id, user_id, session_token_hash, expires_at, created_at, updated_at)
         VALUES (
-            CAST(#{id} AS UUID),
-            CAST(#{tenantId} AS UUID),
-            CAST(#{userId} AS UUID),
+            #{id},
+            #{tenantId},
+            #{userId},
             #{tokenHash},
             #{expiresAt},
             CURRENT_TIMESTAMP,

@@ -26,27 +26,33 @@
             trace_id,
             created_at,
             updated_at
-        ) VALUES (CAST(#{messageId} AS UUID),
-                  CAST(#{tenantId} AS UUID),
-                  CAST(#{conversationId} AS UUID),
+        ) VALUES (#{messageId},
+                  #{tenantId},
+                  #{conversationId},
                   #{role},
                   #{messageText},
-                  CAST(#{traceId} AS UUID),
+                  #{traceId},
                   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     </insert>
 
     <select id="findById" resultMap="MessageRowMap">
         SELECT id, tenant_id, conversation_id, role, message_text, trace_id, created_at
         FROM tb_message
-        WHERE tenant_id = CAST(#{tenantId} AS UUID)
-          AND id = CAST(#{messageId} AS UUID)
+        WHERE tenant_id = #{tenantId}
+          AND id = #{messageId}
+    </select>
+
+    <select id="findByIdWithoutTenant" resultMap="MessageRowMap">
+        SELECT id, tenant_id, conversation_id, role, message_text, trace_id, created_at
+        FROM tb_message
+        WHERE id = #{messageId}
     </select>
 
     <select id="findByConversation" resultMap="MessageRowMap">
         SELECT id, tenant_id, conversation_id, role, message_text, trace_id, created_at
         FROM tb_message
-        WHERE tenant_id = CAST(#{tenantId} AS UUID)
-          AND conversation_id = CAST(#{conversationId} AS UUID)
+        WHERE tenant_id = #{tenantId}
+          AND conversation_id = #{conversationId}
         ORDER BY created_at ASC
     </select>
 

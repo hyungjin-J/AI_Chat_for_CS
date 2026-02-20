@@ -4,6 +4,7 @@ import com.aichatbot.answer.application.AnswerContract;
 import com.aichatbot.answer.application.AnswerContractValidator;
 import com.aichatbot.answer.application.AnswerValidationResult;
 import com.aichatbot.global.config.AppProperties;
+import com.aichatbot.global.error.ApiException;
 import com.aichatbot.global.error.ErrorCatalog;
 import com.aichatbot.global.observability.TraceGuard;
 import com.aichatbot.global.privacy.PiiMaskingService;
@@ -29,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -88,9 +90,7 @@ public class MessageGenerationService {
         TraceGuard.requireTraceId();
         String traceId = TraceGuard.requireTraceId();
 
-        conversationRepository.findById(tenantId, sessionId).orElseThrow(() ->
-            new IllegalArgumentException("conversation_not_found")
-        );
+        requireConversationInTenant(tenantId, sessionId);
 
         String questionMasked = piiMaskingService.mask(questionTextRaw);
         guardrailPolicyService.enforceInputPolicy(questionMasked);
@@ -338,6 +338,31 @@ public class MessageGenerationService {
         }
         return Math.min(requestedTopK, appProperties.getRag().getTopKMax());
     }
+
+    private void requireConversationInTenant(UUID tenantId, UUID sessionId) {
+        if (conversationRepository.findById(tenantId, sessionId).isPresent()) {
+            return;
+        }
+
+        // Why: 생성 API에서도 테넌트 소유권을 먼저 분기해야 403/404가 일관되고 회귀 테스트가 안정적으로 유지됩니다.
+        UUID ownerTenantId = conversationRepository.findTenantIdByConversationId(sessionId).orElse(null);
+        if (ownerTenantId != null && !ownerTenantId.equals(tenantId)) {
+            throw new ApiException(
+                HttpStatus.FORBIDDEN,
+                "SEC-002-403",
+                ErrorCatalog.messageOf("SEC-002-403"),
+                List.of("cross_tenant_session_access")
+            );
+        }
+
+        throw new ApiException(
+            HttpStatus.NOT_FOUND,
+            "API-004-404",
+            ErrorCatalog.messageOf("API-004-404"),
+            List.of("session_not_found")
+        );
+    }
+
     private String buildLlmPrompt(
         String questionMasked,
         UUID messageId,

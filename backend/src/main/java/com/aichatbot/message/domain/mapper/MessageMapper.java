@@ -16,6 +16,8 @@ public interface MessageMapper {
 
     MessageRow findById(@Param("tenantId") UUID tenantId, @Param("messageId") UUID messageId);
 
+    MessageRow findByIdWithoutTenant(@Param("messageId") UUID messageId);
+
     List<MessageRow> findByConversation(@Param("tenantId") UUID tenantId,
                                         @Param("conversationId") UUID conversationId);
 }
