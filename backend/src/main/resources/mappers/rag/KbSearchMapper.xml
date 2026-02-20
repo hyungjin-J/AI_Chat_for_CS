@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.rag.domain.mapper.KbSearchMapper">
+
+    <resultMap id="ChunkSearchRowMap" type="com.aichatbot.rag.infrastructure.ChunkSearchRow">
+        <constructor>
+            <arg column="chunk_id" javaType="java.lang.String" name="chunkId"/>
+            <arg column="document_id" javaType="java.lang.String" name="documentId"/>
+            <arg column="document_version_id" javaType="java.lang.String" name="documentVersionId"/>
+            <arg column="version_no" javaType="java.lang.Integer" name="versionNo"/>
+            <arg column="chunk_no" javaType="java.lang.Integer" name="chunkNo"/>
+            <arg column="title" javaType="java.lang.String" name="title"/>
+            <arg column="source_type" javaType="java.lang.String" name="sourceType"/>
+            <arg column="category" javaType="java.lang.String" name="category"/>
+            <arg column="effective_date" javaType="java.lang.String" name="effectiveDate"/>
+            <arg column="owner" javaType="java.lang.String" name="owner"/>
+            <arg column="context_header" javaType="java.lang.String" name="contextHeader"/>
+            <arg column="summary_text" javaType="java.lang.String" name="summaryText"/>
+            <arg column="chunk_text" javaType="java.lang.String" name="chunkText"/>
+            <arg column="embedding_input_text" javaType="java.lang.String" name="embeddingInputText"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findApprovedChunksByTenant" resultMap="ChunkSearchRowMap">
+        SELECT
+            c.id AS chunk_id,
+            dv.document_id AS document_id,
+            c.document_version_id AS document_version_id,
+            dv.version_no AS version_no,
+            c.chunk_no AS chunk_no,
+            d.title AS title,
+            d.source_type AS source_type,
+            d.category AS category,
+            CAST(d.effective_date AS VARCHAR) AS effective_date,
+            d.owner AS owner,
+            c.context_header AS context_header,
+            c.summary_text AS summary_text,
+            c.chunk_text AS chunk_text,
+            e.embedding_input_text AS embedding_input_text
+        FROM tb_kb_chunk c
+        JOIN tb_kb_document_version dv
+          ON dv.id = c.document_version_id
+         AND dv.tenant_id = c.tenant_id
+        JOIN tb_kb_document d
+          ON d.id = dv.document_id
+         AND d.tenant_id = dv.tenant_id
+        LEFT JOIN tb_kb_chunk_embedding e
+          ON e.chunk_id = c.id
+         AND e.tenant_id = c.tenant_id
+        WHERE c.tenant_id = #{tenantId}
+          AND dv.status = 'approved'
+    </select>
+
+</mapper>

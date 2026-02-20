@@ -120,9 +120,13 @@ public class MessageGenerationService {
         if (toolExecution.hasCitationChunk()) {
             allEvidenceChunks.add(new EvidenceChunk(
                 UUID.fromString(toolExecution.citationChunkId()),
-                piiMaskingService.mask(toolExecution.excerptMasked()),
+                null,
+                "tool_context",
+                0,
                 allEvidenceChunks.size() + 1,
-                0.90d
+                0.90d,
+                piiMaskingService.mask(toolExecution.excerptMasked()),
+                piiMaskingService.mask(toolExecution.excerptMasked())
             ));
         }
         ragSearchLogRepository.save(
@@ -147,7 +151,7 @@ public class MessageGenerationService {
             validation = answerContractValidator.validate(repaired);
         }
 
-        boolean safeResponse = !validation.valid() || retrievalResult.evidenceChunks().isEmpty();
+        boolean safeResponse = !validation.valid() || retrievalResult.zeroEvidence();
         String validationErrorCode = validation.errorCode();
         String finalAnswerText;
         double threshold = appProperties.getAnswer().getEvidenceThreshold();
@@ -241,7 +245,7 @@ public class MessageGenerationService {
                 UUID chunkId = UUID.fromString(citation.chunkId());
                 EvidenceChunk matchedChunk = evidenceById.get(chunkId);
                 String excerptMasked = piiMaskingService.mask(
-                    matchedChunk == null ? citation.excerptMasked() : matchedChunk.chunkTextMasked()
+                    matchedChunk == null ? citation.excerptMasked() : matchedChunk.excerptMasked()
                 );
                 citationRepository.save(
                     tenantId,
@@ -355,9 +359,9 @@ public class MessageGenerationService {
         }
         builder.append("Evidence chunks:\n");
         for (EvidenceChunk chunk : evidenceChunks) {
-            builder.append("- chunk_id=").append(chunk.chunkId())
+                builder.append("- chunk_id=").append(chunk.chunkId())
                 .append(", rank=").append(chunk.rankNo())
-                .append(", text=").append(chunk.chunkTextMasked())
+                .append(", text=").append(chunk.originalChunkText())
                 .append("\n");
         }
         builder.append("Output example: ");

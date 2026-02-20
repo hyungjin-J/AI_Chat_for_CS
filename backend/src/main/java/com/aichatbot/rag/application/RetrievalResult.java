@@ -5,6 +5,7 @@ import java.util.List;
 public record RetrievalResult(
     List<EvidenceChunk> evidenceChunks,
     String retrievalMode,
-    double evidenceScore
+    double evidenceScore,
+    boolean zeroEvidence
 ) {
 }

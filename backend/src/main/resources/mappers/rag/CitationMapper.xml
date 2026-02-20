@@ -36,7 +36,11 @@
         FROM tb_rag_citation
         WHERE tenant_id = #{tenantId}
           AND message_id = #{messageId}
-        ORDER BY rank_no ASC
+          <if test="cursorRankNo != null">
+            AND rank_no &gt; #{cursorRankNo}
+          </if>
+        ORDER BY rank_no ASC, id ASC
+        LIMIT #{limit}
     </select>
 
 </mapper>

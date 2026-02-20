@@ -4,8 +4,12 @@ import java.util.UUID;
 
 public record EvidenceChunk(
     UUID chunkId,
-    String chunkTextMasked,
+    UUID documentId,
+    String title,
+    int versionNo,
     int rankNo,
-    double score
+    double score,
+    String excerptMasked,
+    String originalChunkText
 ) {
 }

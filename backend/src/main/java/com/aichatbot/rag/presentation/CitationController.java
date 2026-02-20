@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,11 +27,16 @@ public class CitationController {
     }
 
     @GetMapping("/{answer_id}/citations")
-    public ResponseEntity<CitationListResponse> getCitations(@PathVariable("answer_id") String answerId) {
+    public ResponseEntity<CitationListResponse> getCitations(
+        @PathVariable("answer_id") String answerId,
+        @RequestParam(value = "cursor", required = false) Integer cursor,
+        @RequestParam(value = "limit", required = false) Integer limit
+    ) {
         UUID tenantId = UUID.fromString(TenantContext.getTenantId());
         UUID messageId = parseUuid(answerId);
+        int safeLimit = limit == null ? 20 : Math.max(1, Math.min(limit, 100));
 
-        List<CitationView> citations = citationRepository.findByMessageId(tenantId, messageId);
+        List<CitationView> citations = citationRepository.findByMessageId(tenantId, messageId, cursor, safeLimit);
         List<CitationListResponse.CitationItem> items = citations.stream()
             .map(citation -> new CitationListResponse.CitationItem(
                 citation.id().toString(),
@@ -41,7 +47,10 @@ public class CitationController {
             ))
             .toList();
 
-        CitationListResponse response = new CitationListResponse("ok", items, TraceGuard.requireTraceId());
+        String nextCursor = citations.size() == safeLimit
+            ? String.valueOf(citations.get(citations.size() - 1).rankNo())
+            : null;
+        CitationListResponse response = new CitationListResponse("ok", items, nextCursor, TraceGuard.requireTraceId());
         return ResponseEntity.ok(response);
     }
 

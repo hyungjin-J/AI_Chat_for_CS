@@ -13,6 +13,34 @@
 - 상태 진실원천(SSOT): `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 - 검증팩 현재 포인터: `docs/review/mvp_verification_pack/CURRENT.md`
 
+## 1-1) 이번 변경 요약 (2026-02-20)
+- RAG 파이프라인 고도화:
+  - Contextual Retrieval + Summary-first Retrieval + Hybrid Search(RRF) 경로 추가
+  - 근거 부족/계약 실패 시 fail-closed(`safe_response` 또는 표준 에러) 유지
+- 신규/확장 API:
+  - `POST /v1/rag/retrieve` (Role: `SYSTEM`, Idempotency-Key 필수, 201)
+  - `POST /v1/rag/answer` (Role: `SYSTEM`, 계약 검증 실패 시 free-text fallback 금지)
+  - `GET /v1/rag/answers/{answer_id}/citations` (Role: `AGENT`, `cursor`/`limit` 페이지네이션)
+- DB/Migration:
+  - `backend/src/main/resources/db/migration/V2__rag_hybrid_retrieval.sql`
+  - KB 문서/버전/청크/임베딩 테이블 추가 및 RAG 로그/인용 연동 보강
+- 테스트:
+  - `./gradlew test` 통과
+  - RRF 결정성, evidence threshold, RAG API 계약 테스트 추가
+
+## 1-2) 현재 주요 맹점 / 후속 우선순위
+- Hybrid Search 엔진 연동 수준:
+  - 현재 구조/계약/로깅/안전응답은 반영되었으나, BM25/벡터는 데모 점수화 경로가 포함됨
+  - 운영용 OpenSearch/pgvector 실쿼리(인덱스 운영/성능 튜닝)로 교체/고도화 필요
+- 임베딩 저장 포맷:
+  - `embedding_vector`는 현재 문자열 기반 저장 경로를 포함함
+  - 운영 표준 `vector(1536)` 기반 검색 최적화/마이그레이션 정합성 추가 검증 필요
+- Retrieve/Answer 비동기 처리:
+  - 현재는 요청 수락 후 즉시 처리 경로 중심
+  - 대량 트래픽 대비 큐잉/워커 분리, 재시도/보상 트랜잭션 정책 보강 권장
+- Notion 첨부:
+  - MCP 경로에서 파일 바이너리 첨부 자동화 제약이 있어 메타/본문 동기화 중심으로 운영 중
+
 ## 2) 로컬 실행
 ### 인프라
 ```bash

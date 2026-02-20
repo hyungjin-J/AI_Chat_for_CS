@@ -58,3 +58,51 @@
 - Notion 반영 상태:
   - 반영 완료 (2026-02-19 20:06:22 +09:00)
   - 반영 항목: Last synced at / Source file / Version(or commit) / Change summary 갱신
+
+## 7) 이번 세션(2026-02-20) 스펙 변경 및 Notion 동기화 기록
+- 기준 커밋: `6eb8baa`
+- 기준 시각(Asia/Seoul): `2026-02-20 21:36`
+- 변경된 스펙 파일(git diff summary):
+  - `docs/references/Summary of key features.csv` (5 lines changed)
+  - `docs/references/CS AI Chatbot_Requirements Statement.csv` (4 lines changed)
+  - `docs/references/Development environment.csv` (4 lines changed)
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx` (binary changed, `전체API목록` only)
+
+### 7.1 `docs/references/Summary of key features.csv`
+- Notion URL: https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149
+- 변경 내용:
+  - 하이브리드 검색 행 ReqID를 `KB-003` -> `AI-004`로 정정
+  - `KB-003` 전용 의미(버전 상태/승인/롤백/폐기) 분리 행 보강
+- Last synced at: `2026-02-20 21:36 +09:00`
+- Commit: `6eb8baa`
+- Notion sync completed: `YES`
+
+### 7.2 `docs/references/CS AI Chatbot_Requirements Statement.csv`
+- Notion URL: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+- 변경 내용:
+  - `AI-004` 상세 가이드에 Contextual Retrieval + Summary-first + Hybrid(vector+BM25+optional rerank) 명시
+  - `KB-002` 상세 가이드에 semantic boundary chunking / summary indexing / embedding input 규칙 명시
+- Last synced at: `2026-02-20 21:36 +09:00`
+- Commit: `6eb8baa`
+- Notion sync completed: `YES`
+
+### 7.3 `docs/references/Development environment.csv`
+- Notion URL: https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7
+- 변경 내용:
+  - OpenSearch/BM25/하이브리드 문맥의 잘못된 `KB-003` 참조를 `AI-004`(및 `KB-002`) 중심으로 정정
+- Last synced at: `2026-02-20 21:36 +09:00`
+- Commit: `6eb8baa`
+- Notion sync completed: `YES`
+
+### 7.4 `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+- Notion URL: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+- 변경 내용:
+  - `전체API목록` 시트의 `/v1/rag/retrieve`, `/v1/rag/answer` 비고 ReqID를 `AI-004` 기준으로 정합화
+  - 카테고리 시트/수식/구조 미수정
+- Last synced at: `2026-02-20 21:36 +09:00`
+- Commit: `6eb8baa`
+- Notion sync completed: `YES`
+
+### 7.5 비고
+- MCP 경로에서 파일 첨부 API는 제공되지 않아 페이지 메타/요약 블록 중심으로 동기화함.
+- 본 세션 변경 파일 기준 Notion 동기화 완료 상태를 위 4개 항목에 명시함.

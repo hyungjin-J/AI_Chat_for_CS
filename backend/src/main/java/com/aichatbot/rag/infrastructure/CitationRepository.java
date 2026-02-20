@@ -29,8 +29,13 @@ public class CitationRepository {
         );
     }
 
-    public List<CitationView> findByMessageId(UUID tenantId, UUID messageId) {
-        List<CitationRow> rows = citationMapper.findByMessageId(tenantId.toString(), messageId.toString());
+    public List<CitationView> findByMessageId(UUID tenantId, UUID messageId, Integer cursorRankNo, int limit) {
+        List<CitationRow> rows = citationMapper.findByMessageId(
+            tenantId.toString(),
+            messageId.toString(),
+            cursorRankNo,
+            limit
+        );
         List<CitationView> views = new ArrayList<>(rows.size());
         for (CitationRow row : rows) {
             views.add(new CitationView(

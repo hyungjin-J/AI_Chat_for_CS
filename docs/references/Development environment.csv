@@ -2,7 +2,7 @@
 1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,DBeaver / DataGrip,DB Tool,최신 안정 버전(권장),"PostgreSQL/pgvector 스키마/쿼리 확인, 인덱스 및 성능 점검.
 - 참고 요구사항: KB-001,KB-002,KB-003, ADM-001,ADM-002,ADM-003,ADM-004, OPS-002 [Phase:PHASE1] [필수여부:필수(RAG 검색)]",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
 1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Docker + Docker Compose,Web Server,최신 안정 버전(권장),"로컬 개발 통합 스택 구성(예: PostgreSQL, Redis(선택), Elasticsearch/OpenSearch(선택), Ollama).
-- 참고 요구사항: KB-002,KB-003, LLM-001, OPS-001",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
+- 참고 요구사항: KB-002,AI-004, LLM-001, OPS-001",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
 1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Nginx (선택),Web Server,1.24+(선택),"Reverse Proxy, HTTPS Termination, 정적 파일 서빙, SSE/WebSocket 프록시.
 - 참고 요구사항: UI-001",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
 1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,PostgreSQL + pgvector,Database,PostgreSQL 16+ / pgvector(선택),"업무 데이터 저장 + 벡터 저장소(지식베이스 임베딩/검색).
@@ -19,7 +19,7 @@
 1,개발 도구 & 인프라 (Dev Tools & Infra),60e08b5912a0426c8a3585b8b6bed367,Visual Studio Code,IDE,최신 안정 버전(권장),"React 프론트엔드 개발, 디버깅, 코드 포맷/린트.
 - 참고 요구사항: UI-001,UI-002,UI-003,UI-004, SYS-001, SEC-002",1 개발 도구 & 인프라 (Dev Tools & Infra) 60e08b5912a0426c8a3585b8b6bed367_all.csv
 2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Elasticsearch/OpenSearch Client ,"API Lib, Network",선택,"하이브리드 검색(BM25) 및 필터링 구현 시 연동.
-- 참고 요구사항: KB-003",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
+- 참고 요구사항: AI-004",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
 2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,Flyway / Liquibase (선택),Env,선택,"DB 스키마 마이그레이션/버전 관리(운영 롤백 전략과 연계).
 - 참고 요구사항: OPS-002, ADM-001",2 백엔드 & 분석 (Backend & Analytics) 08121b350dd946b0beb5685e53b5d327_all.csv
 2,백엔드 & 분석 (Backend & Analytics),08121b350dd946b0beb5685e53b5d327,JUnit5 + Testcontainers ,Env,선택,"PostgreSQL/Redis/Elasticsearch/Ollama 등 통합 테스트 환경 구성.

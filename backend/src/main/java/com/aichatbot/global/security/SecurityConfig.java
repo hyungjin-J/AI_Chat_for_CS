@@ -55,6 +55,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/v1/sessions/*/messages").hasRole("AGENT")
                 .requestMatchers(HttpMethod.GET, "/v1/sessions/*/messages/*/stream").hasRole("AGENT")
                 .requestMatchers(HttpMethod.GET, "/v1/sessions/*/messages/*/stream/resume").hasRole("AGENT")
+                .requestMatchers(HttpMethod.POST, "/v1/rag/retrieve").hasRole("SYSTEM")
+                .requestMatchers(HttpMethod.POST, "/v1/rag/answer").hasRole("SYSTEM")
                 .requestMatchers(HttpMethod.GET, "/v1/rag/answers/*/citations").hasRole("AGENT")
                 .requestMatchers(HttpMethod.GET, "/v1/admin/tenants/*/usage-report").hasAnyRole("OPS", "ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/v1/admin/tenants/*/quota").hasRole("ADMIN")
