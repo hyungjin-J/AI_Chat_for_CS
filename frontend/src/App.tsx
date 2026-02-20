@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { SseEventType } from "./types/sse";
 import { maskSensitiveText } from "./utils/piiMasking";
 import { SseParser } from "./utils/sseParser";
+import { toUserError } from "./utils/errorMapping";
+import type { ErrorBanner } from "./utils/errorMapping";
 import { isValidUuid } from "./utils/uuid";
 import "./index.css";
 
@@ -16,16 +18,6 @@ type CitationItem = {
     chunk_id: string;
     rank_no: number;
     excerpt_masked: string;
-};
-
-type ErrorBanner = {
-    errorCode: string;
-    message: string;
-};
-
-type ApiErrorPayload = {
-    error_code?: string;
-    message?: string;
 };
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
@@ -433,34 +425,6 @@ function App() {
             </section>
         </main>
     );
-}
-
-function toUserError(status: number, payload: ApiErrorPayload | null, notFoundMessage: string): ErrorBanner {
-    if (status === 400 || status === 422) {
-        return {
-            errorCode: payload?.error_code ?? "API-003-422",
-            message: "Request format is invalid. Please verify session/message identifiers.",
-        };
-    }
-
-    if (status === 403) {
-        return {
-            errorCode: payload?.error_code ?? "SEC-002-403",
-            message: "You do not have permission to access this tenant resource.",
-        };
-    }
-
-    if (status === 404) {
-        return {
-            errorCode: payload?.error_code ?? "API-004-404",
-            message: notFoundMessage,
-        };
-    }
-
-    return {
-        errorCode: payload?.error_code ?? "SYS-003-500",
-        message: payload?.message ?? "Request failed",
-    };
 }
 
 function tryParseJson(raw: string): Record<string, any> | null {

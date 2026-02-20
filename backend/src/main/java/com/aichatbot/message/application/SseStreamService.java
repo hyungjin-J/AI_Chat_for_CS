@@ -3,6 +3,7 @@ package com.aichatbot.message.application;
 import com.aichatbot.global.error.ApiException;
 import com.aichatbot.global.error.ErrorCatalog;
 import com.aichatbot.global.config.AppProperties;
+import com.aichatbot.global.observability.TraceContext;
 import com.aichatbot.global.security.UserPrincipal;
 import com.aichatbot.message.infrastructure.MessageRepository;
 import com.aichatbot.message.infrastructure.StreamEventRepository;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -66,10 +68,18 @@ public class SseStreamService {
         String userKey = principal.tenantId() + ":" + principal.userId();
         sseConcurrencyGuard.acquire(userKey);
 
+        AtomicBoolean released = new AtomicBoolean(false);
+        Runnable releaseGuard = () -> {
+            // Why: MockMvc/短수명 SSE에서는 onCompletion 콜백이 늦거나 누락될 수 있어 해제를 중복 방지 방식으로 강제한다.
+            if (released.compareAndSet(false, true)) {
+                sseConcurrencyGuard.release(userKey);
+            }
+        };
+
         SseEmitter emitter = new SseEmitter(60_000L);
-        emitter.onCompletion(() -> sseConcurrencyGuard.release(userKey));
-        emitter.onTimeout(() -> sseConcurrencyGuard.release(userKey));
-        emitter.onError(ex -> sseConcurrencyGuard.release(userKey));
+        emitter.onCompletion(releaseGuard);
+        emitter.onTimeout(releaseGuard);
+        emitter.onError(ex -> releaseGuard.run());
 
         try {
             long streamOpenedAtNanos = System.nanoTime();
@@ -104,10 +114,13 @@ public class SseStreamService {
                     objectMapper.createObjectNode()
                         .put("error_code", "SYS-003-500")
                         .put("message", ErrorCatalog.messageOf("SYS-003-500"))
+                        .put("trace_id", TraceContext.getTraceId())
                 );
             } catch (IOException ignored) {
             }
             emitter.completeWithError(exception);
+        } finally {
+            releaseGuard.run();
         }
 
         return emitter;

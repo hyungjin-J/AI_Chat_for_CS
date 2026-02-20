@@ -7,14 +7,12 @@ $planPath = Join-Path $packDir "03_TEST_PLAN.md"
 $summaryPath = Join-Path $packDir "00_EXEC_SUMMARY.md"
 $artifactSummaryPath = Join-Path $packDir "06_ARTIFACT_SUMMARY_FOR_CROSS_CHECK.md"
 $changelogPath = Join-Path $packDir "CHANGELOG.md"
-$phase2Path = "PHASE2_PROGRESS_SUMMARY_FOR_CHATGPT.md"
 
 if (-not (Test-Path $resultsPath)) { throw "missing 04_TEST_RESULTS.md" }
 if (-not (Test-Path $planPath)) { throw "missing 03_TEST_PLAN.md" }
 if (-not (Test-Path $summaryPath)) { throw "missing 00_EXEC_SUMMARY.md" }
 if (-not (Test-Path $artifactSummaryPath)) { throw "missing 06_ARTIFACT_SUMMARY_FOR_CROSS_CHECK.md" }
 if (-not (Test-Path $changelogPath)) { throw "missing CHANGELOG.md" }
-if (-not (Test-Path $phase2Path)) { throw "missing PHASE2_PROGRESS_SUMMARY_FOR_CHATGPT.md" }
 
 function Parse-StatusMap([string]$content) {
     $map = @{}
@@ -92,8 +90,9 @@ foreach ($line in $resultLines) {
     }
 }
 
-# 2) 00/06/PHASE2 docs must not claim PASS when 04 is FAIL/SKIPPED
-$docsToCheck = @($summaryPath, $artifactSummaryPath, $phase2Path)
+# 2) 00/06 docs must not claim PASS when 04 is FAIL/SKIPPED
+# Why: 삭제된 과거 요약 문서를 필수 의존하지 않고, 현재 검증팩 정본만 기준으로 일관성을 확인한다.
+$docsToCheck = @($summaryPath, $artifactSummaryPath)
 foreach ($docPath in $docsToCheck) {
     $content = Get-Content $docPath -Raw -Encoding utf8
     $docMap = Parse-StatusMap $content
@@ -137,8 +136,7 @@ $targetNames = @(
     "00_EXEC_SUMMARY.md",
     "04_TEST_RESULTS.md",
     "06_ARTIFACT_SUMMARY_FOR_CROSS_CHECK.md",
-    "CHANGELOG.md",
-    "PHASE2_PROGRESS_SUMMARY_FOR_CHATGPT.md"
+    "CHANGELOG.md"
 )
 foreach ($name in $targetNames) {
     $all = Get-ChildItem -Recurse -File -Filter $name | Where-Object {

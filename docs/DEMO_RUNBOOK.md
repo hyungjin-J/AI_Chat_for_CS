@@ -9,7 +9,7 @@
 - 저장소 루트에서 `.env.example`를 참고해 환경변수 확인
 
 ### Node 22 강제 정책
-- `scripts/verify_all.ps1`는 Node 22가 아니면 기본적으로 실패한다.
+- `scripts/check_all.ps1`는 Node 22가 아니면 기본적으로 실패한다.
 - 임시 로컬 우회가 필요한 경우에만 `APP_VERIFY_ALLOW_NON_22_NODE=true`를 사용한다.
 - 권장 전환:
   - `nvm use 22.12.0`
@@ -19,7 +19,8 @@
 1. 인프라 기동
    - `docker compose -f infra/docker-compose.yml up -d`
 2. 전체 검증/증빙 생성
-   - `powershell -ExecutionPolicy Bypass -File scripts/verify_all.ps1`
+   - `powershell -ExecutionPolicy Bypass -File scripts/check_all.ps1`
+   - (호환) `scripts/verify_all.ps1`는 내부적으로 `check_all.ps1`를 호출
 3. 아티팩트 확인
    - `docs/review/mvp_verification_pack/artifacts/sse_stream_normal.log`
    - `docs/review/mvp_verification_pack/artifacts/sse_stream_fail_closed.log`

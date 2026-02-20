@@ -1,24 +1,28 @@
 package com.aichatbot.billing.presentation;
 
-import com.aichatbot.billing.domain.model.BreachAction;
-import com.aichatbot.billing.domain.model.TenantQuota;
-import com.aichatbot.billing.infrastructure.GenerationLogRepository;
-import com.aichatbot.billing.infrastructure.TenantQuotaRepository;
-import java.math.BigDecimal;
-import java.time.Instant;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(properties = "spring.task.scheduling.enabled=false")
+@SpringBootTest(properties = {
+    "spring.task.scheduling.enabled=false",
+    "app.llm.provider=mock",
+    "app.answer.evidence-threshold=0.0",
+    "app.budget.input-token-max=5"
+})
 @AutoConfigureMockMvc
 class BudgetEnforcementHttpTest {
 
@@ -26,37 +30,33 @@ class BudgetEnforcementHttpTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TenantQuotaRepository tenantQuotaRepository;
-
-    @Autowired
-    private GenerationLogRepository generationLogRepository;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        tenantQuotaRepository.clear();
-        generationLogRepository.clear();
-
-        tenantQuotaRepository.upsert(new TenantQuota(
-            "tenant-budget",
-            10,
-            1,
-            new BigDecimal("9999.0"),
-            Instant.parse("2026-01-01T00:00:00Z"),
-            null,
-            BreachAction.THROTTLE_429,
-            "admin",
-            "77777777-7777-4777-8777-777777777777",
-            Instant.parse("2026-01-01T00:00:00Z")
-        ));
+        // Why: 각 테스트는 독립된 idempotency 키/세션을 사용하므로 별도 저장소 초기화 없이도 결정적으로 검증할 수 있다.
     }
 
     @Test
     void shouldReturn429WithStandardHeadersWhenTokenBudgetExceeded() throws Exception {
         String traceBudget = "88888888-8888-4888-8888-888888888888";
-        mockMvc.perform(get("/api/v1/sessions/s1/messages/stream")
-                .param("prompt", "이 프롬프트는 길어서 토큰 예산을 초과하도록 만든 테스트 입력입니다.")
+        String accessToken = login("agent1", "agent1-pass", "81111111-1111-4111-8111-111111111111");
+        String sessionId = createSession(accessToken, "82222222-2222-4222-8222-222222222222");
+
+        // Why: 표준 운영 경로(/v1)에서 예산 초과를 검증해야 레거시 경로 제거 후에도 정책이 유지됨을 보장할 수 있다.
+        mockMvc.perform(post("/v1/sessions/{session_id}/messages", sessionId)
+                .header("Authorization", "Bearer " + accessToken)
                 .header("X-Trace-Id", traceBudget)
-                .header("X-Tenant-Key", "tenant-budget"))
+                .header("X-Tenant-Key", "demo-tenant")
+                .header("Idempotency-Key", "idem-budget-" + traceBudget)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "text": "이 문장은 입력 토큰 예산을 넘기기 위해 충분히 길게 작성된 테스트 문장입니다.",
+                      "top_k": 1,
+                      "client_nonce": "nonce-budget"
+                    }
+                    """))
             .andExpect(status().isTooManyRequests())
             .andExpect(jsonPath("$.error_code").value("API-008-429-BUDGET"))
             .andExpect(jsonPath("$.trace_id").value(traceBudget))
@@ -64,5 +64,41 @@ class BudgetEnforcementHttpTest {
             .andExpect(header().exists("X-RateLimit-Limit"))
             .andExpect(header().exists("X-RateLimit-Remaining"))
             .andExpect(header().exists("X-RateLimit-Reset"));
+    }
+
+    private String login(String loginId, String password, String traceId) throws Exception {
+        MvcResult result = mockMvc.perform(post("/v1/auth/login")
+                .header("X-Trace-Id", traceId)
+                .header("X-Tenant-Key", "demo-tenant")
+                .header("Idempotency-Key", "idem-" + loginId + "-" + traceId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "login_id": "%s",
+                      "password": "%s",
+                      "channel_id": "test",
+                      "client_nonce": "nonce-login"
+                    }
+                    """.formatted(loginId, password)))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        JsonNode json = objectMapper.readTree(result.getResponse().getContentAsString());
+        return json.get("access_token").asText();
+    }
+
+    private String createSession(String accessToken, String traceId) throws Exception {
+        MvcResult result = mockMvc.perform(post("/v1/sessions")
+                .header("Authorization", "Bearer " + accessToken)
+                .header("X-Trace-Id", traceId)
+                .header("X-Tenant-Key", "demo-tenant")
+                .header("Idempotency-Key", "idem-session-" + traceId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        JsonNode json = objectMapper.readTree(result.getResponse().getContentAsString());
+        return json.get("session_id").asText();
     }
 }

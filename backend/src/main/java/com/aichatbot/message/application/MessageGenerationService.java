@@ -292,7 +292,8 @@ public class MessageGenerationService {
                 "safe_response",
                 toJson(Map.of(
                     "error_code", "AI-009-200-SAFE",
-                    "message", ErrorCatalog.messageOf("AI-009-200-SAFE")
+                    "message", ErrorCatalog.messageOf("AI-009-200-SAFE"),
+                    "trace_id", traceId
                 ))
             );
             if (validationErrorCode != null && !"AI-009-200-SAFE".equals(validationErrorCode)) {

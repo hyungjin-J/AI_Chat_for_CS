@@ -42,12 +42,25 @@ jobs:
               working-directory: backend
               run: .\gradlew.bat test --no-daemon
 
-            - name: Frontend build
+            - name: UUID lint gate
+              shell: pwsh
+              run: python scripts/lint_uuid_params.py --root backend/src/main/java/com/aichatbot
+
+            - name: Frontend test and build
               shell: pwsh
               working-directory: frontend
               run: |
                   npm ci
+                  npm run test:run
                   npm run build
+
+            - name: Install gitleaks
+              shell: pwsh
+              run: choco install gitleaks -y
+
+            - name: Secret scan (gitleaks)
+              shell: pwsh
+              run: gitleaks detect --source . --config .gitleaks.toml --no-banner --redact --exit-code 1
 
             - name: Run MVP E2E evidence
               shell: pwsh
@@ -85,6 +98,33 @@ jobs:
               shell: pwsh
               run: powershell -ExecutionPolicy Bypass -File scripts/assert_verification_pack_consistency.ps1
 
+            - name: Provider regression skipped (condition unmet)
+              if: vars.ENABLE_PROVIDER_REGRESSION != 'true'
+              shell: pwsh
+              run: Write-Host "provider regression skipped: ENABLE_PROVIDER_REGRESSION != true"
+
+            - name: Docker compose ollama up (conditional)
+              if: vars.ENABLE_PROVIDER_REGRESSION == 'true'
+              shell: pwsh
+              run: docker compose -f infra/docker-compose.ollama.yml up -d
+
+            - name: Run provider regression (conditional required)
+              if: vars.ENABLE_PROVIDER_REGRESSION == 'true'
+              shell: pwsh
+              run: |
+                  powershell -ExecutionPolicy Bypass -File scripts/run_provider_regression.ps1
+                  $logPath = "docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log"
+                  if (-not (Test-Path $logPath)) {
+                    throw "provider regression log missing: $logPath"
+                  }
+                  $content = Get-Content $logPath -Raw -Encoding utf8
+                  if ($content -match "status=SKIPPED") {
+                    throw "provider regression skipped while ENABLE_PROVIDER_REGRESSION=true"
+                  }
+                  if ($content -notmatch "status=PASS") {
+                    throw "provider regression did not pass"
+                  }
+
             - name: Upload MVP verification artifacts
               if: always()
               uses: actions/upload-artifact@v4
@@ -96,4 +136,6 @@ jobs:
             - name: Docker compose down
               if: always()
               shell: pwsh
-              run: docker compose -f infra/docker-compose.yml down -v
+              run: |
+                  docker compose -f infra/docker-compose.yml down -v
+                  docker compose -f infra/docker-compose.ollama.yml down -v

@@ -47,7 +47,8 @@ public class SecurityConfig {
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/health", "/actuator/health", "/actuator/prometheus").permitAll()
                 .requestMatchers("/v1/auth/login", "/v1/auth/refresh").permitAll()
-                .requestMatchers("/api/v1/**").permitAll()
+                // Why: 레거시 데모 경로(/api/v1)는 우회 접근 위험이 있어 운영 경로에서 명시적으로 차단한다.
+                .requestMatchers("/api/v1/**").denyAll()
                 .requestMatchers(HttpMethod.GET, "/v1/chat/bootstrap").hasRole("AGENT")
                 .requestMatchers(HttpMethod.POST, "/v1/sessions").hasRole("AGENT")
                 .requestMatchers(HttpMethod.GET, "/v1/sessions/*").hasRole("AGENT")

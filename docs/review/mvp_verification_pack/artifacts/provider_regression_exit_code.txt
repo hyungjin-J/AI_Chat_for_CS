@@ -1,0 +1,1 @@
+﻿exit_code=2 (SKIPPED: docker daemon unavailable)

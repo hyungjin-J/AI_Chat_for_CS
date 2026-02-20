@@ -1,13 +1,14 @@
 ﻿# MVP 검증 요약 (SSOT 연동)
 
-- Last synced at: 2026-02-18 20:00 (KST)
-- Version(commit): `3e057a3+working-tree`
-- Status: Demo Ready
+- Last synced at: 2026-02-21 01:55 (KST)
+- Version(commit): `working-tree`
+- Status: Gap Closure evidence aligned
 - SSOT source: `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 
 ## 핵심 결론
-- Fail-Closed, PII 마스킹, trace_id 종단 추적, tenant/RBAC 격리, budget/concurrency 방어는 모두 증빙 파일로 확인되었다.
-- Provider 회귀는 최신 실행에서 `PASS`를 확보했으며, 증빙은 `artifacts/provider_regression_ollama.log`에 기록되어 있다.
+- P0 항목(Answer Contract fail-closed, PII 차단, trace_id 전파, tenant 격리, RBAC)은 테스트로 확인되었다.
+- 프론트 자동 테스트(vitest)와 CI 게이트(uuid lint, gitleaks, consistency)가 추가되었다.
+- provider regression은 현재 로컬 환경에서 Docker daemon 미기동으로 `SKIPPED`이며, 재실행 가이드를 로그에 남겼다.
 
 ## 상태 매트릭스 (04_TEST_RESULTS와 동일)
 
@@ -17,6 +18,15 @@
 | AUTO-PY-001 | PASS |
 | AUTO-FE-001 | PASS |
 | BOOT-PG-001 | PASS |
+| NEG-ANSWER-CONTRACT-001 | PASS |
+| PII-E2E-001 | PASS |
+| TRACE-CONTRACT-001 | PASS |
+| RBAC-TENANT-MATRIX-001 | PASS |
+| SSE-RESUME-CONTRACT-001 | PASS |
+| FE-UUID-UNIT-001 | PASS |
+| FE-SSE-PARSER-001 | PASS |
+| FE-ERROR-MAP-001 | PASS |
+| FE-INVALID-ID-001 | PASS |
 | E2E-AUTH-401 | PASS |
 | E2E-AUTH-403 | PASS |
 | E2E-SESSION-001 | PASS |
@@ -37,11 +47,12 @@
 | OBS-TRACE-001 | PASS |
 | OBS-METRICS-001 | PASS |
 | SEC-ARTIFACT-SCAN-001 | PASS |
-| LLM-PROVIDER-001 | PASS |
+| CI-UUID-LINT-001 | PASS |
+| CI-GITLEAKS-001 | SKIPPED |
+| LLM-PROVIDER-001 | SKIPPED |
 | VER-CONSIST-001 | PASS |
 
 ## 즉시 조치 권고
-1. GitHub Branch Protection에서 `mvp-demo-verify / verify`를 Required check로 설정
-3. Node 22.12.0 표준 사용(로컬 오버라이드는 임시 목적에 한정)
-
-
+1. GitHub Branch Protection에서 `mvp-demo-verify / verify`를 Required check로 유지한다.
+2. provider 회귀를 검증할 때는 Docker Desktop을 먼저 기동한다.
+3. Node 표준 버전(22.x)에서 최종 릴리즈 검증을 한 번 더 수행한다.

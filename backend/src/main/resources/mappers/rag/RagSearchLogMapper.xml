@@ -23,4 +23,13 @@
                   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     </insert>
 
+    <select id="findLatestMaskedQueryByConversation" resultType="java.lang.String">
+        SELECT query_text_masked
+        FROM tb_rag_search_log
+        WHERE tenant_id = #{tenantId}
+          AND conversation_id = #{conversationId}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
 </mapper>

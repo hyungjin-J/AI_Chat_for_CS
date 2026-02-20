@@ -63,8 +63,11 @@ npm run dev
 ## 3) 검증/증빙 생성
 ### 전체 검증 진입점
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/verify_all.ps1
+powershell -ExecutionPolicy Bypass -File scripts/check_all.ps1
 ```
+
+호환 경로(구버전 호출 유지):
+- `scripts/verify_all.ps1` / `scripts/verify_all.sh`는 내부적으로 `check_all`을 호출합니다.
 
 ### 개별 실행 예시
 ```powershell
@@ -82,7 +85,7 @@ powershell -ExecutionPolicy Bypass -File scripts/generate_metrics_report.ps1
 - 검증 요약: `docs/review/mvp_verification_pack/00_EXEC_SUMMARY.md`
 - 테스트 결과(SSOT): `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 - 아티팩트 요약: `docs/review/mvp_verification_pack/06_ARTIFACT_SUMMARY_FOR_CROSS_CHECK.md`
-- Phase2 진행 요약: `PHASE2_PROGRESS_SUMMARY_FOR_CHATGPT.md`
+- 프로젝트 완성 보고서: `docs/review/final/PROJECT_COMPLETION_REPORT.md`
 - 운영 데모 런북: `docs/DEMO_RUNBOOK.md`
 - 브랜치 보호 설정 가이드: `docs/ops/BRANCH_PROTECTION_SETUP.md`
 

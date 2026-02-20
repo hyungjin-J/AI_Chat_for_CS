@@ -24,4 +24,8 @@ public class RagSearchLogRepository {
             TraceIdNormalizer.toUuid(traceId)
         );
     }
+
+    public String findLatestMaskedQueryByConversation(UUID tenantId, UUID conversationId) {
+        return ragSearchLogMapper.findLatestMaskedQueryByConversation(tenantId, conversationId);
+    }
 }

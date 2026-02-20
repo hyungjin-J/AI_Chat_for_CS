@@ -8,7 +8,7 @@
   - `docs/review/mvp_verification_pack/00_EXEC_SUMMARY.md`
   - `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
   - `docs/review/mvp_verification_pack/06_ARTIFACT_SUMMARY_FOR_CROSS_CHECK.md`
-  - `PHASE2_PROGRESS_SUMMARY_FOR_CHATGPT.md`
+  - `docs/review/final/PROJECT_COMPLETION_REPORT.md`
 
 ## Deprecated 처리 기준
 - 동일 목적 문서가 2개 이상 존재하고, 상태(PASS/FAIL/SKIPPED)가 충돌하면

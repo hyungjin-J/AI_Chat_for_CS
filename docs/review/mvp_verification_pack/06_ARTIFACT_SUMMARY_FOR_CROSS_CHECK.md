@@ -1,7 +1,7 @@
 ﻿# 아티팩트 요약본 (교차 검증용 SSOT)
 
-- Last synced at: 2026-02-19 00:40 (KST)
-- Version(commit): `3e057a3+working-tree`
+- Last synced at: 2026-02-21 01:55 (KST)
+- Version(commit): `working-tree`
 - Status source: `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 
 ## 상태 매트릭스 (04와 동일)
@@ -12,6 +12,15 @@
 | AUTO-PY-001 | PASS |
 | AUTO-FE-001 | PASS |
 | BOOT-PG-001 | PASS |
+| NEG-ANSWER-CONTRACT-001 | PASS |
+| PII-E2E-001 | PASS |
+| TRACE-CONTRACT-001 | PASS |
+| RBAC-TENANT-MATRIX-001 | PASS |
+| SSE-RESUME-CONTRACT-001 | PASS |
+| FE-UUID-UNIT-001 | PASS |
+| FE-SSE-PARSER-001 | PASS |
+| FE-ERROR-MAP-001 | PASS |
+| FE-INVALID-ID-001 | PASS |
 | E2E-AUTH-401 | PASS |
 | E2E-AUTH-403 | PASS |
 | E2E-SESSION-001 | PASS |
@@ -32,27 +41,19 @@
 | OBS-TRACE-001 | PASS |
 | OBS-METRICS-001 | PASS |
 | SEC-ARTIFACT-SCAN-001 | PASS |
-| LLM-PROVIDER-001 | PASS |
+| CI-UUID-LINT-001 | PASS |
+| CI-GITLEAKS-001 | SKIPPED |
+| LLM-PROVIDER-001 | SKIPPED |
 | VER-CONSIST-001 | PASS |
 
 ## 핵심 증빙 파일
-- 정상 SSE: `artifacts/sse_stream_normal.log`
-- Fail-Closed: `artifacts/sse_stream_fail_closed.log`
-- trace_id: `artifacts/trace_id_checks.txt`
-- tenant 격리: `artifacts/tenant_isolation_403_checks.txt`
-- PII: `artifacts/pii_masking_checks.txt`, `artifacts/citations_api_response.json`
-- Budget/SSE429: `artifacts/budget_429_checks.txt`, `artifacts/sse_concurrency_attempts.txt`
-- SSE real-limit 429: `artifacts/sse_concurrency_real_limit_proof.txt`
-- Idempotency: `artifacts/idempotency_negative_422.txt`, `artifacts/idempotency_409_proof.txt`, `artifacts/idempotency_redis_e2e.txt`
-- Metrics: `artifacts/metrics_raw.txt`, `artifacts/metrics_report.md`
-- Artifact scan: `artifacts/artifact_sanitization_scan.txt`
-- Provider: `artifacts/provider_regression_ollama.log`, `artifacts/analysis_llm_provider_001.md`
+- 백엔드/정적 UUID lint: `artifacts/backend_gradle_test_output.txt`
+- 프론트 테스트: `artifacts/frontend_test_output.txt`
+- 프론트 빌드: `artifacts/frontend_build_output.txt`
+- consistency 결과: `artifacts/gap_closure_consistency_output.txt`
+- provider 조건부 실행 결과: `artifacts/provider_regression_ollama.log`, `artifacts/provider_regression_gap_closure_output.txt`
+- UUID CAST / MyBatis `${}` 검색 결과: `artifacts/uuid_cast_scan_output.txt`, `artifacts/mybatis_dollar_scan_output.txt`
 
 ## 주의
-- `LLM-PROVIDER-001`은 최신 provider 회귀 로그에서 `status=PASS`가 확인된 상태다.
-- 향후 상태 변경 시에도 `provider_regression_ollama.log` 실증빙 없이는 상태 변경 금지.
-
-
-
-- consistency 게이트 로그: `artifacts/e2e_runner_stdout.txt`
-
+- `LLM-PROVIDER-001`은 현재 로컬에서 Docker daemon 미기동으로 SKIPPED이며, 실패가 아니라 조건 미충족 상태다.
+- provider 상태를 PASS로 변경하려면 `provider_regression_ollama.log`에 `status=PASS`가 기록되어야 한다.

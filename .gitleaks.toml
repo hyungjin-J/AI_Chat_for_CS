@@ -1,0 +1,19 @@
+title = "AI_Chatbot gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allow only documented dummy placeholders in specs/log docs."
+regexes = [
+    '''(?i)example\.com''',
+    '''\*\*\*@\*\*\*''',
+    '''\[EMAIL\]''',
+    '''\[PHONE\]''',
+    '''\[ORDER_ID\]''',
+    '''Bearer <access_token>''',
+]
+paths = [
+    '''docs/review/mvp_verification_pack/artifacts/.*''',
+    '''docs/review/.*/.*\.md''',
+]

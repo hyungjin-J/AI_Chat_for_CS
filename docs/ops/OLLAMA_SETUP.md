@@ -102,4 +102,4 @@ docker compose -f infra/docker-compose.ollama.yml restart ollama
   - 상세 로그: `docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log`
 - 이슈 해결 메모:
   - 초기 실패 원인: 여러 Mapper에서 UUID 컬럼에 문자열 파라미터가 바인딩되어 DB 타입 충돌
-  - 조치: Mapper/Repository UUID 타입 정합성 보강 + SQL `CAST(... AS UUID)` 적용 후 재검증 완료
+  - 조치: Mapper/Repository UUID 타입 정합성 보강 + MyBatis `UUIDTypeHandler` 적용(쿼리 `CAST(... AS UUID)` 의존 제거) 후 재검증 완료

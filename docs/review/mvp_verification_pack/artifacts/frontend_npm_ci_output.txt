@@ -3,18 +3,19 @@ npm warn EBADENGINE   package: 'frontend@0.0.0',
 npm warn EBADENGINE   required: { node: '>=22 <23' },
 npm warn EBADENGINE   current: { node: 'v24.11.1', npm: '11.6.2' }
 npm warn EBADENGINE }
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
-added 176 packages, and audited 177 packages in 4s
+added 267 packages, and audited 268 packages in 6s
 
-45 packages are looking for funding
+63 packages are looking for funding
   run `npm fund` for details
 
-10 moderate severity vulnerabilities
+11 vulnerabilities (1 moderate, 10 high)
 
-To address all issues possible (including breaking changes), run:
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
   npm audit fix --force
-
-Some issues need review, and may require choosing
-a different dependency.
 
 Run `npm audit` for details.

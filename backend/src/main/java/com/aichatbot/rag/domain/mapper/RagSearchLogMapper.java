@@ -11,4 +11,7 @@ public interface RagSearchLogMapper {
              @Param("queryTextMasked") String queryTextMasked,
              @Param("topK") int topK,
              @Param("traceId") UUID traceId);
+
+    String findLatestMaskedQueryByConversation(@Param("tenantId") UUID tenantId,
+                                               @Param("conversationId") UUID conversationId);
 }
