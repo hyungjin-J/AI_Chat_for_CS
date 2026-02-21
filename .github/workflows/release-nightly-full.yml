@@ -70,8 +70,8 @@ jobs:
         run: |
           python scripts/lint_chatgpt_handoff_docs.py `
             --files chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md `
-            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint_202603XX.json `
-            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint_202603XX.txt
+            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint.json `
+            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint.txt
 
       - name: Stop infra
         if: always()

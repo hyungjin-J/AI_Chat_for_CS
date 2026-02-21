@@ -960,3 +960,13 @@ first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Cont
 - `trace_id` 오탈자(`race_id`)는 금지한다.
 - 금칙어 예시는 실제 패턴을 문서에 노출하지 말고 반드시 `<REDACTED>` 표기를 사용한다.
 - 린트 실패 시 PR 병합/배포를 금지한다.
+
+### 16.8.5 Handoff Minimum Content (Mandatory)
+- 두 문서 모두 아래 메타를 반드시 포함한다:
+  - `updated_at_kst`
+  - `base_commit_hash`
+  - `release_tag`
+  - `branch`
+- 두 문서 모두 "Added/Changed/Fixed/Removed 10 lines" 섹션을 유지한다.
+- 두 문서 모두 Validation Gate 표와 증적 경로(`docs/review/mvp_verification_pack/artifacts/...`)를 포함한다.
+- 충돌 시 최신 artifacts와 `spec_sync_report.md`를 우선한다.

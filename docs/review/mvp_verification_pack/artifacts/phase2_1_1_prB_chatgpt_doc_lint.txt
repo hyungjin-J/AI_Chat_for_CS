@@ -1,0 +1,3 @@
+chatgpt_handoff_doc_lint
+status=PASS
+violation_count=0

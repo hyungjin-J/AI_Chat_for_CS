@@ -17,6 +17,9 @@ RACE_ID_PATTERN = re.compile(r"\brace_id\b", re.IGNORECASE)
 FORBIDDEN_LITERAL_PATTERNS = (
     re.compile(r"NOTION_TOKEN"),
     re.compile(r"OPENAI_API_KEY"),
+    re.compile(r"ACCESS_TOKEN"),
+    re.compile(r"refresh_token\s*=", re.IGNORECASE),
+    re.compile(r"api_key\s*=", re.IGNORECASE),
     re.compile(r"Bearer\s+[A-Za-z0-9._\-]+"),
     re.compile(r"\bsk-[A-Za-z0-9]{10,}\b"),
     re.compile(r"\b01[0-9]-\d{3,4}-\d{4}\b"),
