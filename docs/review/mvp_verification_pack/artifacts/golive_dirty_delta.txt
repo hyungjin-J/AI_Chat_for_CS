@@ -1,0 +1,30 @@
+ M .github/workflows/pr-smoke-contract.yml
+ M .github/workflows/release-nightly-full.yml
+ M .nvmrc
+ M backend/src/main/java/com/aichatbot/admin/presentation/AdminOpsDashboardController.java
+ M backend/src/main/java/com/aichatbot/global/security/SecurityConfig.java
+ M backend/src/main/java/com/aichatbot/ops/application/OpsEventService.java
+ M docs/references/google_ready_api_spec_v0.3_20260216.xlsx
+ M docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md
+ M docs/uiux/reports/spec_consistency_check_report.json
+ M scripts/spec_consistency_check.py
+ M spec_sync_report.md
+?? backend/src/main/java/com/aichatbot/global/audit/AuditChainVerifierService.java
+?? backend/src/test/java/com/aichatbot/global/audit/
+?? docs/ops/runbook_audit_chain.md
+?? docs/ops/runbook_scheduler_lock.md
+?? docs/ops/runbook_spec_notion_gate.md
+?? docs/review/mvp_verification_pack/artifacts/golive_backend_test_output.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_baseline.patch
+?? docs/review/mvp_verification_pack/artifacts/golive_ci_gate_status.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_dirty_delta.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_frontend_build_output.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_frontend_npm_ci_output.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_frontend_test_output.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_node_version.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_notion_manual_sync_patch.md
+?? docs/review/mvp_verification_pack/artifacts/golive_notion_sync_status.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_phase2_api_coverage.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_after.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_before.txt
+?? docs/review/mvp_verification_pack/artifacts/golive_utf8_check.txt

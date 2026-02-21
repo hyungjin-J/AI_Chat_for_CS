@@ -1,0 +1,15 @@
+﻿PR smoke/release workflow changes:
+- .github/workflows/pr-smoke-contract.yml
+- .github/workflows/release-nightly-full.yml
+
+Node setup:
+- actions/setup-node uses node-version-file: .nvmrc
+
+Local equivalent gate result:
+- backend tests: PASS (golive_backend_test_output.txt)
+- frontend test: PASS (golive_frontend_test_output.txt)
+- frontend build: PASS (golive_frontend_build_output.txt)
+- spec consistency: PASS=9 FAIL=0 (golive_spec_consistency_after.txt)
+
+GitHub workflow run URL:
+- not available in local execution context

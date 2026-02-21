@@ -1,6 +1,6 @@
 {
-  "pass_count": 7,
-  "fail_count": 1,
+  "pass_count": 9,
+  "fail_count": 0,
   "checks": [
     {
       "name": "summary_reqid_subset",
@@ -34,13 +34,15 @@
     },
     {
       "name": "role_standard",
-      "passed": false,
-      "detail": "roles=['ADMIN', 'AGENT', 'AUTHENTICATED', 'CUSTOMER', 'OPS', 'PUBLIC', 'PUBLIC(Refresh token ??)', 'SYSTEM']",
-      "samples": [
-        "AUTHENTICATED",
-        "PUBLIC",
-        "PUBLIC(Refresh token ??)"
-      ]
+      "passed": true,
+      "detail": "roles=['ADMIN', 'AGENT', 'CUSTOMER', 'OPS', 'SYSTEM']",
+      "samples": []
+    },
+    {
+      "name": "access_level_standard",
+      "passed": true,
+      "detail": "access_levels=['AUTHENTICATED', 'PUBLIC']",
+      "samples": []
     },
     {
       "name": "sse_event_term_standard",

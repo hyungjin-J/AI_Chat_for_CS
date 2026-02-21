@@ -1,0 +1,11 @@
+PASS=7 FAIL=1
+[PASS] summary_reqid_subset: summary=52 missing_in_requirements=0
+[PASS] dev_reqid_subset: dev_refs=41 missing_in_requirements=0
+[PASS] api_note_reqid_subset: api_note_refs=69 missing_in_requirements=0
+[PASS] uiux91_reqid_subset: uiux91_refs=78 missing_in_requirements=0
+[PASS] secret_ref_standard: forbidden_key_ref_hits=0
+[FAIL] role_standard: roles=['ADMIN', 'AGENT', 'AUTHENTICATED', 'CUSTOMER', 'OPS', 'PUBLIC', 'PUBLIC(Refresh token ??)', 'SYSTEM']
+  samples: ['AUTHENTICATED', 'PUBLIC', 'PUBLIC(Refresh token ??)']
+[PASS] sse_event_term_standard: token_chunk_occurrences=0
+[PASS] uiux94_no_placeholder_keys: placeholder_rows=0
+report: C:\Users\hjjmj\OneDrive\���� ȭ��\AI_Chatbot\docs\uiux\reports\spec_consistency_check_report.json

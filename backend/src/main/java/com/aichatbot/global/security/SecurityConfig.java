@@ -77,6 +77,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/v1/admin/audit-logs").hasRole("OPS")
                 .requestMatchers(HttpMethod.GET, "/v1/admin/audit-logs/*/diff").hasRole("OPS")
                 .requestMatchers(HttpMethod.GET, "/v1/admin/audit-logs/export").hasRole("OPS")
+                .requestMatchers(HttpMethod.GET, "/v1/admin/audit-logs/chain-verify").hasRole("OPS")
                 .requestMatchers(HttpMethod.PUT, "/v1/admin/rbac/matrix/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/v1/admin/rbac/approval-requests").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/v1/admin/rbac/approval-requests/*/approve").hasRole("ADMIN")

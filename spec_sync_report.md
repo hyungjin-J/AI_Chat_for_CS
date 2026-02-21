@@ -179,3 +179,42 @@
   - `docs/review/mvp_verification_pack/artifacts/phase2_frontend_test_output_202603XX.txt`
   - `docs/review/mvp_verification_pack/artifacts/phase2_frontend_build_output_202603XX.txt`
   - `docs/review/mvp_verification_pack/artifacts/phase2_utf8_check_202603XX.txt`
+
+## 10) 이번 세션(2026-02-21, Go-Live Gap Closure) 스펙 변경 및 동기화 기록
+- 기준 문서: `docs/review/plans/202603XX_go_live_gap_closure_plan.md`
+- 기준 시각(Asia/Seoul): `2026-02-21 21:00 +09:00`
+- 변경된 스펙 파일:
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+
+### 10.1 `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+- Notion URL: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+- 변경 내용:
+  - `PUBLIC`, `AUTHENTICATED` 레거시 ROLE 표기를 제거하고 `비고(access_level=...)`로 정규화
+  - Phase2 API 누락 엔드포인트 11건 추가 반영
+    - `/v1/auth/mfa/totp/enroll`
+    - `/v1/auth/mfa/totp/activate`
+    - `/v1/auth/mfa/verify`
+    - `/v1/auth/mfa/recovery-codes/regenerate`
+    - `/v1/auth/sessions`
+    - `/v1/auth/sessions/{session_id}`
+    - `/v1/auth/sessions/revoke-others`
+    - `/v1/admin/rbac/approval-requests`
+    - `/v1/admin/rbac/approval-requests/{request_id}/approve`
+    - `/v1/admin/rbac/approval-requests/{request_id}/reject`
+    - `/v1/admin/audit-logs/export`
+  - Go-Live 운영 점검 API 추가 반영:
+    - `/v1/admin/audit-logs/chain-verify`
+  - `/v1/admin/rbac/matrix/{resource_key}`를 2인 승인 요청 생성 의미(202/PENDING)로 정규화
+- 검증 결과:
+  - `python scripts/spec_consistency_check.py` => `PASS=9 FAIL=0`
+  - 증적: `docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_after.txt`
+
+### 10.2 Notion 동기화 상태
+- 자동 동기화(MCP): **DONE**
+  - 반영 페이지: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+  - 반영 시각: `2026-02-21 21:08:04 +09:00`
+  - 반영 메타: Last synced at / Source file / Version(or commit) / Change summary
+  - 반영 본문: Spec Sync Metadata 섹션(Go-Live Gap Closure 변경점) 갱신
+- 참고 아티팩트:
+  - `docs/review/mvp_verification_pack/artifacts/golive_notion_sync_status.txt`
+  - `docs/review/mvp_verification_pack/artifacts/golive_notion_manual_sync_patch.md` (fallback 문서, 기록 보존)

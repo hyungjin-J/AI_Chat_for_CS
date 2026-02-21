@@ -5,7 +5,7 @@ Validation: strict UTF-8 decode for internal XML entries
 - [Content_Types].xml | bytes=1788 | decode=PASS | decl=UTF-8
 - docProps/core.xml | bytes=721 | decode=PASS | decl=UTF-8
 - docProps/app.xml | bytes=1132 | decode=PASS | decl=UTF-8
-- word/document.xml | bytes=24914 | decode=PASS | decl=UTF-8
+- word/document.xml | bytes=26712 | decode=PASS | decl=UTF-8
 - word/styles.xml | bytes=349550 | decode=PASS | decl=UTF-8
 - word/stylesWithEffects.xml | bytes=438131 | decode=PASS | decl=UTF-8
 - word/settings.xml | bytes=2535 | decode=PASS | decl=UTF-8

@@ -928,3 +928,8 @@ first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Cont
 - `.env`, `*.pem`, `*.key`, `id_rsa*`, `service-account*.json` 등 자격증명 파일은 커밋 금지.
 - 커밋/PR에서 토큰/키 패턴(예: `OPENAI_API_KEY=`, `NOTION_TOKEN=`, `Bearer `, `sk-`)이 감지되면 즉시 실패 처리하는 것을 CI 표준으로 권장한다(gitleaks/trufflehog 등).
 - 유출이 발생하면: (1) 즉시 키 폐기/회전 (2) Git 히스토리 정리(필요 시) (3) 영향 범위 공지/감사 로그 점검을 수행한다.
+
+### 16.8 ChatGPT 보고용 문서 작성
+작업을 진행한 후 최상단 chatGPT 폴더안에 있는 아래의 파일에 내용을 상세 기술한다.
+- CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
+- IMPLEMENTATION_GUIDE_FOR_CHATGPT.md

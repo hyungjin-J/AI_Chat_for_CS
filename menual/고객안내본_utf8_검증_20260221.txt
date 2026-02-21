@@ -1,0 +1,22 @@
+고객안내본 UTF-8 검증 보고서
+검증 시각(UTC): 2026-02-21T12:24:23Z
+
+DOCX_XML [Content_Types].xml PASS
+DOCX_XML docProps/core.xml PASS
+DOCX_XML docProps/app.xml PASS
+DOCX_XML word/document.xml PASS
+DOCX_XML word/styles.xml PASS
+DOCX_XML word/stylesWithEffects.xml PASS
+DOCX_XML word/settings.xml PASS
+DOCX_XML word/webSettings.xml PASS
+DOCX_XML word/fontTable.xml PASS
+DOCX_XML word/theme/theme1.xml PASS
+DOCX_XML customXml/item1.xml PASS
+DOCX_XML customXml/itemProps1.xml PASS
+DOCX_XML word/numbering.xml PASS
+DOCX_XML word/footer1.xml PASS
+DOCX_XML_SUMMARY 14/14
+TEXT 고객안내본_인쇄검수_체크리스트_20260221.txt PASS
+TEXT 고객안내본_출처추적_검증_20260221.txt PASS
+PDF_BINARY 에이아이챗봇_고객안내본_인쇄용_20260221.pdf bytes=67076 (UTF-8 decode 대상 아님)
+OVERALL PASS

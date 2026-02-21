@@ -1,5 +1,6 @@
-출처추적 검증 보고서
-기준 문서 존재 여부:
+고객안내본 출처추적 검증 보고서
+검수 시각(UTC): 2026-02-21T12:24:23Z
+
 - S1: docs/review/plans/20260221_auth_rbac_ops_admin_design_and_hardening_plan.md | exists=True
 - S2: docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md | exists=True
 - S3: docs/review/plans/202603XX_go_live_gap_closure_plan.md | exists=True
@@ -9,13 +10,11 @@
 - S7: docs/review/mvp_verification_pack/artifacts/golive_utf8_check.txt | exists=True
 
 키워드 검증:
-- S1 contains 'AUTH_STALE_PERMISSION': True
-- S1 contains 'AUTH_LOCKED': True
 - S1 contains 'AUTH_REFRESH_REUSE_DETECTED': True
 - S2 contains '/v1/admin/audit-logs/chain-verify': True
 - S2 contains '.nvmrc=22': True
-- S3 contains '`PUBLIC`, `AUTHENTICATED`는 ROLE이 아니라 접근수준(access level)로 고정한다.': True
-- S4 contains '10.2 Notion 동기화 상태': True
+- S3 contains '접근수준(access level)': True
+- S4 contains 'Go-Live Gap Closure': True
 - S5 contains 'PASS=9 FAIL=0': True
 - S6 contains 'Notion sync status: DONE': True
 - S7 contains 'result=PASS': True

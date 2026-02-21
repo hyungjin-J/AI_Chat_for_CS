@@ -29,7 +29,8 @@ public class OpsEventService {
         "auth_refresh_success",
         "auth_refresh_reuse_detected",
         "rbac_denied",
-        "ops_block_applied"
+        "ops_block_applied",
+        "audit_chain_verify_failed"
     );
 
     private final OpsRepository opsRepository;

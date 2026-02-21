@@ -87,6 +87,9 @@ flowchart LR
 4. 감사로그 diff/export
 - 기존 조회 + diff 기반을 유지하면서 export(JSON/CSV) 추가.
 - export는 OPS만 허용, tenant/date/row 제한 적용.
+5. 감사 체인 무결성 점검
+- `GET /v1/admin/audit-logs/chain-verify`로 최근 범위 hash chain 검증 가능.
+- 실패 시 `tb_ops_event`에 `audit_chain_verify_failed` 이벤트를 적재.
 
 ## F. 데이터베이스 변경 요약 (V1 -> V6)
 - V1: MVP 코어 테이블.
@@ -122,6 +125,7 @@ Admin/Ops:
 - `POST /v1/admin/rbac/approval-requests/{request_id}/approve`
 - `POST /v1/admin/rbac/approval-requests/{request_id}/reject`
 - `GET /v1/admin/audit-logs/export`
+- `GET /v1/admin/audit-logs/chain-verify`
 
 상태코드/에러 정책:
 - 표준 포맷 유지: `error_code`, `message`, `trace_id`, `details`
@@ -131,33 +135,46 @@ Admin/Ops:
 실행 명령:
 - `cd backend && ./gradlew.bat test --no-daemon`
 - `cd frontend && npm ci && npm run test:run && npm run build`
+- `python scripts/spec_consistency_check.py`
 
 결과:
 - Backend: PASS
-  - 증적: `docs/review/mvp_verification_pack/artifacts/phase2_backend_gradle_test_output_202603XX.txt`
+  - 증적: `docs/review/mvp_verification_pack/artifacts/golive_backend_test_output.txt`
 - Frontend test: PASS
-  - 증적: `docs/review/mvp_verification_pack/artifacts/phase2_frontend_test_output_202603XX.txt`
+  - 증적: `docs/review/mvp_verification_pack/artifacts/golive_frontend_test_output.txt`
 - Frontend build: PASS
-  - 증적: `docs/review/mvp_verification_pack/artifacts/phase2_frontend_build_output_202603XX.txt`
+  - 증적: `docs/review/mvp_verification_pack/artifacts/golive_frontend_build_output.txt`
+- Spec consistency: PASS=9 FAIL=0
+  - 증적(before): `docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_before.txt`
+  - 증적(after): `docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_after.txt`
+- UTF-8 strict decode: PASS
+  - 증적: `docs/review/mvp_verification_pack/artifacts/golive_utf8_check.txt`
 
 추가 관찰:
-- `npm ci` 시 Node engine 경고(`>=22 <23`, 현재 v24.11.1) 존재. 빌드/테스트는 통과했지만 CI/운영은 `.nvmrc` 기준 버전 고정이 권장된다.
-- `python scripts/spec_consistency_check.py` 결과 `PASS=7 FAIL=1`이며, 잔여 실패는 `role_standard`(기존 스펙의 `PUBLIC`, `AUTHENTICATED` 표기) 1건이다.
-  - 증적: `docs/review/mvp_verification_pack/artifacts/phase2_spec_consistency_output_202603XX.txt`
+- `.nvmrc`를 `22`로 고정하고 주요 워크플로우를 `node-version-file: .nvmrc`로 전환했다.
+- 로컬 실행 노드 버전 증적: `docs/review/mvp_verification_pack/artifacts/golive_node_version.txt`
 
 ## I. 스펙/Notion 동기화 현황
-- 이번 Phase2 코드 반영 세션에서 **추가 CSV/XLSX 스펙 수정은 수행하지 않음**.
-- 기존 2026-02-21 스펙 동기화 기록(google API spec/DB/UIUX)은 `spec_sync_report.md` 섹션 8을 기준으로 유지.
-- 이번 세션 기록:
-  - `spec_sync_report.md`에 Phase2 코드 중심 업데이트 섹션 추가(스펙 무변경 확인).
+- 변경 스펙 파일:
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+- 반영 내용:
+  - role 표준 정규화(`PUBLIC/AUTHENTICATED` -> `access_level` 분리)
+  - Phase2 API 누락 엔드포인트 보강
+  - `GET /v1/admin/audit-logs/chain-verify` 추가
+- `spec_sync_report.md` 반영:
+  - 섹션 10에 변경 파일/요약/검증 결과 기록
+- Notion 동기화:
+  - 대상 URL: `https://www.notion.so/2ed405a3a720816594e4dc34972174ec`
+  - 자동 반영 상태: `DONE`
+  - 동기화 시각: `2026-02-21 21:08:04 +09:00`
+  - 상태 증적: `docs/review/mvp_verification_pack/artifacts/golive_notion_sync_status.txt`
 
 ## J. 현재 리스크 및 Phase2 제안
 잔여 리스크:
-1. WebAuthn 미도입(TOTP 우선 단계).
-2. 감사 체인 검증 배치/알림 운영 정책 고도화 필요.
-3. scheduler lock 장애 상황에서 fallback runbook 상세화 필요.
-4. audit export 대량 요청의 성능 보호(비동기 export/큐 처리) 추가 필요.
-5. Node 버전 불일치 경고 해소 필요.
+1. Notion 동기화는 현재 세션에서 완료됐으나, CI 환경의 MCP 토큰 만료/권한 누락 대비 점검이 필요.
+2. audit export 대량 요청의 성능 보호(비동기 export/큐 처리) 추가 필요.
+3. WebAuthn 미도입(TOTP 우선 단계).
+4. scheduler lock 복구 절차는 문서화됐으나 자동 self-healing은 미구현.
 
 Phase2.1 제안:
 1. WebAuthn(패스키) 병행 도입.
@@ -166,6 +183,33 @@ Phase2.1 제안:
 4. export 비동기 작업 큐 + 다운로드 토큰 만료 정책.
 5. retention 정책 자동 검증과 백업/복구 런북 연동.
 
+## K. Go-Live Gap Closure (PR-A/PR-B)
+PR-A (Spec/Node/CI):
+- `.nvmrc=22` 고정, CI 워크플로우 2개를 `node-version-file` 방식으로 전환.
+- API 스펙에서 role/access_level 분리 정규화 및 Phase2 누락 API 보강.
+- `spec_consistency_check`를 access level 검증 포함으로 확장.
+
+PR-B (Runbook/Audit verifier):
+- 운영 runbook 3종 추가:
+  - `docs/ops/runbook_scheduler_lock.md`
+  - `docs/ops/runbook_audit_chain.md`
+  - `docs/ops/runbook_spec_notion_gate.md`
+- audit chain 검증 API 추가:
+  - `GET /v1/admin/audit-logs/chain-verify`
+  - 실패 시 `tb_ops_event(metric_key=audit_chain_verify_failed)` 적재
+- verifier 단위 테스트 추가:
+  - `backend/src/test/java/com/aichatbot/global/audit/AuditChainVerifierServiceTest.java`
+
+핵심 증적:
+- `docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_before.txt`
+- `docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_after.txt`
+- `docs/review/mvp_verification_pack/artifacts/golive_backend_test_output.txt`
+- `docs/review/mvp_verification_pack/artifacts/golive_frontend_test_output.txt`
+- `docs/review/mvp_verification_pack/artifacts/golive_frontend_build_output.txt`
+- `docs/review/mvp_verification_pack/artifacts/golive_utf8_check.txt`
+- `docs/review/mvp_verification_pack/artifacts/golive_dirty_delta.txt`
+
 ## Appendix: dirty baseline 대비 변경 파일 추적
-- baseline 대비 추가 변경 파일 목록: `docs/review/mvp_verification_pack/artifacts/phase2_dirty_delta_202603XX.txt`
-- 추적 방식: `dirty_baseline.patch` 기준 파일셋과 현재 변경 파일셋 비교.
+- GoLive 시작 baseline: `docs/review/mvp_verification_pack/artifacts/golive_baseline.patch`
+- baseline 대비 추가 변경 파일 목록: `docs/review/mvp_verification_pack/artifacts/golive_dirty_delta.txt`
+- 추적 방식: `golive_git_status_start.txt` 대비 현재 변경 파일셋 비교.

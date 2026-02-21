@@ -1,0 +1,36 @@
+# GoLive UTF-8 Strict Decode Report
+
+PASS TEXT .github/workflows/pr-smoke-contract.yml
+PASS TEXT .github/workflows/release-nightly-full.yml
+PASS TEXT .nvmrc
+PASS TEXT backend/src/main/java/com/aichatbot/admin/presentation/AdminOpsDashboardController.java
+PASS TEXT backend/src/main/java/com/aichatbot/global/security/SecurityConfig.java
+PASS TEXT backend/src/main/java/com/aichatbot/ops/application/OpsEventService.java
+PASS XLSX docs/references/google_ready_api_spec_v0.3_20260216.xlsx xml_entries=22
+PASS TEXT docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md
+PASS TEXT docs/uiux/reports/spec_consistency_check_report.json
+PASS TEXT scripts/spec_consistency_check.py
+PASS TEXT spec_sync_report.md
+PASS TEXT backend/src/main/java/com/aichatbot/global/audit/AuditChainVerifierService.java
+SKIP backend/src/test/java/com/aichatbot/global/audit
+PASS TEXT docs/ops/runbook_audit_chain.md
+PASS TEXT docs/ops/runbook_scheduler_lock.md
+PASS TEXT docs/ops/runbook_spec_notion_gate.md
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_backend_test_output.txt
+SKIP docs/review/mvp_verification_pack/artifacts/golive_baseline.patch
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_ci_gate_status.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_dirty_delta.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_frontend_build_output.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_frontend_npm_ci_output.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_frontend_test_output.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_node_version.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_notion_manual_sync_patch.md
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_notion_sync_status.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_phase2_api_coverage.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_after.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_before.txt
+PASS TEXT docs/review/mvp_verification_pack/artifacts/golive_utf8_check.txt
+
+checked=28
+failures=0
+result=PASS

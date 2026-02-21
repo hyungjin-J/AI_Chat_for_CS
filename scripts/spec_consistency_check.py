@@ -163,6 +163,43 @@ def check_role_standard() -> CheckResult:
     )
 
 
+def check_access_level_standard() -> CheckResult:
+    wb = load_workbook(API_XLSX, data_only=False, read_only=True)
+    ws = wb.worksheets[1]
+    allowed = {"PUBLIC", "AUTHENTICATED"}
+    expected = {
+        ("POST", "/v1/auth/login"): "PUBLIC",
+        ("POST", "/v1/auth/refresh"): "PUBLIC",
+        ("POST", "/v1/auth/logout"): "AUTHENTICATED",
+    }
+    found: set[str] = set()
+    issues: list[str] = []
+    pattern = re.compile(r"access_level\s*=\s*([A-Z_]+)")
+    for r in range(2, 600):
+        method = ws.cell(r, 5).value
+        endpoint = ws.cell(r, 6).value
+        role = ws.cell(r, 10).value
+        note = ws.cell(r, 11).value
+        role_text = role.strip() if isinstance(role, str) else ""
+        if role_text in allowed:
+            issues.append(f"role_column_misuse:r{r}:{role_text}")
+        note_text = note if isinstance(note, str) else ""
+        tokens = pattern.findall(note_text)
+        for token in tokens:
+            found.add(token)
+            if token not in allowed:
+                issues.append(f"invalid_access_level:r{r}:{token}")
+        key = (str(method).strip() if method else "", str(endpoint).strip() if endpoint else "")
+        if key in expected and expected[key] not in tokens:
+            issues.append(f"missing_access_level:r{r}:{key[0]} {key[1]} expected={expected[key]}")
+    return CheckResult(
+        name="access_level_standard",
+        passed=len(issues) == 0,
+        detail=f"access_levels={sorted(found)}",
+        samples=issues[:20],
+    )
+
+
 def check_sse_standard_terms() -> CheckResult:
     bad_hits: list[str] = []
     for loc, text in _collect_texts():
@@ -203,6 +240,7 @@ def main() -> None:
         check_uiux_91_ids(req_master),
         check_secret_terms(),
         check_role_standard(),
+        check_access_level_standard(),
         check_sse_standard_terms(),
         check_uiux_94_placeholder(),
     ]

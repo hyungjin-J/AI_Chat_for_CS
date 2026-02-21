@@ -1,0 +1,13 @@
+endpoint	status
+/v1/auth/mfa/totp/enroll	FOUND
+/v1/auth/mfa/totp/activate	FOUND
+/v1/auth/mfa/verify	FOUND
+/v1/auth/mfa/recovery-codes/regenerate	FOUND
+/v1/auth/sessions	FOUND
+/v1/auth/sessions/{session_id}	FOUND
+/v1/auth/sessions/revoke-others	FOUND
+/v1/admin/rbac/approval-requests	FOUND
+/v1/admin/rbac/approval-requests/{request_id}/approve	FOUND
+/v1/admin/rbac/approval-requests/{request_id}/reject	FOUND
+/v1/admin/audit-logs/export	FOUND
+/v1/admin/audit-logs/chain-verify	FOUND

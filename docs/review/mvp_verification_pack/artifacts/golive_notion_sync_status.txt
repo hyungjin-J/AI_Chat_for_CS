@@ -1,0 +1,10 @@
+﻿Notion sync status: DONE
+Target: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+Synced at: 2026-02-21 21:08:04 +09:00
+Synced fields:
+- Last synced at
+- Source file
+- Version
+- Change summary
+- Spec Sync Metadata section
+Note: fallback manual patch file kept for traceability.

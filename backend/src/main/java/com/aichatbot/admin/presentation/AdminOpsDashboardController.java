@@ -1,6 +1,7 @@
 package com.aichatbot.admin.presentation;
 
 import com.aichatbot.global.audit.AuditLogService;
+import com.aichatbot.global.audit.AuditChainVerifierService;
 import com.aichatbot.global.audit.domain.PersistentAuditLogEntry;
 import com.aichatbot.global.error.ApiException;
 import com.aichatbot.global.observability.TraceGuard;
@@ -31,10 +32,16 @@ public class AdminOpsDashboardController {
 
     private final OpsRepository opsRepository;
     private final AuditLogService auditLogService;
+    private final AuditChainVerifierService auditChainVerifierService;
 
-    public AdminOpsDashboardController(OpsRepository opsRepository, AuditLogService auditLogService) {
+    public AdminOpsDashboardController(
+        OpsRepository opsRepository,
+        AuditLogService auditLogService,
+        AuditChainVerifierService auditChainVerifierService
+    ) {
         this.opsRepository = opsRepository;
         this.auditLogService = auditLogService;
+        this.auditChainVerifierService = auditChainVerifierService;
     }
 
     @GetMapping("/dashboard/summary")
@@ -196,6 +203,39 @@ public class AdminOpsDashboardController {
             .body(body);
     }
 
+    @GetMapping("/audit-logs/chain-verify")
+    public AuditChainVerifyResponse verifyAuditChain(
+        @RequestParam(value = "tenant_id", required = false) String tenantId,
+        @RequestParam(value = "from_utc", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant fromUtc,
+        @RequestParam(value = "to_utc", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant toUtc,
+        @RequestParam(value = "limit", defaultValue = "1000") int limit
+    ) {
+        if (fromUtc != null && toUtc != null && fromUtc.isAfter(toUtc)) {
+            throw new ApiException(
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                "API-003-422",
+                "from_utc must be before to_utc",
+                List.of("invalid_time_range")
+            );
+        }
+        UUID resolvedTenantId = resolveTenantScope(tenantId);
+        AuditChainVerifierService.AuditChainVerificationResult result = auditChainVerifierService.verify(
+            resolvedTenantId,
+            fromUtc,
+            toUtc,
+            limit
+        );
+        return new AuditChainVerifyResponse(
+            resolvedTenantId.toString(),
+            result.passed(),
+            result.checkedRows(),
+            result.failureCount(),
+            result.failureSamples(),
+            result.verifiedAt(),
+            result.traceId()
+        );
+    }
+
     private UUID resolveTenantScope(String tenantId) {
         UUID contextTenantId = parseRequiredUuid(TenantContext.getTenantId(), "invalid_tenant_context");
         if (tenantId == null || tenantId.isBlank()) {
@@ -279,6 +319,17 @@ public class AdminOpsDashboardController {
         String beforeJson,
         String afterJson,
         String sourceTraceId,
+        String traceId
+    ) {
+    }
+
+    public record AuditChainVerifyResponse(
+        String tenantId,
+        boolean passed,
+        int checkedRows,
+        int failureCount,
+        List<String> failureSamples,
+        Instant verifiedAt,
         String traceId
     ) {
     }
