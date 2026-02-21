@@ -60,8 +60,17 @@ jobs:
               with:
                   node-version-file: ".nvmrc"
 
+            - name: Assert Node SSOT
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              run: |
+                  python scripts/assert_node_ssot.py \
+                    --nvmrc .nvmrc \
+                    --package-json frontend/package.json \
+                    --check-runtime
+
             - name: Notion auth preflight (fail-closed)
               id: preflight
+              continue-on-error: true
               if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -73,7 +82,7 @@ jobs:
                     --github-output "$GITHUB_OUTPUT"
 
             - name: Generate Codex config (fail-closed MCP)
-              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true' && steps.preflight.outputs.notion_preflight_status == 'PASS'
               run: |
                   mkdir -p "$HOME/.codex"
                   cat > "$HOME/.codex/config.toml" <<'EOF'
@@ -91,7 +100,7 @@ jobs:
                   EOF
 
             - name: Build Codex sync prompt
-              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true' && steps.preflight.outputs.notion_preflight_status == 'PASS'
               run: |
                   python scripts/build_notion_sync_prompt.py \
                     --context-json "tmp/ci_notion_sync_context.json" \
@@ -101,7 +110,7 @@ jobs:
                     --out "tmp/ci_notion_sync_prompt.md"
 
             - name: Run Codex Notion sync (zero-touch)
-              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true' && steps.preflight.outputs.notion_preflight_status == 'PASS'
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
                   NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -113,7 +122,7 @@ jobs:
                     - < "tmp/ci_notion_sync_prompt.md"
 
             - name: Validate sync marker and file scope
-              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true' && steps.preflight.outputs.notion_preflight_status == 'PASS'
               run: |
                   marker="${{ steps.detect.outputs.notion_sync_marker }}"
                   if ! grep -F "$marker" spec_sync_report.md >/dev/null; then
@@ -133,8 +142,20 @@ jobs:
                     exit 1
                   fi
 
+            - name: Validate manual exception close gate (MUST)
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true' && steps.preflight.outputs.notion_preflight_status != 'PASS'
+              run: |
+                  python scripts/check_notion_manual_exception_gate.py \
+                    --context tmp/ci_notion_sync_context.json \
+                    --preflight tmp/ci_notion_auth_preflight.json \
+                    --status-file docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json \
+                    --manual-patch docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md \
+                    --spec-sync spec_sync_report.md \
+                    --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.json \
+                    --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.txt
+
             - name: Commit and push sync report update
-              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
+              if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true' && steps.preflight.outputs.notion_preflight_status == 'PASS'
               run: |
                   git config user.name "github-actions[bot]"
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -152,3 +173,5 @@ jobs:
                       tmp/ci_notion_auth_preflight.json
                       tmp/ci_notion_sync_prompt.md
                       tmp/ci_notion_sync_last_message.txt
+                      docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.json
+                      docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.txt

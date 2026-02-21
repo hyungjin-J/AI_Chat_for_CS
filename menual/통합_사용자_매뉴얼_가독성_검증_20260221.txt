@@ -1,12 +1,11 @@
-가독성 검증 보고서
-대상: 에이아이챗봇_통합_사용자_매뉴얼_20260221.docx
-문단 수: 155
-문장 수(추정): 113
-어절 수(추정): 873
-평균 문장 길이(문자): 39.78
-검증 항목:
-- 비개발자 대상 쉬운 설명 포함
-- 역할/오류/주의사항/문제해결 섹션 포함
-- Go-Live 갭 클로저 반영(노드22, access_level, runbook, chain-verify)
-- 용어 풀이 및 행동 지침 포함
-판정: PASS
+Readability Validation Report
+Target: 에이아이챗봇_통합_사용자_매뉴얼_20260221.docx
+Checked at (UTC): 2026-02-21T14:28:40Z
+Paragraphs: 155
+Estimated sentences: 113
+Estimated words: 882
+Average sentence length (chars): 43.85
+Checks:
+- Non-developer-friendly wording included: PASS
+- Role-based usage flow sections exist: PASS
+- Latest risk wording reflected (Notion blocked/manual patch, scheduler self-healing done): PASS

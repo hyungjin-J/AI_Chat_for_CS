@@ -265,3 +265,26 @@
   - `docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_manual_sync_patch_202603XX.md`
 - 상태 기록:
   - `docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_sync_status_202603XX.txt`
+
+## 12) 이번 세션(2026-02-21, Phase2.1.1 Release Hygiene) Notion BLOCKED 예외 경로 고정
+- 기준 문서: `docs/review/plans/202603XX_phase2_1_1_release_hygiene_plan.md`
+- 기준 커밋: `98e0868` (working tree)
+- 기준 시각(Asia/Seoul): `2026-02-21 23:45:19 +09:00`
+- 스펙 파일(CSV/XLSX) 추가 변경 여부:
+  - **없음 (No additional spec file edit in this session)**
+- 자동 동기화 상태:
+  - BLOCKED 유지(`NOTION_AUTH_*` fail-closed)
+
+### 12.1 Phase2.1.1 고정 증적 파일(필수 3종)
+1. 상태 파일:
+   - `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json`
+   - 필수 값: `status=BLOCKED_AUTOMATION`, `reason`, `timestamp_kst`
+2. 수동 패치 문서:
+   - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+   - 필수 메타: Last synced at / Source file / Version / Change summary
+3. 동기화 보고 기록:
+   - `spec_sync_report.md` (현재 섹션 12)
+
+### 12.2 운영 Close 규칙
+- `scripts/check_notion_manual_exception_gate.py` PASS일 때만 BLOCKED 상태를 운영적으로 Close 처리한다.
+- PASS 전까지는 자동 동기화 우회 완료로 간주하지 않으며, PR 병합 기준에서 예외 경로 미충족으로 실패 처리한다.

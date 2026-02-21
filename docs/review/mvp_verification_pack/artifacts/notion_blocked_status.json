@@ -1,0 +1,11 @@
+{
+  "status": "BLOCKED_AUTOMATION",
+  "reason": "NOTION_MCP_AUTH_REQUIRED",
+  "timestamp_kst": "2026-02-21 23:45:19 +09:00",
+  "manual_patch": "docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md",
+  "targets": [
+    "https://www.notion.so/2ed405a3a720816594e4dc34972174ec",
+    "https://www.notion.so/2ed405a3a720812180d9d508b77f31a4",
+    "https://www.notion.so/UI-UX-2ee405a3a72080a58c93d967ef0f2444"
+  ]
+}

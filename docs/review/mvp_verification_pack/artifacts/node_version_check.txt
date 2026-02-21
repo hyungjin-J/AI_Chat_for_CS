@@ -1,5 +1,1 @@
 ﻿node_version=v24.11.1
-node_major=24
-expected_major=22
-policy=override_allow
-override_allow_non22=True

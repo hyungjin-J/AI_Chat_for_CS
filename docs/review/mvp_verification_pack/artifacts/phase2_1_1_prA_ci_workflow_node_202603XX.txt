@@ -1,0 +1,12 @@
+﻿PR-A CI Node workflow alignment check
+
+.github/workflows/provider-regression-nightly.yml:28:            - name: Setup Node (.nvmrc)
+.github/workflows/provider-regression-nightly.yml:31:                  node-version-file: ".nvmrc"
+.github/workflows/notion-zero-touch-sync.yml:57:            - name: Setup Node
+.github/workflows/notion-zero-touch-sync.yml:61:                  node-version-file: ".nvmrc"
+.github/workflows/mvp-demo-verify.yml:24:            - name: Setup Node (.nvmrc)
+.github/workflows/mvp-demo-verify.yml:27:                  node-version-file: ".nvmrc"
+.github/workflows/release-nightly-full.yml:23:      - name: Setup Node (.nvmrc)
+.github/workflows/release-nightly-full.yml:26:          node-version-file: ".nvmrc"
+.github/workflows/pr-smoke-contract.yml:22:      - name: Setup Node (.nvmrc)
+.github/workflows/pr-smoke-contract.yml:25:          node-version-file: ".nvmrc"

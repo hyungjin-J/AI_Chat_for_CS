@@ -31,6 +31,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Assert Node SSOT
+        shell: pwsh
+        run: |
+          python scripts/assert_node_ssot.py `
+            --nvmrc .nvmrc `
+            --package-json frontend/package.json `
+            --check-runtime
+
       - name: Backend tests
         shell: pwsh
         working-directory: backend
@@ -48,3 +56,11 @@ jobs:
         shell: pwsh
         run: |
           python scripts/spec_consistency_check.py
+
+      - name: ChatGPT handoff doc lint
+        shell: pwsh
+        run: |
+          python scripts/lint_chatgpt_handoff_docs.py `
+            --files chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md `
+            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint_202603XX.json `
+            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint_202603XX.txt

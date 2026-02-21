@@ -1,22 +1,19 @@
-고객안내본 UTF-8 검증 보고서
-검증 시각(UTC): 2026-02-21T12:24:23Z
+Customer Guide UTF-8 Validation Report
+Checked at (UTC): 2026-02-21T14:28:40Z
 
-DOCX_XML [Content_Types].xml PASS
-DOCX_XML docProps/core.xml PASS
-DOCX_XML docProps/app.xml PASS
-DOCX_XML word/document.xml PASS
-DOCX_XML word/styles.xml PASS
-DOCX_XML word/stylesWithEffects.xml PASS
-DOCX_XML word/settings.xml PASS
-DOCX_XML word/webSettings.xml PASS
-DOCX_XML word/fontTable.xml PASS
-DOCX_XML word/theme/theme1.xml PASS
-DOCX_XML customXml/item1.xml PASS
-DOCX_XML customXml/itemProps1.xml PASS
-DOCX_XML word/numbering.xml PASS
-DOCX_XML word/footer1.xml PASS
-DOCX_XML_SUMMARY 14/14
-TEXT 고객안내본_인쇄검수_체크리스트_20260221.txt PASS
-TEXT 고객안내본_출처추적_검증_20260221.txt PASS
-PDF_BINARY 에이아이챗봇_고객안내본_인쇄용_20260221.pdf bytes=67076 (UTF-8 decode 대상 아님)
-OVERALL PASS
+- [Content_Types].xml | bytes=1866 | decode=PASS
+- docProps/core.xml | bytes=721 | decode=PASS
+- docProps/app.xml | bytes=1132 | decode=PASS
+- word/document.xml | bytes=68962 | decode=PASS
+- word/styles.xml | bytes=349577 | decode=PASS
+- word/stylesWithEffects.xml | bytes=438131 | decode=PASS
+- word/settings.xml | bytes=2535 | decode=PASS
+- word/webSettings.xml | bytes=438 | decode=PASS
+- word/fontTable.xml | bytes=2811 | decode=PASS
+- word/theme/theme1.xml | bytes=10939 | decode=PASS
+- customXml/item1.xml | bytes=262 | decode=PASS
+- customXml/itemProps1.xml | bytes=354 | decode=PASS
+- word/numbering.xml | bytes=5513 | decode=PASS
+- word/footer1.xml | bytes=1527 | decode=PASS
+
+Result: PASS

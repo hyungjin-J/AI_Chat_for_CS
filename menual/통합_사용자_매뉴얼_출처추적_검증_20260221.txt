@@ -1,23 +1,15 @@
-출처추적 검증 보고서
-기준 문서 존재 여부:
+Traceability Validation Report
+Checked at (UTC): 2026-02-21T14:28:40Z
+Source existence:
 - S1: docs/review/plans/20260221_auth_rbac_ops_admin_design_and_hardening_plan.md | exists=True
 - S2: docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md | exists=True
 - S3: docs/review/plans/202603XX_go_live_gap_closure_plan.md | exists=True
 - S4: spec_sync_report.md | exists=True
-- S5: docs/review/mvp_verification_pack/artifacts/golive_spec_consistency_after.txt | exists=True
-- S6: docs/review/mvp_verification_pack/artifacts/golive_notion_sync_status.txt | exists=True
-- S7: docs/review/mvp_verification_pack/artifacts/golive_utf8_check.txt | exists=True
+- S5: docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_spec_consistency_202603XX.txt | exists=True
+- S6: docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_sync_status_202603XX.txt | exists=True
+- S7: docs/review/mvp_verification_pack/artifacts/phase2_1_utf8_check_202603XX.txt | exists=True
 
-키워드 검증:
-- S1 contains 'AUTH_STALE_PERMISSION': True
-- S1 contains 'AUTH_LOCKED': True
-- S1 contains 'AUTH_REFRESH_REUSE_DETECTED': True
-- S2 contains '/v1/admin/audit-logs/chain-verify': True
-- S2 contains '.nvmrc=22': True
-- S3 contains '`PUBLIC`, `AUTHENTICATED`는 ROLE이 아니라 접근수준(access level)로 고정한다.': True
-- S4 contains '10.2 Notion 동기화 상태': True
-- S5 contains 'PASS=9 FAIL=0': True
-- S6 contains 'Notion sync status: DONE': True
-- S7 contains 'result=PASS': True
-
-판정: PASS
+Checks:
+- S5 contains FAIL=0: False
+- S6 contains status=BLOCKED_AUTOMATION: True
+- S7 contains PASS: True

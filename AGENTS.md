@@ -943,7 +943,20 @@ first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Cont
 - 보고서/플랜/증적 파일 내용이 충돌할 경우,
   가장 최신의 증적 파일(artifacts/*)과 spec_sync_report.md 기록을 우선한다.
   (필요 시 문서에 ‘정정(addendum)’ 섹션으로 차이를 설명)
+  - updated_at_kst는 placeholder 금지(실제 값 필수).
+- 제어문자(0x00~0x1F, 단 \n/\r 제외) 포함 금지.
+- trace_id 필드명/정책명 오탈자 금지(린트 스크립트로 자동 검증).
 
 ### 16.8.3 “변경점 요약” 섹션 강제
 - 이전 업데이트 대비 변경점(Added/Changed/Fixed/Removed) 10줄 요약을 상단에 추가
 - 잔여 리스크(Phase2.1) Top5와 다음 액션(Next PRs) Top5를 함께 기재
+
+### 16.8.4 ChatGPT 보고 문서 품질 게이트 (강제)
+- 아래 파일은 린트 게이트를 반드시 통과해야 한다.
+  - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
+  - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
+- `updated_at_kst`는 실제 시각 문자열(`YYYY-MM-DD HH:mm:ss +09:00`)이어야 하며 placeholder(`$kst`, `TBD`)를 금지한다.
+- C0 제어문자는 `\n`, `\r` 외 전부 금지한다(탭 `\t` 포함 금지).
+- `trace_id` 오탈자(`race_id`)는 금지한다.
+- 금칙어 예시는 실제 패턴을 문서에 노출하지 말고 반드시 `<REDACTED>` 표기를 사용한다.
+- 린트 실패 시 PR 병합/배포를 금지한다.

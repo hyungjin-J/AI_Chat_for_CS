@@ -1,0 +1,5 @@
+phase2_1_1 ChatGPT UTF-8 check
+checked_at_utc=2026-02-21T14:47:42Z
+- chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md decode=PASS c0_excluding_lfcr=0
+- chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md decode=PASS c0_excluding_lfcr=0
+result=PASS

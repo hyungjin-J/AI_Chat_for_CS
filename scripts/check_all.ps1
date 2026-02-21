@@ -9,25 +9,16 @@ New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
 
 Write-Host "[2/14] node version policy check"
 $nodeVersion = (node -v).Trim()
-$nodeMajor = 0
-if ($nodeVersion -match "^v([0-9]+)") {
-    $nodeMajor = [int]$matches[1]
-}
-$allowNon22 = $env:APP_VERIFY_ALLOW_NON_22_NODE -eq "true"
-$nodePolicy = if ($allowNon22) { "override_allow" } elseif ($env:CI -eq "true") { "ci_fail" } else { "strict_fail" }
 @"
 node_version=$nodeVersion
-node_major=$nodeMajor
-expected_major=22
-policy=$nodePolicy
-override_allow_non22=$allowNon22
 "@ | Out-File -FilePath "$artifactDir\node_version_check.txt" -Encoding utf8
-if ($nodeMajor -ne 22) {
-    if ($allowNon22) {
-        Write-Warning "Node major version is not 22. current=$nodeVersion (override enabled)"
-    } else {
-        throw "node major version must be 22. current=$nodeVersion. use Node 22.12.0 or set APP_VERIFY_ALLOW_NON_22_NODE=true for temporary local override"
-    }
+python scripts/assert_node_ssot.py `
+    --nvmrc .nvmrc `
+    --package-json frontend/package.json `
+    --check-runtime `
+    --output "$artifactDir\phase2_1_1_prA_node_ssot_check_202603XX.txt"
+if ($LASTEXITCODE -ne 0) {
+    throw "node SSOT assertion failed. See $artifactDir\phase2_1_1_prA_node_ssot_check_202603XX.txt"
 }
 
 Write-Host "[3/14] backend test"

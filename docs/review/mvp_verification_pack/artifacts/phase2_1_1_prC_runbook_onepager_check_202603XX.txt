@@ -1,0 +1,23 @@
+﻿phase2_1_1 PR-C runbook onepager check
+5:공식 수동 예외 경로(`BLOCKED -> Manual Patch -> Evidence -> Close`)를 운영 가능하게 표준화한다.
+15:## One-Page Operational Flow (MUST)
+16:1. `BLOCKED` 감지  
+18:2. `Manual Patch` 작성  
+19:   - 파일: `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+20:3. `Evidence` 3종 준비  
+21:   - `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json`
+22:   - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+24:4. `Close` 게이트 통과  
+25:   - `scripts/check_notion_manual_exception_gate.py` PASS일 때만 운영적으로 Close
+27:## Fail-Closed 규칙
+40:### 1) `notion_blocked_status.json`
+42:- `status`: `BLOCKED_AUTOMATION`
+45:- `manual_patch`: `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+48:### 2) `notion_manual_patch.md`
+58:- BLOCKED 사유
+60:- Close 시각/결과
+80:  --status-file docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json \
+81:  --manual-patch docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md \
+94:- [ ] `notion_blocked_status.json`이 존재하고 `status=BLOCKED_AUTOMATION`이다.
+95:- [ ] `notion_manual_patch.md`에 메타 4종이 존재한다.
+96:- [ ] `spec_sync_report.md`에 Phase2.1.1 BLOCKED 예외 기록이 존재한다.

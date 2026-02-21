@@ -1,0 +1,9 @@
+node_ssot_assertion
+expected=22.12.0
+nvmrc=22.12.0
+engines_node=22.12.0
+volta_node=22.12.0
+runtime_node=v24.11.1
+status=FAIL
+violations:
+- runtime node version must match .nvmrc (22.12.0), got: v24.11.1

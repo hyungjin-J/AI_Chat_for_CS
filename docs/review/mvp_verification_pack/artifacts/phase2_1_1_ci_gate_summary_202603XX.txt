@@ -1,0 +1,12 @@
+phase2_1_1_ci_gate_summary
+generated_at_kst=2026-02-22 00:05:03 +09:00
+pr_a_node_ssot=PASS (policy sync); runtime mismatch expected on local Node v24
+pr_b_chatgpt_doc_lint=PASS
+pr_c_notion_manual_exception_gate=PASS
+backend_test=PASS
+frontend_npm_ci=PASS (EBADENGINE warning under local Node v24)
+frontend_test=PASS
+frontend_build=PASS
+spec_consistency=PASS (FAIL=0)
+utf8_check=PASS
+note=CI must run with .nvmrc Node 22.12.0 for full green without engine warning

@@ -1,21 +1,16 @@
-고객안내본 인쇄검수 체크리스트
-검수 시각(UTC): 2026-02-21T12:24:23Z
+Customer Guide Print Checklist
+Checked at (UTC): 2026-02-21T14:28:40Z
 DOCX: menual/에이아이챗봇_고객안내본_인쇄용_20260221.docx
 PDF:  menual/에이아이챗봇_고객안내본_인쇄용_20260221.pdf
 
-[레이아웃]
-- A4 페이지 크기 적용: PASS
-- 표지/목차/본문/부록 섹션 구성: PASS
-- 페이지 번호 표기: PASS
-- 표(역할/메뉴/오류/체크리스트) 포함: PASS
+Layout
+- A4 page format: PASS
+- Cover/TOC/body/appendix sections: PASS
 
-[내용 최신성]
-- Node 22 표준화 반영: PASS
-- access_level 정규화 반영: PASS
-- MFA/세션 관리 반영: PASS
-- RBAC 2인 승인 흐름 반영: PASS
-- Audit Chain Verify + runbook 반영: PASS
-- Notion 동기화 상태 반영: PASS
+Consistency
+- Notion state wording (blocked automation + manual patch): PASS
+- Phase2.1 evidence paths (S5/S6/S7): PASS
+- M-008 status WARN with status=BLOCKED_AUTOMATION: PASS
 
-[검수 결과]
-판정: PASS
+Output
+- PDF regenerated from latest DOCX: PENDING (Word/LibreOffice unavailable in this environment)

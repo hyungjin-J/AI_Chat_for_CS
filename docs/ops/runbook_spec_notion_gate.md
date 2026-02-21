@@ -1,9 +1,10 @@
-﻿# Spec/Notion Gate Runbook (Phase2.1)
+# Spec/Notion Gate Runbook (Phase2.1.1)
 
 ## 목적
-스펙 파일(CSV/XLSX) 변경이 발생한 PR에서 Notion 동기화 누락을 fail-closed로 차단하고, 인증/권한 오류를 즉시 복구하기 위한 운영 절차를 제공한다.
+스펙 변경 PR에서 Notion 자동 동기화가 실패한 경우에도 fail-closed 원칙을 유지하면서,
+공식 수동 예외 경로(`BLOCKED -> Manual Patch -> Evidence -> Close`)를 운영 가능하게 표준화한다.
 
-## 적용 대상 파일
+## 적용 대상 스펙 파일
 - `docs/references/Summary of key features.csv`
 - `docs/references/CS AI Chatbot_Requirements Statement.csv`
 - `docs/references/Development environment.csv`
@@ -11,68 +12,86 @@
 - `docs/references/CS_AI_CHATBOT_DB.xlsx`
 - `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
 
-## 파이프라인 동작 요약
-1. `scripts/notion_zero_touch_gate.py`로 스펙 변경 여부를 감지한다.
-2. 변경이 있으면 `scripts/notion_ci_auth_preflight.py`를 먼저 실행한다.
-3. preflight가 `PASS`일 때만 Codex + MCP 동기화를 실행한다.
-4. 동기화 후 `spec_sync_report.md` 마커와 변경 범위를 검증한다.
-5. 하나라도 실패하면 CI를 즉시 실패 처리한다.
+## One-Page Operational Flow (MUST)
+1. `BLOCKED` 감지  
+   - 조건: `scripts/notion_ci_auth_preflight.py`가 `NOTION_AUTH_*`(또는 `OPENAI_API_KEY_MISSING`)로 실패
+2. `Manual Patch` 작성  
+   - 파일: `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+3. `Evidence` 3종 준비  
+   - `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json`
+   - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+   - `spec_sync_report.md` (동일 세션 기록)
+4. `Close` 게이트 통과  
+   - `scripts/check_notion_manual_exception_gate.py` PASS일 때만 운영적으로 Close
 
-## 표준 오류 코드 (Fail-Closed)
-- `NOTION_AUTH_TOKEN_MISSING`: `NOTION_TOKEN` 미설정
-- `OPENAI_API_KEY_MISSING`: `OPENAI_API_KEY` 미설정
-- `NOTION_AUTH_UNAUTHORIZED`: Notion API 401
-- `NOTION_AUTH_FORBIDDEN`: Notion API 403
-- `NOTION_AUTH_PRECHECK_FAILED`: 네트워크/기타 예외
+## Fail-Closed 규칙
+1. preflight FAIL 시 자동 동기화(Codex + MCP) 경로는 즉시 중단한다.
+2. 수동 예외 경로 증적 3종 중 하나라도 누락되면 CI 실패 처리한다.
+3. 예외 경로는 자동 동기화 실패를 우회하기 위한 임시 운영 절차이며, Notion 동기화 의무를 제거하지 않는다.
 
-## 장애 대응 절차
-### 1) NOTION_AUTH_TOKEN_MISSING
-1. GitHub Secrets에 `NOTION_TOKEN` 존재 여부를 확인한다.
-2. Notion Integration 토큰을 재발급해 Secret을 갱신한다.
-3. Workflow를 rerun하고 preflight 아티팩트를 확인한다.
+## 표준 오류 코드
+- `NOTION_AUTH_TOKEN_MISSING`
+- `NOTION_AUTH_UNAUTHORIZED`
+- `NOTION_AUTH_FORBIDDEN`
+- `NOTION_AUTH_PRECHECK_FAILED`
+- `OPENAI_API_KEY_MISSING`
 
-### 2) OPENAI_API_KEY_MISSING
-1. GitHub Secrets에 `OPENAI_API_KEY`를 재주입한다.
-2. rerun 후 preflight 단계 통과 여부를 확인한다.
+## 증적 파일 스키마 (고정)
+### 1) `notion_blocked_status.json`
+필수 키:
+- `status`: `BLOCKED_AUTOMATION`
+- `reason`: preflight error code
+- `timestamp_kst`
+- `manual_patch`: `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+- `targets`: Notion URL 배열
 
-### 3) NOTION_AUTH_UNAUTHORIZED (401)
-1. 토큰 만료 또는 잘못된 토큰 여부를 점검한다.
-2. 토큰 재발급 후 재실행한다.
-3. 여전히 실패하면 Integration이 연결된 workspace를 확인한다.
+### 2) `notion_manual_patch.md`
+필수 메타:
+- `Last synced at`
+- `Source file`
+- `Version`
+- `Change summary`
 
-### 4) NOTION_AUTH_FORBIDDEN (403)
-1. 대상 Notion 페이지/DB에 Integration 권한이 부여되었는지 확인한다.
-2. 읽기/쓰기 권한을 재부여한다.
-3. rerun 후 `tmp/ci_notion_auth_preflight.json`의 HTTP status를 확인한다.
+### 3) `spec_sync_report.md`
+필수 기록:
+- Phase2.1.1 섹션/항목
+- BLOCKED 사유
+- 위 2개 증적 파일 경로
+- Close 시각/결과
 
-### 5) NOTION_AUTH_PRECHECK_FAILED
-1. GitHub Actions 네트워크 상태를 확인한다.
-2. Notion API 장애 여부를 확인한다.
-3. 복구 전까지 PR은 병합 금지 상태를 유지한다.
-
-## 로컬 점검 커맨드
+## 로컬/CI 검증 명령
 ```bash
 python scripts/notion_zero_touch_gate.py \
   --base-ref origin/main \
   --head-ref HEAD \
-  --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_notion_gate_context_202603XX.json
+  --output-json tmp/ci_notion_sync_context.json
 ```
 
 ```bash
-OPENAI_API_KEY=*** NOTION_TOKEN=*** \
 python scripts/notion_ci_auth_preflight.py \
-  --context-json docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_notion_gate_context_202603XX.json \
-  --output docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_notion_auth_preflight_result_202603XX.json
+  --context-json tmp/ci_notion_sync_context.json \
+  --output tmp/ci_notion_auth_preflight.json
 ```
 
-## 증적 파일
-- `docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_notion_auth_preflight_202603XX.txt`
-- `docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_notion_gate_context_202603XX.json`
-- `docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_notion_auth_preflight_result_202603XX.json`
-- `docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_ci_step_summary_202603XX.txt`
+```bash
+python scripts/check_notion_manual_exception_gate.py \
+  --context tmp/ci_notion_sync_context.json \
+  --preflight tmp/ci_notion_auth_preflight.json \
+  --status-file docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json \
+  --manual-patch docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md \
+  --spec-sync spec_sync_report.md \
+  --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.json \
+  --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.txt
+```
+
+## 책임/점검 항목
+- Dev: 증적 3종 작성 및 스펙 변경 내역 반영
+- Reviewer: 증적 3종 경로/내용/시각 일치 확인
+- Release owner: manual gate PASS 확인 후에만 병합 승인
 
 ## 완료 체크리스트
-- [ ] preflight 실패가 명확한 오류 코드/메시지로 출력된다.
-- [ ] runbook 링크가 실패 메시지에 포함된다.
-- [ ] 성공 시 Notion 동기화가 실행되고 `spec_sync_report.md` 마커가 생성된다.
-- [ ] Notion 메타(Last synced at / Source file / Version / Change summary)가 갱신된다.
+- [ ] preflight 실패 시 자동 동기화가 중단되었다.
+- [ ] `notion_blocked_status.json`이 존재하고 `status=BLOCKED_AUTOMATION`이다.
+- [ ] `notion_manual_patch.md`에 메타 4종이 존재한다.
+- [ ] `spec_sync_report.md`에 Phase2.1.1 BLOCKED 예외 기록이 존재한다.
+- [ ] `check_notion_manual_exception_gate.py`가 PASS했다.
