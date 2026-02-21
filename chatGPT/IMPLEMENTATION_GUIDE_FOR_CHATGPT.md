@@ -222,3 +222,7 @@
   - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
 - 이 파일은 경로 의존성을 최소화한 자기완결형 컨텍스트 패킷으로 유지한다.
 
+## 15) 릴리즈 태그
+- 최신 릴리즈 태그: `v2026.02.21-golive`
+- 태그 목적: Go-Live Gap Closure, 매뉴얼/인쇄본, ChatGPT 공유 문서 정렬 상태를 기준점으로 고정
+

@@ -102,3 +102,7 @@ Task:
 Output format:
 [INSERT REQUIRED FORMAT HERE]
 ```
+
+## 9) Release Marker
+- Latest release tag: `v2026.02.21-golive`
+- Tagged commit intent: Go-Live gap closure + manuals + ChatGPT handoff docs alignment.
