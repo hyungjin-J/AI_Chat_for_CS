@@ -1,6 +1,7 @@
 package com.aichatbot.global.scheduler.domain.mapper;
 
 import com.aichatbot.global.scheduler.domain.RetentionPolicyRecord;
+import com.aichatbot.global.scheduler.domain.SchedulerLockRecord;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +20,20 @@ public interface SchedulerMapper {
                    @Param("ownerId") UUID ownerId,
                    @Param("leaseUntilUtc") Instant leaseUntilUtc,
                    @Param("updatedAt") Instant updatedAt);
+
+    int heartbeatLock(@Param("lockKey") String lockKey,
+                      @Param("ownerId") UUID ownerId,
+                      @Param("leaseUntilUtc") Instant leaseUntilUtc,
+                      @Param("heartbeatAt") Instant heartbeatAt);
+
+    int forceRecoverStaleLock(@Param("lockKey") String lockKey,
+                              @Param("newOwnerId") UUID newOwnerId,
+                              @Param("newLeaseUntilUtc") Instant newLeaseUntilUtc,
+                              @Param("nowUtc") Instant nowUtc);
+
+    List<SchedulerLockRecord> findStaleLocks(@Param("nowUtc") Instant nowUtc,
+                                             @Param("staleBeforeUtc") Instant staleBeforeUtc,
+                                             @Param("limit") int limit);
 
     List<RetentionPolicyRecord> listRetentionPolicies();
 

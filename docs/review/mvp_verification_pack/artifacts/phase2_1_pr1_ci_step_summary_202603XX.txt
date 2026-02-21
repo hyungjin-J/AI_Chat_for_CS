@@ -1,0 +1,13 @@
+﻿PR1 Notion CI token ops summary
+- Workflow updated: .github/workflows/notion-zero-touch-sync.yml
+  - setup-node now uses node-version-file: .nvmrc
+  - preflight step added: scripts/notion_ci_auth_preflight.py
+  - fail-closed semantics enforced before Codex sync step
+- Script added: scripts/notion_ci_auth_preflight.py
+  - error codes: NOTION_AUTH_TOKEN_MISSING, OPENAI_API_KEY_MISSING,
+    NOTION_AUTH_UNAUTHORIZED, NOTION_AUTH_FORBIDDEN, NOTION_AUTH_PRECHECK_FAILED
+- Runbook updated: docs/ops/runbook_spec_notion_gate.md
+- Local preflight evidence:
+  - context: phase2_1_pr1_notion_gate_context_202603XX.json
+  - result: phase2_1_pr1_notion_auth_preflight_202603XX.txt
+  - status: FAIL (expected for missing NOTION_TOKEN test), exit_code=2

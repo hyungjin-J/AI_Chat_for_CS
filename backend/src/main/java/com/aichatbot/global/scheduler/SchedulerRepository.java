@@ -1,6 +1,7 @@
 package com.aichatbot.global.scheduler;
 
 import com.aichatbot.global.scheduler.domain.RetentionPolicyRecord;
+import com.aichatbot.global.scheduler.domain.SchedulerLockRecord;
 import com.aichatbot.global.scheduler.domain.mapper.SchedulerMapper;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -28,6 +29,18 @@ public class SchedulerRepository {
         } catch (DuplicateKeyException duplicateKeyException) {
             return schedulerMapper.updateLockLease(lockKey, ownerId, nowUtc, leaseUntilUtc, nowUtc) > 0;
         }
+    }
+
+    public boolean heartbeatLock(String lockKey, UUID ownerId, Instant leaseUntilUtc, Instant heartbeatAt) {
+        return schedulerMapper.heartbeatLock(lockKey, ownerId, leaseUntilUtc, heartbeatAt) == 1;
+    }
+
+    public boolean forceRecoverStaleLock(String lockKey, UUID newOwnerId, Instant newLeaseUntilUtc, Instant nowUtc) {
+        return schedulerMapper.forceRecoverStaleLock(lockKey, newOwnerId, newLeaseUntilUtc, nowUtc) == 1;
+    }
+
+    public List<SchedulerLockRecord> findStaleLocks(Instant nowUtc, Instant staleBeforeUtc, int limit) {
+        return schedulerMapper.findStaleLocks(nowUtc, staleBeforeUtc, limit);
     }
 
     public List<RetentionPolicyRecord> listRetentionPolicies() {

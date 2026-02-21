@@ -43,6 +43,36 @@ export type AuditDiffResponse = {
     trace_id: string;
 };
 
+export type AuditExportJobCreateRequest = {
+    format: "json" | "csv";
+    from_utc?: string;
+    to_utc?: string;
+    row_limit?: number;
+    max_bytes?: number;
+    max_duration_sec?: number;
+};
+
+export type AuditExportJobCreateResponse = {
+    job_id: string;
+    status: "PENDING" | "RUNNING" | "DONE" | "FAILED" | "EXPIRED";
+    expires_at: string;
+    trace_id: string;
+};
+
+export type AuditExportJobStatusResponse = {
+    job_id: string;
+    status: "PENDING" | "RUNNING" | "DONE" | "FAILED" | "EXPIRED";
+    format: "json" | "csv";
+    row_count: number;
+    total_bytes: number;
+    error_code?: string | null;
+    error_message?: string | null;
+    created_at: string;
+    completed_at?: string | null;
+    expires_at: string;
+    trace_id: string;
+};
+
 export async function fetchDashboardSummary(params: {
     tenantId?: string;
     fromUtc?: string;
@@ -141,10 +171,19 @@ export async function rejectRbacRequest(requestId: string, comment?: string) {
     return response.data;
 }
 
-export async function exportAuditLogs(format: "json" | "csv"): Promise<string> {
-    const response = await httpClient.get<string>("/v1/admin/audit-logs/export", {
-        params: { format },
-        responseType: "text",
+export async function createAuditExportJob(payload: AuditExportJobCreateRequest): Promise<AuditExportJobCreateResponse> {
+    const response = await httpClient.post<AuditExportJobCreateResponse>("/v1/admin/audit-logs/export-jobs", payload);
+    return response.data;
+}
+
+export async function getAuditExportJob(jobId: string): Promise<AuditExportJobStatusResponse> {
+    const response = await httpClient.get<AuditExportJobStatusResponse>(`/v1/admin/audit-logs/export-jobs/${jobId}`);
+    return response.data;
+}
+
+export async function downloadAuditExportJob(jobId: string): Promise<Blob> {
+    const response = await httpClient.get<Blob>(`/v1/admin/audit-logs/export-jobs/${jobId}/download`, {
+        responseType: "blob",
     });
     return response.data;
 }

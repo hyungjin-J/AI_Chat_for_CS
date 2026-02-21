@@ -58,22 +58,19 @@ jobs:
               if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
               uses: actions/setup-node@v4
               with:
-                  node-version: "22"
+                  node-version-file: ".nvmrc"
 
-            - name: Validate required secrets
+            - name: Notion auth preflight (fail-closed)
+              id: preflight
               if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
                   NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
               run: |
-                  if [ -z "${OPENAI_API_KEY:-}" ]; then
-                    echo "OPENAI_API_KEY is required for codex exec."
-                    exit 1
-                  fi
-                  if [ -z "${NOTION_TOKEN:-}" ]; then
-                    echo "NOTION_TOKEN is required for Notion MCP."
-                    exit 1
-                  fi
+                  python scripts/notion_ci_auth_preflight.py \
+                    --context-json "tmp/ci_notion_sync_context.json" \
+                    --output "tmp/ci_notion_auth_preflight.json" \
+                    --github-output "$GITHUB_OUTPUT"
 
             - name: Generate Codex config (fail-closed MCP)
               if: steps.detect.outputs.notion_sync_changed == 'true' && steps.detect.outputs.notion_sync_already_synced != 'true'
@@ -152,5 +149,6 @@ jobs:
                   name: notion-zero-touch-sync-artifacts
                   path: |
                       tmp/ci_notion_sync_context.json
+                      tmp/ci_notion_auth_preflight.json
                       tmp/ci_notion_sync_prompt.md
                       tmp/ci_notion_sync_last_message.txt

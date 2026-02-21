@@ -1,0 +1,28 @@
+UTF-8 strict decode check (Phase2.1)
+
+[PASS][TEXT] .github/workflows/notion-zero-touch-sync.yml
+[PASS][TEXT] AGENTS.md
+[PASS][TEXT] README.md
+[PASS][TEXT] backend/src/main/java/com/aichatbot/admin/presentation/AdminOpsDashboardController.java
+[PASS][TEXT] backend/src/main/java/com/aichatbot/global/audit/PersistentAuditLogRepository.java
+[PASS][TEXT] backend/src/main/java/com/aichatbot/global/audit/domain/mapper/AuditLogMapper.java
+[PASS][TEXT] backend/src/main/java/com/aichatbot/global/scheduler/SchedulerLockService.java
+[PASS][TEXT] backend/src/main/java/com/aichatbot/global/scheduler/SchedulerRepository.java
+[PASS][TEXT] backend/src/main/java/com/aichatbot/global/scheduler/domain/mapper/SchedulerMapper.java
+[PASS][TEXT] backend/src/main/java/com/aichatbot/global/security/SecurityConfig.java
+[PASS][TEXT] backend/src/main/java/com/aichatbot/ops/application/OpsEventService.java
+[PASS][TEXT] backend/src/main/resources/mappers/global/audit/AuditLogMapper.xml
+[PASS][TEXT] backend/src/main/resources/mappers/global/scheduler/SchedulerMapper.xml
+[PASS][TEXT] chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
+[PASS][TEXT] chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
+[PASS][TEXT] docs/ops/runbook_audit_chain.md
+[PASS][TEXT] docs/ops/runbook_scheduler_lock.md
+[PASS][TEXT] docs/ops/runbook_spec_notion_gate.md
+[PASS][XLSX] docs/references/CS_AI_CHATBOT_DB.xlsx workbook open
+[PASS][XLSX] docs/references/google_ready_api_spec_v0.3_20260216.xlsx workbook open
+[PASS][TEXT] docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md
+[PASS][TEXT] frontend/src/api/adminApi.ts
+[PASS][TEXT] frontend/src/pages/AdminAuditPage.tsx
+[PASS][TEXT] spec_sync_report.md
+
+overall=PASS

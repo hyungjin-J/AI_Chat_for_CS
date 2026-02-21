@@ -4,6 +4,19 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aichatbot.global.scheduler.domain.mapper.SchedulerMapper">
 
+    <resultMap id="SchedulerLockMap" type="com.aichatbot.global.scheduler.domain.SchedulerLockRecord">
+        <constructor>
+            <arg column="lock_key" javaType="java.lang.String"/>
+            <arg column="owner_id" javaType="java.util.UUID"/>
+            <arg column="lease_until_utc" javaType="java.time.Instant"/>
+            <arg column="fencing_token" javaType="java.lang.Long"/>
+            <arg column="updated_at" javaType="java.time.Instant"/>
+            <arg column="last_heartbeat_utc" javaType="java.time.Instant"/>
+            <arg column="last_recovered_at" javaType="java.time.Instant"/>
+            <arg column="recovery_count" javaType="java.lang.Long"/>
+        </constructor>
+    </resultMap>
+
     <resultMap id="RetentionPolicyMap" type="com.aichatbot.global.scheduler.domain.RetentionPolicyRecord">
         <constructor>
             <arg column="table_name" javaType="java.lang.String"/>
@@ -17,7 +30,8 @@
         SET owner_id = #{ownerId},
             lease_until_utc = #{leaseUntilUtc},
             fencing_token = fencing_token + 1,
-            updated_at = #{updatedAt}
+            updated_at = #{updatedAt},
+            last_heartbeat_utc = #{updatedAt}
         WHERE lock_key = #{lockKey}
           AND (lease_until_utc &lt;= #{nowUtc} OR owner_id = #{ownerId})
     </update>
@@ -28,16 +42,58 @@
             owner_id,
             lease_until_utc,
             fencing_token,
-            updated_at
+            updated_at,
+            last_heartbeat_utc,
+            recovery_count
         )
         VALUES (
             #{lockKey},
             #{ownerId},
             #{leaseUntilUtc},
             1,
-            #{updatedAt}
+            #{updatedAt},
+            #{updatedAt},
+            0
         )
     </insert>
+
+    <update id="heartbeatLock">
+        UPDATE tb_scheduler_lock
+        SET lease_until_utc = #{leaseUntilUtc},
+            updated_at = #{heartbeatAt},
+            last_heartbeat_utc = #{heartbeatAt}
+        WHERE lock_key = #{lockKey}
+          AND owner_id = #{ownerId}
+    </update>
+
+    <update id="forceRecoverStaleLock">
+        UPDATE tb_scheduler_lock
+        SET owner_id = #{newOwnerId},
+            lease_until_utc = #{newLeaseUntilUtc},
+            fencing_token = fencing_token + 1,
+            updated_at = #{nowUtc},
+            last_heartbeat_utc = #{nowUtc},
+            last_recovered_at = #{nowUtc},
+            recovery_count = recovery_count + 1
+        WHERE lock_key = #{lockKey}
+          AND lease_until_utc &lt;= #{nowUtc}
+    </update>
+
+    <select id="findStaleLocks" resultMap="SchedulerLockMap">
+        SELECT lock_key,
+               owner_id,
+               lease_until_utc,
+               fencing_token,
+               updated_at,
+               last_heartbeat_utc,
+               last_recovered_at,
+               recovery_count
+        FROM tb_scheduler_lock
+        WHERE lease_until_utc &lt;= #{nowUtc}
+           OR (last_heartbeat_utc IS NOT NULL AND last_heartbeat_utc &lt;= #{staleBeforeUtc})
+        ORDER BY updated_at ASC
+        LIMIT #{limit}
+    </select>
 
     <select id="listRetentionPolicies" resultMap="RetentionPolicyMap">
         SELECT table_name,

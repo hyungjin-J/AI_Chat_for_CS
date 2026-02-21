@@ -2,9 +2,12 @@ package com.aichatbot.admin.presentation;
 
 import com.aichatbot.global.audit.AuditLogService;
 import com.aichatbot.global.audit.AuditChainVerifierService;
+import com.aichatbot.global.audit.AuditExportJobService;
+import com.aichatbot.global.audit.domain.AuditExportJobRecord;
 import com.aichatbot.global.audit.domain.PersistentAuditLogEntry;
 import com.aichatbot.global.error.ApiException;
 import com.aichatbot.global.observability.TraceGuard;
+import com.aichatbot.global.security.PrincipalUtils;
 import com.aichatbot.global.tenant.TenantContext;
 import com.aichatbot.ops.domain.OpsMetricRow;
 import com.aichatbot.ops.domain.OpsMetricTotal;
@@ -22,6 +25,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,15 +38,18 @@ public class AdminOpsDashboardController {
     private final OpsRepository opsRepository;
     private final AuditLogService auditLogService;
     private final AuditChainVerifierService auditChainVerifierService;
+    private final AuditExportJobService auditExportJobService;
 
     public AdminOpsDashboardController(
         OpsRepository opsRepository,
         AuditLogService auditLogService,
-        AuditChainVerifierService auditChainVerifierService
+        AuditChainVerifierService auditChainVerifierService,
+        AuditExportJobService auditExportJobService
     ) {
         this.opsRepository = opsRepository;
         this.auditLogService = auditLogService;
         this.auditChainVerifierService = auditChainVerifierService;
+        this.auditExportJobService = auditExportJobService;
     }
 
     @GetMapping("/dashboard/summary")
@@ -203,6 +211,69 @@ public class AdminOpsDashboardController {
             .body(body);
     }
 
+    @PostMapping("/audit-logs/export-jobs")
+    public ResponseEntity<AuditExportJobCreateResponse> createAuditExportJob(
+        @RequestBody(required = false) AuditExportJobCreateRequest request
+    ) {
+        UUID tenantId = parseRequiredUuid(TenantContext.getTenantId(), "invalid_tenant_context");
+        AuditExportJobRecord created = auditExportJobService.createJob(
+            tenantId,
+            AuditLogService.toUuidOrNull(PrincipalUtils.currentPrincipal().userId()),
+            request == null ? null : request.format(),
+            request == null ? null : request.fromUtc(),
+            request == null ? null : request.toUtc(),
+            request == null ? null : request.rowLimit(),
+            request == null ? null : request.maxBytes(),
+            request == null ? null : request.maxDurationSec()
+        );
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+            new AuditExportJobCreateResponse(
+                created.id().toString(),
+                created.status(),
+                created.expiresAt(),
+                TraceGuard.requireTraceId()
+            )
+        );
+    }
+
+    @GetMapping("/audit-logs/export-jobs/{job_id}")
+    public AuditExportJobStatusResponse getAuditExportJob(@PathVariable("job_id") String jobId) {
+        UUID tenantId = parseRequiredUuid(TenantContext.getTenantId(), "invalid_tenant_context");
+        UUID exportJobId = parseRequiredUuid(jobId, "invalid_export_job_id");
+        AuditExportJobRecord job = auditExportJobService.findById(tenantId, exportJobId);
+        return new AuditExportJobStatusResponse(
+            job.id().toString(),
+            job.status(),
+            job.exportFormat(),
+            job.rowCount(),
+            job.totalBytes(),
+            job.errorCode(),
+            job.errorMessage(),
+            job.createdAt(),
+            job.completedAt(),
+            job.expiresAt(),
+            TraceGuard.requireTraceId()
+        );
+    }
+
+    @GetMapping("/audit-logs/export-jobs/{job_id}/download")
+    public ResponseEntity<byte[]> downloadAuditExportJob(@PathVariable("job_id") String jobId) {
+        UUID tenantId = parseRequiredUuid(TenantContext.getTenantId(), "invalid_tenant_context");
+        UUID exportJobId = parseRequiredUuid(jobId, "invalid_export_job_id");
+        AuditExportJobService.DownloadPayload payload = auditExportJobService.download(
+            tenantId,
+            exportJobId,
+            AuditLogService.toUuidOrNull(PrincipalUtils.currentPrincipal().userId())
+        );
+        String format = payload.job().exportFormat();
+        String filename = "audit_export_" + payload.job().id() + "." + format;
+        MediaType mediaType = "csv".equals(format) ? MediaType.TEXT_PLAIN : MediaType.APPLICATION_JSON;
+        return ResponseEntity.ok()
+            .contentType(mediaType)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(payload.payload());
+    }
+
     @GetMapping("/audit-logs/chain-verify")
     public AuditChainVerifyResponse verifyAuditChain(
         @RequestParam(value = "tenant_id", required = false) String tenantId,
@@ -330,6 +401,39 @@ public class AdminOpsDashboardController {
         int failureCount,
         List<String> failureSamples,
         Instant verifiedAt,
+        String traceId
+    ) {
+    }
+
+    public record AuditExportJobCreateRequest(
+        String format,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant fromUtc,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant toUtc,
+        Integer rowLimit,
+        Integer maxBytes,
+        Integer maxDurationSec
+    ) {
+    }
+
+    public record AuditExportJobCreateResponse(
+        String jobId,
+        String status,
+        Instant expiresAt,
+        String traceId
+    ) {
+    }
+
+    public record AuditExportJobStatusResponse(
+        String jobId,
+        String status,
+        String format,
+        int rowCount,
+        int totalBytes,
+        String errorCode,
+        String errorMessage,
+        Instant createdAt,
+        Instant completedAt,
+        Instant expiresAt,
         String traceId
     ) {
     }

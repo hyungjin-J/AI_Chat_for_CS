@@ -933,3 +933,17 @@ first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Cont
 작업을 진행한 후 최상단 chatGPT 폴더안에 있는 아래의 파일에 내용을 상세 기술한다.
 - CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
 - IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
+
+### 16.8.1 보고용 문서 필수 메타(두 파일 공통)
+- updated_at_kst, 기준 commit hash(또는 tag), 작업한 branch/PR 번호(알면) 필수 기재
+- “검증 게이트 요약(PASS/FAIL)”을 표로 포함하고, 각 항목의 증적 파일 경로를 1개 이상 연결
+- 민감정보/토큰/시크릿/PII는 절대 포함 금지
+
+### 16.8.2 충돌 해결 규칙(SSOT conflict rule)
+- 보고서/플랜/증적 파일 내용이 충돌할 경우,
+  가장 최신의 증적 파일(artifacts/*)과 spec_sync_report.md 기록을 우선한다.
+  (필요 시 문서에 ‘정정(addendum)’ 섹션으로 차이를 설명)
+
+### 16.8.3 “변경점 요약” 섹션 강제
+- 이전 업데이트 대비 변경점(Added/Changed/Fixed/Removed) 10줄 요약을 상단에 추가
+- 잔여 리스크(Phase2.1) Top5와 다음 액션(Next PRs) Top5를 함께 기재

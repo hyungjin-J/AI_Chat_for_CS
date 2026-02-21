@@ -1,0 +1,10 @@
+﻿Scheduler self-healing observability checkpoints
+- Source code: backend/src/main/java/com/aichatbot/global/scheduler/SchedulerLockService.java
+  - emits meter: scheduler_lock_events_total{lock_key,outcome}
+- Source code: backend/src/main/java/com/aichatbot/global/scheduler/SchedulerLockJanitorJob.java
+  - outcomes: self_healing_recovered / self_healing_failed
+- Source code: backend/src/main/java/com/aichatbot/ops/application/OpsEventService.java
+  - metric allowlist contains scheduler_lock_recovered and scheduler_lock_recovery_failed
+- Test evidence:
+  - phase2_1_pr3_scheduler_self_heal_202603XX.txt
+  - phase2_1_pr3_scheduler_lock_competition_202603XX.txt

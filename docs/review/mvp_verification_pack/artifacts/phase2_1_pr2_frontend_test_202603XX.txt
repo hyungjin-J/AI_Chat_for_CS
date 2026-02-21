@@ -1,0 +1,23 @@
+
+> frontend@0.0.0 test:run
+> vitest run src/pages/AdminAuditPage.test.tsx
+
+
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend[39m
+
+[90mstderr[2m | src/pages/AdminAuditPage.test.tsx[2m > [22m[2mAdminAuditPage[2m > [22m[2mcreates export job and downloads artifact
+[22m[39mError: Not implemented: navigation (except hash changes)
+    at module.exports (C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\jsdom\lib\jsdom\browser\not-implemented.js:9:17)
+    at navigateFetch (C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\jsdom\lib\jsdom\living\window\navigation.js:77:3)
+    at exports.navigate (C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\jsdom\lib\jsdom\living\window\navigation.js:55:3)
+    at Timeout._onTimeout (C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\jsdom\lib\jsdom\living\nodes\HTMLHyperlinkElementUtils-impl.js:80:7)
+    at listOnTimeout (node:internal/timers:605:17)
+    at processTimers (node:internal/timers:541:7) [90mundefined[39m
+
+ [32m✓[39m src/pages/AdminAuditPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 142[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 22:56:12
+[2m   Duration [22m 1.37s[2m (transform 63ms, setup 100ms, collect 218ms, tests 142ms, environment 574ms, prepare 115ms)[22m
+

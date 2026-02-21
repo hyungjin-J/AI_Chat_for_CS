@@ -1,0 +1,7 @@
+﻿status=BLOCKED_AUTOMATION
+reason=NOTION_MCP_AUTH_REQUIRED
+timestamp_kst=2026-02-21 22:58:08 +09:00
+manual_patch=docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_manual_sync_patch_202603XX.md
+target_1=https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+target_2=https://www.notion.so/2ed405a3a720812180d9d508b77f31a4
+target_3=https://www.notion.so/UI-UX-2ee405a3a72080a58c93d967ef0f2444

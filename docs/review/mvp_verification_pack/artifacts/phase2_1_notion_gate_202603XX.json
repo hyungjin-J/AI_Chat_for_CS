@@ -1,0 +1,11 @@
+{
+  "base_ref": "origin/main",
+  "head_ref": "HEAD",
+  "changed": false,
+  "changed_count": 0,
+  "changed_targets": [],
+  "mapping": {},
+  "sync_key": "",
+  "marker": "",
+  "already_synced": false
+}

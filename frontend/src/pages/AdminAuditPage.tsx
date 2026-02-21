@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { AuditLogItem } from "../api/adminApi";
-import { exportAuditLogs, fetchAuditDiff, fetchAuditLogs } from "../api/adminApi";
+import { createAuditExportJob, downloadAuditExportJob, fetchAuditDiff, fetchAuditLogs, getAuditExportJob } from "../api/adminApi";
 
 export function AdminAuditPage() {
     const [actionType, setActionType] = useState("");
@@ -9,6 +9,7 @@ export function AdminAuditPage() {
     const [toUtc, setToUtc] = useState("");
     const [items, setItems] = useState<AuditLogItem[]>([]);
     const [selectedDiff, setSelectedDiff] = useState<{ before: string; after: string } | null>(null);
+    const [exportStatus, setExportStatus] = useState("");
     const [error, setError] = useState("");
 
     const load = async () => {
@@ -31,19 +32,46 @@ export function AdminAuditPage() {
 
     const onExport = async (format: "json" | "csv") => {
         try {
-            const payload = await exportAuditLogs(format);
-            const blob = new Blob([payload], { type: format === "json" ? "application/json" : "text/csv" });
+            setExportStatus("Export job requested...");
+            const created = await createAuditExportJob({
+                format,
+                from_utc: fromUtc || undefined,
+                to_utc: toUtc || undefined,
+                row_limit: 1000,
+            });
+            let currentStatus = created.status;
+            let attempts = 0;
+            while ((currentStatus === "PENDING" || currentStatus === "RUNNING") && attempts < 20) {
+                await new Promise((resolve) => setTimeout(resolve, 1500));
+                const polled = await getAuditExportJob(created.job_id);
+                currentStatus = polled.status;
+                setExportStatus(`Export job status: ${currentStatus}`);
+                if (currentStatus === "FAILED") {
+                    throw new Error(polled.error_message ?? polled.error_code ?? "Export job failed");
+                }
+                if (currentStatus === "EXPIRED") {
+                    throw new Error("Export job expired before download");
+                }
+                attempts += 1;
+            }
+            if (currentStatus !== "DONE") {
+                throw new Error("Export job timeout. Please retry.");
+            }
+
+            const blob = await downloadAuditExportJob(created.job_id);
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
             link.download = `audit_export.${format}`;
             link.click();
             URL.revokeObjectURL(url);
+            setExportStatus("Export download completed.");
         } catch (caught) {
             const message = typeof caught === "object" && caught !== null && "message" in caught
                 ? String((caught as { message?: string }).message ?? "Failed to export logs")
                 : "Failed to export logs";
             setError(message);
+            setExportStatus("");
         }
     };
 
@@ -91,6 +119,7 @@ export function AdminAuditPage() {
                 <button onClick={() => void onExport("csv")}>Export CSV</button>
             </div>
             {error && <p className="error">{error}</p>}
+            {exportStatus && <p>{exportStatus}</p>}
             <table className="data-table">
                 <thead>
                     <tr>

@@ -1,108 +1,93 @@
-# CHATGPT SELF-CONTAINED BRIEFING (EN)
+﻿# CHATGPT SELF-CONTAINED BRIEFING (EN)
+
+- updated_at_kst: $kst
+- base_commit_hash: 79383ab
+- release_tag: 2026.02.21-phase2.1-pr1-pr3
+- branch: main
+- pr_number: N/A (local working tree)
+- handoff_docs_location: chatGPT/
+
+## 0) Change Summary (Added/Changed/Fixed/Removed, 10 lines)
+- Added: Notion CI auth preflight fail-closed script and workflow step.
+- Added: Async audit export job APIs (create/status/download) and DB spool schema.
+- Added: Scheduler lock self-healing janitor job and lock heartbeat/recovery fields.
+- Added: Ops runbooks for Notion gate, scheduler lock, and audit chain incidents.
+- Changed: API spec workbook to include async export endpoints and fallback note.
+- Changed: DB spec workbook with TB_AUDIT_EXPORT_JOB, TB_AUDIT_EXPORT_CHUNK, TB_SCHEDULER_LOCK.
+- Changed: UIUX OPS-002 sheet API/table references for async export flow.
+- Fixed: ExportStorage MyBatis mapper mis-detection causing export job FAILED.
+- Fixed: Audit export failure path now records both ops_event and udit_log.
+- Removed: scheduler/manual-only assumptions; self-healing path is now implemented.
 
 ## 1) Purpose
 This file is a path-independent handoff brief for ChatGPT (or any LLM assistant) that cannot access the repository directly.
-Use this as the single context packet before asking for planning, review, or implementation guidance.
-
-Latest sync note:
-- This brief is maintained under `chatGPT/` as the primary handoff location (AGENTS.md section 16.8).
+Use this as the single context packet before asking for plan/review/implementation guidance.
 
 ## 2) Project Snapshot
-- Project: `AI_Chatbot`
+- Project: AI_Chatbot
 - Domain: Customer-support AI assistant with grounded responses (RAG), strong security, and operational governance.
-- Current stage: Go-Live Gap Closure completed (production-readiness hardening applied).
-- Overall readiness: High (pre-production operational check level).
+- Current stage: Phase2.1 PR1~PR3 implementation completed in working tree.
+- Overall readiness: High (Go-Live gate mostly green; Notion MCP auth remains an external blocker).
 
-## 3) What Has Been Implemented
-### Auth and Session
-- JWT login/refresh/logout.
-- Refresh rotation with reuse detection.
-- Account lockout and rate-limit protections.
-- Session listing and revoke controls.
-- MFA (TOTP) flow for high-privilege roles (OPS/ADMIN).
+## 3) What Was Implemented in This Session
+### PR1 - Notion CI Token Ops
+- Added scripts/notion_ci_auth_preflight.py.
+- Updated .github/workflows/notion-zero-touch-sync.yml with preflight fail-closed gate.
+- Updated runbook: docs/ops/runbook_spec_notion_gate.md.
 
-### Authorization and RBAC
-- Server-side RBAC as final authority.
-- Permission staleness detection (`permission_version`) with forced re-auth behavior.
-- Admin permission updates guarded by approval workflow.
+### PR2 - Async Audit Export (DB Spool)
+- Added migration V7__audit_export_async_spool.sql.
+- Added service/jobs/storage abstraction:
+  - AuditExportJobService, AuditExportWorkerJob, AuditExportCleanupJob
+  - ExportStorage, DbExportStorage
+- Added APIs:
+  - POST /v1/admin/audit-logs/export-jobs
+  - GET /v1/admin/audit-logs/export-jobs/{job_id}
+  - GET /v1/admin/audit-logs/export-jobs/{job_id}/download
+- Updated AdminAudit frontend page to async create/poll/download flow.
 
-### Ops/Admin Capabilities
-- Ops dashboard (summary + series).
-- Audit log query, diff, export controls.
-- Audit chain integrity verification endpoint and operational handling.
-- Immediate block actions for account/IP level controls.
+### PR3 - Scheduler Self-Healing
+- Added migration V8__scheduler_lock_self_healing.sql.
+- Extended scheduler lock service/repository/mapper with heartbeat + stale recovery.
+- Added SchedulerLockJanitorJob.
+- Updated runbook: docs/ops/runbook_scheduler_lock.md.
 
-### Operational Hardening
-- Append-only ops event model.
-- UTC-based hourly metrics with idempotent aggregation.
-- Scheduler lock pattern for multi-instance safety.
-- Incident runbooks for scheduler lock, audit chain integrity, and spec/notion sync gate.
+## 4) Non-Negotiable Locks
+1. ROLE taxonomy fixed: AGENT, CUSTOMER, ADMIN, OPS, SYSTEM.
+2. Manager/System Admin are ADMIN internal levels, not roles.
+3. Error payload shape fixed: error_code, message, 	race_id, details.
+4. Key security code semantics fixed:
+   - stale permission -> 401 AUTH_STALE_PERMISSION
+   - lockout -> 429 AUTH_LOCKED
+   - rate-limit -> 429 AUTH_RATE_LIMITED
+   - refresh reuse -> 409 AUTH_REFRESH_REUSE_DETECTED
+5. Hardening Gate cookie/CSRF/rotation/lockout/UTC policies must remain locked.
+6. If spec files change, Notion sync + metadata + spec_sync_report.md entry are mandatory.
 
-## 4) Non-Negotiable Policy Locks
-Do not violate these constraints in proposals or code suggestions:
+## 5) Validation Gate Summary
+| Gate | Status | Evidence |
+|---|---|---|
+| Backend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_backend_test_202603XX.txt |
+| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_frontend_test_202603XX.txt |
+| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_frontend_build_202603XX.txt |
+| Spec consistency | PASS (PASS=9 FAIL=0) | docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_spec_consistency_202603XX.txt |
+| UTF-8 strict decode | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_utf8_check_202603XX.txt |
+| Notion sync automation | BLOCKED (Auth required) | docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_sync_status_202603XX.txt |
 
-1. ROLE taxonomy is fixed: `AGENT`, `CUSTOMER`, `ADMIN`, `OPS`, `SYSTEM`.
-2. `Manager/System Admin` are not roles; they are `ADMIN` internal permission levels.
-3. Standard error payload shape is fixed:
-   - `error_code`, `message`, `trace_id`, `details`
-4. Security code semantics are fixed:
-   - stale permission -> `401 AUTH_STALE_PERMISSION`
-   - lockout -> `429 AUTH_LOCKED`
-   - rate-limit -> `429 AUTH_RATE_LIMITED`
-   - refresh reuse -> `409 AUTH_REFRESH_REUSE_DETECTED`
-5. Hardening gate policies (cookie/CSRF/rotation/lockout/UTC-bucket) must remain locked.
-6. If specs change, Notion sync + metadata update + sync report entry are mandatory.
+## 6) Remaining Risks Top5
+1. Notion MCP auth is not connected in this runtime; manual patch flow is currently required.
+2. Async export currently uses DB spool only; object storage migration is pending (Phase2.2).
+3. WebAuthn remains design-only (implementation pending).
+4. Scheduler self-healing alert routing (Pager/Slack) is not yet automated in CI/ops.
+5. Node local runtime is still v24 on this machine, while project target is Node 22.
 
-## 5) Current Validation Status (Latest Known)
-- Backend tests: PASS
-- Frontend tests: PASS
-- Frontend build: PASS
-- Spec consistency gate: PASS
-- UTF-8 integrity checks: PASS
-- Notion sync status for latest spec updates: DONE
+## 7) Next PRs Top5
+1. Notion MCP token lifecycle automation and self-check telemetry.
+2. Export storage adapter for object storage (signed URL + KMS).
+3. WebAuthn runtime endpoints and UX rollout.
+4. Scheduler lock recovery alert integration and SLO dashboards.
+5. Phase2.2 full regression pipeline hardening (nightly + release evidence pack).
 
-## 6) Remaining Risks (Phase2.1 Candidates)
-1. Notion MCP token/permission expiry handling in CI must be continuously monitored.
-2. Large audit export should be improved with async queue-based processing.
-3. WebAuthn is not yet introduced (TOTP-first phase currently).
-4. Scheduler lock auto self-healing is not implemented (runbook-based recovery currently).
-
-## 7) How to Use This Brief with ChatGPT
-When requesting output, always provide:
-1. The target task (exactly what to produce).
-2. The fixed constraints from section 4.
-3. Whether the request is plan-only or implementation-ready.
-4. The expected output format (e.g., checklist, PR plan, API review, runbook draft).
-
-## 8) Ready-to-Paste Prompt Block
-```text
-You are assisting with AI_Chatbot.
-Assume the repository is not directly accessible.
-Use only the context below as source of truth.
-
-Context summary:
-- Go-Live hardening is already applied.
-- Auth/session/RBAC/Ops-admin/audit-chain/scheduler-lock are implemented.
-- Validation gates are currently PASS.
-- Remaining risks are: Notion CI token ops, async audit export, WebAuthn not yet added, scheduler self-healing pending.
-
-Hard constraints:
-- ROLEs fixed: AGENT/CUSTOMER/ADMIN/OPS/SYSTEM
-- Manager/System Admin are ADMIN internal levels, not roles
-- Error format fixed: error_code/message/trace_id/details
-- Stale=401 AUTH_STALE_PERMISSION
-- Lockout=429 AUTH_LOCKED
-- Rate-limit=429 AUTH_RATE_LIMITED
-- Refresh reuse=409 AUTH_REFRESH_REUSE_DETECTED
-- Do not relax hardening gate policies.
-
-Task:
-[INSERT YOUR TASK HERE]
-
-Output format:
-[INSERT REQUIRED FORMAT HERE]
-```
-
-## 9) Release Marker
-- Latest release tag: `v2026.02.21-golive`
-- Tagged commit intent: Go-Live gap closure + manuals + ChatGPT handoff docs alignment.
+## 8) SSOT Conflict Rule
+- If report/plan/evidence conflicts, prioritize latest rtifacts/* and spec_sync_report.md.
+- If mismatch remains, document an explicit addendum with rationale.

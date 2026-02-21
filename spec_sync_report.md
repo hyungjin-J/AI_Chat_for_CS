@@ -218,3 +218,50 @@
 - 참고 아티팩트:
   - `docs/review/mvp_verification_pack/artifacts/golive_notion_sync_status.txt`
   - `docs/review/mvp_verification_pack/artifacts/golive_notion_manual_sync_patch.md` (fallback 문서, 기록 보존)
+
+## 11) 이번 세션(2026-02-21, Phase2.1 PR1~PR3) 스펙 변경 및 동기화 기록
+- 기준 문서: `docs/review/plans/202603XX_phase2_1_ops_maturity_plan.md`
+- 기준 커밋: `79383ab` (working tree)
+- 기준 시각(Asia/Seoul): `2026-02-21 22:58 +09:00`
+- 변경된 스펙 파일:
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+  - `docs/references/CS_AI_CHATBOT_DB.xlsx`
+  - `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+
+### 11.1 `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+- Notion URL: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+- 변경 내용:
+  - Async audit export API 3종 추가
+    - `POST /v1/admin/audit-logs/export-jobs`
+    - `GET /v1/admin/audit-logs/export-jobs/{job_id}`
+    - `GET /v1/admin/audit-logs/export-jobs/{job_id}/download`
+  - Legacy sync export(`GET /v1/admin/audit-logs/export`)를 fallback-only 정책으로 명시
+  - ROLE taxonomy 고정 + `access_level` 표현 규칙 유지
+
+### 11.2 `docs/references/CS_AI_CHATBOT_DB.xlsx`
+- Notion URL: https://www.notion.so/2ed405a3a720812180d9d508b77f31a4
+- 변경 내용:
+  - 신규 테이블 시트 추가:
+    - `TB_AUDIT_EXPORT_JOB`
+    - `TB_AUDIT_EXPORT_CHUNK`
+    - `TB_SCHEDULER_LOCK`
+  - 목차(`목차` 시트) 총 테이블 수/누락 시트 인덱스 최신화
+  - V7/V8(Async export spool + scheduler self-healing) 스키마 반영
+
+### 11.3 `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+- Notion URL: https://www.notion.so/UI-UX-2ee405a3a72080a58c93d967ef0f2444
+- 변경 내용:
+  - `17_OPS002_감사로그즉시조치` 시트 API 목록에 async export-jobs 경로 반영
+  - 사용 테이블에 `TB_AUDIT_EXPORT_JOB`, `TB_AUDIT_EXPORT_CHUNK`, `TB_SCHEDULER_LOCK` 반영
+
+### 11.4 검증 결과
+- `python scripts/spec_consistency_check.py` => `PASS=9 FAIL=0`
+- 증적: `docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_spec_consistency_202603XX.txt`
+
+### 11.5 Notion 동기화 상태
+- 자동 동기화(MCP): **BLOCKED**
+  - 사유: `Auth required` (Notion MCP 인증 미연결)
+- 수동 반영 패치 문서 생성:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_manual_sync_patch_202603XX.md`
+- 상태 기록:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_sync_status_202603XX.txt`
