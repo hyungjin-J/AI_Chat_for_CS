@@ -9,11 +9,34 @@
 - 예산/레이트리밋 가드
 
 ## 1) 현재 상태
-- MVP 상태: **Demo Ready 유지 + Phase2.1 운영 게이트 반영**
+- MVP 상태: **Auth/RBAC/Ops-Admin 운영형 베이스라인 + Phase2 P0 보강 반영 완료(2026-02-21)**
 - 상태 진실원천(SSOT): `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 - 검증팩 현재 포인터: `docs/review/mvp_verification_pack/CURRENT.md`
 
-## 1-1) 이번 변경 요약 (2026-02-20)
+## 1-1) 이번 변경 요약 (2026-02-21, Phase2 P0)
+- 인증/세션 보강:
+  - OPS/ADMIN MFA(TOTP + recovery code) 경로 추가
+  - 내 세션 목록 조회/개별 revoke/다른 세션 일괄 revoke 지원
+  - refresh rotation/reuse 탐지, stale permission 401 차단 정책 유지
+- RBAC/감사 보강:
+  - RBAC matrix 변경을 2인 승인 워크플로우(PENDING -> APPROVED 2인 -> APPLY)로 전환
+  - 감사로그 hash chain(tenant 단위) + JSON/CSV export(권한/범위 제한) 추가
+- 운영 안정성 보강:
+  - UTC 기준 스케줄러 분산락(`tb_scheduler_lock`) 도입
+  - retention/partition baseline(job + 정책 테이블) 추가
+  - CI 분리 게이트 추가:
+    - `.github/workflows/pr-smoke-contract.yml`
+    - `.github/workflows/release-nightly-full.yml`
+- 테스트/증적:
+  - Backend: `./gradlew.bat test --no-daemon` PASS
+  - Frontend: `npm run test:run && npm run build` PASS
+  - 증적 파일:
+    - `docs/review/mvp_verification_pack/artifacts/phase2_backend_gradle_test_output_202603XX.txt`
+    - `docs/review/mvp_verification_pack/artifacts/phase2_frontend_test_output_202603XX.txt`
+    - `docs/review/mvp_verification_pack/artifacts/phase2_frontend_build_output_202603XX.txt`
+    - `docs/review/mvp_verification_pack/artifacts/phase2_utf8_check_202603XX.txt`
+
+## 1-2) 이전 주요 변경 요약 (2026-02-20)
 - RAG 파이프라인 고도화:
   - Contextual Retrieval + Summary-first Retrieval + Hybrid Search(RRF) 경로 추가
   - 근거 부족/계약 실패 시 fail-closed(`safe_response` 또는 표준 에러) 유지
@@ -28,7 +51,7 @@
   - `./gradlew test` 통과
   - RRF 결정성, evidence threshold, RAG API 계약 테스트 추가
 
-## 1-2) 현재 주요 맹점 / 후속 우선순위
+## 1-3) 현재 주요 맹점 / 후속 우선순위
 - Hybrid Search 엔진 연동 수준:
   - 현재 구조/계약/로깅/안전응답은 반영되었으나, BM25/벡터는 데모 점수화 경로가 포함됨
   - 운영용 OpenSearch/pgvector 실쿼리(인덱스 운영/성능 튜닝)로 교체/고도화 필요
@@ -38,6 +61,9 @@
 - Retrieve/Answer 비동기 처리:
   - 현재는 요청 수락 후 즉시 처리 경로 중심
   - 대량 트래픽 대비 큐잉/워커 분리, 재시도/보상 트랜잭션 정책 보강 권장
+- Spec 정합성:
+  - `python scripts/spec_consistency_check.py` 기준 `role_standard` 1건(`PUBLIC`, `AUTHENTICATED`) 잔존
+  - 스펙 정리 시 Notion 동기화 + `spec_sync_report.md` 동시 갱신 필요
 - Notion 첨부:
   - MCP 경로에서 파일 바이너리 첨부 자동화 제약이 있어 메타/본문 동기화 중심으로 운영 중
 
@@ -82,6 +108,9 @@ powershell -ExecutionPolicy Bypass -File scripts/generate_metrics_report.ps1
 
 ## 4) 주요 문서
 - 구현 리뷰: `docs/MVP_IMPLEMENTATION_REVIEW_PACK.md`
+- Phase2 계획(SSOT): `docs/review/plans/202603XX_production_readiness_phase2_plan.md`
+- 누적 종합 보고서(최신): `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md`
+- 20260221 기준 스냅샷 보고서: `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_20260221.md`
 - 검증 요약: `docs/review/mvp_verification_pack/00_EXEC_SUMMARY.md`
 - 테스트 결과(SSOT): `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 - 아티팩트 요약: `docs/review/mvp_verification_pack/06_ARTIFACT_SUMMARY_FOR_CROSS_CHECK.md`
