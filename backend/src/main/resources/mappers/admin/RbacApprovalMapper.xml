@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.admin.domain.mapper.RbacApprovalMapper">
+
+    <resultMap id="RbacChangeRequestMap" type="com.aichatbot.admin.infrastructure.RbacChangeRequestRecord">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="resource_key" javaType="java.lang.String"/>
+            <arg column="role_code" javaType="java.lang.String"/>
+            <arg column="admin_level" javaType="java.lang.String"/>
+            <arg column="allowed" javaType="java.lang.Boolean"/>
+            <arg column="status" javaType="java.lang.String"/>
+            <arg column="requested_by" javaType="java.util.UUID"/>
+            <arg column="reason" javaType="java.lang.String"/>
+            <arg column="applied_at" javaType="java.time.Instant"/>
+            <arg column="created_at" javaType="java.time.Instant"/>
+            <arg column="updated_at" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insertChangeRequest">
+        INSERT INTO tb_rbac_change_request(
+            id,
+            tenant_id,
+            resource_key,
+            role_code,
+            admin_level,
+            allowed,
+            status,
+            requested_by,
+            reason,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{resourceKey},
+            #{roleCode},
+            #{adminLevel},
+            #{allowed},
+            #{status},
+            #{requestedBy},
+            #{reason},
+            #{createdAt},
+            #{createdAt}
+        )
+    </insert>
+
+    <select id="findChangeRequestById" resultMap="RbacChangeRequestMap">
+        SELECT id,
+               tenant_id,
+               resource_key,
+               role_code,
+               admin_level,
+               allowed,
+               status,
+               requested_by,
+               reason,
+               applied_at,
+               created_at,
+               updated_at
+        FROM tb_rbac_change_request
+        WHERE tenant_id = #{tenantId}
+          AND id = #{requestId}
+    </select>
+
+    <select id="listChangeRequests" resultMap="RbacChangeRequestMap">
+        SELECT id,
+               tenant_id,
+               resource_key,
+               role_code,
+               admin_level,
+               allowed,
+               status,
+               requested_by,
+               reason,
+               applied_at,
+               created_at,
+               updated_at
+        FROM tb_rbac_change_request
+        WHERE tenant_id = #{tenantId}
+          <if test="status != null and status != ''">
+              AND status = #{status}
+          </if>
+        ORDER BY created_at DESC
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
+    <insert id="insertApproval">
+        INSERT INTO tb_rbac_change_approval(
+            id,
+            request_id,
+            tenant_id,
+            approver_user_id,
+            decision,
+            comment,
+            decided_at
+        )
+        VALUES (
+            #{id},
+            #{requestId},
+            #{tenantId},
+            #{approverUserId},
+            #{decision},
+            #{comment},
+            #{decidedAt}
+        )
+    </insert>
+
+    <select id="countApprovals" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT approver_user_id)
+        FROM tb_rbac_change_approval
+        WHERE request_id = #{requestId}
+          AND decision = #{decision}
+    </select>
+
+    <update id="updateChangeRequestStatus">
+        UPDATE tb_rbac_change_request
+        SET status = #{status},
+            applied_at = #{appliedAt},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{requestId}
+    </update>
+</mapper>

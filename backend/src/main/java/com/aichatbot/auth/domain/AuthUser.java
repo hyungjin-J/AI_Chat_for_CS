@@ -1,5 +1,6 @@
 package com.aichatbot.auth.domain;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,6 +10,11 @@ public record AuthUser(
     String tenantKey,
     String loginId,
     String displayName,
-    List<String> roles
+    List<String> roles,
+    long permissionVersion,
+    String adminLevel,
+    boolean mfaEnabled,
+    int failedLoginCount,
+    Instant lockedUntil
 ) {
 }

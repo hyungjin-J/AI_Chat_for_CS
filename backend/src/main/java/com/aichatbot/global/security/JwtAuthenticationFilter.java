@@ -60,6 +60,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 writeForbiddenTenant(response);
                 return;
             }
+            if (!authService.isPermissionVersionCurrent(principal)) {
+                writeUnauthorized(
+                    response,
+                    "AUTH_STALE_PERMISSION",
+                    List.of("permission_version_stale")
+                );
+                return;
+            }
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 principal,
@@ -77,14 +85,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void writeUnauthorized(HttpServletResponse response) throws IOException {
+        writeUnauthorized(response, "SEC-001-401", List.of("invalid_or_expired_token"));
+    }
+
+    private void writeUnauthorized(HttpServletResponse response, String errorCode, List<String> details) throws IOException {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
         ApiErrorResponse body = new ApiErrorResponse(
-            "SEC-001-401",
-            ErrorCatalog.messageOf("SEC-001-401"),
+            errorCode,
+            ErrorCatalog.messageOf(errorCode),
             TraceContext.getTraceId(),
-            List.of("invalid_or_expired_token")
+            details
         );
         response.getWriter().write(objectMapper.writeValueAsString(body));
     }

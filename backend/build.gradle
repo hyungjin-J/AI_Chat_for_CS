@@ -50,6 +50,7 @@ tasks.register('lintUuidMapperParams', Exec) {
 tasks.named('test') {
 	dependsOn tasks.named('lintUuidMapperParams')
 	useJUnitPlatform()
+	systemProperty 'app.auth.rate-limit-per-minute', '100000'
 }
 
 tasks.named('check') {

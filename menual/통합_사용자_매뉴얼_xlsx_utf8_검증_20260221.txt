@@ -1,0 +1,25 @@
+UTF-8 Validation Report for XLSX Reference
+Target: C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\menual\에이아이챗봇_통합_사용자_참조시트_20260221.xlsx
+Validation: strict UTF-8 decode for internal XML entries
+
+- docProps/app.xml | bytes=205 | decode=PASS | decl=encoding_unspecified
+- docProps/core.xml | bytes=555 | decode=PASS | decl=encoding_unspecified
+- xl/theme/theme1.xml | bytes=10140 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet1.xml | bytes=1976 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet2.xml | bytes=10590 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet3.xml | bytes=4670 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet4.xml | bytes=5248 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet5.xml | bytes=3575 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet6.xml | bytes=4812 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet7.xml | bytes=3010 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet8.xml | bytes=3411 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet9.xml | bytes=3282 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet10.xml | bytes=4178 | decode=PASS | decl=encoding_unspecified
+- xl/worksheets/sheet11.xml | bytes=1424 | decode=PASS | decl=encoding_unspecified
+- xl/styles.xml | bytes=3237 | decode=PASS | decl=encoding_unspecified
+- xl/workbook.xml | bytes=2126 | decode=PASS | decl=encoding_unspecified
+- [Content_Types].xml | bytes=2337 | decode=PASS | decl=encoding_unspecified
+
+XML entries total: 17
+UTF-8 strict decode pass: 17/17
+Overall result: PASS

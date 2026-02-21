@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.admin.domain.mapper.RbacMatrixMapper">
+
+    <resultMap id="RbacMatrixEntryMap" type="com.aichatbot.admin.infrastructure.RbacMatrixEntry">
+        <id property="id" column="id" javaType="java.util.UUID"/>
+        <result property="tenantId" column="tenant_id" javaType="java.util.UUID"/>
+        <result property="resourceKey" column="resource_key" javaType="java.lang.String"/>
+        <result property="roleCode" column="role_code" javaType="java.lang.String"/>
+        <result property="adminLevel" column="admin_level" javaType="java.lang.String"/>
+        <result property="allowed" column="allowed" javaType="boolean"/>
+        <result property="permissionVersion" column="permission_version" javaType="long"/>
+        <result property="updatedBy" column="updated_by" javaType="java.util.UUID"/>
+        <result property="updatedAt" column="updated_at" javaType="java.time.Instant"/>
+    </resultMap>
+
+    <update id="updateMatrix">
+        UPDATE tb_rbac_matrix
+        SET allowed = #{allowed},
+            permission_version = #{permissionVersion},
+            updated_by = #{updatedBy},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND resource_key = #{resourceKey}
+          AND role_code = #{roleCode}
+          AND admin_level = #{adminLevel}
+    </update>
+
+    <insert id="insertMatrix">
+        INSERT INTO tb_rbac_matrix(
+            id,
+            tenant_id,
+            resource_key,
+            role_code,
+            admin_level,
+            allowed,
+            permission_version,
+            updated_by,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{resourceKey},
+            #{roleCode},
+            #{adminLevel},
+            #{allowed},
+            #{permissionVersion},
+            #{updatedBy},
+            #{updatedAt}
+        )
+    </insert>
+
+    <select id="findOne" resultMap="RbacMatrixEntryMap">
+        SELECT id,
+               tenant_id,
+               resource_key,
+               role_code,
+               admin_level,
+               allowed,
+               permission_version,
+               updated_by,
+               updated_at
+        FROM tb_rbac_matrix
+        WHERE tenant_id = #{tenantId}
+          AND resource_key = #{resourceKey}
+          AND role_code = #{roleCode}
+          AND admin_level = #{adminLevel}
+    </select>
+</mapper>

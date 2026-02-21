@@ -1,0 +1,28 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+
+> Task :compileTestJava
+C:\Users\hjjmj\OneDrive\¹ÙÅÁ È­¸é\AI_Chatbot\backend\src\test\java\com\aichatbot\message\presentation\SseConcurrencyLimitContractTest.java:50: warning: [removal] SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+    @SpyBean
+     ^
+1 warning
+
+> Task :lintUuidMapperParams
+[uuid-lint] PASS: checked_mapper_files=8 violations=0
+[uuid-lint] allowlist=['login_id', 'loginid']
+
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-02-21T03:21:27.738+09:00  INFO 22856 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-02-21T03:21:27.740+09:00  INFO 22856 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+> Task :test
+
+[Incubating] Problems report is available at: file:///C:/Users/hjjmj/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/AI_Chatbot/backend/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 30s
+5 actionable tasks: 3 executed, 2 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.0/userguide/configuration_cache_enabling.html

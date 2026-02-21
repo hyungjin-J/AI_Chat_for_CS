@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.auth.domain.mapper.AuthMfaMapper">
+
+    <resultMap id="UserMfaRecordMap" type="com.aichatbot.auth.domain.UserMfaRecord">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="user_id" javaType="java.util.UUID"/>
+            <arg column="mfa_type" javaType="java.lang.String"/>
+            <arg column="secret_ciphertext" javaType="java.lang.String"/>
+            <arg column="enabled" javaType="java.lang.Boolean"/>
+            <arg column="enforced" javaType="java.lang.Boolean"/>
+            <arg column="verified_at" javaType="java.time.Instant"/>
+            <arg column="updated_at" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="MfaChallengeRecordMap" type="com.aichatbot.auth.domain.MfaChallengeRecord">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="user_id" javaType="java.util.UUID"/>
+            <arg column="challenge_type" javaType="java.lang.String"/>
+            <arg column="totp_secret_ciphertext" javaType="java.lang.String"/>
+            <arg column="expires_at" javaType="java.time.Instant"/>
+            <arg column="consumed_at" javaType="java.time.Instant"/>
+            <arg column="attempt_count" javaType="java.lang.Integer"/>
+            <arg column="locked_until" javaType="java.time.Instant"/>
+            <arg column="trace_id" javaType="java.util.UUID"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findUserMfaByUserId" resultMap="UserMfaRecordMap">
+        SELECT id,
+               tenant_id,
+               user_id,
+               mfa_type,
+               secret_ciphertext,
+               enabled,
+               enforced,
+               verified_at,
+               updated_at
+        FROM tb_user_mfa
+        WHERE user_id = #{userId}
+    </select>
+
+    <update id="upsertUserMfa">
+        UPDATE tb_user_mfa
+        SET mfa_type = #{mfaType},
+            secret_ciphertext = #{secretCiphertext},
+            enabled = #{enabled},
+            enforced = #{enforced},
+            verified_at = #{verifiedAt},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND user_id = #{userId}
+    </update>
+
+    <insert id="insertUserMfa">
+        INSERT INTO tb_user_mfa(
+            id,
+            tenant_id,
+            user_id,
+            mfa_type,
+            secret_ciphertext,
+            enabled,
+            enforced,
+            verified_at,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{userId},
+            #{mfaType},
+            #{secretCiphertext},
+            #{enabled},
+            #{enforced},
+            #{verifiedAt},
+            CURRENT_TIMESTAMP,
+            #{updatedAt}
+        )
+    </insert>
+
+    <delete id="deleteRecoveryCodes">
+        DELETE FROM tb_user_mfa_recovery_code
+        WHERE tenant_id = #{tenantId}
+          AND user_id = #{userId}
+    </delete>
+
+    <insert id="insertRecoveryCode">
+        INSERT INTO tb_user_mfa_recovery_code(
+            id,
+            tenant_id,
+            user_id,
+            code_hash,
+            expires_at,
+            created_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{userId},
+            #{codeHash},
+            #{expiresAt},
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <update id="consumeRecoveryCode">
+        UPDATE tb_user_mfa_recovery_code
+        SET used_at = #{usedAt}
+        WHERE tenant_id = #{tenantId}
+          AND user_id = #{userId}
+          AND code_hash = #{codeHash}
+          AND used_at IS NULL
+          AND expires_at >= CURRENT_TIMESTAMP
+    </update>
+
+    <insert id="insertMfaChallenge">
+        INSERT INTO tb_auth_mfa_challenge(
+            id,
+            tenant_id,
+            user_id,
+            challenge_type,
+            expires_at,
+            trace_id,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{userId},
+            #{challengeType},
+            #{expiresAt},
+            #{traceId},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <select id="findMfaChallengeById" resultMap="MfaChallengeRecordMap">
+        SELECT id,
+               tenant_id,
+               user_id,
+               challenge_type,
+               totp_secret_ciphertext,
+               expires_at,
+               consumed_at,
+               attempt_count,
+               locked_until,
+               trace_id
+        FROM tb_auth_mfa_challenge
+        WHERE tenant_id = #{tenantId}
+          AND id = #{challengeId}
+    </select>
+
+    <update id="setMfaChallengeSecret">
+        UPDATE tb_auth_mfa_challenge
+        SET totp_secret_ciphertext = #{ciphertext},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{challengeId}
+          AND consumed_at IS NULL
+    </update>
+
+    <update id="incrementChallengeAttempt">
+        UPDATE tb_auth_mfa_challenge
+        SET attempt_count = attempt_count + 1,
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{challengeId}
+          AND consumed_at IS NULL
+    </update>
+
+    <update id="lockChallenge">
+        UPDATE tb_auth_mfa_challenge
+        SET locked_until = #{lockedUntil},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{challengeId}
+          AND consumed_at IS NULL
+    </update>
+
+    <update id="consumeChallenge">
+        UPDATE tb_auth_mfa_challenge
+        SET consumed_at = #{consumedAt},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE tenant_id = #{tenantId}
+          AND id = #{challengeId}
+          AND consumed_at IS NULL
+    </update>
+
+    <delete id="cleanupExpiredChallenges">
+        DELETE FROM tb_auth_mfa_challenge
+        WHERE consumed_at IS NOT NULL
+           OR expires_at &lt; #{cutoff}
+    </delete>
+
+    <select id="listRecoveryCodeHashes" resultType="java.lang.String">
+        SELECT code_hash
+        FROM tb_user_mfa_recovery_code
+        WHERE tenant_id = #{tenantId}
+          AND user_id = #{userId}
+          AND used_at IS NULL
+          AND expires_at >= #{nowUtc}
+        ORDER BY created_at ASC
+    </select>
+
+</mapper>

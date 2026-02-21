@@ -2,7 +2,10 @@ package com.aichatbot.global.observability;
 
 import com.aichatbot.llm.application.LlmService;
 import com.aichatbot.message.application.MessageView;
+import com.aichatbot.message.application.StreamEventView;
 import com.aichatbot.message.infrastructure.MessageRepository;
+import com.aichatbot.message.infrastructure.StreamEventRepository;
+import com.aichatbot.rag.infrastructure.RagSearchLogRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -51,6 +54,12 @@ class TraceIdContractTest {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private StreamEventRepository streamEventRepository;
+
+    @Autowired
+    private RagSearchLogRepository ragSearchLogRepository;
 
     @SpyBean
     private LlmService llmService;
@@ -120,10 +129,13 @@ class TraceIdContractTest {
         String messageId = objectMapper.readTree(messageResult.getResponse().getContentAsString()).get("id").asText();
         String streamBody = stream(principal.accessToken(), sessionId, messageId, traceId);
 
+        JsonNode safePayload = firstEventPayload(streamBody, "safe_response");
         JsonNode errorPayload = firstEventPayload(streamBody, "error");
         JsonNode donePayload = firstEventPayload(streamBody, "done");
+        assertThat(safePayload.path("trace_id").asText()).isEqualTo(traceId);
         assertThat(errorPayload.path("trace_id").asText()).isEqualTo(traceId);
         assertThat(donePayload.path("trace_id").asText()).isEqualTo(traceId);
+        assertAllEventPayloadTraceId(streamBody, traceId);
     }
 
     @Test
@@ -132,7 +144,7 @@ class TraceIdContractTest {
         String sessionId = createSession(principal.accessToken(), "60000000-0000-4000-8000-000000000001");
         String traceId = "60000000-0000-4000-8000-000000000002";
 
-        postMessage(principal.accessToken(), sessionId, "refund policy", traceId);
+        String answerMessageId = postMessage(principal.accessToken(), sessionId, "refund policy", traceId);
 
         List<MessageView> messages = messageRepository.findByConversation(
             UUID.fromString(principal.tenantId()),
@@ -140,6 +152,23 @@ class TraceIdContractTest {
         );
         assertThat(messages).isNotEmpty();
         assertThat(messages).allMatch(message -> traceId.equals(message.traceId()));
+
+        String ragTraceId = ragSearchLogRepository.findLatestTraceIdByConversation(
+            UUID.fromString(principal.tenantId()),
+            UUID.fromString(sessionId)
+        );
+        assertThat(ragTraceId).isEqualTo(traceId);
+
+        List<StreamEventView> streamEvents = streamEventRepository.findByMessageFromSeq(
+            UUID.fromString(principal.tenantId()),
+            UUID.fromString(answerMessageId),
+            0
+        );
+        assertThat(streamEvents).isNotEmpty();
+        for (StreamEventView streamEvent : streamEvents) {
+            JsonNode payload = parseEventData(streamEvent.payloadJson());
+            assertThat(payload.path("trace_id").asText()).isEqualTo(traceId);
+        }
     }
 
     private JsonNode firstEventPayload(String body, String eventName) throws Exception {
@@ -182,6 +211,23 @@ class TraceIdContractTest {
             events.add(new SseEvent(currentEvent, currentData.toString()));
         }
         return events;
+    }
+
+    private void assertAllEventPayloadTraceId(String streamBody, String expectedTraceId) throws Exception {
+        for (SseEvent event : parseEvents(streamBody)) {
+            JsonNode payload = parseEventData(event.data());
+            assertThat(payload.path("trace_id").asText())
+                .as("trace_id missing for event_type=%s", event.event())
+                .isEqualTo(expectedTraceId);
+        }
+    }
+
+    private JsonNode parseEventData(String raw) throws Exception {
+        JsonNode parsed = objectMapper.readTree(raw);
+        if (parsed.isTextual()) {
+            return objectMapper.readTree(parsed.asText());
+        }
+        return parsed;
     }
 
     private LoginPrincipal login(String loginId, String password, String traceId) throws Exception {

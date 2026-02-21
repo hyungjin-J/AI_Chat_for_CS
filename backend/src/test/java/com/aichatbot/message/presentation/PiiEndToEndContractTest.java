@@ -11,6 +11,7 @@ import com.aichatbot.rag.infrastructure.CitationRepository;
 import com.aichatbot.rag.infrastructure.RagSearchLogRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.reset;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -114,6 +116,8 @@ class PiiEndToEndContractTest {
                 + "address SampleCity TestRoad 123, order ORD-99887766";
             String postTrace = "40000000-0000-4000-8000-000000000002";
             String answerMessageId = postMessage(principal.accessToken(), sessionId, piiInput, postTrace);
+            String streamTrace = "40000000-0000-4000-8000-000000000003";
+            String streamBody = stream(principal.accessToken(), sessionId, answerMessageId, streamTrace);
 
             String capturedPrompt = promptCapture.get();
             assertThat(capturedPrompt).isNotBlank();
@@ -147,6 +151,19 @@ class PiiEndToEndContractTest {
                 .map(ILoggingEvent::getFormattedMessage)
                 .reduce("", (left, right) -> left + "\n" + right);
             assertNoRawPii(combinedLogs);
+            assertNoRawPii(streamBody);
+            assertThat(streamBody).contains("event:done");
+
+            for (SseEvent event : parseEvents(streamBody)) {
+                JsonNode payload = parsePayload(event.data());
+                if ("token".equals(event.event())) {
+                    assertNoRawPii(payload.path("text").asText());
+                } else if ("citation".equals(event.event())) {
+                    assertNoRawPii(payload.path("excerpt_masked").asText());
+                } else {
+                    assertNoRawPii(payload.toString());
+                }
+            }
         } finally {
             rootLogger.detachAppender(appender);
             appender.stop();
@@ -222,6 +239,56 @@ class PiiEndToEndContractTest {
             .andReturn();
 
         return objectMapper.readTree(result.getResponse().getContentAsString()).get("id").asText();
+    }
+
+    private String stream(String accessToken, String sessionId, String messageId, String traceId) throws Exception {
+        MvcResult result = mockMvc.perform(get("/v1/sessions/{session_id}/messages/{message_id}/stream", sessionId, messageId)
+                .header("Authorization", "Bearer " + accessToken)
+                .header("X-Trace-Id", traceId)
+                .header("X-Tenant-Key", "demo-tenant"))
+            .andExpect(status().isOk())
+            .andReturn();
+        return result.getResponse().getContentAsString();
+    }
+
+    private List<SseEvent> parseEvents(String body) {
+        List<SseEvent> events = new ArrayList<>();
+        String currentEvent = null;
+        StringBuilder currentData = new StringBuilder();
+
+        for (String rawLine : body.split("\\R")) {
+            String line = rawLine.trim();
+            if (line.startsWith("event:")) {
+                currentEvent = line.substring("event:".length()).trim();
+            } else if (line.startsWith("data:")) {
+                if (currentData.length() > 0) {
+                    currentData.append('\n');
+                }
+                currentData.append(line.substring("data:".length()).trim());
+            } else if (line.isEmpty()) {
+                if (currentEvent != null && currentData.length() > 0) {
+                    events.add(new SseEvent(currentEvent, currentData.toString()));
+                }
+                currentEvent = null;
+                currentData = new StringBuilder();
+            }
+        }
+
+        if (currentEvent != null && currentData.length() > 0) {
+            events.add(new SseEvent(currentEvent, currentData.toString()));
+        }
+        return events;
+    }
+
+    private JsonNode parsePayload(String rawData) throws Exception {
+        JsonNode node = objectMapper.readTree(rawData);
+        if (node.isTextual()) {
+            return objectMapper.readTree(node.asText());
+        }
+        return node;
+    }
+
+    private record SseEvent(String event, String data) {
     }
 
     private record LoginPrincipal(String accessToken, String tenantId) {

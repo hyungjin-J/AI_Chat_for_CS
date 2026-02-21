@@ -261,14 +261,14 @@ public class MessageGenerationService {
                     answerMessage.createdAt(),
                     eventSeq++,
                     "citation",
-                    toJson(Map.of(
+                    toJson(withTraceId(Map.of(
                         "message_id", answerMessage.id().toString(),
                         "chunk_id", chunkId.toString(),
                         "rank_no", citation.rankNo(),
                         "excerpt_masked", excerptMasked,
                         "citation_type", toolExecution.hasCitationChunk()
                             && toolExecution.citationChunkId().equals(chunkId.toString()) ? "TOOL_CITATION" : "RAG_CITATION"
-                    ))
+                    ), traceId))
                 );
             }
 
@@ -280,7 +280,7 @@ public class MessageGenerationService {
                     answerMessage.createdAt(),
                     eventSeq++,
                     "token",
-                    toJson(Map.of("text", chunk))
+                    toJson(withTraceId(Map.of("text", chunk), traceId))
                 );
             }
         } else {
@@ -428,6 +428,12 @@ public class MessageGenerationService {
         } catch (JsonProcessingException exception) {
             throw new IllegalStateException("stream_payload_serialization_failed", exception);
         }
+    }
+
+    private Map<String, Object> withTraceId(Map<String, Object> payload, String traceId) {
+        Map<String, Object> tracedPayload = new HashMap<>(payload);
+        tracedPayload.put("trace_id", traceId);
+        return tracedPayload;
     }
 
     private String resolvePrimaryRole() {

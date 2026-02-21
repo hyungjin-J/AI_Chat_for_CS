@@ -1,0 +1,21 @@
+UTF-8 Validation Report for DOCX Manual
+Target: C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\menual\에이아이챗봇_통합_사용자_매뉴얼_20260221.docx
+Validation: strict UTF-8 decode for internal XML entries
+
+- [Content_Types].xml | bytes=1788 | decode=PASS | decl=UTF-8
+- docProps/core.xml | bytes=721 | decode=PASS | decl=UTF-8
+- docProps/app.xml | bytes=1132 | decode=PASS | decl=UTF-8
+- word/document.xml | bytes=24914 | decode=PASS | decl=UTF-8
+- word/styles.xml | bytes=349550 | decode=PASS | decl=UTF-8
+- word/stylesWithEffects.xml | bytes=438131 | decode=PASS | decl=UTF-8
+- word/settings.xml | bytes=2535 | decode=PASS | decl=UTF-8
+- word/webSettings.xml | bytes=438 | decode=PASS | decl=UTF-8
+- word/fontTable.xml | bytes=2811 | decode=PASS | decl=UTF-8
+- word/theme/theme1.xml | bytes=10939 | decode=PASS | decl=UTF-8
+- customXml/item1.xml | bytes=262 | decode=PASS | decl=UTF-8
+- customXml/itemProps1.xml | bytes=354 | decode=PASS | decl=UTF-8
+- word/numbering.xml | bytes=5513 | decode=PASS | decl=UTF-8
+
+XML entries total: 13
+UTF-8 strict decode pass: 13/13
+Overall result: PASS

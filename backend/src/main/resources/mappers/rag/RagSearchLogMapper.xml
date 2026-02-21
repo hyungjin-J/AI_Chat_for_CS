@@ -32,4 +32,13 @@
         LIMIT 1
     </select>
 
+    <select id="findLatestTraceIdByConversation" resultType="java.lang.String">
+        SELECT CAST(trace_id AS VARCHAR)
+        FROM tb_rag_search_log
+        WHERE tenant_id = #{tenantId}
+          AND conversation_id = #{conversationId}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
 </mapper>

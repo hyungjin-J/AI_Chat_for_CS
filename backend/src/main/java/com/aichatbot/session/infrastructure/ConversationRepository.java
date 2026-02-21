@@ -1,6 +1,6 @@
 package com.aichatbot.session.infrastructure;
 
-import com.aichatbot.global.observability.TraceIdNormalizer;
+import com.aichatbot.global.observability.TraceGuard;
 import com.aichatbot.session.domain.mapper.ConversationMapper;
 import com.aichatbot.session.application.ConversationView;
 import java.util.Optional;
@@ -20,13 +20,15 @@ public class ConversationRepository {
     }
 
     public ConversationView create(UUID tenantId, String traceId) {
+        // Why: Conversation rows are root entities; missing trace_id would break downstream forensic tracing.
+        UUID requiredTraceId = UUID.fromString(TraceGuard.requireTraceId());
         UUID conversationId = UUID.randomUUID();
         conversationMapper.create(
             conversationId,
             tenantId,
             DEFAULT_CHANNEL_ID,
             DEFAULT_CUSTOMER_ID,
-            TraceIdNormalizer.toUuid(traceId)
+            requiredTraceId
         );
         return findById(tenantId, conversationId).orElseThrow();
     }

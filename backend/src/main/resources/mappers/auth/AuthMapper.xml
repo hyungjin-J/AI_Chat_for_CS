@@ -6,11 +6,44 @@
 
     <resultMap id="AuthUserProjectionMap" type="com.aichatbot.auth.domain.AuthUserProjection">
         <constructor>
-            <arg column="user_id" javaType="java.lang.String" name="userId"/>
-            <arg column="tenant_id" javaType="java.lang.String" name="tenantId"/>
-            <arg column="tenant_key" javaType="java.lang.String" name="tenantKey"/>
-            <arg column="login_id" javaType="java.lang.String" name="loginId"/>
-            <arg column="display_name" javaType="java.lang.String" name="displayName"/>
+            <arg column="user_id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="tenant_key" javaType="java.lang.String"/>
+            <arg column="login_id" javaType="java.lang.String"/>
+            <arg column="display_name" javaType="java.lang.String"/>
+            <arg column="permission_version" javaType="java.lang.Long"/>
+            <arg column="admin_level" javaType="java.lang.String"/>
+            <arg column="mfa_enabled" javaType="java.lang.Boolean"/>
+            <arg column="failed_login_count" javaType="java.lang.Integer"/>
+            <arg column="locked_until" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="AuthSessionOverviewMap" type="com.aichatbot.auth.domain.AuthSessionOverview">
+        <constructor>
+            <arg column="session_id" javaType="java.util.UUID"/>
+            <arg column="created_at" javaType="java.time.Instant"/>
+            <arg column="last_seen_at" javaType="java.time.Instant"/>
+            <arg column="expires_at" javaType="java.time.Instant"/>
+            <arg column="client_type" javaType="java.lang.String"/>
+            <arg column="device_name" javaType="java.lang.String"/>
+            <arg column="created_ip" javaType="java.lang.String"/>
+            <arg column="consumed_ip" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="AuthSessionRecordMap" type="com.aichatbot.auth.domain.AuthSessionRecord">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="user_id" javaType="java.util.UUID"/>
+            <arg column="session_family_id" javaType="java.util.UUID"/>
+            <arg column="session_token_hash" javaType="java.lang.String"/>
+            <arg column="refresh_jti_hash" javaType="java.lang.String"/>
+            <arg column="parent_refresh_jti_hash" javaType="java.lang.String"/>
+            <arg column="expires_at" javaType="java.time.Instant"/>
+            <arg column="consumed_at" javaType="java.time.Instant"/>
+            <arg column="revoked_at" javaType="java.time.Instant"/>
         </constructor>
     </resultMap>
 
@@ -19,9 +52,15 @@
                u.tenant_id AS tenant_id,
                t.tenant_key AS tenant_key,
                u.login_id AS login_id,
-               u.display_name AS display_name
+               u.display_name AS display_name,
+               u.permission_version AS permission_version,
+               u.admin_level AS admin_level,
+               COALESCE(um.enabled, FALSE) AS mfa_enabled,
+               u.failed_login_count AS failed_login_count,
+               u.locked_until AS locked_until
         FROM tb_user u
         JOIN tb_tenant t ON t.id = u.tenant_id
+        LEFT JOIN tb_user_mfa um ON um.tenant_id = u.tenant_id AND um.user_id = u.id
         WHERE t.tenant_key = #{tenantKey}
           AND t.status = 'active'
           AND u.login_id = #{loginId}
@@ -33,9 +72,15 @@
                u.tenant_id AS tenant_id,
                t.tenant_key AS tenant_key,
                u.login_id AS login_id,
-               u.display_name AS display_name
+               u.display_name AS display_name,
+               u.permission_version AS permission_version,
+               u.admin_level AS admin_level,
+               COALESCE(um.enabled, FALSE) AS mfa_enabled,
+               u.failed_login_count AS failed_login_count,
+               u.locked_until AS locked_until
         FROM tb_user u
         JOIN tb_tenant t ON t.id = u.tenant_id
+        LEFT JOIN tb_user_mfa um ON um.tenant_id = u.tenant_id AND um.user_id = u.id
         WHERE u.id = #{userId}
           AND t.status = 'active'
           AND u.status = 'active'
@@ -49,29 +94,168 @@
         ORDER BY r.role_code
     </select>
 
-    <insert id="saveAuthSession">
-        INSERT INTO tb_auth_session(id, tenant_id, user_id, session_token_hash, expires_at, created_at, updated_at)
+    <insert id="insertAuthSession">
+        INSERT INTO tb_auth_session(
+            id,
+            tenant_id,
+            user_id,
+            session_family_id,
+            session_token_hash,
+            refresh_jti_hash,
+            parent_refresh_jti_hash,
+            expires_at,
+            client_type,
+            created_ip,
+            trace_id,
+            created_at,
+            updated_at
+        )
         VALUES (
             #{id},
             #{tenantId},
             #{userId},
+            #{sessionFamilyId},
             #{tokenHash},
+            #{refreshJtiHash},
+            #{parentRefreshJtiHash},
             #{expiresAt},
+            #{clientType},
+            #{createdIp},
+            #{traceId},
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
         )
     </insert>
 
-    <select id="countValidSessionByTokenHash" resultType="java.lang.Integer">
-        SELECT COUNT(1)
+    <select id="findSessionByTokenHash" resultMap="AuthSessionRecordMap">
+        SELECT id,
+               tenant_id,
+               user_id,
+               session_family_id,
+               session_token_hash,
+               refresh_jti_hash,
+               parent_refresh_jti_hash,
+               expires_at,
+               consumed_at,
+               revoked_at
         FROM tb_auth_session
         WHERE session_token_hash = #{tokenHash}
-          AND expires_at >= CURRENT_TIMESTAMP
     </select>
 
-    <delete id="deleteSessionByTokenHash">
-        DELETE FROM tb_auth_session
+    <update id="consumeRefreshSessionByTokenHash">
+        UPDATE tb_auth_session
+        SET consumed_at = #{consumedAt},
+            consumed_ip = #{consumedIp},
+            last_seen_at = #{consumedAt},
+            updated_at = CURRENT_TIMESTAMP
         WHERE session_token_hash = #{tokenHash}
-    </delete>
+          AND consumed_at IS NULL
+          AND revoked_at IS NULL
+          AND expires_at >= CURRENT_TIMESTAMP
+    </update>
 
+    <update id="revokeSessionFamily">
+        UPDATE tb_auth_session
+        SET revoked_at = #{revokedAt},
+            revoked_reason = #{reason},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE session_family_id = #{sessionFamilyId}
+          AND revoked_at IS NULL
+    </update>
+
+    <update id="revokeSessionByTokenHash">
+        UPDATE tb_auth_session
+        SET revoked_at = #{revokedAt},
+            revoked_reason = #{reason},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE session_token_hash = #{tokenHash}
+          AND revoked_at IS NULL
+    </update>
+
+    <select id="findActiveSessionsByUser" resultMap="AuthSessionOverviewMap">
+        SELECT session_family_id AS session_id,
+               MIN(created_at) AS created_at,
+               MAX(COALESCE(last_seen_at, created_at)) AS last_seen_at,
+               MAX(expires_at) AS expires_at,
+               MAX(client_type) AS client_type,
+               MAX(device_name) AS device_name,
+               MAX(created_ip) AS created_ip,
+               MAX(consumed_ip) AS consumed_ip
+        FROM tb_auth_session
+        WHERE tenant_id = #{tenantId}
+          AND user_id = #{userId}
+          AND revoked_at IS NULL
+          AND expires_at >= #{nowUtc}
+        GROUP BY session_family_id
+        ORDER BY MAX(COALESCE(last_seen_at, created_at)) DESC
+    </select>
+
+    <update id="revokeSessionFamilyByUser">
+        UPDATE tb_auth_session
+        SET revoked_at = #{revokedAt},
+            revoked_reason = #{reason},
+            revoked_by_session_id = #{revokedBySessionId},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE tenant_id = #{tenantId}
+          AND user_id = #{userId}
+          AND session_family_id = #{sessionFamilyId}
+          AND revoked_at IS NULL
+    </update>
+
+    <update id="revokeOtherSessionFamiliesByUser">
+        UPDATE tb_auth_session
+        SET revoked_at = #{revokedAt},
+            revoked_reason = #{reason},
+            revoked_by_session_id = #{revokedBySessionId},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE tenant_id = #{tenantId}
+          AND user_id = #{userId}
+          AND session_family_id != #{currentSessionFamilyId}
+          AND revoked_at IS NULL
+    </update>
+
+    <update id="incrementFailedLogin">
+        UPDATE tb_user
+        SET failed_login_count = failed_login_count + 1,
+            last_failed_at = #{failedAt},
+            locked_until = CASE
+                WHEN failed_login_count + 1 >= #{lockoutThreshold} THEN #{lockUntil}
+                ELSE locked_until
+            END,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{userId}
+    </update>
+
+    <update id="resetFailedLogin">
+        UPDATE tb_user
+        SET failed_login_count = 0,
+            locked_until = NULL,
+            last_failed_at = NULL,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{userId}
+    </update>
+
+    <update id="clearExpiredLock">
+        UPDATE tb_user
+        SET failed_login_count = 0,
+            locked_until = NULL,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{userId}
+          AND locked_until IS NOT NULL
+          AND locked_until &lt;= CURRENT_TIMESTAMP
+    </update>
+
+    <update id="incrementPermissionVersionByTenant">
+        UPDATE tb_user
+        SET permission_version = permission_version + 1,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE tenant_id = #{tenantId}
+    </update>
+
+    <select id="findPermissionVersionByUserId" resultType="java.lang.Long">
+        SELECT permission_version
+        FROM tb_user
+        WHERE id = #{userId}
+          AND status = 'active'
+    </select>
 </mapper>

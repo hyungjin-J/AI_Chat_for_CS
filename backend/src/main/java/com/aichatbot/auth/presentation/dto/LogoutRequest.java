@@ -1,10 +1,16 @@
 package com.aichatbot.auth.presentation.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record LogoutRequest(
-    @NotBlank
+    @Size(max = 4096)
     String refreshToken,
-    String clientNonce
+    @Size(max = 60)
+    String clientType,
+    @Size(max = 120)
+    String clientNonce,
+    @Size(max = 200)
+    String reason
 ) {
 }
+

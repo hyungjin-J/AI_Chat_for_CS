@@ -37,6 +37,6 @@ public final class PrincipalUtils {
             .map(role -> role.startsWith("ROLE_") ? role.substring(5) : role)
             .collect(Collectors.toList());
 
-        return new UserPrincipal(userId, tenantId, userId, roles);
+        return new UserPrincipal(userId, tenantId, userId, roles, 1L, "MANAGER");
     }
 }

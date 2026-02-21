@@ -11,6 +11,7 @@ public class AppProperties {
     private final Answer answer = new Answer();
     private final Rag rag = new Rag();
     private final Budget budget = new Budget();
+    private final Auth auth = new Auth();
     private final Idempotency idempotency = new Idempotency();
     private final Llm llm = new Llm();
 
@@ -36,6 +37,10 @@ public class AppProperties {
 
     public Budget getBudget() {
         return budget;
+    }
+
+    public Auth getAuth() {
+        return auth;
     }
 
     public Idempotency getIdempotency() {
@@ -187,6 +192,200 @@ public class AppProperties {
 
         public void setSseHoldMs(long sseHoldMs) {
             this.sseHoldMs = sseHoldMs;
+        }
+    }
+
+    public static class Auth {
+        private int lockoutThreshold = 5;
+        private int lockoutMinutes = 15;
+        private int rateLimitPerMinute = 20;
+        private String rateLimitRedisKeyPrefix = "rl:auth:login:";
+        private String refreshCookieName = "refresh_token";
+        private String refreshCookiePath = "/v1/auth";
+        private String sameSite = "Lax";
+        private boolean refreshCookieSecure = false;
+        private boolean refreshBodyFallbackDevTest = true;
+        private boolean refreshBodyFallbackProd = false;
+        private java.util.List<String> refreshBodyFallbackProdClientTypes = java.util.List.of();
+        private java.util.List<String> csrfOriginAllowlist = java.util.List.of();
+        private java.util.List<String> csrfOriginMissingAllowClientTypes = java.util.List.of();
+        private String runtimeMode = "dev";
+        private boolean mfaEnforceOpsAdmin = false;
+        private int mfaChallengeTtlMinutes = 10;
+        private int mfaMaxAttempts = 5;
+        private int mfaLockMinutes = 5;
+        private int mfaRecoveryCodeCount = 10;
+        private int mfaRecoveryCodeTtlDays = 365;
+        private String mfaIssuer = "AI_Chatbot";
+
+        public int getLockoutThreshold() {
+            return lockoutThreshold;
+        }
+
+        public void setLockoutThreshold(int lockoutThreshold) {
+            this.lockoutThreshold = lockoutThreshold;
+        }
+
+        public int getLockoutMinutes() {
+            return lockoutMinutes;
+        }
+
+        public void setLockoutMinutes(int lockoutMinutes) {
+            this.lockoutMinutes = lockoutMinutes;
+        }
+
+        public int getRateLimitPerMinute() {
+            return rateLimitPerMinute;
+        }
+
+        public void setRateLimitPerMinute(int rateLimitPerMinute) {
+            this.rateLimitPerMinute = rateLimitPerMinute;
+        }
+
+        public String getRateLimitRedisKeyPrefix() {
+            return rateLimitRedisKeyPrefix;
+        }
+
+        public void setRateLimitRedisKeyPrefix(String rateLimitRedisKeyPrefix) {
+            this.rateLimitRedisKeyPrefix = rateLimitRedisKeyPrefix;
+        }
+
+        public String getRefreshCookieName() {
+            return refreshCookieName;
+        }
+
+        public void setRefreshCookieName(String refreshCookieName) {
+            this.refreshCookieName = refreshCookieName;
+        }
+
+        public String getRefreshCookiePath() {
+            return refreshCookiePath;
+        }
+
+        public void setRefreshCookiePath(String refreshCookiePath) {
+            this.refreshCookiePath = refreshCookiePath;
+        }
+
+        public String getSameSite() {
+            return sameSite;
+        }
+
+        public void setSameSite(String sameSite) {
+            this.sameSite = sameSite;
+        }
+
+        public boolean isRefreshCookieSecure() {
+            return refreshCookieSecure;
+        }
+
+        public void setRefreshCookieSecure(boolean refreshCookieSecure) {
+            this.refreshCookieSecure = refreshCookieSecure;
+        }
+
+        public boolean isRefreshBodyFallbackDevTest() {
+            return refreshBodyFallbackDevTest;
+        }
+
+        public void setRefreshBodyFallbackDevTest(boolean refreshBodyFallbackDevTest) {
+            this.refreshBodyFallbackDevTest = refreshBodyFallbackDevTest;
+        }
+
+        public boolean isRefreshBodyFallbackProd() {
+            return refreshBodyFallbackProd;
+        }
+
+        public void setRefreshBodyFallbackProd(boolean refreshBodyFallbackProd) {
+            this.refreshBodyFallbackProd = refreshBodyFallbackProd;
+        }
+
+        public java.util.List<String> getRefreshBodyFallbackProdClientTypes() {
+            return refreshBodyFallbackProdClientTypes;
+        }
+
+        public void setRefreshBodyFallbackProdClientTypes(java.util.List<String> refreshBodyFallbackProdClientTypes) {
+            this.refreshBodyFallbackProdClientTypes =
+                refreshBodyFallbackProdClientTypes == null ? java.util.List.of() : refreshBodyFallbackProdClientTypes;
+        }
+
+        public java.util.List<String> getCsrfOriginAllowlist() {
+            return csrfOriginAllowlist;
+        }
+
+        public void setCsrfOriginAllowlist(java.util.List<String> csrfOriginAllowlist) {
+            this.csrfOriginAllowlist = csrfOriginAllowlist == null ? java.util.List.of() : csrfOriginAllowlist;
+        }
+
+        public java.util.List<String> getCsrfOriginMissingAllowClientTypes() {
+            return csrfOriginMissingAllowClientTypes;
+        }
+
+        public void setCsrfOriginMissingAllowClientTypes(java.util.List<String> csrfOriginMissingAllowClientTypes) {
+            this.csrfOriginMissingAllowClientTypes =
+                csrfOriginMissingAllowClientTypes == null ? java.util.List.of() : csrfOriginMissingAllowClientTypes;
+        }
+
+        public String getRuntimeMode() {
+            return runtimeMode;
+        }
+
+        public void setRuntimeMode(String runtimeMode) {
+            this.runtimeMode = runtimeMode;
+        }
+
+        public boolean isMfaEnforceOpsAdmin() {
+            return mfaEnforceOpsAdmin;
+        }
+
+        public void setMfaEnforceOpsAdmin(boolean mfaEnforceOpsAdmin) {
+            this.mfaEnforceOpsAdmin = mfaEnforceOpsAdmin;
+        }
+
+        public int getMfaChallengeTtlMinutes() {
+            return mfaChallengeTtlMinutes;
+        }
+
+        public void setMfaChallengeTtlMinutes(int mfaChallengeTtlMinutes) {
+            this.mfaChallengeTtlMinutes = mfaChallengeTtlMinutes;
+        }
+
+        public int getMfaMaxAttempts() {
+            return mfaMaxAttempts;
+        }
+
+        public void setMfaMaxAttempts(int mfaMaxAttempts) {
+            this.mfaMaxAttempts = mfaMaxAttempts;
+        }
+
+        public int getMfaLockMinutes() {
+            return mfaLockMinutes;
+        }
+
+        public void setMfaLockMinutes(int mfaLockMinutes) {
+            this.mfaLockMinutes = mfaLockMinutes;
+        }
+
+        public int getMfaRecoveryCodeCount() {
+            return mfaRecoveryCodeCount;
+        }
+
+        public void setMfaRecoveryCodeCount(int mfaRecoveryCodeCount) {
+            this.mfaRecoveryCodeCount = mfaRecoveryCodeCount;
+        }
+
+        public int getMfaRecoveryCodeTtlDays() {
+            return mfaRecoveryCodeTtlDays;
+        }
+
+        public void setMfaRecoveryCodeTtlDays(int mfaRecoveryCodeTtlDays) {
+            this.mfaRecoveryCodeTtlDays = mfaRecoveryCodeTtlDays;
+        }
+
+        public String getMfaIssuer() {
+            return mfaIssuer;
+        }
+
+        public void setMfaIssuer(String mfaIssuer) {
+            this.mfaIssuer = mfaIssuer;
         }
     }
 

@@ -9,9 +9,12 @@ public record LoginRequest(
     String password,
     @Size(max = 40)
     String channelId,
+    @Size(max = 60)
+    String clientType,
     @Size(max = 120)
     String customerToken,
     @Size(max = 120)
     String clientNonce
 ) {
 }
+

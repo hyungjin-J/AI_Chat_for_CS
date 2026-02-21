@@ -1,6 +1,6 @@
 ﻿# Verification Pack CURRENT
 
-- Last synced at: 2026-02-21 01:55 (KST)
+- Last synced at: 2026-02-21 03:25 (KST)
 - Git commit hash: `working-tree`
 - Execution environment:
   - OS: Windows 11
@@ -8,7 +8,7 @@
   - Node: v24.11.1 (프로젝트 표준: 22.x)
   - Python: 3.11
 - Canonical status source: `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
-- Final status: Gap Closure evidence aligned
+- Final status: Post-gap-closure hardening evidence aligned
 
 ## 실행 커맨드
 1. `docker compose -f infra/docker-compose.yml up -d`
@@ -16,6 +16,7 @@
 3. `cd frontend && npm ci && npm run test:run && npm run build`
 4. `powershell -ExecutionPolicy Bypass -File scripts/assert_verification_pack_consistency.ps1`
 5. `powershell -ExecutionPolicy Bypass -File scripts/run_provider_regression.ps1` (조건 충족 시)
+6. `powershell -ExecutionPolicy Bypass -File scripts/assert_provider_regression_evidence.ps1`
 
 ## SSOT 규칙
 - PASS/FAIL/SKIPPED의 진실은 `04_TEST_RESULTS.md` 1곳으로 고정한다.

@@ -1,17 +1,17 @@
 {
-  "pass_count": 8,
-  "fail_count": 0,
+  "pass_count": 7,
+  "fail_count": 1,
   "checks": [
     {
       "name": "summary_reqid_subset",
       "passed": true,
-      "detail": "summary=51 missing_in_requirements=0",
+      "detail": "summary=52 missing_in_requirements=0",
       "samples": []
     },
     {
       "name": "dev_reqid_subset",
       "passed": true,
-      "detail": "dev_refs=40 missing_in_requirements=0",
+      "detail": "dev_refs=41 missing_in_requirements=0",
       "samples": []
     },
     {
@@ -34,9 +34,13 @@
     },
     {
       "name": "role_standard",
-      "passed": true,
-      "detail": "roles=['ADMIN', 'AGENT', 'CUSTOMER', 'OPS', 'SYSTEM']",
-      "samples": []
+      "passed": false,
+      "detail": "roles=['ADMIN', 'AGENT', 'AUTHENTICATED', 'CUSTOMER', 'OPS', 'PUBLIC', 'PUBLIC(Refresh token ??)', 'SYSTEM']",
+      "samples": [
+        "AUTHENTICATED",
+        "PUBLIC",
+        "PUBLIC(Refresh token ??)"
+      ]
     },
     {
       "name": "sse_event_term_standard",

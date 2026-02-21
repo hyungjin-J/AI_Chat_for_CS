@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.global.audit.domain.mapper.AuditLogMapper">
+
+    <resultMap id="AuditLogEntryMap" type="com.aichatbot.global.audit.domain.PersistentAuditLogEntry">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID" name="id"/>
+            <arg column="tenant_id" javaType="java.util.UUID" name="tenantId"/>
+            <arg column="trace_id" javaType="java.util.UUID" name="traceId"/>
+            <arg column="action_type" javaType="java.lang.String" name="actionType"/>
+            <arg column="actor_user_id" javaType="java.util.UUID" name="actorUserId"/>
+            <arg column="actor_role" javaType="java.lang.String" name="actorRole"/>
+            <arg column="target_type" javaType="java.lang.String" name="targetType"/>
+            <arg column="target_id" javaType="java.lang.String" name="targetId"/>
+            <arg column="before_json" javaType="java.lang.String" name="beforeJson"/>
+            <arg column="after_json" javaType="java.lang.String" name="afterJson"/>
+            <arg column="chain_seq" javaType="java.lang.Long" name="chainSeq"/>
+            <arg column="hash_prev" javaType="java.lang.String" name="hashPrev"/>
+            <arg column="hash_curr" javaType="java.lang.String" name="hashCurr"/>
+            <arg column="hash_algo" javaType="java.lang.String" name="hashAlgo"/>
+            <arg column="created_at" javaType="java.time.Instant" name="createdAt"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="AuditChainStateMap" type="com.aichatbot.global.audit.domain.AuditChainState">
+        <constructor>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="last_seq" javaType="java.lang.Long"/>
+            <arg column="last_hash" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO tb_audit_log(
+            id,
+            tenant_id,
+            trace_id,
+            action_type,
+            actor_user_id,
+            actor_role,
+            target_type,
+            target_id,
+            before_json,
+            after_json,
+            chain_seq,
+            hash_prev,
+            hash_curr,
+            hash_algo,
+            created_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{traceId},
+            #{actionType},
+            #{actorUserId},
+            #{actorRole},
+            #{targetType},
+            #{targetRef},
+            #{beforeJson, jdbcType=VARCHAR},
+            #{afterJson, jdbcType=VARCHAR},
+            #{chainSeq},
+            #{hashPrev, jdbcType=VARCHAR},
+            #{hashCurr, jdbcType=VARCHAR},
+            #{hashAlgo, jdbcType=VARCHAR},
+            #{createdAt}
+        )
+    </insert>
+
+    <select id="search" resultMap="AuditLogEntryMap">
+        SELECT id,
+               tenant_id,
+               trace_id,
+               action_type,
+               actor_user_id,
+               actor_role,
+               target_type,
+               target_id,
+               CAST(before_json AS VARCHAR) AS before_json,
+               CAST(after_json AS VARCHAR) AS after_json,
+               chain_seq,
+               hash_prev,
+               hash_curr,
+               hash_algo,
+               created_at
+        FROM tb_audit_log
+        WHERE tenant_id = #{tenantId}
+          <if test="fromUtc != null">
+              AND created_at &gt;= #{fromUtc}
+          </if>
+          <if test="toUtc != null">
+              AND created_at &lt;= #{toUtc}
+          </if>
+          <if test="actorUserId != null">
+              AND actor_user_id = #{actorUserId}
+          </if>
+          <if test="actionType != null and actionType != ''">
+              AND action_type = #{actionType}
+          </if>
+          <if test="traceId != null">
+              AND trace_id = #{traceId}
+          </if>
+        ORDER BY created_at DESC
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
+    <select id="findById" resultMap="AuditLogEntryMap">
+        SELECT id,
+               tenant_id,
+               trace_id,
+               action_type,
+               actor_user_id,
+               actor_role,
+               target_type,
+               target_id,
+               CAST(before_json AS VARCHAR) AS before_json,
+               CAST(after_json AS VARCHAR) AS after_json,
+               chain_seq,
+               hash_prev,
+               hash_curr,
+               hash_algo,
+               created_at
+        FROM tb_audit_log
+        WHERE id = #{auditId}
+    </select>
+
+    <select id="lockChainState" resultMap="AuditChainStateMap">
+        SELECT tenant_id,
+               last_seq,
+               last_hash
+        FROM tb_audit_chain_state
+        WHERE tenant_id = #{tenantId}
+        FOR UPDATE
+    </select>
+
+    <insert id="insertChainState">
+        INSERT INTO tb_audit_chain_state(
+            tenant_id,
+            last_seq,
+            last_hash,
+            updated_at
+        )
+        VALUES (
+            #{tenantId},
+            #{lastSeq},
+            #{lastHash},
+            #{updatedAt}
+        )
+    </insert>
+
+    <update id="updateChainState">
+        UPDATE tb_audit_chain_state
+        SET last_seq = #{lastSeq},
+            last_hash = #{lastHash},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+    </update>
+
+    <insert id="insertExportLog">
+        INSERT INTO tb_audit_export_log(
+            id,
+            tenant_id,
+            requested_by,
+            export_format,
+            from_utc,
+            to_utc,
+            row_count,
+            trace_id,
+            created_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{requestedBy},
+            #{format},
+            #{fromUtc},
+            #{toUtc},
+            #{rowCount},
+            #{traceId},
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+</mapper>

@@ -106,3 +106,76 @@
 ### 7.5 비고
 - MCP 경로에서 파일 첨부 API는 제공되지 않아 페이지 메타/요약 블록 중심으로 동기화함.
 - 본 세션 변경 파일 기준 Notion 동기화 완료 상태를 위 4개 항목에 명시함.
+
+## 8) 이번 세션(2026-02-21) 스펙 변경 및 Notion 동기화 기록
+- 기준 커밋: `d0ec39c` (working tree)
+- 기준 시각(Asia/Seoul): `2026-02-21 16:54:05 +09:00`
+- `/mnt/data` 접근 상태: 미가용
+- 로컬 SSOT 사용 경로:
+  - `docs/references/**`
+  - `docs/uiux/**`
+- 변경된 스펙 파일:
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+  - `docs/references/CS_AI_CHATBOT_DB.xlsx`
+  - `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+
+### 8.1 `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+- Notion URL: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+- 변경 내용:
+  - `전체API목록`에서 Auth 3종(`/v1/auth/login`, `/v1/auth/refresh`, `/v1/auth/logout`) 계약을 하드닝 고정점 기준으로 갱신
+  - `AUTH_STALE_PERMISSION(401)`, `AUTH_LOCKED(429)`, `AUTH_RATE_LIMITED(429)`, `AUTH_REFRESH_REUSE_DETECTED(409)` 명시
+  - refresh cookie `Path=/v1/auth`, CSRF Origin allowlist, body fallback 조건부 허용 정책 반영
+  - Ops/Admin API 6종(대시보드/감사로그/RBAC matrix/block)의 UTC bucket, metric allowlist, permission_version 연계 정책 반영
+- Last synced at: `2026-02-21 16:54:05 +09:00`
+- Commit: `d0ec39c` (working tree)
+- Notion sync completed: `YES`
+
+### 8.2 `docs/references/CS_AI_CHATBOT_DB.xlsx`
+- Notion URL: https://www.notion.so/2ed405a3a720812180d9d508b77f31a4
+- 변경 내용:
+  - `TB_USER`, `TB_AUTH_SESSION`, `TB_AUDIT_LOG`, `TB_OPS_EVENT`, `TB_API_METRIC_HOURLY` 스키마를 구현 기준(V3 migration)으로 정합화
+  - 신규 시트 `TB_RBAC_MATRIX`, `TB_OPS_BLOCK` 추가
+  - 감사 로그 before/after JSON 민감정보 차단 규칙(원문 저장 금지) 명시
+  - `tb_api_metric_hourly` 유니크 키 `(tenant_id, hour_bucket_utc, metric_key)` 및 idempotent upsert 기준 반영
+- Last synced at: `2026-02-21 16:54:05 +09:00`
+- Commit: `d0ec39c` (working tree)
+- Notion sync completed: `YES`
+
+### 8.3 `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+- Notion URL: https://www.notion.so/UI-UX-2ee405a3a72080a58c93d967ef0f2444
+- 변경 내용:
+  - 에러코드 시트에 `AUTH_STALE_PERMISSION`, `AUTH_LOCKED`, `AUTH_RATE_LIMITED`, `AUTH_REFRESH_REUSE_DETECTED` 추가
+  - 권한별 UI 시트에 `ADMIN` 내부 `admin_level(MANAGER/SYSTEM_ADMIN)` 정책 반영
+  - OPS/ADMIN 콘솔 메뉴와 RBAC matrix 변경 화면 매핑 보강
+- Last synced at: `2026-02-21 16:54:05 +09:00`
+- Commit: `d0ec39c` (working tree)
+- Notion sync completed: `YES`
+
+### 8.4 추적성(ReqID 기준) 변경 요약
+- `SEC-001`: 로그인/리프레시/로그아웃 하드닝, lockout/rate-limit/reuse 대응
+- `SEC-002`: 서버 RBAC 최종권위, stale permission 401 처리, admin_level 내부 권한레벨 분리
+- `OPS-001`/`OPS-003`: 감사로그/운영 이벤트/즉시조치(block) 운영 경로 정합화
+- `API-007`: 표준 에러 포맷 + Retry-After 정책 고정
+
+### 8.5 TBD / Phase2 이관
+- Notion 페이지 내 원본 파일 첨부 자동화는 MCP 기능 한계로 메타/요약 블록 갱신 중심으로 운영
+- API workbook의 카테고리 시트/프로그램ID 목록 시트는 `_guide` 규칙에 따라 자동 동기화 영역으로 수동 편집하지 않음
+
+## 9) 이번 세션(2026-02-21, Phase2 P0) 코드/운영 보강 기록
+- 기준 브랜치 상태: working tree
+- 기준 문서:
+  - `docs/review/plans/202603XX_production_readiness_phase2_plan.md`
+  - `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md`
+- 수행 범위 요약:
+  - MFA(TOTP) + 세션 관리 API/화면
+  - RBAC 2인 승인 워크플로우 + 감사 해시체인 + 감사 export
+  - 스케줄러 분산락 + retention/partition baseline + CI 게이트 워크플로우
+- 스펙 파일(CSV/XLSX) 추가 변경 여부:
+  - **없음 (No additional spec file edit in this session)**
+- Notion 동기화 필요 여부:
+  - 스펙 파일 무변경이므로 본 세션에 신규 Notion 본문/메타 갱신 대상 없음
+- 증적 산출물:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_backend_gradle_test_output_202603XX.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_frontend_test_output_202603XX.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_frontend_build_output_202603XX.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_utf8_check_202603XX.txt`

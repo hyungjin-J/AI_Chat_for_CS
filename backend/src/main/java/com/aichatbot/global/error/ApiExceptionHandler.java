@@ -34,6 +34,29 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(error, headers, exception.status());
     }
 
+    @ExceptionHandler(RetryAfterApiException.class)
+    public ResponseEntity<ApiErrorResponse> handleRetryAfter(RetryAfterApiException exception) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Retry-After", String.valueOf(exception.retryAfterSeconds()));
+        if (exception.limit() != null) {
+            headers.add("X-RateLimit-Limit", String.valueOf(exception.limit()));
+        }
+        if (exception.remaining() != null) {
+            headers.add("X-RateLimit-Remaining", String.valueOf(exception.remaining()));
+        }
+        if (exception.resetEpochSeconds() != null) {
+            headers.add("X-RateLimit-Reset", String.valueOf(exception.resetEpochSeconds()));
+        }
+
+        ApiErrorResponse error = new ApiErrorResponse(
+            exception.errorCode(),
+            exception.getMessage(),
+            TraceContext.getTraceId(),
+            exception.details()
+        );
+        return new ResponseEntity<>(error, headers, exception.status());
+    }
+
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ApiErrorResponse> handleApiException(ApiException exception) {
         ApiErrorResponse error = new ApiErrorResponse(

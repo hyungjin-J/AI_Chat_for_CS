@@ -1,0 +1,21 @@
+UTF-8 Validation Report for 07_MVP_GLOSSARY_CEO_KR.xlsx
+Workbook path: 07_MVP_GLOSSARY_CEO_KR.xlsx
+Validation method: strict UTF-8 decode for every internal XML entry + XML declaration inspection
+
+- [Content_Types].xml | bytes=1519 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- docProps/app.xml | bytes=205 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- docProps/core.xml | bytes=555 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- xl/styles.xml | bytes=10252 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- xl/theme/theme1.xml | bytes=10140 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- xl/workbook.xml | bytes=1281 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- xl/worksheets/sheet1.xml | bytes=225361 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- xl/worksheets/sheet2.xml | bytes=59376 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- xl/worksheets/sheet3.xml | bytes=60592 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- xl/worksheets/sheet4.xml | bytes=46738 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+- xl/worksheets/sheet5.xml | bytes=10628 | decode=PASS | decl=encoding_unspecified(xml_default_applies)
+
+XML entries total: 11
+UTF-8 strict decode pass: 11/11
+UTF-8 declaration count: 0
+Encoding unspecified count (XML default): 11
+Overall result: PASS (all internal XML are valid UTF-8 decodable)

@@ -1,6 +1,6 @@
 ﻿# MVP Verification Pack 변경 이력
 
-- Last synced at: 2026-02-21 01:55 (KST)
+- Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`
 - SSOT status source: `04_TEST_RESULTS.md`
 
@@ -35,3 +35,18 @@
 2. 테스트/결과/CURRENT 문서의 실행 진입점을 `scripts/check_all.ps1`로 정렬했다.
 3. `scripts/check_all.ps1`, `scripts/check_all.sh`를 추가하고 `verify_all`은 호환 래퍼로 유지했다.
 4. 레거시 `/api/v1/**` 경로 차단 정책과 연동된 테스트를 보강했다.
+
+## 2026-02-21 (post gap closure hardening)
+1. provider 증빙 단일 진실원천 문서를 추가했다.
+   - `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md`
+2. provider 증빙 정합성 스크립트를 추가하고 CI/one-command에 연결했다.
+   - `scripts/assert_provider_regression_evidence.ps1`
+   - `.github/workflows/mvp-demo-verify.yml`
+   - `scripts/check_all.ps1`
+3. provider 최신 PASS 근거를 커밋 가능한 아티팩트로 고정했다.
+   - `artifacts/provider_regression_ollama_PASS_20260219_003600Z.txt`
+4. SSE 동시성 계약 테스트를 추가해 한도 유지를 증명했다.
+   - `SseConcurrencyLimitContractTest`
+5. PII/trace 테스트를 강화했다.
+   - PII: SSE payload raw PII 무유출 검증 추가
+   - trace: safe_response + rag/stream_event 저장 trace 일치 검증 추가

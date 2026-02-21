@@ -33,5 +33,6 @@
 
 ## Provider 회귀
 - 파일: `artifacts/provider_regression_ollama.log`
-- 결과: PASS (`status=PASS` 확인)
+- 최신 로컬 결과: SKIPPED (`status=SKIPPED`)
+- 최신 PASS 근거: `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md`의 `latest_pass_artifact`
 

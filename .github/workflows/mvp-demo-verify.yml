@@ -98,6 +98,10 @@ jobs:
               shell: pwsh
               run: powershell -ExecutionPolicy Bypass -File scripts/assert_verification_pack_consistency.ps1
 
+            - name: Assert provider evidence consistency
+              shell: pwsh
+              run: powershell -ExecutionPolicy Bypass -File scripts/assert_provider_regression_evidence.ps1
+
             - name: Provider regression skipped (condition unmet)
               if: vars.ENABLE_PROVIDER_REGRESSION != 'true'
               shell: pwsh

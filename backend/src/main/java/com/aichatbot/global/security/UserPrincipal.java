@@ -6,6 +6,15 @@ public record UserPrincipal(
     String userId,
     String tenantId,
     String loginId,
-    List<String> roles
+    List<String> roles,
+    long permissionVersion,
+    String adminLevel
 ) {
+    public boolean hasRole(String roleCode) {
+        if (roleCode == null || roleCode.isBlank()) {
+            return false;
+        }
+        return roles.stream().anyMatch(value -> roleCode.equalsIgnoreCase(value));
+    }
 }
+

@@ -1,6 +1,6 @@
 package com.aichatbot.message.infrastructure;
 
-import com.aichatbot.global.observability.TraceIdNormalizer;
+import com.aichatbot.global.observability.TraceGuard;
 import com.aichatbot.message.application.MessageView;
 import com.aichatbot.message.domain.mapper.MessageMapper;
 import java.util.ArrayList;
@@ -19,6 +19,8 @@ public class MessageRepository {
     }
 
     public MessageView create(UUID tenantId, UUID conversationId, String role, String messageText, String traceId) {
+        // Why: Store writes must fail closed when trace context is missing to keep auditability guarantees.
+        UUID requiredTraceId = UUID.fromString(TraceGuard.requireTraceId());
         UUID messageId = UUID.randomUUID();
         messageMapper.create(
             messageId,
@@ -26,7 +28,7 @@ public class MessageRepository {
             conversationId,
             role,
             messageText,
-            TraceIdNormalizer.toUuid(traceId)
+            requiredTraceId
         );
         return findById(tenantId, messageId).orElseThrow();
     }

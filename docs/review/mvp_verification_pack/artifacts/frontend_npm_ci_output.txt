@@ -5,7 +5,7 @@ npm warn EBADENGINE   current: { node: 'v24.11.1', npm: '11.6.2' }
 npm warn EBADENGINE }
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
-added 267 packages, and audited 268 packages in 6s
+added 267 packages, and audited 268 packages in 5s
 
 63 packages are looking for funding
   run `npm fund` for details

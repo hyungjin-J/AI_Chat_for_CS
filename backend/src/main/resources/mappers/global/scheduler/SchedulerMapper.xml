@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.global.scheduler.domain.mapper.SchedulerMapper">
+
+    <resultMap id="RetentionPolicyMap" type="com.aichatbot.global.scheduler.domain.RetentionPolicyRecord">
+        <constructor>
+            <arg column="table_name" javaType="java.lang.String"/>
+            <arg column="retention_days" javaType="java.lang.Integer"/>
+            <arg column="enabled" javaType="java.lang.Boolean"/>
+        </constructor>
+    </resultMap>
+
+    <update id="updateLockLease">
+        UPDATE tb_scheduler_lock
+        SET owner_id = #{ownerId},
+            lease_until_utc = #{leaseUntilUtc},
+            fencing_token = fencing_token + 1,
+            updated_at = #{updatedAt}
+        WHERE lock_key = #{lockKey}
+          AND (lease_until_utc &lt;= #{nowUtc} OR owner_id = #{ownerId})
+    </update>
+
+    <insert id="insertLock">
+        INSERT INTO tb_scheduler_lock(
+            lock_key,
+            owner_id,
+            lease_until_utc,
+            fencing_token,
+            updated_at
+        )
+        VALUES (
+            #{lockKey},
+            #{ownerId},
+            #{leaseUntilUtc},
+            1,
+            #{updatedAt}
+        )
+    </insert>
+
+    <select id="listRetentionPolicies" resultMap="RetentionPolicyMap">
+        SELECT table_name,
+               retention_days,
+               enabled
+        FROM tb_data_retention_policy
+        ORDER BY table_name ASC
+    </select>
+
+    <delete id="deleteOpsEventBefore">
+        DELETE FROM tb_ops_event
+        WHERE event_time &lt; #{cutoff}
+    </delete>
+
+    <delete id="deleteAuditLogBefore">
+        DELETE FROM tb_audit_log
+        WHERE created_at &lt; #{cutoff}
+    </delete>
+
+    <delete id="deleteApiMetricHourlyBefore">
+        DELETE FROM tb_api_metric_hourly
+        WHERE hour_bucket_utc &lt; #{cutoff}
+    </delete>
+
+    <insert id="insertRetentionRun">
+        INSERT INTO tb_data_retention_run(
+            id,
+            table_name,
+            started_at,
+            status,
+            trace_id,
+            created_at
+        )
+        VALUES (
+            #{id},
+            #{tableName},
+            #{startedAt},
+            #{status},
+            #{traceId},
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <update id="updateRetentionRun">
+        UPDATE tb_data_retention_run
+        SET ended_at = #{endedAt},
+            deleted_rows = #{deletedRows},
+            status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="upsertPartitionPlan">
+        UPDATE tb_partition_plan
+        SET status = #{status},
+            updated_at = #{updatedAt}
+        WHERE table_name = #{tableName}
+          AND bucket_month_utc = #{bucketMonthUtc}
+    </update>
+
+    <insert id="insertPartitionPlan">
+        INSERT INTO tb_partition_plan(
+            table_name,
+            bucket_month_utc,
+            status,
+            updated_at
+        )
+        VALUES (
+            #{tableName},
+            #{bucketMonthUtc},
+            #{status},
+            #{updatedAt}
+        )
+    </insert>
+</mapper>

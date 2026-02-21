@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.ops.domain.mapper.OpsMapper">
+
+    <resultMap id="OpsEventAggregateMap" type="com.aichatbot.ops.domain.OpsEventAggregate">
+        <constructor>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="hour_bucket_utc" javaType="java.time.Instant"/>
+            <arg column="metric_key" javaType="java.lang.String"/>
+            <arg column="metric_value" javaType="java.lang.Long"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="OpsMetricRowMap" type="com.aichatbot.ops.domain.OpsMetricRow">
+        <constructor>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="hour_bucket_utc" javaType="java.time.Instant"/>
+            <arg column="metric_key" javaType="java.lang.String"/>
+            <arg column="metric_value" javaType="java.lang.Long"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="OpsMetricTotalMap" type="com.aichatbot.ops.domain.OpsMetricTotal">
+        <constructor>
+            <arg column="metric_key" javaType="java.lang.String"/>
+            <arg column="metric_value" javaType="java.lang.Long"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="OpsBlockRecordMap" type="com.aichatbot.ops.domain.OpsBlockRecord">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="block_type" javaType="java.lang.String"/>
+            <arg column="block_value" javaType="java.lang.String"/>
+            <arg column="status" javaType="java.lang.String"/>
+            <arg column="reason" javaType="java.lang.String"/>
+            <arg column="expires_at" javaType="java.time.Instant"/>
+            <arg column="created_by" javaType="java.util.UUID"/>
+            <arg column="created_at" javaType="java.time.Instant"/>
+            <arg column="updated_at" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insertOpsEvent">
+        INSERT INTO tb_ops_event(
+            id,
+            tenant_id,
+            trace_id,
+            event_time,
+            event_type,
+            metric_key,
+            metric_value,
+            dimensions_json,
+            created_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{traceId},
+            #{eventTime},
+            #{eventType},
+            #{metricKey},
+            #{metricValue},
+            #{dimensionsJson, jdbcType=VARCHAR},
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <select id="aggregateHourly" resultMap="OpsEventAggregateMap">
+        SELECT tenant_id,
+               DATE_TRUNC('hour', event_time) AS hour_bucket_utc,
+               metric_key,
+               SUM(metric_value) AS metric_value
+        FROM tb_ops_event
+        WHERE event_time &gt;= #{fromUtc}
+          AND event_time &lt; #{toUtc}
+          AND metric_key IN
+          <foreach collection="metricKeys" item="metricKey" open="(" close=")" separator=",">
+              #{metricKey}
+          </foreach>
+        GROUP BY tenant_id, DATE_TRUNC('hour', event_time), metric_key
+    </select>
+
+    <update id="updateHourlyMetric">
+        UPDATE tb_api_metric_hourly
+        SET metric_value = #{metricValue},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND hour_bucket_utc = #{hourBucketUtc}
+          AND metric_key = #{metricKey}
+    </update>
+
+    <insert id="insertHourlyMetric">
+        INSERT INTO tb_api_metric_hourly(
+            id,
+            tenant_id,
+            hour_bucket_utc,
+            metric_key,
+            metric_value,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{hourBucketUtc},
+            #{metricKey},
+            #{metricValue},
+            #{updatedAt}
+        )
+    </insert>
+
+    <select id="findSeries" resultMap="OpsMetricRowMap">
+        SELECT tenant_id,
+               hour_bucket_utc,
+               metric_key,
+               metric_value
+        FROM tb_api_metric_hourly
+        WHERE tenant_id = #{tenantId}
+          <if test="fromUtc != null">
+              AND hour_bucket_utc &gt;= #{fromUtc}
+          </if>
+          <if test="toUtc != null">
+              AND hour_bucket_utc &lt;= #{toUtc}
+          </if>
+        ORDER BY hour_bucket_utc ASC, metric_key ASC
+    </select>
+
+    <select id="findSummary" resultMap="OpsMetricTotalMap">
+        SELECT metric_key,
+               SUM(metric_value) AS metric_value
+        FROM tb_api_metric_hourly
+        WHERE tenant_id = #{tenantId}
+          <if test="fromUtc != null">
+              AND hour_bucket_utc &gt;= #{fromUtc}
+          </if>
+          <if test="toUtc != null">
+              AND hour_bucket_utc &lt;= #{toUtc}
+          </if>
+        GROUP BY metric_key
+        ORDER BY metric_key ASC
+    </select>
+
+    <update id="updateExistingBlock">
+        UPDATE tb_ops_block
+        SET status = #{status},
+            reason = #{reason},
+            expires_at = #{expiresAt},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND block_type = #{blockType}
+          AND block_value = #{blockValue}
+    </update>
+
+    <insert id="insertBlock">
+        INSERT INTO tb_ops_block(
+            id,
+            tenant_id,
+            block_type,
+            block_value,
+            status,
+            reason,
+            expires_at,
+            created_by,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{blockType},
+            #{blockValue},
+            #{status},
+            #{reason},
+            #{expiresAt},
+            #{createdBy},
+            #{updatedAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <select id="findActiveBlock" resultMap="OpsBlockRecordMap">
+        SELECT id,
+               tenant_id,
+               block_type,
+               block_value,
+               status,
+               reason,
+               expires_at,
+               created_by,
+               created_at,
+               updated_at
+        FROM tb_ops_block
+        WHERE tenant_id = #{tenantId}
+          AND block_type = #{blockType}
+          AND block_value = #{blockValue}
+          AND status = 'ACTIVE'
+          AND (expires_at IS NULL OR expires_at &gt;= #{nowUtc})
+        ORDER BY updated_at DESC
+        LIMIT 1
+    </select>
+</mapper>

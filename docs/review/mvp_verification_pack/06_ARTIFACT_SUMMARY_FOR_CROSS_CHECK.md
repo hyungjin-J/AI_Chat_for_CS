@@ -1,6 +1,6 @@
 ﻿# 아티팩트 요약본 (교차 검증용 SSOT)
 
-- Last synced at: 2026-02-21 01:55 (KST)
+- Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`
 - Status source: `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
 
@@ -30,6 +30,7 @@
 | SSE-RESUME-001 | PASS |
 | SSE-RESUME-NET-001 | PASS |
 | SSE-CONC-429 | PASS |
+| SSE-CONC-CONTRACT-001 | PASS |
 | SSE-CONC-REAL-001 | PASS |
 | NEG-422-IDEM | PASS |
 | NEG-IDEM-409 | PASS |
@@ -44,6 +45,7 @@
 | CI-UUID-LINT-001 | PASS |
 | CI-GITLEAKS-001 | SKIPPED |
 | LLM-PROVIDER-001 | SKIPPED |
+| PROVIDER-EVIDENCE-001 | PASS |
 | VER-CONSIST-001 | PASS |
 
 ## 핵심 증빙 파일
@@ -52,8 +54,10 @@
 - 프론트 빌드: `artifacts/frontend_build_output.txt`
 - consistency 결과: `artifacts/gap_closure_consistency_output.txt`
 - provider 조건부 실행 결과: `artifacts/provider_regression_ollama.log`, `artifacts/provider_regression_gap_closure_output.txt`
+- provider 증빙 정합성 결과: `artifacts/provider_evidence_consistency_output.txt`
+- SSE 동시성 계약 실행 로그: `artifacts/sse_concurrency_contract_test_output.txt`
 - UUID CAST / MyBatis `${}` 검색 결과: `artifacts/uuid_cast_scan_output.txt`, `artifacts/mybatis_dollar_scan_output.txt`
 
 ## 주의
 - `LLM-PROVIDER-001`은 현재 로컬에서 Docker daemon 미기동으로 SKIPPED이며, 실패가 아니라 조건 미충족 상태다.
-- provider 상태를 PASS로 변경하려면 `provider_regression_ollama.log`에 `status=PASS`가 기록되어야 한다.
+- 최신 PASS 근거는 `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md`의 `latest_pass_artifact`를 기준으로 확인한다.

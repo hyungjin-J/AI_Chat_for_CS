@@ -1,6 +1,6 @@
 ﻿# MVP 검증 요약 (SSOT 연동)
 
-- Last synced at: 2026-02-21 01:55 (KST)
+- Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`
 - Status: Gap Closure evidence aligned
 - SSOT source: `docs/review/mvp_verification_pack/04_TEST_RESULTS.md`
@@ -8,7 +8,8 @@
 ## 핵심 결론
 - P0 항목(Answer Contract fail-closed, PII 차단, trace_id 전파, tenant 격리, RBAC)은 테스트로 확인되었다.
 - 프론트 자동 테스트(vitest)와 CI 게이트(uuid lint, gitleaks, consistency)가 추가되었다.
-- provider regression은 현재 로컬 환경에서 Docker daemon 미기동으로 `SKIPPED`이며, 재실행 가이드를 로그에 남겼다.
+- provider regression은 현재 로컬 환경에서 Docker daemon 미기동으로 `SKIPPED`이며, PASS 증빙은 `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md`에서 별도 고정한다.
+- SSE 동시성은 기존 키(`app.budget.sse-concurrency-max-per-user`) 기준으로 유지되며, finally 해제로 오탐 429/락 누수 제거를 `artifacts/sse_concurrency_contract_test_output.txt`로 증명했다.
 
 ## 상태 매트릭스 (04_TEST_RESULTS와 동일)
 
@@ -36,6 +37,7 @@
 | SSE-RESUME-001 | PASS |
 | SSE-RESUME-NET-001 | PASS |
 | SSE-CONC-429 | PASS |
+| SSE-CONC-CONTRACT-001 | PASS |
 | SSE-CONC-REAL-001 | PASS |
 | NEG-422-IDEM | PASS |
 | NEG-IDEM-409 | PASS |
@@ -50,6 +52,7 @@
 | CI-UUID-LINT-001 | PASS |
 | CI-GITLEAKS-001 | SKIPPED |
 | LLM-PROVIDER-001 | SKIPPED |
+| PROVIDER-EVIDENCE-001 | PASS |
 | VER-CONSIST-001 | PASS |
 
 ## 즉시 조치 권고

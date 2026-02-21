@@ -1,6 +1,6 @@
 ﻿# MVP 테스트 결과 (SSOT)
 
-- Last synced at: 2026-02-21 01:55 (KST)
+- Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`
 - Status: Gap Closure Evidence Updated
 
@@ -44,6 +44,7 @@
 | SSE-RESUME-001 | PASS | `artifacts/sse_resume_proof.log` |
 | SSE-RESUME-NET-001 | PASS | `artifacts/sse_resume_fault_injection.log` |
 | SSE-CONC-429 | PASS | `artifacts/sse_concurrency_attempts.txt` |
+| SSE-CONC-CONTRACT-001 | PASS | `artifacts/sse_concurrency_contract_test_output.txt`, `artifacts/backend_gradle_test_output.txt` |
 | SSE-CONC-REAL-001 | PASS | `artifacts/sse_concurrency_real_limit_proof.txt` |
 | NEG-422-IDEM | PASS | `artifacts/idempotency_negative_422.txt` |
 | NEG-IDEM-409 | PASS | `artifacts/idempotency_409_proof.txt` |
@@ -57,7 +58,8 @@
 | SEC-ARTIFACT-SCAN-001 | PASS | `artifacts/artifact_sanitization_scan.txt` |
 | CI-UUID-LINT-001 | PASS | `artifacts/backend_gradle_test_output.txt` |
 | CI-GITLEAKS-001 | SKIPPED (local) | CI workflow only (`.github/workflows/mvp-demo-verify.yml`) |
-| LLM-PROVIDER-001 | SKIPPED (docker unavailable) | `artifacts/provider_regression_ollama.log`, `artifacts/provider_regression_gap_closure_output.txt`, `artifacts/provider_regression_exit_code.txt` |
+| LLM-PROVIDER-001 | SKIPPED (docker unavailable) | `artifacts/provider_regression_ollama.log`, `artifacts/provider_regression_gap_closure_output.txt`, `artifacts/provider_regression_exit_code.txt`, `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md` |
+| PROVIDER-EVIDENCE-001 | PASS | `artifacts/provider_evidence_consistency_output.txt`, `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md` |
 | VER-CONSIST-001 | PASS | `artifacts/gap_closure_consistency_output.txt` |
 
 ## 정책 확인 포인트
@@ -66,3 +68,6 @@
 - trace_id 정책: UUID 형식만 허용 (`SYS-004-409-TRACE`)
 - tenant mismatch: `403 + SYS-002-403 + details=["tenant_mismatch"]`
 - provider는 PR에서 조건부 실행, nightly는 강제 실행
+- 최신 로컬 결과가 SKIPPED인 경우 PASS 근거는 `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md`의 `latest_pass_artifact`를 사용한다.
+- SSE 동시성 키/기본값/단위: `app.budget.sse-concurrency-max-per-user` / `2` / `tenant_id:user_id`
+- SSE 제한 초과 응답: `429 + 표준 에러 JSON(error_code,message,trace_id,details)`

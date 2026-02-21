@@ -1,0 +1,18 @@
+provider=ollama
+status=PASS
+reason=provider_regression_run
+generated_at_utc=2026-02-18T15:36:00Z
+generated_at_kst=2026-02-19 00:36:00+09:00
+source_commit=3e057a3
+runner=local-windows11-docker-desktop-ollama
+normal_has_citation=true
+normal_has_done=true
+fail_has_safe_response=true
+fail_has_done=true
+fail_leaks_token=false
+
+[notes]
+This file preserves the latest known PASS evidence referenced by
+docs/review/mvp_verification_pack/artifacts/analysis_llm_provider_001.md.
+It is used as a stable, committable artifact when local Docker is unavailable
+and the latest local provider regression run is SKIPPED.

@@ -15,6 +15,8 @@
    - `powershell -ExecutionPolicy Bypass -File scripts/assert_verification_pack_consistency.ps1`
 5. provider 회귀(조건부)
    - `powershell -ExecutionPolicy Bypass -File scripts/run_provider_regression.ps1`
+6. provider 증빙 정합성 검사
+   - `powershell -ExecutionPolicy Bypass -File scripts/assert_provider_regression_evidence.ps1`
 
 호환 명령:
 - `scripts/verify_all.ps1`, `scripts/verify_all.sh`는 내부적으로 `check_all`을 호출한다.
@@ -26,6 +28,7 @@
 - UUID CAST 검색 결과: `NO_MATCH`
 - MyBatis `${}` 검색 결과: `NO_MATCH`
 - provider regression: 환경 준비 시 PASS, 미준비 시 SKIPPED(원인/재실행 가이드 포함)
+- provider 최신 PASS 근거: `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md`의 `latest_pass_artifact`
 
 ## 4. 주요 증빙 파일
 - `docs/review/mvp_verification_pack/artifacts/backend_gradle_test_output.txt`
@@ -35,6 +38,15 @@
 - `docs/review/mvp_verification_pack/artifacts/uuid_cast_scan_output.txt`
 - `docs/review/mvp_verification_pack/artifacts/mybatis_dollar_scan_output.txt`
 - `docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log`
+- `docs/review/mvp_verification_pack/artifacts/provider_evidence_consistency_output.txt`
+- `docs/review/final/PROVIDER_REGRESSION_EVIDENCE.md`
+- `docs/review/mvp_verification_pack/artifacts/sse_concurrency_contract_test_output.txt`
+
+## 6. SSE 동시성 정책
+- key: `app.budget.sse-concurrency-max-per-user`
+- default: `2`
+- unit: user(`tenant_id:user_id`)
+- 제한 초과 응답: `429 + 표준 에러 JSON(trace_id 포함)`
 
 ## 5. 주의사항
 - provider 회귀는 Docker Desktop + Ollama 컨테이너 상태에 의존한다.

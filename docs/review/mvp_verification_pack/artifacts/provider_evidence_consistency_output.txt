@@ -1,0 +1,5 @@
+﻿provider_regression_evidence=PASS
+latest_result_status=SKIPPED
+latest_pass_utc=2026-02-18T15:36:00Z
+latest_pass_commit=3e057a3
+latest_pass_artifact=docs/review/mvp_verification_pack/artifacts/provider_regression_ollama_PASS_20260219_003600Z.txt

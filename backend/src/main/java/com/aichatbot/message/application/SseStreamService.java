@@ -1,9 +1,9 @@
 package com.aichatbot.message.application;
 
+import com.aichatbot.global.config.AppProperties;
 import com.aichatbot.global.error.ApiException;
 import com.aichatbot.global.error.ErrorCatalog;
-import com.aichatbot.global.config.AppProperties;
-import com.aichatbot.global.observability.TraceContext;
+import com.aichatbot.global.observability.TraceGuard;
 import com.aichatbot.global.security.UserPrincipal;
 import com.aichatbot.message.infrastructure.MessageRepository;
 import com.aichatbot.message.infrastructure.StreamEventRepository;
@@ -53,6 +53,7 @@ public class SseStreamService {
         int fromEventSeqExclusive,
         UserPrincipal principal
     ) {
+        String requestTraceId = TraceGuard.requireTraceId();
         MessageView answerMessage = requireMessageInTenant(tenantId, messageId);
         requireSessionInTenant(tenantId, sessionId);
 
@@ -70,7 +71,7 @@ public class SseStreamService {
 
         AtomicBoolean released = new AtomicBoolean(false);
         Runnable releaseGuard = () -> {
-            // Why: MockMvc/短수명 SSE에서는 onCompletion 콜백이 늦거나 누락될 수 있어 해제를 중복 방지 방식으로 강제한다.
+            // Why: onCompletion/onTimeout/onError/finally can race, so release only once.
             if (released.compareAndSet(false, true)) {
                 sseConcurrencyGuard.release(userKey);
             }
@@ -85,7 +86,14 @@ public class SseStreamService {
             long streamOpenedAtNanos = System.nanoTime();
             boolean firstTokenRecorded = false;
             if (fromEventSeqExclusive <= 0) {
-                send(emitter, 0, "heartbeat", objectMapper.createObjectNode().put("status", "alive"));
+                send(
+                    emitter,
+                    0,
+                    "heartbeat",
+                    objectMapper.createObjectNode()
+                        .put("status", "alive")
+                        .put("trace_id", requestTraceId)
+                );
             }
             List<StreamEventView> events = streamEventRepository.findByMessageFromSeq(tenantId, messageId, fromEventSeqExclusive);
             for (StreamEventView event : events) {
@@ -114,7 +122,7 @@ public class SseStreamService {
                     objectMapper.createObjectNode()
                         .put("error_code", "SYS-003-500")
                         .put("message", ErrorCatalog.messageOf("SYS-003-500"))
-                        .put("trace_id", TraceContext.getTraceId())
+                        .put("trace_id", requestTraceId)
                 );
             } catch (IOException ignored) {
             }
@@ -140,7 +148,7 @@ public class SseStreamService {
         }
 
         MessageView anyTenantMessage = messageRepository.findByIdWithoutTenant(messageId).orElse(null);
-        // Why: 메시지가 존재해도 다른 tenant 소유면 404가 아니라 403으로 응답해야 권한 오류를 명확히 전달할 수 있습니다.
+        // Why: Returning 403 for cross-tenant access prevents hiding authorization errors as not-found.
         if (anyTenantMessage != null && !anyTenantMessage.tenantId().equals(tenantId)) {
             throw new ApiException(
                 HttpStatus.FORBIDDEN,
@@ -163,7 +171,7 @@ public class SseStreamService {
             return;
         }
 
-        // Why: 세션 소유 tenant를 직접 확인해야 "미존재"와 "타 테넌트 접근"을 안정적으로 구분할 수 있습니다.
+        // Why: Distinguishing 403 vs 404 keeps tenant isolation behavior deterministic for clients.
         UUID ownerTenantId = conversationRepository.findTenantIdByConversationId(sessionId).orElse(null);
         if (ownerTenantId != null && !ownerTenantId.equals(tenantId)) {
             throw new ApiException(
