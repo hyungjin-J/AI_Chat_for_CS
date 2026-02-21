@@ -1,25 +1,25 @@
 $ErrorActionPreference = "Stop"
 
 # Why: check_all은 AGENTS.md 표준 one-command 검증 진입점이다.
-Write-Host "[1/14] docker compose up -d"
-docker compose -f infra/docker-compose.yml up -d
-
 $artifactDir = "docs/review/mvp_verification_pack/artifacts"
 New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
 
-Write-Host "[2/14] node version policy check"
+Write-Host "[1/14] node version policy check"
 $nodeVersion = (node -v).Trim()
 @"
 node_version=$nodeVersion
 "@ | Out-File -FilePath "$artifactDir\node_version_check.txt" -Encoding utf8
-python scripts/assert_node_ssot.py `
+python scripts/check_node_version.py `
     --nvmrc .nvmrc `
     --package-json frontend/package.json `
     --check-runtime `
-    --output "$artifactDir\phase2_1_1_prA_node_ssot_check_202603XX.txt"
+    --output "$artifactDir\phase2_1_1_prA_node_ssot_check.txt"
 if ($LASTEXITCODE -ne 0) {
-    throw "node SSOT assertion failed. See $artifactDir\phase2_1_1_prA_node_ssot_check_202603XX.txt"
+    throw "node SSOT assertion failed. See $artifactDir\phase2_1_1_prA_node_ssot_check.txt"
 }
+
+Write-Host "[2/14] docker compose up -d"
+docker compose -f infra/docker-compose.yml up -d
 
 Write-Host "[3/14] backend test"
 cmd /c "cd /d backend && gradlew.bat test --no-daemon > ..\$artifactDir\backend_gradle_test_output.txt 2>&1"

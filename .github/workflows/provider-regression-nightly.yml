@@ -33,7 +33,7 @@ jobs:
             - name: Assert Node SSOT
               shell: pwsh
               run: |
-                  python scripts/assert_node_ssot.py `
+                  python scripts/check_node_version.py `
                     --nvmrc .nvmrc `
                     --package-json frontend/package.json `
                     --check-runtime
