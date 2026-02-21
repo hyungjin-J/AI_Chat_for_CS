@@ -77,11 +77,11 @@ python scripts/notion_ci_auth_preflight.py \
 python scripts/check_notion_manual_exception_gate.py \
   --context tmp/ci_notion_sync_context.json \
   --preflight tmp/ci_notion_auth_preflight.json \
-  --status-file docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json \
+  --status-json docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json \
   --manual-patch docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md \
   --spec-sync spec_sync_report.md \
-  --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.json \
-  --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.txt
+  --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate.json \
+  --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate.txt
 ```
 
 ## 책임/점검 항목

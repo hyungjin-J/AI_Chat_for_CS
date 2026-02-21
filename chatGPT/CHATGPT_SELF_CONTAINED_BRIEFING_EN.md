@@ -1,7 +1,7 @@
 ﻿# CHATGPT SELF-CONTAINED BRIEFING (EN)
 
-- updated_at_kst: 2026-02-22 00:32:43 +09:00
-- base_commit_hash: 17d758d
+- updated_at_kst: 2026-02-22 00:40:30 +09:00
+- base_commit_hash: 60c6d97
 - release_tag: 2026.03XX-phase2.1.1-release-hygiene
 - branch: main
 - pr_number: N/A (local working tree)

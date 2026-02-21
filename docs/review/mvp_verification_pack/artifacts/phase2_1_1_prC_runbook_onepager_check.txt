@@ -1,0 +1,9 @@
+runbook_onepager_check
+status=PASS
+has_BLOCKED=True
+has_Manual_Patch=True
+has_Evidence=True
+has_Close=True
+has_status_json=True
+has_manual_patch=True
+has_manual_gate_script=True

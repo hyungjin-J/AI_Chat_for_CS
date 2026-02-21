@@ -47,9 +47,10 @@ def assert_fixed_name(path: Path, expected: str, violations: list[Violation], fi
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Notion manual exception gate")
-    parser.add_argument("--context", required=True)
-    parser.add_argument("--preflight", required=True)
-    parser.add_argument("--status-file", required=True)
+    parser.add_argument("--context")
+    parser.add_argument("--preflight")
+    parser.add_argument("--status-file")
+    parser.add_argument("--status-json")
     parser.add_argument("--manual-patch", required=True)
     parser.add_argument("--spec-sync", required=True)
     parser.add_argument("--output-json")
@@ -58,20 +59,23 @@ def main() -> int:
 
     violations: list[Violation] = []
 
-    context_path = Path(args.context)
-    preflight_path = Path(args.preflight)
-    status_path = Path(args.status_file)
+    context_path = Path(args.context) if args.context else None
+    preflight_path = Path(args.preflight) if args.preflight else None
+    status_arg = args.status_json or args.status_file
+    if not status_arg:
+        parser.error("one of --status-json or --status-file is required")
+    status_path = Path(status_arg)
     patch_path = Path(args.manual_patch)
     spec_sync_path = Path(args.spec_sync)
 
     assert_fixed_name(status_path, EXPECTED_STATUS_FILE, violations, "status_file")
     assert_fixed_name(patch_path, EXPECTED_PATCH_FILE, violations, "manual_patch")
 
-    context = load_json(context_path, violations, "CONTEXT")
-    preflight = load_json(preflight_path, violations, "PREFLIGHT")
+    context = load_json(context_path, violations, "CONTEXT") if context_path else {}
+    preflight = load_json(preflight_path, violations, "PREFLIGHT") if preflight_path else {}
     status = load_json(status_path, violations, "STATUS")
 
-    if context:
+    if context_path and context:
         changed = bool(context.get("changed_targets"))
         if not changed:
             violations.append(
@@ -81,7 +85,7 @@ def main() -> int:
                 )
             )
 
-    if preflight:
+    if preflight_path and preflight:
         preflight_status = str(preflight.get("status", "")).upper()
         error_code = str(preflight.get("error_code", ""))
         if preflight_status != "FAIL":
@@ -154,8 +158,8 @@ def main() -> int:
         "violation_count": len(violations),
         "violations": [asdict(v) for v in violations],
         "checked_files": {
-            "context": context_path.as_posix(),
-            "preflight": preflight_path.as_posix(),
+            "context": context_path.as_posix() if context_path else "",
+            "preflight": preflight_path.as_posix() if preflight_path else "",
             "status_file": status_path.as_posix(),
             "manual_patch": patch_path.as_posix(),
             "spec_sync_report": spec_sync_path.as_posix(),

@@ -1,0 +1,12 @@
+{
+  "checked_at_utc": "2026-02-21T15:34:56.174583+00:00",
+  "changed_targets_count": 1,
+  "changed_targets": [
+    "docs/references/google_ready_api_spec_v0.3_20260216.xlsx"
+  ],
+  "already_synced": false,
+  "status": "FAIL",
+  "error_code": "NOTION_AUTH_TOKEN_MISSING",
+  "message": "Fail-Closed: NOTION_TOKEN is missing. Update CI secret and follow docs/ops/runbook_spec_notion_gate.md.",
+  "runbook": "docs/ops/runbook_spec_notion_gate.md"
+}

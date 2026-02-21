@@ -1,0 +1,21 @@
+PASS .nvmrc
+PASS frontend/package.json
+PASS scripts/assert_node_ssot.py
+PASS scripts/check_node_version.py
+PASS scripts/check_all.ps1
+PASS scripts/lint_chatgpt_handoff_docs.py
+PASS scripts/check_notion_manual_exception_gate.py
+PASS .github/workflows/pr-smoke-contract.yml
+PASS .github/workflows/release-nightly-full.yml
+PASS .github/workflows/mvp-demo-verify.yml
+PASS .github/workflows/provider-regression-nightly.yml
+PASS .github/workflows/notion-zero-touch-sync.yml
+PASS docs/review/plans/202603XX_phase2_1_1_release_hygiene_plan.md
+PASS docs/ops/runbook_spec_notion_gate.md
+PASS spec_sync_report.md
+PASS AGENTS.md
+PASS chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
+PASS chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
+PASS docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json
+PASS docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md
+status=PASS
