@@ -1,0 +1,6 @@
+fixed_artifact_paths_contract
+status=PASS
+contract_path=scripts/contracts/fixed_artifact_paths.json
+artifact_root=docs/review/mvp_verification_pack/artifacts/
+fixed_paths_count=19
+violation_count=0

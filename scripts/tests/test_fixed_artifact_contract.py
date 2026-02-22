@@ -89,6 +89,52 @@ class FixedArtifactContractTest(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
             self.assertIn("status=PASS", proc.stdout)
 
+    def test_contract_safety_rejects_path_traversal_absolute_and_backslash(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            artifacts = root / "docs/review/mvp_verification_pack/artifacts"
+            artifacts.mkdir(parents=True, exist_ok=True)
+            (artifacts / "ok.txt").write_text("ok\n", encoding="utf-8")
+            (root / "spec_sync_report.md").write_text("sync\n", encoding="utf-8")
+
+            contract = {
+                "artifact_root": "docs/review/mvp_verification_pack/artifacts/",
+                "allowed_non_artifact_paths": ["spec_sync_report.md"],
+                "fixed_paths": [
+                    "docs/review/mvp_verification_pack/artifacts/ok.txt",
+                    "../secrets.txt",
+                    "/etc/passwd",
+                    "C:\\temp\\x",
+                    "docs/../x",
+                    "spec_sync_report.md",
+                ],
+            }
+            contract_path = root / "contract.json"
+            contract_path.write_text(json.dumps(contract, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+            proc = subprocess.run(
+                [
+                    "python",
+                    str(SCRIPT_PATH),
+                    "--contract",
+                    str(contract_path),
+                ],
+                cwd=root,
+                check=False,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("PATH_TRAVERSAL_FORBIDDEN", proc.stdout)
+            self.assertIn("PATH_ABSOLUTE_FORBIDDEN", proc.stdout)
+            self.assertIn("PATH_BACKSLASH_FORBIDDEN", proc.stdout)
+            self.assertIn("../secrets.txt", proc.stdout)
+            self.assertIn("/etc/passwd", proc.stdout)
+            self.assertIn("C:\\temp\\x", proc.stdout)
+            self.assertIn("docs/../x", proc.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

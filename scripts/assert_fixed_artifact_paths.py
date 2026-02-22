@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
@@ -30,56 +31,86 @@ def has_path_traversal(path: str) -> bool:
     return ".." in PurePosixPath(path).parts
 
 
+def is_absolute_forbidden(path: str) -> bool:
+    if path.startswith(("/", "\\")):
+        return True
+    return bool(re.match(r"^[A-Za-z]:[\\/]", path))
+
+
 def run_contract_check(contract_path: Path) -> tuple[dict, list[Violation]]:
     contract = load_contract(contract_path)
     artifact_root = normalize(contract.get("artifact_root", ""))
     allowed_non_artifact = {normalize(item) for item in contract.get("allowed_non_artifact_paths", [])}
-    fixed_paths = [normalize(item) for item in contract.get("fixed_paths", [])]
+    fixed_paths_raw = [str(item).strip() for item in contract.get("fixed_paths", [])]
 
     violations: list[Violation] = []
 
-    for raw_path in fixed_paths:
-        if not raw_path:
+    for entry in fixed_paths_raw:
+        if not entry:
             violations.append(
                 Violation(
                     code="PATH_EMPTY",
-                    path=raw_path,
+                    path=entry,
                     message="empty path entry in contract",
                     remediation="Remove empty entry from scripts/contracts/fixed_artifact_paths.json",
                 )
             )
             continue
 
-        if raw_path.startswith(("http://", "https://")):
+        if entry.startswith(("http://", "https://")):
             violations.append(
                 Violation(
                     code="PATH_REMOTE_NOT_ALLOWED",
-                    path=raw_path,
+                    path=entry,
                     message="contract paths must be repository-local, remote URL found",
                     remediation="Replace remote URL with repository-local evidence path.",
                 )
             )
             continue
 
-        if has_path_traversal(raw_path):
+        if "\\" in entry:
+            violations.append(
+                Violation(
+                    code="PATH_BACKSLASH_FORBIDDEN",
+                    path=entry,
+                    message="backslash path separator is forbidden in contract entries",
+                    remediation="Use forward-slash repository-relative paths only.",
+                )
+            )
+            continue
+
+        if is_absolute_forbidden(entry):
+            violations.append(
+                Violation(
+                    code="PATH_ABSOLUTE_FORBIDDEN",
+                    path=entry,
+                    message="absolute paths are forbidden in fixed artifact contract",
+                    remediation="Use repository-relative paths only.",
+                )
+            )
+            continue
+
+        normalized_path = normalize(entry)
+
+        if has_path_traversal(normalized_path):
             violations.append(
                 Violation(
                     code="PATH_TRAVERSAL_FORBIDDEN",
-                    path=raw_path,
+                    path=entry,
                     message="path traversal '..' is forbidden in fixed artifact contract",
                     remediation="Use normalized repository-relative paths only.",
                 )
             )
             continue
 
-        in_allowed_non_artifact = raw_path in allowed_non_artifact
-        in_artifact_root = raw_path.startswith(artifact_root)
+        in_allowed_non_artifact = normalized_path in allowed_non_artifact
+        in_artifact_root = normalized_path.startswith(artifact_root)
 
         if not in_allowed_non_artifact and not in_artifact_root:
             violations.append(
                 Violation(
                     code="PATH_OUT_OF_SCOPE",
-                    path=raw_path,
+                    path=entry,
                     message="path must be under artifacts root or explicitly allowlisted",
                     remediation=(
                         "Move evidence under artifacts root or add it to "
@@ -89,15 +120,15 @@ def run_contract_check(contract_path: Path) -> tuple[dict, list[Violation]]:
             )
             continue
 
-        file_path = Path(raw_path)
+        file_path = Path(normalized_path)
         if not file_path.exists():
             violations.append(
                 Violation(
                     code="PATH_MISSING",
-                    path=raw_path,
+                    path=entry,
                     message="required fixed path does not exist",
                     remediation=(
-                        f"Recreate or restore {raw_path} by rerunning its gate/script, "
+                        f"Recreate or restore {normalized_path} by rerunning its gate/script, "
                         "then commit the file."
                     ),
                 )
@@ -108,7 +139,7 @@ def run_contract_check(contract_path: Path) -> tuple[dict, list[Violation]]:
         "contract_path": contract_path.as_posix(),
         "artifact_root": artifact_root,
         "allowed_non_artifact_paths": sorted(allowed_non_artifact),
-        "fixed_paths_count": len(fixed_paths),
+        "fixed_paths_count": len(fixed_paths_raw),
         "violation_count": len(violations),
         "violations": [asdict(v) for v in violations],
     }

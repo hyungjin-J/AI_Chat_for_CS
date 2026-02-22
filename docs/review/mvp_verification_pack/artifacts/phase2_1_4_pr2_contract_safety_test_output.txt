@@ -1,0 +1,8 @@
+test_contract_passes_when_all_paths_exist (scripts.tests.test_fixed_artifact_contract.FixedArtifactContractTest.test_contract_passes_when_all_paths_exist) ... ok
+test_contract_safety_rejects_path_traversal_absolute_and_backslash (scripts.tests.test_fixed_artifact_contract.FixedArtifactContractTest.test_contract_safety_rejects_path_traversal_absolute_and_backslash) ... ok
+test_missing_contract_path_fails_with_missing_list (scripts.tests.test_fixed_artifact_contract.FixedArtifactContractTest.test_missing_contract_path_fails_with_missing_list) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.258s
+
+OK
