@@ -4,7 +4,7 @@
 핵심 목표는 빠른 응답이 아니라, **근거 기반 답변 + 보안 + 운영 추적성**을 동시에 만족하는 운영형 시스템입니다.
 
 ## TL;DR
-- 현재 기준: **Phase2.1.2 (Open Risks Burn-down) 반영 완료**
+- 현재 기준: **Phase2.1.3 (Gate Regression & Drift Prevention) 반영 완료**
 - 최신 기준 문서(SSOT):
   - `docs/review/plans/202603XX_phase2_1_1_release_hygiene_plan.md`
   - `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md`
@@ -15,62 +15,54 @@
   - Hardening Gate 완화 금지(쿠키/CSRF/락아웃/리프레시 회전/UTC 버킷)
   - 스펙 변경 시 Notion 동기화 + 메타 갱신 + `spec_sync_report.md` 필수
 
-## Current Status (Phase2.1.2)
+## Current Status (Phase2.1.3)
 | Item | Status | Evidence |
 |---|---|---|
-| Start status snapshot | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt` |
-| Baseline patch snapshot | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_baseline.patch` |
-| Node SSOT guidance check | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_node_ssot_check.txt` |
-| Backend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_backend_test_output.txt` |
-| Frontend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_test_output.txt` |
-| Frontend build | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_build_output.txt` |
-| ChatGPT doc lint | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_chatgpt_doc_lint.txt` |
-| Spec consistency | PASS (`FAIL=0`) | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_spec_consistency.txt` |
-| UTF-8 strict decode | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_utf8_check.txt` |
-| Notion manual exception gate | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_manual_gate.txt` |
+| Start status snapshot | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_git_status_start.txt` |
+| Baseline patch snapshot | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_baseline.patch` |
+| Fixed artifact contract | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_fixed_artifact_contract_check.txt` |
+| Gate regression unittest | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_unittest_output.txt` |
+| ChatGPT doc lint | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.txt` |
+| Backend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_backend_test_output.txt` |
+| Frontend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_frontend_test_output.txt` |
+| Frontend build | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_frontend_build_output.txt` |
+| Spec consistency | PASS (`FAIL=0`) | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_spec_consistency.txt` |
+| UTF-8 strict decode | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_utf8_check.txt` |
 
-## What Changed in Phase2.1.2
+## What Changed in Phase2.1.3
 
-### W1: Node 런타임 드리프트 완화
-- 플랫폼별 부트스트랩 스크립트 추가:
-  - `scripts/bootstrap_node_from_nvmrc.ps1`
-  - `scripts/bootstrap_node_from_nvmrc.sh`
-- 설치 불안정 대응 재시도 스크립트(선택):
-  - `scripts/frontend_install_retry.ps1`
-  - `scripts/frontend_install_retry.sh`
-- Node 버전 불일치 시 복구 가이드 자동 출력:
-  - `scripts/check_node_version.py`
-  - `docs/dev/DEV_ENVIRONMENT.md`
-
-### W2: Windows npm lock 대응 강화
-- npm 설치 표준 플래그를 로컬/CI 동일하게 적용:
-  - `npm ci --prefer-offline --no-audit --fund=false`
-- 운영 런북 추가:
-  - `docs/ops/runbook_windows_node_npm_lock.md`
-- CI/로컬 검사 스크립트 반영:
+### A) Artifact Path Contract + CI
+- 고정 경로 계약 파일 추가:
+  - `scripts/contracts/fixed_artifact_paths.json`
+- 계약 검사 스크립트 추가:
+  - `scripts/assert_fixed_artifact_paths.py`
+- CI smoke gate에 계약 검사 단계 추가:
   - `.github/workflows/pr-smoke-contract.yml`
-  - `scripts/check_all.ps1`
 
-### W3: Notion 수동 예외 Close 게이트 고도화
-- 수동 증적 템플릿 생성 스크립트 추가:
-  - `scripts/gen_notion_manual_evidence_templates.py`
-- 파일/필드 단위로 상세 진단하도록 검증기 강화:
-  - `scripts/check_notion_manual_exception_gate.py`
-- 운영 절차 업데이트:
-  - `docs/ops/runbook_spec_notion_gate.md`
-- Notion export snapshot 정책 추가:
-  - `docs/notion_exports/README.md`
-- 고정 증적 경로 유지:
-  - `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json`
-  - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
-  - `spec_sync_report.md`
-
-### W4: ChatGPT handoff 증적 경로 검증 강화
-- 브리핑 문서의 Validation Gate에서 참조한 증적 파일 존재/범위를 자동 검사:
-  - `scripts/lint_chatgpt_handoff_docs.py`
-- 대상 문서:
+### B) chatGPT Doc Lint Coverage 확장
+- Validation Gate Evidence 경로 검증을 두 문서로 확장:
   - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
   - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
+- lint JSON 출력에 coverage 메트릭 추가:
+  - `scanned_tables_count`
+  - `extracted_evidence_paths_count`
+  - `missing_paths_count`
+  - `missing_paths`
+
+### C) Gate Regression Test + CI
+- stdlib `unittest` 회귀 테스트 추가:
+  - `scripts/tests/test_lint_chatgpt_handoff_docs.py`
+  - `scripts/tests/test_notion_templates.py`
+  - `scripts/tests/test_notion_manual_exception_gate.py`
+  - `scripts/tests/test_fixed_artifact_contract.py`
+- CI smoke gate에 unittest 단계 추가:
+  - `.github/workflows/pr-smoke-contract.yml`
+
+### D) Windows npm lock Runbook 격상
+- 진단 번들 수집 스크립트 추가:
+  - `scripts/collect_windows_npm_lock_diag.ps1`
+- runbook에 진단 번들 생성/에스컬레이션 절차 추가:
+  - `docs/ops/runbook_windows_node_npm_lock.md`
 
 ## Quick Start
 
@@ -105,6 +97,8 @@ python scripts/check_node_version.py --nvmrc .nvmrc --package-json frontend/pack
 cd backend; ./gradlew.bat test --no-daemon
 cd ../frontend; npm ci --prefer-offline --no-audit --fund=false; npm run test:run; npm run build
 python ../scripts/spec_consistency_check.py
+python ../scripts/assert_fixed_artifact_paths.py
+python -m unittest discover -s ../scripts/tests -p "test_*.py"
 python ../scripts/lint_chatgpt_handoff_docs.py --files ../chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md ../chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
 ```
 

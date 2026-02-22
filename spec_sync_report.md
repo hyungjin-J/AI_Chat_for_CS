@@ -356,3 +356,40 @@
 ### 14.3 비고
 - Notion BLOCKED_AUTOMATION 수동 close는 기존 고정 증적 3종 정책을 유지한다.
 - Notion export snapshot 경로/시각/커밋 기록은 본 문서(`spec_sync_report.md`)에 누적 관리한다.
+
+## 15) 이번 세션(2026-02-22, Phase2.1.3 Gate Regression & Drift Prevention) 기록
+- 기준 커밋(base): `e2bde0e`
+- 기준 시각(Asia/Seoul): `2026-02-22 14:17:28 +09:00`
+- 스펙 파일(CSV/XLSX) 추가 변경 여부:
+  - **없음 (No additional spec file edit in this session)**
+- Notion 자동 동기화 상태:
+  - 본 세션은 스펙 파일 변경이 없어 신규 자동 동기화 실행 대상 없음
+
+### 15.1 계약/게이트 회귀 방지 보강
+- 고정 경로 계약:
+  - `scripts/contracts/fixed_artifact_paths.json`
+  - `scripts/assert_fixed_artifact_paths.py`
+- 계약 증적:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_3_fixed_artifact_contract_check.txt`
+- unittest 회귀 증적:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_3_unittest_output.txt`
+
+### 15.2 ChatGPT handoff lint 커버리지 확장
+- 대상 문서:
+  - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
+  - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
+- 결과 증적:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.json`
+
+### 15.3 Windows npm lock 진단 번들 운영 보강
+- 신규 스크립트:
+  - `scripts/collect_windows_npm_lock_diag.ps1`
+- runbook 연계:
+  - `docs/ops/runbook_windows_node_npm_lock.md`
+- 존재 증적:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_3_windows_diag_script_exists.txt`
+
+### 15.4 비고
+- Hardening lock, ROLE taxonomy, 표준 에러 포맷 정책 변경 없음.
+- Notion BLOCKED_AUTOMATION 고정 증적 3종(`notion_blocked_status.json`, `notion_manual_patch.md`, `spec_sync_report.md`) 유지.

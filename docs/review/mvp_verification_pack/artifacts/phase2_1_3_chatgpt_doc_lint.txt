@@ -1,0 +1,7 @@
+chatgpt_handoff_doc_lint
+status=PASS
+violation_count=0
+warning_count=0
+scanned_tables_count=2
+extracted_evidence_paths_count=24
+missing_paths_count=0

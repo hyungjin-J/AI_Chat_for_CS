@@ -57,10 +57,25 @@ jobs:
         run: |
           python scripts/spec_consistency_check.py
 
+      - name: Fixed artifact contract check
+        shell: pwsh
+        run: |
+          python scripts/assert_fixed_artifact_paths.py `
+            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_3_fixed_artifact_contract_check.txt
+
+      - name: Gate regression unittest
+        shell: pwsh
+        run: |
+          python -m unittest discover -s scripts/tests -p "test_*.py" *>&1 `
+            | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/phase2_1_3_unittest_output.txt
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
       - name: ChatGPT handoff doc lint
         shell: pwsh
         run: |
           python scripts/lint_chatgpt_handoff_docs.py `
             --files chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md `
-            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint.json `
-            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint.txt
+            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.json `
+            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.txt

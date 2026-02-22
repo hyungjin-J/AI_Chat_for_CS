@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "violation_count": 0,
+  "violations": [],
+  "warning_count": 0,
+  "warnings": [],
+  "scanned_tables_count": 2,
+  "extracted_evidence_paths_count": 24,
+  "missing_paths_count": 0,
+  "missing_paths": [],
+  "evidence_scan_by_file": [
+    {
+      "file": "chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md",
+      "scanned_tables_count": 1,
+      "extracted_evidence_paths_count": 12,
+      "missing_paths_count": 0,
+      "missing_paths": []
+    },
+    {
+      "file": "chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md",
+      "scanned_tables_count": 1,
+      "extracted_evidence_paths_count": 12,
+      "missing_paths_count": 0,
+      "missing_paths": []
+    }
+  ]
+}

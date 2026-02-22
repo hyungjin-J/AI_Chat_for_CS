@@ -41,6 +41,22 @@ powershell -ExecutionPolicy Bypass -File scripts/frontend_install_retry.ps1 -Max
 6. If still blocked, reboot once and retry before escalating.
 7. If recurring, move the install flow to WSL2 or short local path and re-run from clean workspace.
 
+## Diagnostic Bundle for Escalation
+When issue persists after standard recovery, collect a sanitized diagnostics bundle:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/collect_windows_npm_lock_diag.ps1
+```
+
+Bundle output:
+- `docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip`
+
+Escalation flow:
+1. Generate bundle and confirm timestamp.
+2. Attach bundle to internal escalation ticket.
+3. Include retry count, error code, and whether reboot/WSL fallback was attempted.
+4. Do not attach raw token values, private keys, or user-identifying data.
+
 ## Optional OS-Level Mitigations
 - Keep repository path short (avoid deeply nested folders).
 - Exclude project folder from real-time antivirus scanning if enterprise policy allows.

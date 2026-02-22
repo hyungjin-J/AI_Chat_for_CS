@@ -1,0 +1,23 @@
+utf8_strict_decode_check
+checked_files=20
+failure_count=0
+PASS .github/workflows/pr-smoke-contract.yml
+PASS README.md
+PASS chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
+PASS chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
+PASS docs/ops/runbook_windows_node_npm_lock.md
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_backend_test_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_baseline.patch
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.json
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_fixed_artifact_contract_check.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_frontend_build_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_frontend_test_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_git_status_start.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_spec_consistency.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_unittest_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_3_windows_diag_script_exists.txt
+PASS scripts/assert_fixed_artifact_paths.py
+PASS scripts/collect_windows_npm_lock_diag.ps1
+PASS scripts/lint_chatgpt_handoff_docs.py
+PASS spec_sync_report.md

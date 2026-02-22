@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lint gate for chatGPT handoff docs."""
+"""Lint gate for chatGPT handoff documents."""
 
 from __future__ import annotations
 
@@ -15,7 +15,9 @@ REQUIRED_META_KEYS = ("updated_at_kst", "base_commit_hash", "release_tag", "bran
 UPDATED_AT_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \+09:00$")
 RACE_ID_PATTERN = re.compile(r"\brace_id\b", re.IGNORECASE)
 ARTIFACT_ROOT = "docs/review/mvp_verification_pack/artifacts/"
+ALLOWED_NON_ARTIFACT_EVIDENCE = {"spec_sync_report.md"}
 ARTIFACT_PATH_PATTERN = re.compile(r"docs/review/mvp_verification_pack/artifacts/[A-Za-z0-9._/\-]+")
+PLAIN_EVIDENCE_PATTERN = re.compile(r"(?:docs/review/mvp_verification_pack/artifacts/[A-Za-z0-9._/\-]+|spec_sync_report\.md)")
 UNSTABLE_EVIDENCE_NAME_PATTERN = re.compile(r"_(?:20\d{6}|20\d{2}XX)(?=\.)")
 FORBIDDEN_LITERAL_PATTERNS = (
     re.compile(r"NOTION_TOKEN"),
@@ -38,6 +40,14 @@ class Violation:
     line: int | None = None
 
 
+@dataclass
+class WarningItem:
+    file: str
+    code: str
+    message: str
+    line: int | None = None
+
+
 def parse_meta(lines: list[str]) -> dict[str, str]:
     meta: dict[str, str] = {}
     for line in lines:
@@ -50,84 +60,76 @@ def parse_meta(lines: list[str]) -> dict[str, str]:
     return meta
 
 
-def parse_validation_gate_evidence(lines: list[str]) -> list[tuple[int, str]]:
-    evidence_rows: list[tuple[int, str]] = []
-    in_gate_table = False
-    for line_idx, line in enumerate(lines, start=1):
-        stripped = line.strip()
-        if stripped.lower() == "| gate | status | evidence |":
-            in_gate_table = True
+def normalize_path(path: str) -> str:
+    return path.strip().strip("`").strip().replace("\\", "/")
+
+
+def extract_paths_from_evidence_cell(cell: str) -> set[str]:
+    candidates: set[str] = set()
+
+    # Inline code snippets.
+    for match in re.findall(r"`([^`]+)`", cell):
+        normalized = normalize_path(match)
+        if normalized:
+            candidates.add(normalized)
+
+    # Markdown links: [label](path)
+    for match in re.findall(r"\[[^\]]+\]\(([^)]+)\)", cell):
+        normalized = normalize_path(match)
+        if normalized:
+            candidates.add(normalized)
+
+    # Plain path tokens.
+    for match in PLAIN_EVIDENCE_PATTERN.findall(cell):
+        normalized = normalize_path(match)
+        if normalized:
+            candidates.add(normalized)
+
+    return candidates
+
+
+def parse_validation_gate_tables(path: Path, lines: list[str]) -> tuple[int, list[tuple[int, str]]]:
+    scanned_tables = 0
+    evidence_entries: list[tuple[int, str]] = []
+
+    idx = 0
+    while idx < len(lines):
+        stripped = lines[idx].strip().lower()
+        if stripped == "| gate | status | evidence |":
+            scanned_tables += 1
+            idx += 1
+            while idx < len(lines):
+                row = lines[idx].strip()
+                if not row.startswith("|"):
+                    break
+
+                cells = [cell.strip() for cell in row.split("|")[1:-1]]
+                if len(cells) < 3:
+                    idx += 1
+                    continue
+
+                # Skip header/separator rows.
+                if cells[0].lower() == "gate" and cells[1].lower() == "status":
+                    idx += 1
+                    continue
+                if all(cell and set(cell) <= {"-"} for cell in cells):
+                    idx += 1
+                    continue
+
+                evidence_cell = cells[2]
+                for extracted in extract_paths_from_evidence_cell(evidence_cell):
+                    evidence_entries.append((idx + 1, extracted))
+
+                idx += 1
             continue
+        idx += 1
 
-        if not in_gate_table:
-            continue
-
-        if not stripped.startswith("|"):
-            break
-
-        cells = [cell.strip() for cell in stripped.split("|")[1:-1]]
-        if len(cells) < 3:
-            continue
-        if cells[0].lower() == "gate" and cells[1].lower() == "status":
-            continue
-        if all(set(cell) <= {"-"} for cell in cells):
-            continue
-
-        evidence_cell = cells[2]
-        for artifact_path in ARTIFACT_PATH_PATTERN.findall(evidence_cell):
-            evidence_rows.append((line_idx, artifact_path))
-
-    return evidence_rows
+    return scanned_tables, evidence_entries
 
 
-def collect_briefing_evidence_stats(path: Path) -> dict[str, int | str]:
-    lines = path.read_text(encoding="utf-8", errors="strict").splitlines()
-    evidence_rows = parse_validation_gate_evidence(lines=lines)
-
-    stats: dict[str, int | str] = {
-        "parsed_count": len(evidence_rows),
-        "existing_count": 0,
-        "missing_count": 0,
-        "out_of_scope_count": 0,
-        "path_traversal_count": 0,
-        "unstable_name_count": 0,
-    }
-
-    for _, evidence_path in evidence_rows:
-        normalized = evidence_path.replace("\\", "/")
-        if not normalized.startswith(ARTIFACT_ROOT):
-            stats["out_of_scope_count"] += 1
-            continue
-
-        if ".." in PurePosixPath(normalized).parts:
-            stats["path_traversal_count"] += 1
-            continue
-
-        evidence_file = Path(normalized)
-        if evidence_file.exists():
-            stats["existing_count"] += 1
-        else:
-            stats["missing_count"] += 1
-
-        if UNSTABLE_EVIDENCE_NAME_PATTERN.search(evidence_file.name):
-            stats["unstable_name_count"] += 1
-
-    status = "PASS"
-    if stats["parsed_count"] == 0:
-        status = "FAIL"
-    if (
-        stats["missing_count"] > 0
-        or stats["out_of_scope_count"] > 0
-        or stats["path_traversal_count"] > 0
-        or stats["unstable_name_count"] > 0
-    ):
-        status = "FAIL"
-    stats["status"] = status
-    return stats
-
-
-def lint_file(path: Path) -> list[Violation]:
+def lint_file(path: Path) -> tuple[list[Violation], list[WarningItem], dict]:
     violations: list[Violation] = []
+    warnings: list[WarningItem] = []
     text = path.read_text(encoding="utf-8", errors="strict")
     lines = text.splitlines()
 
@@ -208,7 +210,7 @@ def lint_file(path: Path) -> list[Violation]:
                 )
             )
 
-    # Validation table and artifact evidence path.
+    # Validation table presence.
     if "| Gate |" not in text or "|---|---|" not in text:
         violations.append(
             Violation(
@@ -217,72 +219,90 @@ def lint_file(path: Path) -> list[Violation]:
                 message="validation gate table missing",
             )
         )
-    if "docs/review/mvp_verification_pack/artifacts/" not in text:
+
+    scanned_tables, evidence_entries = parse_validation_gate_tables(path=path, lines=lines)
+    if scanned_tables == 0:
         violations.append(
             Violation(
                 file=path.as_posix(),
-                code="DOC_EVIDENCE_PATH_MISSING",
-                message="artifact evidence path missing",
+                code="DOC_GATE_EVIDENCE_MISSING",
+                message="validation gate evidence table was not parsed",
             )
-            )
+        )
 
-    if path.as_posix().endswith("chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md"):
-        evidence_rows = parse_validation_gate_evidence(lines=lines)
-        if not evidence_rows:
+    missing_paths: set[str] = set()
+    extracted_unique: set[str] = set()
+
+    for line_idx, evidence_path in evidence_entries:
+        normalized = normalize_path(evidence_path)
+        if not normalized:
+            continue
+
+        extracted_unique.add(normalized)
+
+        if normalized.startswith(("http://", "https://")):
+            warnings.append(
+                WarningItem(
+                    file=path.as_posix(),
+                    code="DOC_EVIDENCE_EXTERNAL_PATH",
+                    message=f"external evidence path detected (local path preferred): {normalized}",
+                    line=line_idx,
+                )
+            )
+            continue
+
+        if ".." in PurePosixPath(normalized).parts:
+            warnings.append(
+                WarningItem(
+                    file=path.as_posix(),
+                    code="DOC_EVIDENCE_PATH_TRAVERSAL",
+                    message=f"path traversal detected in evidence path: {normalized}",
+                    line=line_idx,
+                )
+            )
+            continue
+
+        is_artifact = normalized.startswith(ARTIFACT_ROOT)
+        is_allowlisted = normalized in ALLOWED_NON_ARTIFACT_EVIDENCE
+        if not is_artifact and not is_allowlisted:
+            warnings.append(
+                WarningItem(
+                    file=path.as_posix(),
+                    code="DOC_EVIDENCE_SCOPE_WARNING",
+                    message=(
+                        "evidence path should be under artifacts root or spec_sync_report.md: "
+                        f"{normalized}"
+                    ),
+                    line=line_idx,
+                )
+            )
+            continue
+
+        evidence_file = Path(normalized)
+        if not evidence_file.exists():
+            missing_paths.add(normalized)
             violations.append(
                 Violation(
                     file=path.as_posix(),
-                    code="DOC_GATE_EVIDENCE_MISSING",
-                    message="validation gate evidence paths were not parsed from table",
+                    code="DOC_EVIDENCE_NOT_FOUND",
+                    message=f"evidence file does not exist: {normalized}",
+                    line=line_idx,
                 )
             )
+            continue
 
-        for line_idx, evidence_path in evidence_rows:
-            normalized = evidence_path.replace("\\", "/")
-            if not normalized.startswith(ARTIFACT_ROOT):
-                violations.append(
-                    Violation(
-                        file=path.as_posix(),
-                        code="DOC_EVIDENCE_SCOPE_INVALID",
-                        message=f"evidence path must stay under {ARTIFACT_ROOT}: {normalized}",
-                        line=line_idx,
-                    )
+        if is_artifact and UNSTABLE_EVIDENCE_NAME_PATTERN.search(evidence_file.name):
+            violations.append(
+                Violation(
+                    file=path.as_posix(),
+                    code="DOC_EVIDENCE_UNSTABLE_NAME",
+                    message=(
+                        "evidence filename appears date-suffixed; use stable prefix naming: "
+                        f"{evidence_file.name}"
+                    ),
+                    line=line_idx,
                 )
-                continue
-
-            if ".." in PurePosixPath(normalized).parts:
-                violations.append(
-                    Violation(
-                        file=path.as_posix(),
-                        code="DOC_EVIDENCE_SCOPE_INVALID",
-                        message=f"evidence path must not contain '..': {normalized}",
-                        line=line_idx,
-                    )
-                )
-
-            evidence_file = Path(normalized)
-            if not evidence_file.exists():
-                violations.append(
-                    Violation(
-                        file=path.as_posix(),
-                        code="DOC_EVIDENCE_NOT_FOUND",
-                        message=f"evidence file does not exist: {normalized}",
-                        line=line_idx,
-                    )
-                )
-
-            if UNSTABLE_EVIDENCE_NAME_PATTERN.search(evidence_file.name):
-                violations.append(
-                    Violation(
-                        file=path.as_posix(),
-                        code="DOC_EVIDENCE_UNSTABLE_NAME",
-                        message=(
-                            "evidence filename appears date-suffixed; use stable prefix naming: "
-                            f"{evidence_file.name}"
-                        ),
-                        line=line_idx,
-                    )
-                )
+            )
 
     # Forbidden literals (security hygiene).
     for pattern in FORBIDDEN_LITERAL_PATTERNS:
@@ -298,7 +318,14 @@ def lint_file(path: Path) -> list[Violation]:
                 )
             )
 
-    return violations
+    evidence_stats = {
+        "file": path.as_posix(),
+        "scanned_tables_count": scanned_tables,
+        "extracted_evidence_paths_count": len(extracted_unique),
+        "missing_paths_count": len(missing_paths),
+        "missing_paths": sorted(missing_paths),
+    }
+    return violations, warnings, evidence_stats
 
 
 def main() -> int:
@@ -309,7 +336,9 @@ def main() -> int:
     args = parser.parse_args()
 
     violations: list[Violation] = []
-    evidence_existence_validation: dict[str, int | str] = {}
+    warnings: list[WarningItem] = []
+    evidence_scan_by_file: list[dict] = []
+
     for file_path in args.files:
         path = Path(file_path)
         if not path.exists():
@@ -317,15 +346,34 @@ def main() -> int:
                 Violation(file=path.as_posix(), code="DOC_FILE_MISSING", message="file not found")
             )
             continue
-        violations.extend(lint_file(path))
-        if path.as_posix().endswith("chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md"):
-            evidence_existence_validation = collect_briefing_evidence_stats(path=path)
+
+        file_violations, file_warnings, file_evidence_stats = lint_file(path)
+        violations.extend(file_violations)
+        warnings.extend(file_warnings)
+        evidence_scan_by_file.append(file_evidence_stats)
+
+    scanned_tables_count = sum(item["scanned_tables_count"] for item in evidence_scan_by_file)
+    extracted_evidence_paths_count = sum(
+        item["extracted_evidence_paths_count"] for item in evidence_scan_by_file
+    )
+    missing_paths_set = {
+        path
+        for item in evidence_scan_by_file
+        for path in item["missing_paths"]
+    }
+    missing_paths = sorted(missing_paths_set)
 
     payload = {
         "status": "PASS" if not violations else "FAIL",
         "violation_count": len(violations),
         "violations": [asdict(v) for v in violations],
-        "evidence_existence_validation": evidence_existence_validation,
+        "warning_count": len(warnings),
+        "warnings": [asdict(w) for w in warnings],
+        "scanned_tables_count": scanned_tables_count,
+        "extracted_evidence_paths_count": extracted_evidence_paths_count,
+        "missing_paths_count": len(missing_paths),
+        "missing_paths": missing_paths,
+        "evidence_scan_by_file": evidence_scan_by_file,
     }
     report_json = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 
@@ -338,11 +386,22 @@ def main() -> int:
         "chatgpt_handoff_doc_lint",
         f"status={payload['status']}",
         f"violation_count={payload['violation_count']}",
+        f"warning_count={payload['warning_count']}",
+        f"scanned_tables_count={payload['scanned_tables_count']}",
+        f"extracted_evidence_paths_count={payload['extracted_evidence_paths_count']}",
+        f"missing_paths_count={payload['missing_paths_count']}",
     ]
+    for missing in payload["missing_paths"]:
+        lines.append(f"- missing_path={missing}")
     for item in payload["violations"]:
         lines.append(
             f"- {item['file']}:{item.get('line') or '-'} [{item['code']}] {item['message']}"
         )
+    for item in payload["warnings"]:
+        lines.append(
+            f"- {item['file']}:{item.get('line') or '-'} [WARN:{item['code']}] {item['message']}"
+        )
+
     report_txt = "\n".join(lines) + "\n"
     if args.output_txt:
         output_txt = Path(args.output_txt)

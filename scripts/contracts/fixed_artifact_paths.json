@@ -1,0 +1,27 @@
+{
+    "artifact_root": "docs/review/mvp_verification_pack/artifacts/",
+    "allowed_non_artifact_paths": [
+        "spec_sync_report.md"
+    ],
+    "fixed_paths": [
+        "docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json",
+        "docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md",
+        "spec_sync_report.md",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_baseline.patch",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr1_node_bootstrap_output.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr1_windows_runbook_exists.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr2_notion_template_gen.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr2_notion_gate_error_message.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr2_notion_exports_readme_exists.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_backend_test_output.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_test_output.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_build_output.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_spec_consistency.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_utf8_check.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_chatgpt_doc_lint.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_chatgpt_doc_lint.json",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_manual_gate.txt",
+        "docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_manual_gate.json"
+    ]
+}
