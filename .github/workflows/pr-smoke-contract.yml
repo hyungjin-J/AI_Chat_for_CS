@@ -79,3 +79,15 @@ jobs:
             --files chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md `
             --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.json `
             --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.txt
+
+      - name: Upload gate evidence artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-evidence-${{ github.workflow }}-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            docs/review/mvp_verification_pack/artifacts/phase2_1_3_*
+            docs/review/mvp_verification_pack/artifacts/phase2_1_4_*
+            scripts/contracts/fixed_artifact_paths.json

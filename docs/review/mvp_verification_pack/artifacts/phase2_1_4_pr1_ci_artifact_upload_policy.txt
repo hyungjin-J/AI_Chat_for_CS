@@ -1,0 +1,15 @@
+﻿phase2_1_4_pr1_ci_artifact_upload_policy
+status=APPLIED
+workflows_updated:
+- .github/workflows/pr-smoke-contract.yml
+- .github/workflows/release-nightly-full.yml
+artifact_upload_step:
+- uses=actions/upload-artifact@v4
+- if=always()
+- if-no-files-found=warn
+- retention-days=30
+- name=gate-evidence-${{ github.workflow }}-${{ github.run_id }}
+paths:
+- docs/review/mvp_verification_pack/artifacts/phase2_1_3_*
+- docs/review/mvp_verification_pack/artifacts/phase2_1_4_*
+- scripts/contracts/fixed_artifact_paths.json
