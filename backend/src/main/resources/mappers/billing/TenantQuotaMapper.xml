@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.contexts.billing.domain.mapper.TenantQuotaMapper">
+
+    <resultMap id="TenantQuotaMap" type="com.aichatbot.contexts.billing.infrastructure.TenantQuotaRow">
+        <constructor>
+            <arg column="tenant_key" javaType="java.lang.String" name="tenantId"/>
+            <arg column="max_qps" javaType="java.lang.Integer" name="maxQps"/>
+            <arg column="max_daily_tokens" javaType="java.lang.Long" name="maxDailyTokens"/>
+            <arg column="max_monthly_cost" javaType="java.math.BigDecimal" name="maxMonthlyCost"/>
+            <arg column="effective_from" javaType="java.time.Instant" name="effectiveFrom"/>
+            <arg column="effective_to" javaType="java.time.Instant" name="effectiveTo"/>
+            <arg column="breach_action" javaType="java.lang.String" name="breachAction"/>
+            <arg column="updated_by" javaType="java.lang.String" name="updatedBy"/>
+            <arg column="trace_id" javaType="java.lang.String" name="traceId"/>
+            <arg column="updated_at" javaType="java.time.Instant" name="updatedAt"/>
+        </constructor>
+    </resultMap>
+
+    <delete id="deleteByTenantAndEffectiveFrom">
+        DELETE FROM tb_tenant_quota
+        WHERE tenant_key = #{tenantKey}
+          AND effective_from = #{effectiveFrom}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO tb_tenant_quota (
+            tenant_key,
+            max_qps,
+            max_daily_tokens,
+            max_monthly_cost,
+            effective_from,
+            effective_to,
+            breach_action,
+            updated_by,
+            trace_id,
+            updated_at
+        ) VALUES (
+            #{tenantKey},
+            #{maxQps},
+            #{maxDailyTokens},
+            #{maxMonthlyCost},
+            #{effectiveFrom},
+            #{effectiveTo},
+            #{breachAction},
+            #{updatedBy},
+            #{traceToken},
+            #{updatedAt}
+        )
+    </insert>
+
+    <select id="findActive" resultMap="TenantQuotaMap">
+        SELECT tenant_key,
+               max_qps,
+               max_daily_tokens,
+               max_monthly_cost,
+               effective_from,
+               effective_to,
+               breach_action,
+               updated_by,
+               trace_id,
+               updated_at
+        FROM tb_tenant_quota
+        WHERE tenant_key = #{tenantKey}
+          AND effective_from &lt;= #{at}
+          AND (effective_to IS NULL OR effective_to > #{at})
+        ORDER BY effective_from DESC
+        LIMIT 1
+    </select>
+
+    <select id="findLatest" resultMap="TenantQuotaMap">
+        SELECT tenant_key,
+               max_qps,
+               max_daily_tokens,
+               max_monthly_cost,
+               effective_from,
+               effective_to,
+               breach_action,
+               updated_by,
+               trace_id,
+               updated_at
+        FROM tb_tenant_quota
+        WHERE tenant_key = #{tenantKey}
+        ORDER BY effective_from DESC
+        LIMIT 1
+    </select>
+
+    <select id="findAll" resultMap="TenantQuotaMap">
+        SELECT tenant_key,
+               max_qps,
+               max_daily_tokens,
+               max_monthly_cost,
+               effective_from,
+               effective_to,
+               breach_action,
+               updated_by,
+               trace_id,
+               updated_at
+        FROM tb_tenant_quota
+        WHERE tenant_key = #{tenantKey}
+        ORDER BY effective_from DESC
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM tb_tenant_quota
+    </delete>
+
+</mapper>

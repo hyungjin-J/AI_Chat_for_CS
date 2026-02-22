@@ -1,0 +1,34 @@
+{
+  "java_root": "backend/src/main/java",
+  "xml_root": "backend/src/main/resources/mappers",
+  "mapper_interface_glob": "**/domain/**/mapper/*Mapper.java",
+  "allowed_xml_contexts": [
+    "conversation",
+    "identity",
+    "knowledge",
+    "operations",
+    "billing",
+    "platform"
+  ],
+  "namespace_context_map": {
+    "com.aichatbot.contexts.conversation.": "conversation",
+    "com.aichatbot.contexts.identity.": "identity",
+    "com.aichatbot.contexts.knowledge.": "knowledge",
+    "com.aichatbot.contexts.operations.": "operations",
+    "com.aichatbot.contexts.billing.": "billing",
+    "com.aichatbot.platform.": "platform"
+  },
+  "legacy_namespace_prefixes": [
+    "com.aichatbot.auth.",
+    "com.aichatbot.billing.",
+    "com.aichatbot.message.",
+    "com.aichatbot.rag.",
+    "com.aichatbot.session.",
+    "com.aichatbot.admin.",
+    "com.aichatbot.answer.",
+    "com.aichatbot.llm.",
+    "com.aichatbot.tool.",
+    "com.aichatbot.ops.",
+    "com.aichatbot.global."
+  ]
+}

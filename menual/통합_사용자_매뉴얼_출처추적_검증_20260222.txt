@@ -1,0 +1,15 @@
+Traceability Validation Report
+Checked at (UTC): 2026-02-22T08:28:45Z
+Source existence:
+- S1: docs/agent_manual/01_preflight_and_baseline.md | exists=True
+- S2: docs/agent_manual/02_working_memory_contract.md | exists=True
+- S3: docs/agent_manual/03_pr_decomposition_and_agent_roles.md | exists=True
+- S4: docs/agent_manual/04_gates_notion_and_evidence.md | exists=True
+- S5: docs/review/mvp_verification_pack/artifacts/ddd_refactor_spec_consistency.txt | exists=True
+- S6: docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json | exists=True
+- S7: docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md | exists=True
+
+Checks:
+- S5 contains FAIL=0: True
+- S6 contains status=BLOCKED_AUTOMATION: True
+- S7 contains Notion targets: True

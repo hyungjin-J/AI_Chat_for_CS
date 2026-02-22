@@ -393,3 +393,64 @@
 ### 15.4 비고
 - Hardening lock, ROLE taxonomy, 표준 에러 포맷 정책 변경 없음.
 - Notion BLOCKED_AUTOMATION 고정 증적 3종(`notion_blocked_status.json`, `notion_manual_patch.md`, `spec_sync_report.md`) 유지.
+
+## 16) 이번 세션(2026-02-22, menual/chatGPT 문서-Notion 동기화 점검) 기록
+- 기준 커밋(base): `97f7502` (working tree)
+- 기준 시각(Asia/Seoul): `2026-02-22 17:35:49 +09:00`
+- 사용자 요청 범위:
+  - `menual` 폴더 문서 반영 누락 점검 및 산출물 갱신
+  - `chatGPT` 폴더 문서와 Notion 기재 누락 점검/동기화
+- 스펙 파일(CSV/XLSX) 추가 변경 여부:
+  - **없음 (No additional spec file edit in this session)**
+- 로컬 반영 파일(신규/갱신):
+  - `menual/에이아이챗봇_통합_사용자_매뉴얼_20260222.docx`
+  - `menual/에이아이챗봇_고객안내본_인쇄용_20260222.docx`
+  - `menual/에이아이챗봇_통합_사용자_참조시트_20260222.xlsx`
+  - `menual/통합_사용자_매뉴얼_출처추적_검증_20260222.txt`
+  - `menual/고객안내본_출처추적_검증_20260222.txt`
+  - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
+  - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
+- Notion 동기화 반영 페이지:
+  - 요구 사항 명세: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+  - 테이블 정의서: https://www.notion.so/2ed405a3a720812180d9d508b77f31a4
+  - UI/UX 설계: https://www.notion.so/2ee405a3a72080a58c93d967ef0f2444
+  - 프로그램 구현 히스토리: https://www.notion.so/2ed405a3a7208154a1ebfe888fdaf006
+- 동기화 정리 내용:
+  - 4개 페이지에 `Session Update (2026-02-22, DDD Refactor & Security Guard)` 블록 반영
+  - Notion 경로 자동 파싱으로 깨지던 `.md` 경로를 코드블록 표기로 재정렬
+  - `menual`/`chatGPT` 반영 경로와 증적 경로를 페이지별로 일치시켜 문서 드리프트 해소
+- 검증 결과:
+  - Notion 검색에서 세션 업데이트가 4개 대상 페이지에 모두 검출됨
+  - 깨진 경로 패턴(`docs/agent_manual/docs/agent_manual`, `chatGPT/IMPLEMENTATION_GUIDE_chatGPT`) 재발 없음
+  - `menual/통합_사용자_매뉴얼_출처추적_검증_20260222.txt`의 `S5 contains FAIL=0: True` 확인
+
+## 17) 이번 세션(2026-02-22, GitHub 기록 + README 최신화 + Notion 점검) 기록
+- 기준 시각(local): '2026-02-22 19:07:19 +09:00'
+- 사용자 요청 범위:
+  - 지금까지 진행 내역을 GitHub에 기록(커밋/푸시)
+  - README.md 최신화
+  - Notion/문서 추가 업데이트 필요성 점검
+- 스펙 파일(CSV/XLSX) 추가 변경 여부:
+  - **없음 (No additional spec file edit in this session)**
+  - 확인 경로: docs/references/*.csv, docs/references/*.xlsx, docs/uiux/*.xlsx
+
+### 17.1 Notion 점검 결과
+- 내부 검색 기준 확인:
+  - 요구 사항 명세: Session Update (2026-02-22, DDD Refactor & Security Guard) 확인
+  - 테이블 정의서: Session Update (2026-02-22, DDD Refactor & Security Guard) 확인
+  - UI/UX 설계: Session Update (2026-02-22, DDD Refactor & Security Guard) 확인
+  - 프로그램 구현 히스토리: Session Update (2026-02-22, DDD Refactor & Security Guard) 확인
+- 판단:
+  - 이번 세션은 필수 동기화 대상 스펙 파일 변경이 없어 **신규 필수 Notion 동기화 대상 없음**
+  - Notion fail-closed 정책 유지
+
+### 17.2 로컬 문서 최신화
+- README.md를 PR-1~PR-4 기준으로 전면 갱신
+  - DDD 구조 스냅샷
+  - 신규 게이트/증적 경로
+  - billing persistence 전환 상태
+  - 실행/검증 명령 최신화
+
+### 17.3 GitHub 기록 대상
+- 본 세션 기준 워크트리 전체 변경을 커밋 대상으로 확정
+- 원격: origin (main 브랜치)

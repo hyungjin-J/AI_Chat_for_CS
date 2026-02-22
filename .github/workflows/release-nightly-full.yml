@@ -40,6 +40,20 @@ jobs:
             --package-json frontend/package.json `
             --check-runtime
 
+      - name: Mapper namespace drift gate
+        shell: pwsh
+        run: |
+          python scripts/verify_mapper_namespaces.py `
+            --output-txt docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.json
+
+      - name: Legacy package reintroduction blocker
+        shell: pwsh
+        run: |
+          python scripts/block_legacy_packages.py `
+            --output-txt docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.json
+
       - name: Start infra
         shell: pwsh
         run: docker compose -f infra/docker-compose.yml up -d
@@ -83,6 +97,8 @@ jobs:
           path: |
             docs/review/mvp_verification_pack/artifacts/phase2_1_3_*
             docs/review/mvp_verification_pack/artifacts/phase2_1_4_*
+            docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.*
+            docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.*
             docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip
             scripts/contracts/fixed_artifact_paths.json
 

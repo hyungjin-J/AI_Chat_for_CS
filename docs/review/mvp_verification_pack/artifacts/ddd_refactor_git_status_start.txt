@@ -1,0 +1,14 @@
+﻿## main...origin/main
+ M .github/workflows/pr-smoke-contract.yml
+?? docs/architecture/DDD_STRUCTURE_AUDIT_AND_REFACTOR_PLAN.md
+?? docs/architecture/bounded_context_map.md
+?? docs/architecture/templates/
+?? docs/review/mvp_verification_pack/artifacts/ddd_refactor_baseline.patch
+?? docs/review/mvp_verification_pack/artifacts/ddd_refactor_git_status_start.txt
+?? docs/review/mvp_verification_pack/artifacts/ddd_refactor_public_api_before.txt
+?? scripts/assert_platform_boundary.py
+?? scripts/contracts/domain_template_contract.json
+?? scripts/scaffold_backend_context.py
+?? scripts/scaffold_frontend_feature.py
+?? scripts/tests/test_assert_platform_boundary.py
+?? scripts/tests/test_scaffold_templates.py

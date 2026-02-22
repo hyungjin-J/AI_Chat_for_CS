@@ -321,35 +321,70 @@ required = true
 
 ## 6) Backend 컨벤션 (Java / Spring Boot)
 
-### 6.1 패키지/레이어 구조(권장)
+### 6.1 패키지/레이어 구조(사실상 강제)
 루트 패키지(예): `com.aichatbot`
 
-도메인 기준 패키지 분리 + 글로벌 공통 영역 분리
+도메인 기준 분리 + 플랫폼/공유커널 분리 구조를 표준으로 고정한다.
 
 예시:
 ```
 com.aichatbot
-├─ global
+├─ platform
 │  ├─ config
 │  ├─ security
 │  ├─ error
-│  ├─ observability
-│  └─ util
-├─ auth
-├─ session
-├─ message
-├─ rag
-├─ knowledgebase
-├─ template
-├─ admin
-└─ ops
+│  └─ observability
+├─ sharedkernel
+├─ contexts
+│  ├─ identity
+│  ├─ conversation
+│  ├─ knowledge
+│  ├─ billing
+│  └─ operations
+└─ channels
+   └─ backoffice
 ```
 
+금지:
+- `global` 패키지 신설/확장 금지(기존 잔존 코드는 단계적으로 `platform/sharedkernel/contexts`로 이관).
+- `global/util`, `common/util`에 도메인 정책 저장 금지.
+
 **레이어 원칙:**
-- `Controller`: 요청 검증/매핑/권한 체크/trace 컨텍스트 설정까지만(Thin)
-- `Service`: 비즈니스 로직(단, 너무 비대해지면 도메인 서비스로 분해)
-- `Repository/DAO`: 영속화/조회
+- `presentation`: 요청 검증/매핑/권한 체크/trace 컨텍스트 설정까지만(Thin)
+- `application`: 유스케이스 조합/트랜잭션 경계/ACL 호출
+- `domain`: 도메인 모델/규칙/불변식/도메인 서비스
+- `infrastructure`: MyBatis, 외부 시스템 연동, 영속화 구현
 - `DTO/VO`: 외부 계약(API)과 내부 모델을 명확히 분리
+
+### 6.1-A 도메인 템플릿 강제 규칙
+모든 신규/리팩토링 도메인은 아래 4계층 템플릿을 따라야 한다.
+- `presentation`
+- `application`
+- `domain`
+- `infrastructure`
+
+강제 사항:
+- 템플릿을 벗어난 임의 폴더(`misc`, `helpers`, `etc`) 추가 금지.
+- 신규 도메인 생성 시 템플릿 스캐폴딩(`scripts/scaffold_backend_context.py`)을 1순위로 사용한다.
+
+### 6.1-B 도메인 의존/역참조 규칙
+도메인 간 의존은 단방향으로만 허용하며 역참조를 금지한다.
+- `presentation -> application -> domain` 방향만 허용.
+- `domain`은 타 도메인 `application/presentation/infrastructure`를 직접 import 금지.
+- cross-domain 호출은 `application`의 ACL(anti-corruption layer) 또는 계약 인터페이스 경유만 허용.
+- `platform/sharedkernel`은 도메인 정책 import 금지(기술 공통만 허용).
+
+### 6.1-C admin 분류 규칙(backoffice 채널)
+`admin`은 독립 도메인이 아니라 **backoffice 채널**로 규정한다.
+- 허용: 운영자 API 조립, 권한 게이트, 컨텍스트 오케스트레이션.
+- 금지: backoffice 계층에 도메인 정책/핵심 규칙 직접 구현.
+- 도메인 정책은 반드시 각 컨텍스트(`identity/operations/billing/...`) 내부에 둔다.
+
+### 6.1-D Ubiquitous Language / 네이밍 금지 규칙
+모호한 네이밍으로 경계가 흐려지는 것을 금지한다.
+- 금지 예: `util`, `common`, `helper`, `service2`, `managerX` (도메인 의미 불명).
+- 허용 원칙: 도메인 용어를 클래스/패키지명에 반영(`QuotaPolicy`, `TenantResolver`, `EvidenceSelector`).
+- 예외: 순수 기술 보조 함수는 `platform` 또는 `sharedkernel` 하위에 한정하고, 도메인 정책 포함 금지.
 
 ### 6.2 네이밍 규칙
 - 변수/메서드: `camelCase`
@@ -466,13 +501,13 @@ OpenTelemetry/Micrometer로:
 
 ## 7) Frontend 컨벤션 (React / TypeScript)
 
-### 7.1 기본 규칙
+### 7.1 기본 규칙(구조는 사실상 강제)
 - TypeScript strict 지향(가능한 any 금지)
 - 컴포넌트: `PascalCase.tsx`
 - 훅: `useSomething.ts`
 - 상태/비즈니스 로직은 UI 컴포넌트에서 분리(커스텀 훅/서비스 레이어)
 
-**권장 구조:**
+**표준 구조(사실상 강제):**
 ```
 src/
 ├─ api/              # axios/fetch wrapper, interceptors
@@ -484,6 +519,15 @@ src/
 ├─ styles/
 └─ utils/
 ```
+
+승격 근거:
+- 기능을 `features/*`로 고정해야 도메인 단위 복제(스캐폴딩), 코드 소유권, 회귀 범위 추적이 가능하다.
+- `pages/*`가 두꺼워지면 라우팅/도메인 로직이 섞여 버그 격리가 어려워진다.
+
+예외 규칙:
+- 레거시 화면 유지보수 중 즉시 분리가 어려운 경우에 한해 임시 예외를 허용한다.
+- 임시 예외는 PR에 이유/범위/종료 조건(타겟 릴리스 또는 마이그레이션 PR 번호)을 반드시 기록한다.
+- 신규 화면/신규 기능에는 예외를 적용하지 않는다.
 
 ### 7.2 SSE 스트리밍 UX(필수)
 스트리밍 이벤트는 서버 계약을 따른다:
@@ -712,6 +756,50 @@ first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Cont
 가능한 경우 다음을 자동화하여 “사람 기억” 의존을 제거한다.
 - Git diff에 `backend/` 또는 `frontend/` 또는 `scripts/` 변경이 포함되는데,
   `docs/review/plans/`에 신규/갱신 문서가 없으면 CI 실패 처리
+
+#### 12.3-A Working Memory 3문서 트리거(변경 파일 패턴 기반, 강제)
+다음 패턴 중 하나라도 변경되면 workpack 3문서를 반드시 생성/갱신한다.
+- `backend/**`
+- `frontend/**`
+- `scripts/**`
+- `.github/workflows/**`
+- `AGENTS.md`
+- `docs/architecture/**`
+- `docs/agent_manual/**`
+- `chatGPT/**`
+
+필수 경로(최소 1세트):
+- `docs/workpacks/YYYYMMDD_<topic>/01_plan.md`
+- `docs/workpacks/YYYYMMDD_<topic>/02_context.md`
+- `docs/workpacks/YYYYMMDD_<topic>/03_checklist.md`
+
+추가 강제:
+- `02_context.md`에는 manual hook 출력 근거 경로를 최소 1개 포함해야 한다.
+  - 예: `docs/review/mvp_verification_pack/artifacts/orchestrator_control_manual_hook_output.json`
+
+#### 12.3-B Specialized Agents 산출물 규칙(강제)
+고위험 변경(12.3 대상)은 역할별 최소 보고서를 반드시 남긴다.
+
+필수 경로(동일 topic):
+- `docs/review/agent_reports/YYYYMMDD_<topic>/DDD_report.md`
+- `docs/review/agent_reports/YYYYMMDD_<topic>/SEC_report.md`
+- `docs/review/agent_reports/YYYYMMDD_<topic>/QA_report.md`
+
+템플릿(SSOT):
+- `docs/review/templates/agent_reports/DDD_report_template.md`
+- `docs/review/templates/agent_reports/SEC_report_template.md`
+- `docs/review/templates/agent_reports/QA_report_template.md`
+
+최소 포함 항목:
+- Scope(검토 범위)
+- Findings(핵심 이슈/결정)
+- Evidence(명령/아티팩트 경로)
+- Decision(PASS/FAIL + 후속 액션)
+
+#### 12.3-C CI 계약 게이트(강제)
+아래 계약 스크립트를 CI에 포함하고 fail-closed로 운용한다.
+- `python scripts/assert_workpack_agent_report_contract.py`
+- 계약 파일: `scripts/contracts/workpack_agent_report_contract.json`
 
 ---
 
@@ -970,3 +1058,15 @@ first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Cont
 - 두 문서 모두 "Added/Changed/Fixed/Removed 10 lines" 섹션을 유지한다.
 - 두 문서 모두 Validation Gate 표와 증적 경로(`docs/review/mvp_verification_pack/artifacts/...`)를 포함한다.
 - 충돌 시 최신 artifacts와 `spec_sync_report.md`를 우선한다.
+
+### 16.9 AGENTS.md 변경 요약 (DDD Rules)
+- Added:
+  - `6.1-A` 도메인 템플릿 강제 규칙
+  - `6.1-B` 도메인 의존/역참조 금지 규칙
+  - `6.1-C` admin을 backoffice 채널로 규정하는 규칙
+  - `6.1-D` Ubiquitous Language 및 모호한 네이밍 금지 규칙
+- Changed:
+  - `6.1` 패키지/레이어 구조를 DDD 표준(`platform/sharedkernel/contexts/channels`) 중심으로 재정의
+  - `7.1` frontend 구조를 권장에서 사실상 강제로 승격하고 예외 규칙/근거 추가
+- Removed:
+  - `6.1` 예시에서 `global/util` 중심 구조를 표준 예시에서 제거

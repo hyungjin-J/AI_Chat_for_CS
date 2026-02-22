@@ -1,0 +1,10 @@
+﻿github_record_and_notion_check
+status=PASS
+date=2026-02-22
+branch=main
+summary=README refreshed to PR-1~PR-4 baseline; spec sync mandatory targets rechecked.
+notion_check=PASS
+notion_note=No new mandatory sync target because no CSV/XLSX spec file changes in this session.
+notion_pages_verified=요구 사항 명세, 테이블 정의서, UI/UX 설계, 프로그램 구현 히스토리
+spec_files_changed=0
+spec_paths_checked=docs/references/*.csv,docs/references/*.xlsx,docs/uiux/*.xlsx

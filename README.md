@@ -1,68 +1,92 @@
-# AI_Chatbot (CS Support AI Chatbot)
+﻿# AI_Chatbot (CS Support AI Chatbot)
 
 고객센터 상담원을 위한 RAG 기반 AI 챗봇 프로젝트입니다.  
 핵심 목표는 빠른 응답이 아니라, **근거 기반 답변 + 보안 + 운영 추적성**을 동시에 만족하는 운영형 시스템입니다.
 
 ## TL;DR
-- 현재 기준: **Phase2.1.3 (Gate Regression & Drift Prevention) 반영 완료**
-- 최신 기준 문서(SSOT):
-  - `docs/review/plans/202603XX_phase2_1_1_release_hygiene_plan.md`
-  - `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md`
-  - `spec_sync_report.md`
-- 핵심 잠금 정책:
+- 현재 기준: **2026-02-22 Production Continuation Gap Closing (PR-1~PR-4) 반영 완료**
+- 실행 기준 계획서: `docs/review/plans/20260222_production_continuation_gap_closing_plan.md`
+- 아키텍처 기준: `platform/sharedkernel/contexts/channels(backoffice)`
+- 정책 잠금:
   - ROLE 고정: `AGENT`, `CUSTOMER`, `ADMIN`, `OPS`, `SYSTEM`
   - 표준 에러 포맷 고정: `error_code`, `message`, `trace_id`, `details`
-  - Hardening Gate 완화 금지(쿠키/CSRF/락아웃/리프레시 회전/UTC 버킷)
-  - 스펙 변경 시 Notion 동기화 + 메타 갱신 + `spec_sync_report.md` 필수
+  - Hardening lock 완화 금지
+  - Notion fail-closed 정책 유지
 
-## Current Status (Phase2.1.3)
-| Item | Status | Evidence |
+## Architecture Snapshot (DDD)
+```text
+com.aichatbot
+├─ platform
+├─ sharedkernel
+├─ contexts
+│  ├─ identity
+│  ├─ conversation
+│  ├─ knowledge
+│  ├─ billing
+│  └─ operations
+└─ channels
+   └─ backoffice
+```
+
+## What Was Implemented (PR-1 ~ PR-4)
+
+### PR-1: 문서 SSOT + 에이전트 시스템 고정
+- `AGENTS.md`를 contexts/platform/sharedkernel/channels 기준으로 최신화
+- Workpack 3문서(01/02/03) + 전문 에이전트 보고서(DDD/SEC/QA) 계약을 CI fail-closed로 고정
+- 템플릿 및 계약 검사 스크립트/테스트 추가
+
+핵심 파일:
+- `AGENTS.md`
+- `scripts/assert_workpack_agent_report_contract.py`
+- `scripts/contracts/workpack_agent_report_contract.json`
+- `scripts/tests/test_assert_workpack_agent_report_contract.py`
+- `docs/review/templates/agent_reports/*.md`
+
+### PR-2: MyBatis mapper namespace drift 게이트
+- `backend/src/main/resources/mappers/**/*.xml` 전수 namespace 검증 게이트 추가
+- 중복 namespace/경로-namespace 컨텍스트 불일치/legacy namespace 재유입 차단
+- `TenantResolverMapper.xml` 경로를 `mappers/platform`로 정합화
+
+핵심 파일:
+- `scripts/verify_mapper_namespaces.py`
+- `scripts/contracts/mapper_namespace_contract.json`
+- `scripts/tests/test_verify_mapper_namespaces.py`
+- `backend/src/main/resources/mappers/platform/TenantResolverMapper.xml`
+
+### PR-3: Legacy package 재도입 차단
+- `com.aichatbot.(auth|billing|message|rag|...)` legacy 루트 패키지 재등장 시 CI FAIL
+
+핵심 파일:
+- `scripts/block_legacy_packages.py`
+- `scripts/contracts/legacy_package_blocker_contract.json`
+- `scripts/tests/test_block_legacy_packages.py`
+
+### PR-4: Billing persistence 운영형 전환 (P0)
+- billing 저장소를 in-memory 중심에서 mapper-backed persistence로 확장
+- Flyway V9 마이그레이션 추가
+- `memory|mybatis` 모드 스위치 유지(기본 `mybatis`)
+- Testcontainers 통합 테스트 추가
+
+핵심 파일:
+- `backend/src/main/resources/db/migration/V9__billing_mapper_persistence.sql`
+- `backend/src/main/java/com/aichatbot/contexts/billing/domain/mapper/*Mapper.java`
+- `backend/src/main/resources/mappers/billing/*.xml`
+- `backend/src/test/java/com/aichatbot/contexts/billing/infrastructure/BillingMapperPersistenceIntegrationTest.java`
+
+## Validation Gates (Latest)
+| Gate | Status | Evidence |
 |---|---|---|
-| Start status snapshot | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_git_status_start.txt` |
-| Baseline patch snapshot | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_baseline.patch` |
-| Fixed artifact contract | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_fixed_artifact_contract_check.txt` |
-| Gate regression unittest | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_unittest_output.txt` |
-| ChatGPT doc lint | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.txt` |
-| Backend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_backend_test_output.txt` |
-| Frontend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_frontend_test_output.txt` |
-| Frontend build | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_frontend_build_output.txt` |
-| Spec consistency | PASS (`FAIL=0`) | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_spec_consistency.txt` |
-| UTF-8 strict decode | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_3_utf8_check.txt` |
-
-## What Changed in Phase2.1.3
-
-### A) Artifact Path Contract + CI
-- 고정 경로 계약 파일 추가:
-  - `scripts/contracts/fixed_artifact_paths.json`
-- 계약 검사 스크립트 추가:
-  - `scripts/assert_fixed_artifact_paths.py`
-- CI smoke gate에 계약 검사 단계 추가:
-  - `.github/workflows/pr-smoke-contract.yml`
-
-### B) chatGPT Doc Lint Coverage 확장
-- Validation Gate Evidence 경로 검증을 두 문서로 확장:
-  - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
-  - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
-- lint JSON 출력에 coverage 메트릭 추가:
-  - `scanned_tables_count`
-  - `extracted_evidence_paths_count`
-  - `missing_paths_count`
-  - `missing_paths`
-
-### C) Gate Regression Test + CI
-- stdlib `unittest` 회귀 테스트 추가:
-  - `scripts/tests/test_lint_chatgpt_handoff_docs.py`
-  - `scripts/tests/test_notion_templates.py`
-  - `scripts/tests/test_notion_manual_exception_gate.py`
-  - `scripts/tests/test_fixed_artifact_contract.py`
-- CI smoke gate에 unittest 단계 추가:
-  - `.github/workflows/pr-smoke-contract.yml`
-
-### D) Windows npm lock Runbook 격상
-- 진단 번들 수집 스크립트 추가:
-  - `scripts/collect_windows_npm_lock_diag.ps1`
-- runbook에 진단 번들 생성/에스컬레이션 절차 추가:
-  - `docs/ops/runbook_windows_node_npm_lock.md`
+| Workpack + Agent report contract | PASS | `docs/review/mvp_verification_pack/artifacts/agent_system_pr1_lint_output.txt` |
+| UTF-8 strict decode (PR-1) | PASS | `docs/review/mvp_verification_pack/artifacts/agent_system_pr1_utf8_check.txt` |
+| Mapper namespace drift gate | PASS | `docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.txt` |
+| Legacy package blocker | PASS | `docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.txt` |
+| Billing persistence integration test | PASS | `docs/review/mvp_verification_pack/artifacts/billing_persistence_itest.txt` |
+| Backend regression test | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_2_3_billing_mapper_tests.txt` |
+| Frontend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_2_3_frontend_test.txt` |
+| Frontend build | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_2_3_frontend_build.txt` |
+| Spec consistency | PASS (`FAIL=0`) | `docs/review/mvp_verification_pack/artifacts/phase2_2_3_spec_consistency.txt` |
+| UTF-8 strict decode (changed files) | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_2_3_utf8_check.txt` |
+| Public API compare | PASS (`added=0, removed=0`) | `docs/review/mvp_verification_pack/artifacts/phase2_2_3_public_api_compare.txt` |
 
 ## Quick Start
 
@@ -86,61 +110,32 @@ npm run dev
 
 ## Verification Commands
 
-### Full Check (recommended)
+### One-command (권장)
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/check_all.ps1
 ```
 
-### Individual Checks
+### Core gates
 ```powershell
-python scripts/check_node_version.py --nvmrc .nvmrc --package-json frontend/package.json --check-runtime
+python scripts/assert_workpack_agent_report_contract.py
+python scripts/verify_mapper_namespaces.py
+python scripts/block_legacy_packages.py
 cd backend; ./gradlew.bat test --no-daemon
 cd ../frontend; npm ci --prefer-offline --no-audit --fund=false; npm run test:run; npm run build
 python ../scripts/spec_consistency_check.py
-python ../scripts/assert_fixed_artifact_paths.py
-python -m unittest discover -s ../scripts/tests -p "test_*.py"
-python ../scripts/lint_chatgpt_handoff_docs.py --files ../chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md ../chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
 ```
 
-## Policy Locks (Non-Negotiable)
-- ROLE taxonomy fixed: `AGENT`, `CUSTOMER`, `ADMIN`, `OPS`, `SYSTEM`
-- `Manager/System Admin`는 ROLE이 아니라 `ADMIN` 내부 권한 레벨
-- 표준 에러 포맷 고정: `error_code`, `message`, `trace_id`, `details`
-- 상태/에러 의미 고정:
-  - stale permission -> `401 AUTH_STALE_PERMISSION`
-  - lockout -> `429 AUTH_LOCKED`
-  - rate-limit -> `429 AUTH_RATE_LIMITED`
-  - refresh reuse -> `409 AUTH_REFRESH_REUSE_DETECTED`
-- 스펙 변경 시 Notion 동기화 + 메타 갱신 + `spec_sync_report.md` 기록 없으면 실패
+## Notion Sync Policy
+- 스펙 파일 변경(`.csv/.xlsx`) 시 Notion 동기화 + 메타 갱신 + `spec_sync_report.md` 기록은 필수입니다.
+- 필수 매핑 및 fail-closed 규칙은 `AGENTS.md` 2.2/2.2-A/2.2-B를 따릅니다.
 
 ## Key Documents
-- Phase2.1.1 plan: `docs/review/plans/202603XX_phase2_1_1_release_hygiene_plan.md`
-- Full report: `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md`
-- Spec sync report: `spec_sync_report.md`
-- Dev guide: `docs/dev/DEV_ENVIRONMENT.md`
-- Notion export policy: `docs/notion_exports/README.md`
-- Ops runbooks:
-  - `docs/ops/runbook_scheduler_lock.md`
-  - `docs/ops/runbook_audit_chain.md`
-  - `docs/ops/runbook_spec_notion_gate.md`
-  - `docs/ops/runbook_windows_node_npm_lock.md`
+- Global rules: `AGENTS.md`
+- Production continuation plan: `docs/review/plans/20260222_production_continuation_gap_closing_plan.md`
 - ChatGPT handoff docs:
   - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
   - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
-
-## Notion Mapping (Spec Sync Targets)
-- Summary of key features.csv  
-  https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149
-- CS AI Chatbot_Requirements Statement.csv  
-  https://www.notion.so/2ed405a3a720816594e4dc34972174ec
-- Development environment.csv  
-  https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7
-- google_ready_api_spec_v0.3_20260216.xlsx  
-  https://www.notion.so/2ed405a3a720816594e4dc34972174ec
-- CS_AI_CHATBOT_DB.xlsx  
-  https://www.notion.so/2ed405a3a720812180d9d508b77f31a4
-- CS_RAG_UI_UX_설계서.xlsx  
-  https://www.notion.so/UI-UX-2ee405a3a72080a58c93d967ef0f2444
+- Spec sync log: `spec_sync_report.md`
 
 ## Security Notes
 - 민감정보/토큰/시크릿/PII 평문 커밋 금지

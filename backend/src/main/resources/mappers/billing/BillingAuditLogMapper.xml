@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.contexts.billing.domain.mapper.BillingAuditLogMapper">
+
+    <resultMap id="AuditLogEntryMap" type="com.aichatbot.contexts.billing.domain.model.AuditLogEntry">
+        <constructor>
+            <arg column="id" javaType="java.lang.String" name="id"/>
+            <arg column="tenant_key" javaType="java.lang.String" name="tenantId"/>
+            <arg column="actor_user_id" javaType="java.lang.String" name="actorUserId"/>
+            <arg column="actor_role" javaType="java.lang.String" name="actorRole"/>
+            <arg column="action_type" javaType="java.lang.String" name="actionType"/>
+            <arg column="target_type" javaType="java.lang.String" name="targetType"/>
+            <arg column="target_id" javaType="java.lang.String" name="targetId"/>
+            <arg column="trace_id" javaType="java.lang.String" name="traceId"/>
+            <arg column="before_json" javaType="java.lang.String" name="beforeJson"/>
+            <arg column="after_json" javaType="java.lang.String" name="afterJson"/>
+            <arg column="created_at" javaType="java.time.Instant" name="createdAt"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO tb_billing_audit_log (
+            id,
+            tenant_key,
+            actor_user_id,
+            actor_role,
+            action_type,
+            target_type,
+            target_id,
+            trace_id,
+            before_json,
+            after_json,
+            created_at
+        ) VALUES (
+            #{auditLogKey},
+            #{tenantKey},
+            #{actorUserKey},
+            #{actorRole},
+            #{actionType},
+            #{targetType},
+            #{targetKey},
+            #{traceToken},
+            #{beforeJson},
+            #{afterJson},
+            #{createdAt}
+        )
+    </insert>
+
+    <select id="findByTenant" resultMap="AuditLogEntryMap">
+        SELECT id,
+               tenant_key,
+               actor_user_id,
+               actor_role,
+               action_type,
+               target_type,
+               target_id,
+               trace_id,
+               before_json,
+               after_json,
+               created_at
+        FROM tb_billing_audit_log
+        WHERE tenant_key = #{tenantKey}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findAll" resultMap="AuditLogEntryMap">
+        SELECT id,
+               tenant_key,
+               actor_user_id,
+               actor_role,
+               action_type,
+               target_type,
+               target_id,
+               trace_id,
+               before_json,
+               after_json,
+               created_at
+        FROM tb_billing_audit_log
+        ORDER BY created_at DESC
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM tb_billing_audit_log
+    </delete>
+
+</mapper>

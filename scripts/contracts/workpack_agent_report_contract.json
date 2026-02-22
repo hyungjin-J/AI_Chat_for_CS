@@ -1,0 +1,28 @@
+{
+  "high_risk_patterns": [
+    "backend/**",
+    "frontend/**",
+    "scripts/**",
+    ".github/workflows/**",
+    "AGENTS.md",
+    "docs/architecture/**",
+    "docs/agent_manual/**",
+    "chatGPT/**"
+  ],
+  "workpack_root": "docs/workpacks",
+  "required_workpack_files": [
+    "01_plan.md",
+    "02_context.md",
+    "03_checklist.md"
+  ],
+  "manual_hook_reference_tokens": [
+    "orchestrator_control_manual_hook_output.json",
+    "manual_hook_output.json"
+  ],
+  "agent_report_root": "docs/review/agent_reports",
+  "required_agent_reports": [
+    "DDD_report.md",
+    "SEC_report.md",
+    "QA_report.md"
+  ]
+}

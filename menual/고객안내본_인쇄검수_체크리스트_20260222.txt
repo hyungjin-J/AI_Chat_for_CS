@@ -1,0 +1,16 @@
+Customer Guide Print Checklist
+Checked at (UTC): 2026-02-22T08:28:45Z
+DOCX: menual/에이아이챗봇_고객안내본_인쇄용_20260222.docx
+PDF:  menual/에이아이챗봇_고객안내본_인쇄용_20260222.pdf
+
+Layout
+- A4 page format: PASS
+- Cover/TOC/body/appendix sections: PASS
+
+Consistency
+- Notion state wording (blocked automation + manual patch): PASS
+- DDD refactor evidence paths: PASS
+- manual_hook/agent_manual references: PASS
+
+Output
+- PDF regenerated from latest DOCX: PENDING (Word/LibreOffice unavailable in this environment)

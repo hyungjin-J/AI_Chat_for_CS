@@ -1,0 +1,4 @@
+﻿utf8_strict_check
+checked_count=236
+failed_count=0
+status=PASS

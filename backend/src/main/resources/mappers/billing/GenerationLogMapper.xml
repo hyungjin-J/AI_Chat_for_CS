@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.contexts.billing.domain.mapper.GenerationLogMapper">
+
+    <resultMap id="GenerationLogEntryMap" type="com.aichatbot.contexts.billing.infrastructure.GenerationLogRow">
+        <constructor>
+            <arg column="id" javaType="java.lang.String" name="id"/>
+            <arg column="tenant_key" javaType="java.lang.String" name="tenantId"/>
+            <arg column="message_id" javaType="java.lang.String" name="messageId"/>
+            <arg column="provider_id" javaType="java.lang.String" name="providerId"/>
+            <arg column="model_id" javaType="java.lang.String" name="modelId"/>
+            <arg column="input_tokens" javaType="java.lang.Integer" name="inputTokens"/>
+            <arg column="output_tokens" javaType="java.lang.Integer" name="outputTokens"/>
+            <arg column="tool_calls" javaType="java.lang.Integer" name="toolCalls"/>
+            <arg column="prompt_masked" javaType="java.lang.String" name="promptMasked"/>
+            <arg column="trace_id" javaType="java.lang.String" name="traceId"/>
+            <arg column="created_at" javaType="java.time.Instant" name="createdAt"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO tb_generation_log (
+            id,
+            tenant_key,
+            message_id,
+            provider_id,
+            model_id,
+            input_tokens,
+            output_tokens,
+            tool_calls,
+            prompt_masked,
+            trace_id,
+            created_at
+        ) VALUES (
+            #{generationLogKey},
+            #{tenantKey},
+            #{messageKey},
+            #{providerCode},
+            #{modelCode},
+            #{inputTokens},
+            #{outputTokens},
+            #{toolCalls},
+            #{promptMasked},
+            #{traceToken},
+            #{createdAt}
+        )
+    </insert>
+
+    <select id="findByTenant" resultMap="GenerationLogEntryMap">
+        SELECT id,
+               tenant_key,
+               message_id,
+               provider_id,
+               model_id,
+               input_tokens,
+               output_tokens,
+               tool_calls,
+               prompt_masked,
+               trace_id,
+               created_at
+        FROM tb_generation_log
+        WHERE tenant_key = #{tenantKey}
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="findByTenantAndDate" resultMap="GenerationLogEntryMap">
+        SELECT id,
+               tenant_key,
+               message_id,
+               provider_id,
+               model_id,
+               input_tokens,
+               output_tokens,
+               tool_calls,
+               prompt_masked,
+               trace_id,
+               created_at
+        FROM tb_generation_log
+        WHERE tenant_key = #{tenantKey}
+          AND CAST(created_at AS DATE) = #{usageDate}
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="findByTenantAndMonth" resultMap="GenerationLogEntryMap">
+        SELECT id,
+               tenant_key,
+               message_id,
+               provider_id,
+               model_id,
+               input_tokens,
+               output_tokens,
+               tool_calls,
+               prompt_masked,
+               trace_id,
+               created_at
+        FROM tb_generation_log
+        WHERE tenant_key = #{tenantKey}
+          AND created_at >= #{monthFrom}
+          AND created_at &lt; #{monthTo}
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="findByDate" resultMap="GenerationLogEntryMap">
+        SELECT id,
+               tenant_key,
+               message_id,
+               provider_id,
+               model_id,
+               input_tokens,
+               output_tokens,
+               tool_calls,
+               prompt_masked,
+               trace_id,
+               created_at
+        FROM tb_generation_log
+        WHERE CAST(created_at AS DATE) = #{usageDate}
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="findAll" resultMap="GenerationLogEntryMap">
+        SELECT id,
+               tenant_key,
+               message_id,
+               provider_id,
+               model_id,
+               input_tokens,
+               output_tokens,
+               tool_calls,
+               prompt_masked,
+               trace_id,
+               created_at
+        FROM tb_generation_log
+        ORDER BY created_at ASC
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM tb_generation_log
+    </delete>
+
+</mapper>

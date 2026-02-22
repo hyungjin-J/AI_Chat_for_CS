@@ -1,0 +1,5 @@
+notion_manual_exception_gate
+status=PASS
+violation_count=0
+spec_sync_required_tokens=notion_blocked_status.json,notion_manual_patch.md,BLOCKED_AUTOMATION
+spec_sync_phase_pattern=Phase2\.1(?:\.\d+)?|phase2_1(?:_\d+)?

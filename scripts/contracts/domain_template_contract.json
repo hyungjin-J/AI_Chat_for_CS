@@ -1,0 +1,44 @@
+{
+  "backend_context_template": {
+    "required_dirs": [
+      "domain/model",
+      "domain/service",
+      "domain/mapper",
+      "application/usecase",
+      "application/dto",
+      "infrastructure/persistence/mybatis",
+      "infrastructure/external",
+      "presentation/controller",
+      "presentation/request",
+      "presentation/response"
+    ],
+    "required_files": [
+      "domain/model/{Context}AggregateRoot.java",
+      "domain/service/{Context}DomainService.java",
+      "domain/mapper/{Context}Mapper.java",
+      "application/usecase/{Context}UseCase.java",
+      "application/dto/{Context}Command.java",
+      "infrastructure/persistence/mybatis/{Context}MybatisRepository.java",
+      "infrastructure/external/{Context}ExternalGateway.java",
+      "presentation/controller/{Context}Controller.java",
+      "presentation/request/{Context}Request.java",
+      "presentation/response/{Context}Response.java"
+    ],
+    "mapper_xml_path": "backend/src/main/resources/mappers/{context}/{Context}Mapper.xml"
+  },
+  "frontend_feature_template": {
+    "required_dirs": [
+      "api",
+      "model",
+      "hooks",
+      "ui"
+    ],
+    "required_files": [
+      "api/{feature}Api.ts",
+      "model/{Feature}Types.ts",
+      "hooks/use{Feature}.ts",
+      "ui/{Feature}Panel.tsx",
+      "index.ts"
+    ]
+  }
+}

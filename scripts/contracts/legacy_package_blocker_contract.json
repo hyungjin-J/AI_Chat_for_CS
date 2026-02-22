@@ -1,0 +1,19 @@
+{
+  "java_roots": [
+    "backend/src/main/java",
+    "backend/src/test/java"
+  ],
+  "legacy_packages": [
+    "auth",
+    "billing",
+    "message",
+    "rag",
+    "session",
+    "admin",
+    "ops",
+    "answer",
+    "llm",
+    "tool",
+    "global"
+  ]
+}

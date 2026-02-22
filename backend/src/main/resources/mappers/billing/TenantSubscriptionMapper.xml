@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.contexts.billing.domain.mapper.TenantSubscriptionMapper">
+
+    <resultMap id="TenantSubscriptionMap" type="com.aichatbot.contexts.billing.domain.model.TenantSubscription">
+        <constructor>
+            <arg column="tenant_key" javaType="java.lang.String" name="tenantId"/>
+            <arg column="plan_code" javaType="java.lang.String" name="planCode"/>
+            <arg column="status" javaType="java.lang.String" name="status"/>
+            <arg column="started_at" javaType="java.time.Instant" name="startedAt"/>
+            <arg column="ended_at" javaType="java.time.Instant" name="endedAt"/>
+        </constructor>
+    </resultMap>
+
+    <delete id="deleteByTenant">
+        DELETE FROM tb_tenant_subscription
+        WHERE tenant_key = #{tenantKey}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO tb_tenant_subscription (
+            tenant_key,
+            plan_code,
+            status,
+            started_at,
+            ended_at
+        ) VALUES (
+            #{tenantKey},
+            #{planCode},
+            #{status},
+            #{startedAt},
+            #{endedAt}
+        )
+    </insert>
+
+    <select id="findActive" resultMap="TenantSubscriptionMap">
+        SELECT tenant_key,
+               plan_code,
+               status,
+               started_at,
+               ended_at
+        FROM tb_tenant_subscription
+        WHERE tenant_key = #{tenantKey}
+          AND started_at &lt;= #{at}
+          AND (ended_at IS NULL OR ended_at > #{at})
+          AND UPPER(status) = 'ACTIVE'
+        ORDER BY started_at DESC
+        LIMIT 1
+    </select>
+
+    <select id="findLatest" resultMap="TenantSubscriptionMap">
+        SELECT tenant_key,
+               plan_code,
+               status,
+               started_at,
+               ended_at
+        FROM tb_tenant_subscription
+        WHERE tenant_key = #{tenantKey}
+        ORDER BY started_at DESC
+        LIMIT 1
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM tb_tenant_subscription
+    </delete>
+
+</mapper>

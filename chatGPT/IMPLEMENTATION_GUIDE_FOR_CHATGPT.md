@@ -2,100 +2,125 @@
 
 - project: AI_Chatbot
 - document_type: Implementation and Operations Handoff Guide
-- updated_at_kst: 2026-02-22 14:56:27 +09:00
-- base_commit_hash: 7ac802f
-- release_tag: 2026.03XX-phase2.1.4-ci-evidence-archive-contract-safety-diagnostics-evidence-lint
+- updated_at_kst: 2026-02-22 18:47:00 +09:00
+- base_commit_hash: 97f7502
+- release_tag: 2026.03XX-ddd-refactor-backend-security-guard-remediation
 - branch: main
 - pr_number: N/A (local working tree)
 
 ## 0) Change Summary (Added/Changed/Fixed/Removed, 10 lines)
-- Added: `scripts/validate_windows_diag_bundle.py` for deterministic zip-structure/sanitization checks.
-- Added: `scripts/lint_validation_gate_tables.py` for non-chatGPT docs Validation Gate evidence lint.
-- Added: `scripts/tests/test_lint_validation_gate_tables.py` regression tests for docs evidence lint behavior.
-- Changed: `pr-smoke-contract.yml` now adds windows diag smoke job (`DIAG_SMOKE=1`) and PR4 docs lint step.
-- Changed: CI artifact archive now includes gate evidence patterns plus Windows diag zip, with `if: always()`.
-- Changed: `release-nightly-full.yml` upload policy now mirrors PR smoke archive policy.
-- Changed: `scripts/assert_fixed_artifact_paths.py` blocks backslash/absolute/traversal contract entries.
-- Changed: `scripts/collect_windows_npm_lock_diag.ps1` enforces fixed zip entry set and redacted path output.
-- Fixed: Phase2.1.4 evidence artifacts emitted with stable `phase2_1_4_*` naming.
-- Fixed: Gate regression suite passes with contract safety and docs evidence lint tests included.
+- Added: execution baseline plan `docs/review/plans/20260222_production_continuation_gap_closing_plan.md`.
+- Added: workpack/agent-report fail-closed contract gate script + contract JSON + tests.
+- Added: specialized report templates and concrete DDD/SEC/QA report directories.
+- Changed: AGENTS now explicitly defines trigger patterns for mandatory workpack generation.
+- Added: mapper namespace drift verifier script + contract JSON + unit tests.
+- Changed: `TenantResolverMapper.xml` moved under `mappers/platform` to align path and namespace context.
+- Added: legacy package blocker script + contract + tests + CI wiring.
+- Added: billing persistence mode switch (`app.billing.persistence.mode`) defaulting to `mybatis`.
+- Added: Flyway V9 billing tables + MyBatis mapper/XML layer + mapper-backed repositories.
+- Added: Testcontainers integration test for billing persistence path (`disabledWithoutDocker=true`).
 
 ## 1) Execution Units
-### Phase2.1.4 Unit A: CI Evidence Archive
+### Unit PR1: Architecture Template + Scaffold + Gates
 - Files:
-  - `.github/workflows/pr-smoke-contract.yml`
-  - `.github/workflows/release-nightly-full.yml`
-  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr1_ci_artifact_upload_policy.txt`
-- Goal:
-  - Upload gate evidence even on failed runs (`if: always()`).
-  - Keep 30-day retention and non-blocking missing-file behavior (`if-no-files-found: warn`).
-
-### Phase2.1.4 Unit B: Contract Safety Lock
-- Files:
-  - `scripts/assert_fixed_artifact_paths.py`
-  - `scripts/tests/test_fixed_artifact_contract.py`
-  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr2_contract_safety_test_output.txt`
-- Goal:
-  - Reject path traversal, absolute path, and Windows backslash entries in contract JSON.
-  - Emit remediation-oriented failures for 3-minute operator recovery.
-
-### Phase2.1.4 Unit C: Windows Diagnostics Fixture and Smoke
-- Files:
-  - `scripts/collect_windows_npm_lock_diag.ps1`
-  - `scripts/validate_windows_diag_bundle.py`
-  - `docs/ops/runbook_windows_node_npm_lock.md`
-  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt`
-  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_validate.json`
+  - `docs/architecture/DDD_STRUCTURE_AUDIT_AND_REFACTOR_PLAN.md`
+  - `docs/architecture/bounded_context_map.md`
+  - `docs/architecture/HOW_TO_ADD_NEW_DOMAIN.md`
+  - `docs/architecture/templates/backend_domain_template.md`
+  - `docs/architecture/templates/frontend_feature_template.md`
+  - `scripts/scaffold_backend_context.py`
+  - `scripts/scaffold_frontend_feature.py`
+  - `scripts/contracts/domain_template_contract.json`
+  - `scripts/assert_platform_boundary.py`
+  - `scripts/tests/test_assert_platform_boundary.py`
+  - `scripts/tests/test_scaffold_templates.py`
   - `.github/workflows/pr-smoke-contract.yml`
 - Goal:
-  - Validate fixed zip structure and sanitization in `windows-latest` CI smoke job.
-  - Keep diagnostics bundle useful while excluding sensitive path/token patterns.
+  - Lock architecture template and reproducible scaffold flow.
+  - Enforce platform/sharedkernel boundary via CI lint.
 
-### Phase2.1.4 Unit D: Evidence Lint Expansion (Non-chatGPT Docs)
+### Unit PR2: Backend Domain Structure Unification
 - Files:
-  - `scripts/lint_validation_gate_tables.py`
-  - `scripts/tests/test_lint_validation_gate_tables.py`
-  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.txt`
-  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.json`
+  - `backend/src/main/java/com/aichatbot/contexts/**`
+  - `backend/src/main/java/com/aichatbot/platform/**`
+  - `backend/src/main/java/com/aichatbot/sharedkernel/**`
+  - `backend/src/main/java/com/aichatbot/channels/backoffice/**`
+  - `backend/src/main/resources/mappers/{identity,conversation,knowledge,operations}/**`
 - Goal:
-  - Scan docs reports/runbooks/plans for Validation Gate Evidence local-path drift.
-  - Fail CI on missing local evidence paths while warning external links.
+  - Move legacy packages into bounded contexts without runtime behavior change.
+  - Keep API contract and hardening semantics intact.
+
+### Unit PR3: Frontend Feature Structure Unification
+- Files:
+  - `frontend/src/features/**`
+  - `frontend/src/pages/*.tsx` (thin wrappers only)
+  - `frontend/src/app/README.md`
+  - `frontend/src/shared/README.md`
+  - `frontend/src/widgets/README.md`
+- Goal:
+  - Keep routing thin and move feature logic into context-scoped feature modules.
+  - Preserve current routes and UI behavior.
+
+### Unit PR4: Backend Security and Tenant Guard Remediation
+- Files:
+  - `backend/src/main/java/com/aichatbot/contexts/operations/application/OpsDimensionsSanitizer.java`
+  - `backend/src/main/java/com/aichatbot/contexts/operations/application/OpsEventService.java`
+  - `backend/src/main/java/com/aichatbot/contexts/identity/application/AuthService.java`
+  - `backend/src/main/java/com/aichatbot/contexts/identity/application/AuthRateLimitService.java`
+  - `backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java`
+  - `backend/src/main/java/com/aichatbot/platform/privacy/PiiMaskingService.java`
+  - `backend/src/main/java/com/aichatbot/contexts/conversation/{session,message}/**`
+  - `backend/src/main/java/com/aichatbot/contexts/identity/{domain/infrastructure}/**`
+  - `backend/src/main/resources/mappers/{conversation,identity}/**`
+  - `backend/src/test/java/com/aichatbot/contexts/operations/application/OpsDimensionsSanitizerTest.java`
+  - Header-auth test property updates in RBAC-related test classes
+- Goal:
+  - Remove raw PII from ops dimensions/rate-limit keying and mask session IP outputs.
+  - Enforce tenant-scoped lookup contracts on cross-tenant probe and token-hash session queries.
+  - Keep RBAC server-authority defaults fail-closed (`allow-header-auth=false` baseline).
 
 ## 2) Validation Gate
 | Gate | Status | Evidence |
 |---|---|---|
-| Phase2.1.4 start status snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_git_status_start.txt |
-| Phase2.1.4 baseline patch snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_baseline.patch |
-| PR1 CI artifact upload policy | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr1_ci_artifact_upload_policy.txt |
-| Fixed artifact contract check | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_fixed_artifact_contract_check.txt |
-| PR2 contract safety unittest | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr2_contract_safety_test_output.txt |
-| PR3 windows diag smoke output | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt |
-| PR3 windows diag validate JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_validate.json |
-| PR4 docs evidence lint | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.txt |
-| PR4 docs evidence lint JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.json |
-| Gate regression unittest | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_unittest_output.txt |
-| Backend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_backend_test_output.txt |
-| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_test_output.txt |
-| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_build_output.txt |
-| Spec consistency | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_spec_consistency.txt |
-| UTF-8 strict decode | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_utf8_check.txt |
-| ChatGPT handoff doc lint | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.txt |
-| ChatGPT handoff doc lint JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.json |
+| DDD refactor start status snapshot | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_git_status_start.txt |
+| DDD refactor baseline patch snapshot | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_baseline.patch |
+| Platform boundary lint | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_platform_boundary_lint.txt |
+| Script regression unittest | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_unittest_output.txt |
+| Backend tests | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_backend_test_output.txt |
+| Backend build | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_backend_build_output.txt |
+| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_frontend_test_output.txt |
+| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_frontend_build_output.txt |
+| Spec consistency | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_spec_consistency.txt |
+| UTF-8 strict decode | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_utf8_check.txt |
+| Public API compare (before/after) | PASS | docs/review/mvp_verification_pack/artifacts/ddd_refactor_public_api_compare.txt |
+| Backend security remediation test | PASS | docs/review/mvp_verification_pack/artifacts/orchestrator_control_backend_impl_test_output.txt |
+| Agent system PR1 contract lint | PASS | docs/review/mvp_verification_pack/artifacts/agent_system_pr1_lint_output.txt |
+| Agent system PR1 UTF-8 check | PASS | docs/review/mvp_verification_pack/artifacts/agent_system_pr1_utf8_check.txt |
+| Mapper namespace drift gate | PASS | docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.txt |
+| Legacy package blocker | PASS | docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.txt |
+| Billing persistence integration test | PASS | docs/review/mvp_verification_pack/artifacts/billing_persistence_itest.txt |
+| Backend regression tests (latest) | PASS | docs/review/mvp_verification_pack/artifacts/phase2_2_3_billing_mapper_tests.txt |
+| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_2_3_frontend_test.txt |
+| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/phase2_2_3_frontend_build.txt |
+| Spec consistency (latest) | PASS | docs/review/mvp_verification_pack/artifacts/phase2_2_3_spec_consistency.txt |
+| UTF-8 strict decode (changed files) | PASS | docs/review/mvp_verification_pack/artifacts/phase2_2_3_utf8_check.txt |
+| Public API compare (latest) | PASS | docs/review/mvp_verification_pack/artifacts/phase2_2_3_public_api_compare.txt |
 
 ## 3) Runbook and Script Additions
-- `scripts/collect_windows_npm_lock_diag.ps1`
-- `scripts/validate_windows_diag_bundle.py`
-- `scripts/lint_validation_gate_tables.py`
-- `scripts/tests/test_lint_validation_gate_tables.py`
-- `.github/workflows/pr-smoke-contract.yml` (windows diag smoke + docs lint + archive)
-- `.github/workflows/release-nightly-full.yml` (archive parity)
-- `docs/ops/runbook_windows_node_npm_lock.md`
+- `docs/architecture/HOW_TO_ADD_NEW_DOMAIN.md`
+- `scripts/scaffold_backend_context.py`
+- `scripts/scaffold_frontend_feature.py`
+- `scripts/contracts/domain_template_contract.json`
+- `scripts/assert_platform_boundary.py`
+- `scripts/tests/test_assert_platform_boundary.py`
+- `scripts/tests/test_scaffold_templates.py`
 
 ## 4) Security Notes
-- Never include live secret patterns in docs; use `<REDACTED>` only.
-- Keep trace_id naming canonical; typo forms are rejected by lint.
-- Keep C0 controls out of handoff docs (LF/CR only).
-- Hardening lock, ROLE taxonomy, and standard error shape remain unchanged.
+- ROLE taxonomy remains fixed: AGENT/CUSTOMER/ADMIN/OPS/SYSTEM.
+- `admin_level` model retained; no new ROLE introduced.
+- Standard error response remains `error_code`, `message`, `trace_id`, `details`.
+- Cookie/CSRF/rotation/lockout/UTC hardening behavior remains unchanged.
+- No real token/secret/PII literal is documented in artifacts.
 
 ## 5) Source Priority
 If conflicts appear:
@@ -104,15 +129,15 @@ If conflicts appear:
 3. reports/plans
 
 ## 6) Open Risks Top5
-1. Notion auth outage still blocks zero-touch sync by design (fail-closed remains intentional).
-2. Non-chatGPT docs currently expose no Validation Gate tables, so PR4 lint runs as preventive contract.
-3. Windows diagnostics smoke remains intentionally minimal and may omit rare forensic hints.
-4. Fixed artifact contract still needs explicit governance when introducing new mandatory evidence files.
-5. Artifact retention in GitHub Actions (30 days) may be insufficient for extended audits.
+1. [CLOSED] Billing repositories are mapper-backed with rollout/rollback mode switch.
+2. [CLOSED] Mapper namespace drift now has a dedicated static verification gate.
+3. [OPEN] Backoffice channel separation still requires deeper ACL boundary audit.
+4. [OPEN] Frontend shared/widget extraction is not yet complete across all features.
+5. [OPEN] Local Node runtime mismatch remains possible without bootstrap workflow adherence.
 
 ## 7) Next PRs Top5
-1. Add non-Windows diagnostics fixture and validator for npm lock parity across macOS/Linux.
-2. Expand fixed contract set to include selected Phase2.1.4 mandatory artifacts.
-3. Seed docs fixtures with Validation Gate tables to keep PR4 lint exercised continuously.
-4. Add CI comment summary with key artifact links (`run_id`, failed gates, remediation hints).
-5. Introduce reviewer-ack workflow for contract JSON modifications (safety governance).
+1. Add domain-layer reverse reference detector (`domain -> infrastructure/application/presentation`) as CI gate.
+2. Add workpack/report gate extension to bind changed-file scope and topic naming more strictly.
+3. Expand billing parity regression suite for `memory` and `mybatis` mode equivalence.
+4. Consolidate frontend shared API client/state helpers into `frontend/src/shared`.
+5. Add scaffold smoke CI to auto-generate and verify template contract per run.

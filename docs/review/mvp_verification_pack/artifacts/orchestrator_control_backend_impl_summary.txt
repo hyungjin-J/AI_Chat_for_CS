@@ -1,0 +1,15 @@
+﻿orchestrator_control_backend_impl_summary
+status=PASS
+scope=backend security/tenant/rbac guard remediation
+implemented_items=
+- ops dimension PII sanitization (OpsDimensionsSanitizer + OpsEventService integration)
+- auth rate-limit key/log hashing for tenant/ip
+- auth ops event dimensions switched to hashed identifiers
+- tenant scoped cross-tenant probes in conversation/message mapper paths
+- tenant scoped token-hash session queries in auth mapper paths
+- default app.security.allow-header-auth=false
+- header-auth dependent tests switched to explicit opt-in
+- regression test added: OpsDimensionsSanitizerTest
+verification=
+- cd backend && .\gradlew.bat test --no-daemon
+  evidence=docs/review/mvp_verification_pack/artifacts/orchestrator_control_backend_impl_test_output.txt

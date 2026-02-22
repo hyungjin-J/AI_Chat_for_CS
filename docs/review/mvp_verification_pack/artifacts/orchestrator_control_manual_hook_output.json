@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "task": "Orchestrator pre-code control before implementation",
+  "manual_chapters": [
+    "docs/agent_manual/01_preflight_and_baseline.md",
+    "docs/agent_manual/02_working_memory_contract.md",
+    "docs/agent_manual/03_pr_decomposition_and_agent_roles.md",
+    "docs/agent_manual/04_gates_notion_and_evidence.md"
+  ],
+  "chapter_summaries": [
+    {
+      "chapter": "01_preflight_and_baseline.md",
+      "summary": [
+        "Lock a reproducible baseline before any code implementation starts.",
+        "1. Collect changed targets first:",
+        "- `git diff --name-only`"
+      ]
+    },
+    {
+      "chapter": "02_working_memory_contract.md",
+      "summary": [
+        "Force planning artifacts to exist before implementation.",
+        "- `docs/workpacks/YYYYMMDD_<topic>/01_plan.md`",
+        "- `docs/workpacks/YYYYMMDD_<topic>/02_context.md`"
+      ]
+    },
+    {
+      "chapter": "03_pr_decomposition_and_agent_roles.md",
+      "summary": [
+        "Split work into rollback-safe and ownership-clear units.",
+        "- At least 2 PRs are required.",
+        "- Preferred: 3 PRs (control plane, documentation, QA gate wiring)."
+      ]
+    },
+    {
+      "chapter": "04_gates_notion_and_evidence.md",
+      "summary": [
+        "Ensure every control action leaves auditable evidence.",
+        "- Backend:",
+        "- `cd backend && .\\gradlew.bat test --no-daemon`"
+      ]
+    }
+  ],
+  "blockers": [],
+  "next_actions": [
+    "Open and read all returned manual chapters before implementation.",
+    "Create/update workpack files before touching runtime code:",
+    "docs/workpacks/YYYYMMDD_<topic>/01_plan.md",
+    "docs/workpacks/YYYYMMDD_<topic>/02_context.md",
+    "docs/workpacks/YYYYMMDD_<topic>/03_checklist.md",
+    "Declare 'no code changes before approval' in workpack plan/checklist.",
+    "Load chapter: docs/agent_manual/01_preflight_and_baseline.md",
+    "Load chapter: docs/agent_manual/02_working_memory_contract.md",
+    "Load chapter: docs/agent_manual/03_pr_decomposition_and_agent_roles.md",
+    "Load chapter: docs/agent_manual/04_gates_notion_and_evidence.md"
+  ],
+  "changed_files_count": 237,
+  "changed_files_sample": [
+    ".github/workflows/pr-smoke-contract.yml",
+    "AGENTS.md",
+    "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+    "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminRbacController.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/application/BillingMetrics.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/application/BudgetEnforcementService.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/application/GenerationLogService.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/application/QuotaService.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/application/UsageReportService.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/application/UsageRollupJob.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/application/UsageRollupService.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/AuditLogEntry.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/BreachAction.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/CostRateCard.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/GenerationLogEntry.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/TenantDailyUsage.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/TenantMonthlyUsage.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/TenantPlan.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/TenantQuota.java",
+    "backend/src/main/java/com/aichatbot/contexts/billing/domain/model/TenantSubscription.java"
+  ]
+}

@@ -1,0 +1,48 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :compileTestJava UP-TO-DATE
+
+> Task :lintUuidMapperParams
+[uuid-lint] PASS: checked_mapper_files=22 violations=0
+[uuid-lint] allowlist=['login_id', 'loginid']
+
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+> Task :test
+
+2026-02-22T18:54:32.540+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-02-22T18:54:32.543+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-02-22T18:54:32.566+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-02-22T18:54:32.566+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2026-02-22T18:54:32.574+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-02-22T18:54:32.575+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2026-02-22T18:54:32.590+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-02-22T18:54:32.590+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2026-02-22T18:54:32.598+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-02-22T18:54:32.599+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+2026-02-22T18:54:32.613+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
+2026-02-22T18:54:32.614+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+2026-02-22T18:54:32.630+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
+2026-02-22T18:54:32.631+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+2026-02-22T18:54:32.645+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown initiated...
+2026-02-22T18:54:32.646+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown completed.
+2026-02-22T18:54:32.659+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Shutdown initiated...
+2026-02-22T18:54:32.659+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Shutdown completed.
+2026-02-22T18:54:32.674+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Shutdown initiated...
+2026-02-22T18:54:32.675+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Shutdown completed.
+2026-02-22T18:54:32.683+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown initiated...
+2026-02-22T18:54:32.684+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown completed.
+2026-02-22T18:54:32.692+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown initiated...
+2026-02-22T18:54:32.692+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown completed.
+2026-02-22T18:54:32.700+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown initiated...
+2026-02-22T18:54:32.700+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown completed.
+2026-02-22T18:54:32.711+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown initiated...
+2026-02-22T18:54:32.713+09:00  INFO 2600 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown completed.
+
+BUILD SUCCESSFUL in 51s
+5 actionable tasks: 2 executed, 3 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.0/userguide/configuration_cache_enabling.html

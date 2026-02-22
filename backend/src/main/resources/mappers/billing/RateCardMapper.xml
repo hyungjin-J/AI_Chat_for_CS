@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.contexts.billing.domain.mapper.RateCardMapper">
+
+    <resultMap id="CostRateCardMap" type="com.aichatbot.contexts.billing.domain.model.CostRateCard">
+        <constructor>
+            <arg column="rate_card_id" javaType="java.lang.String" name="rateCardId"/>
+            <arg column="provider_id" javaType="java.lang.String" name="providerId"/>
+            <arg column="model_id" javaType="java.lang.String" name="modelId"/>
+            <arg column="input_token_cost_per_1k" javaType="java.math.BigDecimal" name="inputTokenCostPer1k"/>
+            <arg column="output_token_cost_per_1k" javaType="java.math.BigDecimal" name="outputTokenCostPer1k"/>
+            <arg column="tool_call_cost" javaType="java.math.BigDecimal" name="toolCallCost"/>
+            <arg column="effective_from" javaType="java.time.Instant" name="effectiveFrom"/>
+            <arg column="effective_to" javaType="java.time.Instant" name="effectiveTo"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO tb_cost_rate_card (
+            rate_card_id,
+            provider_id,
+            model_id,
+            input_token_cost_per_1k,
+            output_token_cost_per_1k,
+            tool_call_cost,
+            effective_from,
+            effective_to
+        ) VALUES (
+            #{rateCardCode},
+            #{providerCode},
+            #{modelCode},
+            #{inputTokenCostPer1k},
+            #{outputTokenCostPer1k},
+            #{toolCallCost},
+            #{effectiveFrom},
+            #{effectiveTo}
+        )
+    </insert>
+
+    <select id="findApplicable" resultMap="CostRateCardMap">
+        SELECT rate_card_id,
+               provider_id,
+               model_id,
+               input_token_cost_per_1k,
+               output_token_cost_per_1k,
+               tool_call_cost,
+               effective_from,
+               effective_to
+        FROM tb_cost_rate_card
+        WHERE provider_id = #{providerCode}
+          AND model_id = #{modelCode}
+          AND effective_from &lt;= #{at}
+          AND (effective_to IS NULL OR effective_to > #{at})
+        ORDER BY effective_from DESC
+        LIMIT 1
+    </select>
+
+    <select id="findAll" resultMap="CostRateCardMap">
+        SELECT rate_card_id,
+               provider_id,
+               model_id,
+               input_token_cost_per_1k,
+               output_token_cost_per_1k,
+               tool_call_cost,
+               effective_from,
+               effective_to
+        FROM tb_cost_rate_card
+        ORDER BY effective_from DESC
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM tb_cost_rate_card
+    </delete>
+
+</mapper>

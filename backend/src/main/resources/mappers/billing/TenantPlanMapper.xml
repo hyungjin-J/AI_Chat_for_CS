@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.contexts.billing.domain.mapper.TenantPlanMapper">
+
+    <resultMap id="TenantPlanMap" type="com.aichatbot.contexts.billing.domain.model.TenantPlan">
+        <constructor>
+            <arg column="plan_code" javaType="java.lang.String" name="planCode"/>
+            <arg column="plan_name" javaType="java.lang.String" name="name"/>
+            <arg column="description" javaType="java.lang.String" name="description"/>
+        </constructor>
+    </resultMap>
+
+    <delete id="deleteByCode">
+        DELETE FROM tb_tenant_plan
+        WHERE plan_code = #{planCode}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO tb_tenant_plan (
+            plan_code,
+            plan_name,
+            description
+        ) VALUES (
+            #{planCode},
+            #{name},
+            #{description}
+        )
+    </insert>
+
+    <select id="findByCode" resultMap="TenantPlanMap">
+        SELECT plan_code,
+               plan_name,
+               description
+        FROM tb_tenant_plan
+        WHERE plan_code = #{planCode}
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM tb_tenant_plan
+    </delete>
+
+</mapper>

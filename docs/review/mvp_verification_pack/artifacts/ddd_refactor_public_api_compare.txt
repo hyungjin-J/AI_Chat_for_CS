@@ -1,0 +1,7 @@
+﻿public_api_compare
+before_count=46
+after_count=46
+removed_count=0
+added_count=0
+status=PASS
+summary=No public API mapping annotation change detected.

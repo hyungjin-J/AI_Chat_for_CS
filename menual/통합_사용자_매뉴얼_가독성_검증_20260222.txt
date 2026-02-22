@@ -1,0 +1,11 @@
+Readability Validation Report
+Target: 에이아이챗봇_통합_사용자_매뉴얼_20260222.docx
+Checked at (UTC): 2026-02-22T08:28:45Z
+Paragraphs: 190
+Estimated sentences: 131
+Estimated words: 961
+Average sentence length (chars): 44.38
+Checks:
+- Non-developer-friendly wording included: PASS
+- Role-based usage flow sections exist: PASS
+- Latest risk wording reflected (agent manual + DDD refactor + remediation): PASS

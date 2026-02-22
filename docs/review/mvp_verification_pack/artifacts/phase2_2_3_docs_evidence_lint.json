@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "root": ".",
+  "target_globs": [
+    "docs/reports/**/*.md",
+    "docs/ops/runbook_*.md",
+    "docs/review/plans/**/*.md"
+  ],
+  "scanned_files_count": 2,
+  "scanned_tables_count": 2,
+  "extracted_evidence_paths_count": 46,
+  "missing_local_evidence_count": 0,
+  "missing_local_paths": [],
+  "missing_local_evidence": [],
+  "warning_count": 0,
+  "warnings": []
+}
