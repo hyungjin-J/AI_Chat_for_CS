@@ -1,4 +1,4 @@
-﻿# Audit Chain Integrity Runbook
+# Audit Chain Integrity Runbook
 
 ## 목적
 tenant 범위 `tb_audit_log` hash chain의 무결성을 검증하고, 이상 탐지 시 export 제한 및 증거 보존 절차를 표준화한다.

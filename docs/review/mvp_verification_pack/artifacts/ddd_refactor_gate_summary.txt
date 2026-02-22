@@ -1,4 +1,4 @@
-﻿ddd_refactor_gate_summary
+ddd_refactor_gate_summary
 status=PASS
 backend_test=docs/review/mvp_verification_pack/artifacts/ddd_refactor_backend_test_output.txt
 backend_build=docs/review/mvp_verification_pack/artifacts/ddd_refactor_backend_build_output.txt

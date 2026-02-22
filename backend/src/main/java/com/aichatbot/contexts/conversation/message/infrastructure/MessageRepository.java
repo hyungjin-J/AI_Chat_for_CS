@@ -3,6 +3,7 @@ package com.aichatbot.contexts.conversation.message.infrastructure;
 import com.aichatbot.platform.observability.TraceGuard;
 import com.aichatbot.contexts.conversation.message.application.MessageView;
 import com.aichatbot.contexts.conversation.message.domain.mapper.MessageMapper;
+import com.aichatbot.contexts.conversation.message.domain.readmodel.MessageRow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

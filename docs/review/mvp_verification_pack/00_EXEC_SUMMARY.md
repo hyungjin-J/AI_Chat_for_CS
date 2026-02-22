@@ -1,4 +1,4 @@
-﻿# MVP 검증 요약 (SSOT 연동)
+# MVP 검증 요약 (SSOT 연동)
 
 - Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`

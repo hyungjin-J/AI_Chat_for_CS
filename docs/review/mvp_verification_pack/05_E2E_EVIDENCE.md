@@ -1,4 +1,4 @@
-﻿# E2E 증빙 (민감정보 마스킹)
+# E2E 증빙 (민감정보 마스킹)
 
 - Last synced at: 2026-02-18 19:35 (KST)
 - Version(commit): `3e057a3+working-tree`

@@ -1,4 +1,4 @@
-﻿# DEMO_RUNBOOK
+# DEMO_RUNBOOK
 
 ## 목적
 비개발자도 10분 안에 MVP 데모를 재현할 수 있도록 실행 절차를 표준화한다.

@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { clearAuthState, setAuthState } from "../auth/authStore";
 import { LoginPage } from "./LoginPage";
 
-vi.mock("../api/authApi", () => ({
+vi.mock("../shared/api/authApi", () => ({
     login: vi.fn(async () => {
         setAuthState({
             tenantKey: "demo-tenant",

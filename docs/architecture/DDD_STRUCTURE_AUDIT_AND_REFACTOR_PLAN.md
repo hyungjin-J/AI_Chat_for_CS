@@ -1,4 +1,4 @@
-﻿# DDD Structure Audit And Refactor Plan
+# DDD Structure Audit And Refactor Plan
 
 ## 1) Summary
 This document is the architecture SSOT for the current DDD layout.

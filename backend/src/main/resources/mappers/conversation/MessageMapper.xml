@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aichatbot.contexts.conversation.message.domain.mapper.MessageMapper">
 
-    <resultMap id="MessageRowMap" type="com.aichatbot.contexts.conversation.message.infrastructure.MessageRow">
+    <resultMap id="MessageRowMap" type="com.aichatbot.contexts.conversation.message.domain.readmodel.MessageRow">
         <constructor>
             <arg column="id" javaType="java.lang.String" name="id"/>
             <arg column="tenant_id" javaType="java.lang.String" name="tenantId"/>

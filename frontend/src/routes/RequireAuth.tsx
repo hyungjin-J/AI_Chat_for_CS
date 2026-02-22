@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { getAuthState } from "../auth/authStore";
+import { getAuthState } from "../shared/auth/authStore";
 
 type RequireAuthProps = {
     roles?: string[];
@@ -21,4 +21,3 @@ export function RequireAuth({ roles = [] }: RequireAuthProps) {
 
     return <Outlet />;
 }
-

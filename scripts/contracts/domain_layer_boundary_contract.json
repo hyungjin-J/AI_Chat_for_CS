@@ -1,0 +1,11 @@
+{
+  "scan_root": "backend/src/main/java/com/aichatbot/contexts",
+  "domain_glob": "**/domain/**/*.java",
+  "forbidden_import_tokens": [
+    ".infrastructure.",
+    ".application.",
+    ".presentation."
+  ],
+  "baseline_file": "docs/review/mvp_verification_pack/artifacts/domain_layer_purity_baseline_violations.json",
+  "baseline_growth_guard": true
+}

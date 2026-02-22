@@ -1,4 +1,4 @@
-﻿first_status=201
+first_status=201
 first_error_code=
 second_status=409
 second_error_code=API-003-409

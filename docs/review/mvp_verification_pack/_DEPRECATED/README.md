@@ -1,4 +1,4 @@
-﻿# DEPRECATED 문서 보관소
+# DEPRECATED 문서 보관소
 
 현재 `_DEPRECATED` 밖에서 충돌하는 정본 파일은 없습니다.
 

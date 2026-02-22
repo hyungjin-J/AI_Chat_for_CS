@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchDashboardSeries, fetchDashboardSummary } from "../../../../api/adminApi";
-import { getAuthState } from "../../../../auth/authStore";
+import { fetchDashboardSeries, fetchDashboardSummary } from "../../../../shared/api/adminApi";
+import { getAuthState } from "../../../../shared/auth/authStore";
+import { SectionPanel } from "../../../../widgets";
 
 type DashboardData = {
     summary: Record<string, number>;
@@ -44,9 +45,7 @@ export function AdminDashboardView() {
     }, []);
 
     return (
-        <section>
-            <h2>OPS Dashboard</h2>
-            <p>UTC metrics for tenant: {getAuthState().tenantKey}</p>
+        <SectionPanel title="OPS Dashboard" subtitle={`UTC metrics for tenant: ${getAuthState().tenantKey}`}>
             <div className="toolbar">
                 <label>
                     From UTC
@@ -105,6 +104,6 @@ export function AdminDashboardView() {
                     )}
                 </tbody>
             </table>
-        </section>
+        </SectionPanel>
     );
 }

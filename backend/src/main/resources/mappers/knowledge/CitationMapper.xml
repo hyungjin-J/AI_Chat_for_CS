@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aichatbot.contexts.knowledge.rag.domain.mapper.CitationMapper">
 
-    <resultMap id="CitationRowMap" type="com.aichatbot.contexts.knowledge.rag.infrastructure.CitationRow">
+    <resultMap id="CitationRowMap" type="com.aichatbot.contexts.knowledge.rag.domain.readmodel.CitationRow">
         <constructor>
             <arg column="id" javaType="java.lang.String" name="id"/>
             <arg column="tenant_id" javaType="java.lang.String" name="tenantId"/>

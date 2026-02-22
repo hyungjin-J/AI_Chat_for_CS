@@ -1,4 +1,4 @@
-﻿LOGIN_TRACE=e06d888f-0bc9-4980-b603-bb8c93fdf239
+LOGIN_TRACE=e06d888f-0bc9-4980-b603-bb8c93fdf239
 {"result":"accepted","access_token":"***","refresh_token":"***","user_id":"00000000-0000-0000-0000-000000000201","tenant_id":"00000000-0000-0000-0000-000000000001","roles":["AGENT"],"trace_id":"e06d888f-0bc9-4980-b603-bb8c93fdf239"}
 
 CREATE_SESSION_TRACE=abd84ff8-ac47-4184-aec9-931efb01de60

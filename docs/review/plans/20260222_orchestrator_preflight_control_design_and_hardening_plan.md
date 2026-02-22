@@ -12,7 +12,7 @@ Current repository state includes broad in-progress changes. To prevent uncontro
 ## 2) Scope
 - Introduce `scripts/agent/manual_hook.py`.
 - Bootstrap `docs/agent_manual` with required chapters.
-- Create working memory pack under `docs/workpacks/20260222_orchestrator_preflight_control/`.
+- Create working memory pack under `docs/workpacks/20260222_orchestrator__preflight__control/`.
 - Add 12.3-compatible implementation checklist for execution lock.
 - Capture control evidence under fixed artifact naming.
 

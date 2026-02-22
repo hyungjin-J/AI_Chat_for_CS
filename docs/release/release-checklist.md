@@ -1,4 +1,4 @@
-﻿# Release Checklist (AI_Chatbot)
+# Release Checklist (AI_Chatbot)
 
 ## Scope
 - ReqID: `AI-004`, `AI-005`, `AI-009`, `RAG-003`, `PERF-001`, `SYS-004`, `OPS-001`, `OPS-100`, `OPS-102`, `API-007`, `SEC-004`

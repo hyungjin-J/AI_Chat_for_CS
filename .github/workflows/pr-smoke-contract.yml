@@ -41,6 +41,12 @@ jobs:
             --package-json frontend/package.json `
             --check-runtime
 
+      - name: Print Node runtime diagnostic
+        shell: pwsh
+        run: |
+          node -v *>&1 | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt
+          npm -v *>&1 | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt -Append
+
       - name: Workpack + specialized agent report contract
         shell: pwsh
         run: |
@@ -48,8 +54,23 @@ jobs:
           python scripts/assert_workpack_agent_report_contract.py `
             --use-git-diff `
             --git-base-ref "origin/$env:GITHUB_BASE_REF" `
-            --output-txt docs/review/mvp_verification_pack/artifacts/agent_system_pr1_lint_output.txt `
-            --output-json docs/review/mvp_verification_pack/artifacts/agent_system_pr1_lint_output.json
+            --output-txt docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.json
+
+      - name: Workpack trigger consistency gate
+        shell: pwsh
+        run: |
+          python scripts/assert_workpack_trigger_consistency.py `
+            --output-txt docs/review/mvp_verification_pack/artifacts/continuation_trigger_consistency_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/continuation_trigger_consistency_gate.json
+
+      - name: Domain layer purity ratchet gate
+        shell: pwsh
+        run: |
+          python scripts/assert_domain_layer_boundaries.py `
+            --git-base-ref "origin/$env:GITHUB_BASE_REF" `
+            --output-txt docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.json
 
       - name: Mapper namespace drift gate
         shell: pwsh
@@ -64,6 +85,47 @@ jobs:
           python scripts/block_legacy_packages.py `
             --output-txt docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.txt `
             --output-json docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.json
+
+      - name: Backoffice ACL boundary ratchet gate
+        shell: pwsh
+        run: |
+          python scripts/assert_backoffice_acl_boundary.py `
+            --git-base-ref "origin/$env:GITHUB_BASE_REF" `
+            --output-txt docs/review/mvp_verification_pack/artifacts/backoffice_acl_boundary_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/backoffice_acl_boundary_gate.json
+
+      - name: Frontend import boundary gate
+        shell: pwsh
+        run: |
+          python scripts/assert_frontend_import_boundaries.py `
+            --output-txt docs/review/mvp_verification_pack/artifacts/frontend_import_boundary_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/frontend_import_boundary_gate.json
+
+      - name: UTF-8 strict decode gate
+        shell: pwsh
+        run: |
+          python scripts/assert_utf8_strict.py `
+            --use-git-diff `
+            --git-base-ref "origin/$env:GITHUB_BASE_REF" `
+            --output-txt docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.json
+
+      - name: UTF-8 full-scan ratchet gate
+        shell: pwsh
+        run: |
+          python scripts/assert_utf8_strict.py `
+            --full-scan `
+            --baseline-file docs/review/mvp_verification_pack/artifacts/utf8_full_scan_baseline_violations.json `
+            --git-base-ref "origin/$env:GITHUB_BASE_REF" `
+            --output-txt docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.json
+
+      - name: Scaffold contract smoke gate
+        shell: pwsh
+        run: |
+          python scripts/assert_scaffold_contract_smoke.py `
+            --output-txt docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.json
 
       - name: Backend tests
         shell: pwsh
@@ -131,6 +193,15 @@ jobs:
             docs/review/mvp_verification_pack/artifacts/phase2_1_3_*
             docs/review/mvp_verification_pack/artifacts/phase2_1_4_*
             docs/review/mvp_verification_pack/artifacts/agent_system_pr1_*
+            docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.*
+            docs/review/mvp_verification_pack/artifacts/continuation_trigger_consistency_gate.*
+            docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.*
+            docs/review/mvp_verification_pack/artifacts/backoffice_acl_boundary_gate.*
+            docs/review/mvp_verification_pack/artifacts/frontend_import_boundary_gate.*
+            docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.*
+            docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.*
+            docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.*
+            docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt
             docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.*
             docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.*
             docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip

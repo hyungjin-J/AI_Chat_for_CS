@@ -1,0 +1,19 @@
+{
+  "frontend_root": "frontend/src",
+  "source_globs": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "path_aliases": {
+    "@/": "frontend/src/"
+  },
+  "shared_dirs": [
+    "shared",
+    "widgets"
+  ],
+  "features_dir": "features",
+  "allowed_cross_feature_entry_files": [
+    "index.ts",
+    "index.tsx"
+  ]
+}

@@ -1,0 +1,129 @@
+assert_utf8_strict
+status=PASS
+scanned_file_count=1008
+violation_count=118
+baseline_violation_count=118
+new_violation_count=0
+resolved_baseline_count=0
+baseline_growth_base_source=head-fallback:missing-in-97f7502
+baseline_growth_base_count=118
+baseline_growth_head_count=118
+baseline_growth_count=0
+- [NON_UTF8_TEXT] docs/review/mvp_verification_pack/artifacts/backend_bootrun_postgres_output.txt :: strict UTF-8 decode failed at byte 941
+- [NON_UTF8_TEXT] docs/review/mvp_verification_pack/artifacts/sse_concurrency_contract_test_output.txt :: strict UTF-8 decode failed at byte 431
+- [UTF8_BOM_FORBIDDEN] docs/references/CS AI Chatbot_Requirements Statement.csv :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/references/Development environment.csv :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/references/Summary of key features.csv :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/CHANGELOG.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/CURRENT.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/mybatis_dollar_scan_output.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/node_version_check.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_1_git_status_start.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_ci_workflow_node_202603XX.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_node_runtime.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_node_runtime_202603XX.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_runbook_onepager_check_202603XX.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr1_windows_runbook_exists.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr2_notion_exports_readme_exists.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_3_git_status_start.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_3_windows_diag_script_exists.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_backend_test_output.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_fixed_artifact_contract_check.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_build_output.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_test_output.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_git_status_start.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr1_ci_artifact_upload_policy.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr2_contract_safety_test_output.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_validate.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_spec_consistency.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_4_unittest_output.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_ci_step_summary_202603XX.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_pr1_notion_gate_context_202603XX.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_manual_sync_patch_202603XX.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_pr2_notion_sync_status_202603XX.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_1_pr3_scheduler_observability_202603XX.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_dirty_delta_202603XX.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/phase2_spec_consistency_output_202603XX.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/pii_masking_checks.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/provider_evidence_consistency_output.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/provider_regression_exit_code.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/rbac_401_403_checks.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/sse_concurrency_attempts.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/sse_concurrency_real_limit_proof.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/tenant_isolation_403_checks.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/trace_id_checks.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/mvp_verification_pack/artifacts/uuid_cast_scan_output.txt :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/plans/20260220_gap_closure_design_and_hardening_plan.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/plans/20260221_auth_rbac_ops_admin_design_and_hardening_plan.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/plans/20260221_auth_rbac_ops_admin_implementation_checklist.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/plans/202603XX_phase2_1_ops_maturity_plan.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/plans/202603XX_production_readiness_phase2_plan.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/review/verification_pack/README.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] docs/uiux/Figma_to_React_Checklist.md :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] infra/docker-compose.ollama.yml :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] infra/docker-compose.yml :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/assert_verification_pack_consistency.ps1 :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/check_branch_protection.ps1 :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/generate_uiux_workbook.py :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/latency_budget_calculator.py :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/pii_guard_scan.py :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/release_check.py :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/run_metrics_sampling.ps1 :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/run_mvp_negative_tests.ps1 :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/run_sse_concurrency_real_limit_test.ps1 :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/scan_artifacts_for_secrets_and_pii.ps1 :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] scripts/validate_ui_traceability.py :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tests/sse_stream_basic_test.py :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/ci_notion_sync_context.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/ci_notion_sync_context_test.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/create_customer_print_pack.py :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/create_session_idem_redis.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/login.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/login_body.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/login_body_idem_redis.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/message_body.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/message_body_fail_closed.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/message_body_pii.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_login.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_fail.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_1.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_10.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_11.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_12.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_13.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_14.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_15.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_16.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_17.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_18.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_19.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_2.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_20.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_3.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_4.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_5.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_6.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_7.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_8.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_message_normal_9.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/metrics_session.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/neg_budget_body.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/neg_login_admin.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/neg_login_agent.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/neg_session_body.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/neg_sse_body.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/provider_fail.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/provider_login.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/provider_normal.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/provider_session.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/run_backend_check.ps1 :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/session_body.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/sse_real_login.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/sse_real_msg.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/sse_real_session.json :: UTF-8 with BOM is forbidden; use UTF-8 without BOM
+- [UTF8_BOM_FORBIDDEN] tmp/update_menual_docs.py :: UTF-8 with BOM is forbidden; use UTF-8 without BOM

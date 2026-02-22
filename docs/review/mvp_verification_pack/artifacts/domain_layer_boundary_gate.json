@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "current_violation_count": 6,
+  "baseline_violation_count": 6,
+  "new_violation_count": 0,
+  "resolved_baseline_count": 0,
+  "baseline_growth_base_source": "head-fallback:missing-in-97f7502",
+  "baseline_growth_base_count": 6,
+  "baseline_growth_head_count": 6,
+  "baseline_growth_count": 0,
+  "baseline_growth_items": [],
+  "new_violations": [],
+  "resolved_baseline": [],
+  "all_current_violations": [
+    {
+      "file": "backend/src/main/java/com/aichatbot/contexts/billing/domain/mapper/GenerationLogMapper.java",
+      "line": 3,
+      "import_target": "com.aichatbot.contexts.billing.infrastructure.GenerationLogRow",
+      "code": "DOMAIN_LAYER_FORBIDDEN_IMPORT"
+    },
+    {
+      "file": "backend/src/main/java/com/aichatbot/contexts/billing/domain/mapper/TenantUsageDailyMapper.java",
+      "line": 3,
+      "import_target": "com.aichatbot.contexts.billing.infrastructure.TenantDailyUsageRow",
+      "code": "DOMAIN_LAYER_FORBIDDEN_IMPORT"
+    },
+    {
+      "file": "backend/src/main/java/com/aichatbot/contexts/billing/domain/mapper/TenantUsageMonthlyMapper.java",
+      "line": 3,
+      "import_target": "com.aichatbot.contexts.billing.infrastructure.TenantMonthlyUsageRow",
+      "code": "DOMAIN_LAYER_FORBIDDEN_IMPORT"
+    },
+    {
+      "file": "backend/src/main/java/com/aichatbot/contexts/billing/domain/service/CostCalculator.java",
+      "line": 5,
+      "import_target": "com.aichatbot.contexts.billing.infrastructure.RateCardRepository",
+      "code": "DOMAIN_LAYER_FORBIDDEN_IMPORT"
+    },
+    {
+      "file": "backend/src/main/java/com/aichatbot/contexts/identity/rbac/domain/mapper/RbacApprovalMapper.java",
+      "line": 3,
+      "import_target": "com.aichatbot.contexts.identity.rbac.infrastructure.RbacChangeRequestRecord",
+      "code": "DOMAIN_LAYER_FORBIDDEN_IMPORT"
+    },
+    {
+      "file": "backend/src/main/java/com/aichatbot/contexts/knowledge/rag/domain/mapper/KbSearchMapper.java",
+      "line": 3,
+      "import_target": "com.aichatbot.contexts.knowledge.rag.infrastructure.ChunkSearchRow",
+      "code": "DOMAIN_LAYER_FORBIDDEN_IMPORT"
+    }
+  ]
+}

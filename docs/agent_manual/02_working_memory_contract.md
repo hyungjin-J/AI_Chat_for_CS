@@ -18,6 +18,8 @@ When any file matching below changes, a workpack set is mandatory:
 - `docs/architecture/**`
 - `docs/agent_manual/**`
 - `chatGPT/**`
+- `docs/references/**`
+- `docs/uiux/**`
 
 ## Mandatory Declaration
 Each workpack set must explicitly contain:
@@ -44,8 +46,11 @@ Each workpack set must explicitly contain:
 - Stop conditions and completion criteria
 
 ## Topic Naming Contract
-- Default: `orchestrator_preflight_control`
-- Optional suffix format:
-  - `orchestrator_preflight_control__<short_suffix>`
-- Suffix rule:
-  - snake_case only
+- Required pattern:
+  - `^20\d{6}_[a-z0-9]+(?:__[a-z0-9]+)*$`
+- Example:
+  - `20260222_billing__parity`
+- Forbidden tokens:
+  - `misc`, `etc`, `tmp`, `temp`, `update`, `fix`
+- Scope binding:
+  - Topic tokens must include at least one token extracted from changed files.

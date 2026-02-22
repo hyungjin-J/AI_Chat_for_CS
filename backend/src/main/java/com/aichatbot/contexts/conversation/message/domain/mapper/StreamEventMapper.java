@@ -1,6 +1,6 @@
 package com.aichatbot.contexts.conversation.message.domain.mapper;
 
-import com.aichatbot.contexts.conversation.message.application.StreamEventView;
+import com.aichatbot.contexts.conversation.message.domain.readmodel.StreamEventView;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

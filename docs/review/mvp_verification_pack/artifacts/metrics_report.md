@@ -1,4 +1,4 @@
-﻿# Metrics Report
+# Metrics Report
 
 - generated_at: 2026-02-18 19:58:41+09:00
 - source: /actuator/prometheus

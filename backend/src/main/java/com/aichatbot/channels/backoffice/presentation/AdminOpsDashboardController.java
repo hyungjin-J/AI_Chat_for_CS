@@ -5,13 +5,13 @@ import com.aichatbot.contexts.operations.audit.AuditChainVerifierService;
 import com.aichatbot.contexts.operations.audit.AuditExportJobService;
 import com.aichatbot.contexts.operations.audit.domain.AuditExportJobRecord;
 import com.aichatbot.contexts.operations.audit.domain.PersistentAuditLogEntry;
+import com.aichatbot.contexts.operations.application.OpsDashboardQueryService;
 import com.aichatbot.platform.error.ApiException;
 import com.aichatbot.platform.observability.TraceGuard;
 import com.aichatbot.contexts.identity.security.PrincipalUtils;
 import com.aichatbot.platform.tenancy.TenantContext;
 import com.aichatbot.contexts.operations.domain.OpsMetricRow;
 import com.aichatbot.contexts.operations.domain.OpsMetricTotal;
-import com.aichatbot.contexts.operations.infrastructure.OpsRepository;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
@@ -35,18 +35,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/admin")
 public class AdminOpsDashboardController {
 
-    private final OpsRepository opsRepository;
+    private final OpsDashboardQueryService opsDashboardQueryService;
     private final AuditLogService auditLogService;
     private final AuditChainVerifierService auditChainVerifierService;
     private final AuditExportJobService auditExportJobService;
 
     public AdminOpsDashboardController(
-        OpsRepository opsRepository,
+        OpsDashboardQueryService opsDashboardQueryService,
         AuditLogService auditLogService,
         AuditChainVerifierService auditChainVerifierService,
         AuditExportJobService auditExportJobService
     ) {
-        this.opsRepository = opsRepository;
+        this.opsDashboardQueryService = opsDashboardQueryService;
         this.auditLogService = auditLogService;
         this.auditChainVerifierService = auditChainVerifierService;
         this.auditExportJobService = auditExportJobService;
@@ -59,7 +59,7 @@ public class AdminOpsDashboardController {
         @RequestParam(value = "to_utc", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant toUtc
     ) {
         UUID resolvedTenantId = resolveTenantScope(tenantId);
-        List<OpsMetricTotal> rows = opsRepository.findSummary(resolvedTenantId, fromUtc, toUtc);
+        List<OpsMetricTotal> rows = opsDashboardQueryService.loadSummary(resolvedTenantId, fromUtc, toUtc);
         Map<String, Long> totals = new LinkedHashMap<>();
         for (OpsMetricTotal row : rows) {
             totals.put(row.metricKey(), row.metricValue());
@@ -78,7 +78,7 @@ public class AdminOpsDashboardController {
         @RequestParam(value = "to_utc", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant toUtc
     ) {
         UUID resolvedTenantId = resolveTenantScope(tenantId);
-        List<OpsMetricRow> series = opsRepository.findSeries(resolvedTenantId, fromUtc, toUtc);
+        List<OpsMetricRow> series = opsDashboardQueryService.loadSeries(resolvedTenantId, fromUtc, toUtc);
         List<SeriesPoint> points = series.stream()
             .map(row -> new SeriesPoint(row.hourBucketUtc(), row.metricKey(), row.metricValue()))
             .toList();

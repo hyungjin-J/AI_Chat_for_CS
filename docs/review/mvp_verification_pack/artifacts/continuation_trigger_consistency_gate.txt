@@ -1,0 +1,6 @@
+assert_workpack_trigger_consistency
+status=PASS
+agents_pattern_count=10
+manual_pattern_count=10
+contract_pattern_count=10
+violation_count=0

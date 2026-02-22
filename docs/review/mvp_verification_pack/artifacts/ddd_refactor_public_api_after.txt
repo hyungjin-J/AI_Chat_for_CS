@@ -1,4 +1,4 @@
-﻿backend/src/main/java\com\aichatbot\channels\backoffice\presentation\AdminOpsDashboardController.java:139:    @GetMapping("/audit-logs/{audit_id}/diff")
+backend/src/main/java\com\aichatbot\channels\backoffice\presentation\AdminOpsDashboardController.java:139:    @GetMapping("/audit-logs/{audit_id}/diff")
 backend/src/main/java\com\aichatbot\channels\backoffice\presentation\AdminOpsDashboardController.java:157:    @GetMapping("/audit-logs/export")
 backend/src/main/java\com\aichatbot\channels\backoffice\presentation\AdminOpsDashboardController.java:214:    @PostMapping("/audit-logs/export-jobs")
 backend/src/main/java\com\aichatbot\channels\backoffice\presentation\AdminOpsDashboardController.java:239:    @GetMapping("/audit-logs/export-jobs/{job_id}")

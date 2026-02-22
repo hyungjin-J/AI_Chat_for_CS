@@ -1,0 +1,7 @@
+assert_scaffold_contract_smoke
+status=PASS
+backend_scaffold_exit=0
+frontend_scaffold_exit=0
+missing_count=0
+backend_scaffold_output_snippet=backend_context_scaffold\nstatus=PASS\ncontext=continuation_acl\ndry_run=0\ncreated_count=13\nexisting_count=0\n- created=C:/Users/hjjmj/AppData/Local/Temp/tmpxtuwxdgo/backend/src/main/java/com/aichatbot/contexts/continuation_acl/domain/model/ContinuationAclAggregateRoot.java\n- created=C:/Users/hjjmj/AppD
+frontend_scaffold_output_snippet=frontend_feature_scaffold\nstatus=PASS\ncontext=backoffice\nfeature=ops_console\ndry_run=0\ncreated_count=6\nexisting_count=0\n- created=C:/Users/hjjmj/AppData/Local/Temp/tmpxtuwxdgo/frontend/src/features/backoffice/ops_console/api/opsConsoleApi.ts\n- created=C:/Users/hjjmj/AppData/Local/Temp/tmpxtuwxdgo/fr

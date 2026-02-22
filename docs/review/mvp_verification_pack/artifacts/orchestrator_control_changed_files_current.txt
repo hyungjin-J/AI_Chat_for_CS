@@ -1,4 +1,4 @@
-﻿.github/workflows/pr-smoke-contract.yml
+.github/workflows/pr-smoke-contract.yml
 AGENTS.md
 backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java
 backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminRbacController.java

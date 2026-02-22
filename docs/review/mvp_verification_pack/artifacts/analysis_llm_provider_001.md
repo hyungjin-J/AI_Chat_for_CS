@@ -1,4 +1,4 @@
-﻿# LLM-PROVIDER-001 분석 및 조치 결과
+# LLM-PROVIDER-001 분석 및 조치 결과
 
 - 분석 대상 로그: `docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log`
 - 최초 문제 상태: `status=SKIPPED`

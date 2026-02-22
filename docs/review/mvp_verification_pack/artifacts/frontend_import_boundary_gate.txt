@@ -1,0 +1,5 @@
+assert_frontend_import_boundaries
+status=PASS
+scanned_file_count=42
+violation_count=0
+cycle_count=0

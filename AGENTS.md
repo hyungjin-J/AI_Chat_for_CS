@@ -767,6 +767,8 @@ first-token을 빠르게 보여주되(목표 1~2s), 최종 응답은 Answer Cont
 - `docs/architecture/**`
 - `docs/agent_manual/**`
 - `chatGPT/**`
+- `docs/references/**`
+- `docs/uiux/**`
 
 필수 경로(최소 1세트):
 - `docs/workpacks/YYYYMMDD_<topic>/01_plan.md`

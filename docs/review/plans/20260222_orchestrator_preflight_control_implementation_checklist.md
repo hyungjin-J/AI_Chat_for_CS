@@ -19,9 +19,9 @@
 - [ ] hook run output captured
 
 3. Working memory docs
-- [ ] `docs/workpacks/20260222_orchestrator_preflight_control/01_plan.md`
-- [ ] `docs/workpacks/20260222_orchestrator_preflight_control/02_context.md`
-- [ ] `docs/workpacks/20260222_orchestrator_preflight_control/03_checklist.md`
+- [ ] `docs/workpacks/20260222_orchestrator__preflight__control/01_plan.md`
+- [ ] `docs/workpacks/20260222_orchestrator__preflight__control/02_context.md`
+- [ ] `docs/workpacks/20260222_orchestrator__preflight__control/03_checklist.md`
 
 4. 12.3 documents
 - [ ] design and hardening plan exists

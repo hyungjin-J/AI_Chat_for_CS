@@ -1,6 +1,7 @@
 package com.aichatbot.contexts.identity.rbac.infrastructure;
 
 import com.aichatbot.contexts.identity.rbac.domain.mapper.RbacMatrixMapper;
+import com.aichatbot.contexts.identity.rbac.domain.readmodel.RbacMatrixEntry;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;

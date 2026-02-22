@@ -6,8 +6,8 @@ import {
     enrollMfaTotp,
     login,
     verifyMfa,
-} from "../../../../api/authApi";
-import { getAuthState } from "../../../../auth/authStore";
+} from "../../../../shared/api/authApi";
+import { getAuthState } from "../../../../shared/auth/authStore";
 
 export function LoginView() {
     const navigate = useNavigate();

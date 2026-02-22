@@ -1,13 +1,13 @@
 import type { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { clearAuthState, getAuthState, setAuthState } from "../auth/authStore";
+import { clearAuthState, getAuthState, setAuthState } from "../shared/auth/authStore";
 
-vi.mock("./authApi", () => ({
+vi.mock("../shared/api/authApi", () => ({
     refreshToken: vi.fn(),
 }));
 
-import { refreshToken } from "./authApi";
-import { httpClient } from "./httpClient";
+import { refreshToken } from "../shared/api/authApi";
+import { httpClient } from "../shared/api/httpClient";
 
 function buildResponse(
     config: InternalAxiosRequestConfig,

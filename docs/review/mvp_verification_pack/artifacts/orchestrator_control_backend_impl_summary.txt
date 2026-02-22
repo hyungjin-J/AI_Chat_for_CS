@@ -1,4 +1,4 @@
-﻿orchestrator_control_backend_impl_summary
+orchestrator_control_backend_impl_summary
 status=PASS
 scope=backend security/tenant/rbac guard remediation
 implemented_items=

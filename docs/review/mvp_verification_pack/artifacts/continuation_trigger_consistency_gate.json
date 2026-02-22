@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "agents_patterns": [
+    "backend/**",
+    "frontend/**",
+    "scripts/**",
+    ".github/workflows/**",
+    "AGENTS.md",
+    "docs/architecture/**",
+    "docs/agent_manual/**",
+    "chatGPT/**",
+    "docs/references/**",
+    "docs/uiux/**"
+  ],
+  "manual_patterns": [
+    "backend/**",
+    "frontend/**",
+    "scripts/**",
+    ".github/workflows/**",
+    "AGENTS.md",
+    "docs/architecture/**",
+    "docs/agent_manual/**",
+    "chatGPT/**",
+    "docs/references/**",
+    "docs/uiux/**"
+  ],
+  "contract_patterns": [
+    "backend/**",
+    "frontend/**",
+    "scripts/**",
+    ".github/workflows/**",
+    "AGENTS.md",
+    "docs/architecture/**",
+    "docs/agent_manual/**",
+    "chatGPT/**",
+    "docs/references/**",
+    "docs/uiux/**"
+  ],
+  "violation_count": 0,
+  "violations": []
+}

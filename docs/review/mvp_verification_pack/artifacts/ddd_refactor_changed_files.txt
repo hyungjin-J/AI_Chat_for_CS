@@ -1,4 +1,4 @@
-﻿.github/workflows/pr-smoke-contract.yml
+.github/workflows/pr-smoke-contract.yml
 backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java
 backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminRbacController.java
 backend/src/main/java/com/aichatbot/contexts/billing/application/BillingMetrics.java

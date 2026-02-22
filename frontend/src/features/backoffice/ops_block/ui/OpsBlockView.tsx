@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { upsertBlock } from "../../../../api/adminApi";
+import { upsertBlock } from "../../../../shared/api/adminApi";
 
 export function OpsBlockView() {
     const [blockType, setBlockType] = useState("ACCOUNT");

@@ -1,0 +1,3 @@
+billing_parity_summary
+- memory_mode: PASS (billing_parity_memory_mode.txt)
+- mybatis_mode: PASS (billing_parity_mybatis_mode.txt)

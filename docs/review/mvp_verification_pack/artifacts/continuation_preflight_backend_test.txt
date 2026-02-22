@@ -1,0 +1,62 @@
+$ C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend\gradlew.bat test --no-daemon
+exit_code=0
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :compileJava
+> Task :processResources
+> Task :classes
+
+> Task :compileTestJava
+
+> Task :lintUuidMapperParams
+[uuid-lint] PASS: checked_mapper_files=22 violations=0
+[uuid-lint] allowlist=['login_id', 'loginid']
+
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+> Task :test
+
+2026-02-22T23:03:22.199+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-02-22T23:03:22.202+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-02-22T23:03:22.226+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-02-22T23:03:22.227+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2026-02-22T23:03:22.236+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-02-22T23:03:22.236+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2026-02-22T23:03:22.245+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-02-22T23:03:22.246+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2026-02-22T23:03:22.261+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-02-22T23:03:22.262+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+2026-02-22T23:03:22.272+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
+2026-02-22T23:03:22.273+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+2026-02-22T23:03:22.288+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
+2026-02-22T23:03:22.289+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+2026-02-22T23:03:22.302+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown initiated...
+2026-02-22T23:03:22.302+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown completed.
+2026-02-22T23:03:22.314+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Shutdown initiated...
+2026-02-22T23:03:22.315+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Shutdown completed.
+2026-02-22T23:03:22.327+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Shutdown initiated...
+2026-02-22T23:03:22.327+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Shutdown completed.
+2026-02-22T23:03:22.336+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown initiated...
+2026-02-22T23:03:22.337+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown completed.
+2026-02-22T23:03:22.342+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown initiated...
+2026-02-22T23:03:22.342+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown completed.
+2026-02-22T23:03:22.348+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown initiated...
+2026-02-22T23:03:22.348+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown completed.
+2026-02-22T23:03:22.354+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown initiated...
+2026-02-22T23:03:22.354+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown completed.
+2026-02-22T23:03:22.361+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown initiated...
+2026-02-22T23:03:22.362+09:00  INFO 19604 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown completed.
+
+[Incubating] Problems report is available at: file:///C:/Users/hjjmj/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/AI_Chatbot/backend/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 59s
+5 actionable tasks: 5 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.0/userguide/configuration_cache_enabling.html
+
+[stderr]
+C:\Users\hjjmj\OneDrive\���� ȭ��\AI_Chatbot\backend\src\test\java\com\aichatbot\contexts\conversation\message\presentation\PiiEndToEndContractTest.java:68: warning: [removal] SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+    @SpyBean
+     ^
+1 warning
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended

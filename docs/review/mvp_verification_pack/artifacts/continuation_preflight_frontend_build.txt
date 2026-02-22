@@ -1,0 +1,8 @@
+workspace=C:\Users\hjjmj\AppData\Local\Temp\ai_chatbot_node22_frontend\frontend
+$ npm.cmd run build
+exit_code=0
+
+
+> frontend@0.0.0 build
+> tsc -b
+

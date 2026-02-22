@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "root": "backend/src/main/java",
+  "scan_paths": [
+    "backend/src/main/java/com/aichatbot/platform",
+    "backend/src/main/java/com/aichatbot/sharedkernel"
+  ],
+  "scanned_files_count": 27,
+  "scanned_files": [
+    "com/aichatbot/platform/config/AppProperties.java",
+    "com/aichatbot/platform/error/ApiErrorResponse.java",
+    "com/aichatbot/platform/error/ApiException.java",
+    "com/aichatbot/platform/error/ApiExceptionHandler.java",
+    "com/aichatbot/platform/error/ErrorCatalog.java",
+    "com/aichatbot/platform/error/QuotaExceededException.java",
+    "com/aichatbot/platform/error/RetryAfterApiException.java",
+    "com/aichatbot/platform/health/HealthController.java",
+    "com/aichatbot/platform/idempotency/IdempotencyFallbackMetricsRecorder.java",
+    "com/aichatbot/platform/idempotency/IdempotencyService.java",
+    "com/aichatbot/platform/idempotency/IdempotencyStore.java",
+    "com/aichatbot/platform/idempotency/IdempotencyStoreRouter.java",
+    "com/aichatbot/platform/idempotency/InMemoryIdempotencyRecordStore.java",
+    "com/aichatbot/platform/idempotency/NoopIdempotencyFallbackMetricsRecorder.java",
+    "com/aichatbot/platform/idempotency/RedisIdempotencyStore.java",
+    "com/aichatbot/platform/idempotency/StoredIdempotencyRecord.java",
+    "com/aichatbot/platform/mybatis/UUIDTypeHandler.java",
+    "com/aichatbot/platform/observability/TraceContext.java",
+    "com/aichatbot/platform/observability/TraceGuard.java",
+    "com/aichatbot/platform/observability/TraceIdFilter.java",
+    "com/aichatbot/platform/observability/TraceIdNormalizer.java",
+    "com/aichatbot/platform/privacy/PiiMaskingService.java",
+    "com/aichatbot/platform/tenancy/domain/mapper/TenantResolverMapper.java",
+    "com/aichatbot/platform/tenancy/TenantContext.java",
+    "com/aichatbot/platform/tenancy/TenantKeyFilter.java",
+    "com/aichatbot/platform/tenancy/TenantResolverRepository.java",
+    "com/aichatbot/sharedkernel/util/UuidParser.java"
+  ],
+  "violation_count": 0,
+  "violations": []
+}

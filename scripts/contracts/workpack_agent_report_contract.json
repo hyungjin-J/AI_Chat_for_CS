@@ -7,7 +7,55 @@
     "AGENTS.md",
     "docs/architecture/**",
     "docs/agent_manual/**",
-    "chatGPT/**"
+    "chatGPT/**",
+    "docs/references/**",
+    "docs/uiux/**"
+  ],
+  "topic_pattern": "^20\\d{6}_[a-z0-9]+(?:__[a-z0-9]+)*$",
+  "forbidden_topic_tokens": [
+    "misc",
+    "etc",
+    "tmp",
+    "temp",
+    "update",
+    "fix"
+  ],
+  "scope_stop_tokens": [
+    "src",
+    "main",
+    "test",
+    "java",
+    "com",
+    "aichatbot",
+    "contexts",
+    "channels",
+    "backend",
+    "frontend",
+    "scripts",
+    "docs",
+    "review",
+    "workpacks",
+    "agent",
+    "reports",
+    "presentation",
+    "application",
+    "domain",
+    "infrastructure",
+    "github",
+    "workflows",
+    "chatgpt"
+  ],
+  "security_scope_patterns": [
+    "backend/**/security/**",
+    "backend/**/rbac/**",
+    "backend/**/auth/**",
+    "backend/**/tenant/**",
+    "backend/**/rate/**",
+    "backend/**/abuse/**",
+    "frontend/**/auth/**",
+    "scripts/**security**",
+    "scripts/**guard**",
+    "scripts/**tenant**"
   ],
   "workpack_root": "docs/workpacks",
   "required_workpack_files": [
@@ -24,5 +72,31 @@
     "DDD_report.md",
     "SEC_report.md",
     "QA_report.md"
-  ]
+  ],
+  "required_reports_by_scope": {
+    "backend": [
+      "DDD_report.md",
+      "QA_report.md"
+    ],
+    "frontend": [
+      "QA_report.md"
+    ],
+    "security": [
+      "SEC_report.md"
+    ]
+  },
+  "spec_sync": {
+    "patterns": [
+      "docs/references/*.csv",
+      "docs/references/*.xlsx",
+      "docs/uiux/*.xlsx"
+    ],
+    "required_report": "spec_sync_report.md",
+    "manual_exception_gate": {
+      "script": "scripts/check_notion_manual_exception_gate.py",
+      "status_file": "docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json",
+      "manual_patch": "docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md",
+      "spec_sync_report": "spec_sync_report.md"
+    }
+  }
 }

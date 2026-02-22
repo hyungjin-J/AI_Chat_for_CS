@@ -1,0 +1,8 @@
+test_spec_only_change_requires_spec_sync_report (scripts.tests.test_assert_workpack_agent_report_contract.WorkpackAgentReportContractV2Test.test_spec_only_change_requires_spec_sync_report) ... ok
+test_spec_only_change_fails_when_manual_exception_gate_fails (scripts.tests.test_assert_workpack_agent_report_contract.WorkpackAgentReportContractV2Test.test_spec_only_change_fails_when_manual_exception_gate_fails) ... ok
+test_spec_only_change_passes_when_manual_exception_gate_passes (scripts.tests.test_assert_workpack_agent_report_contract.WorkpackAgentReportContractV2Test.test_spec_only_change_passes_when_manual_exception_gate_passes) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.436s
+
+OK

@@ -1,6 +1,6 @@
 package com.aichatbot.contexts.knowledge.rag.domain.mapper;
 
-import com.aichatbot.contexts.knowledge.rag.infrastructure.CitationRow;
+import com.aichatbot.contexts.knowledge.rag.domain.readmodel.CitationRow;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

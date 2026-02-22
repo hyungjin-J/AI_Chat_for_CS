@@ -1,4 +1,4 @@
-﻿idempotency_store=redis
+idempotency_store=redis
 fixed_idempotency_key=idem-redis-session-d008f970-f5f8-4493-944f-93e7b9dd06a5
 first_request_status=201
 second_request_status_after_restart=409

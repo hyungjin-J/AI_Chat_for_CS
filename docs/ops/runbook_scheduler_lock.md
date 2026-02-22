@@ -1,4 +1,4 @@
-﻿# Scheduler Lock Runbook (Self-Healing)
+# Scheduler Lock Runbook (Self-Healing)
 
 ## 목적
 `tb_scheduler_lock` 기반 분산락에서 stuck lock을 자동 감지/회복하고, 자동 회복 실패 시 수동 복구 절차로 안전하게 전환한다.

@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { getAuthState, hasAnyRole } from "../auth/authStore";
-import { logout } from "../api/authApi";
+import { logout } from "../shared/api/authApi";
+import { getAuthState, hasAnyRole } from "../shared/auth/authStore";
 
 export function AdminShell() {
     const navigate = useNavigate();

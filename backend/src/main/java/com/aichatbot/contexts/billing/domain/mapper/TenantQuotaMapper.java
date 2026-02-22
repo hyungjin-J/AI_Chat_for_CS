@@ -1,6 +1,6 @@
 package com.aichatbot.contexts.billing.domain.mapper;
 
-import com.aichatbot.contexts.billing.infrastructure.TenantQuotaRow;
+import com.aichatbot.contexts.billing.domain.readmodel.TenantQuotaRow;
 import java.time.Instant;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;

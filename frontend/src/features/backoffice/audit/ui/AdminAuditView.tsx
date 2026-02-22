@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import type { AuditLogItem } from "../../../../api/adminApi";
+import type { AuditLogItem } from "../../../../shared/api/adminApi";
 import {
     createAuditExportJob,
     downloadAuditExportJob,
     fetchAuditDiff,
     fetchAuditLogs,
     getAuditExportJob,
-} from "../../../../api/adminApi";
+} from "../../../../shared/api/adminApi";
 
 export function AdminAuditView() {
     const [actionType, setActionType] = useState("");

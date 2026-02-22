@@ -3,7 +3,7 @@ package com.aichatbot.contexts.conversation.message.infrastructure;
 import com.aichatbot.platform.error.ApiException;
 import com.aichatbot.platform.error.ErrorCatalog;
 import com.aichatbot.platform.observability.TraceGuard;
-import com.aichatbot.contexts.conversation.message.application.StreamEventView;
+import com.aichatbot.contexts.conversation.message.domain.readmodel.StreamEventView;
 import com.aichatbot.contexts.conversation.message.domain.mapper.StreamEventMapper;
 import java.time.Instant;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.aichatbot.platform.observability;
 
 import com.aichatbot.contexts.conversation.llm.application.LlmService;
 import com.aichatbot.contexts.conversation.message.application.MessageView;
-import com.aichatbot.contexts.conversation.message.application.StreamEventView;
+import com.aichatbot.contexts.conversation.message.domain.readmodel.StreamEventView;
 import com.aichatbot.contexts.conversation.message.infrastructure.MessageRepository;
 import com.aichatbot.contexts.conversation.message.infrastructure.StreamEventRepository;
 import com.aichatbot.contexts.knowledge.rag.infrastructure.RagSearchLogRepository;

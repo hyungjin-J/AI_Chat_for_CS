@@ -1,4 +1,4 @@
-﻿github_record_and_notion_check
+github_record_and_notion_check
 status=PASS
 date=2026-02-22
 branch=main

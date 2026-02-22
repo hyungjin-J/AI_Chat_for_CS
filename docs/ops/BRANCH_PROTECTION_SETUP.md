@@ -1,4 +1,4 @@
-﻿# BRANCH_PROTECTION_SETUP
+# BRANCH_PROTECTION_SETUP
 
 ## 목적
 `mvp-demo-verify`가 실패하면 머지되지 않도록 GitHub 브랜치 보호 규칙을 5분 내 설정한다.

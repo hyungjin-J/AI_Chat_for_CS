@@ -1,4 +1,4 @@
-﻿PR smoke/release workflow changes:
+PR smoke/release workflow changes:
 - .github/workflows/pr-smoke-contract.yml
 - .github/workflows/release-nightly-full.yml
 

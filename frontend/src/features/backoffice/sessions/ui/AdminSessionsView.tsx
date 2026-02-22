@@ -4,7 +4,7 @@ import {
     revokeOtherSessions,
     revokeSession,
     type SessionItem,
-} from "../../../../api/authApi";
+} from "../../../../shared/api/authApi";
 
 export function AdminSessionsView() {
     const [sessions, setSessions] = useState<SessionItem[]>([]);

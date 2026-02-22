@@ -1,0 +1,10 @@
+assert_domain_layer_boundaries
+status=PASS
+current_violation_count=6
+baseline_violation_count=6
+new_violation_count=0
+resolved_baseline_count=0
+baseline_growth_base_source=head-fallback:missing-in-97f7502
+baseline_growth_base_count=6
+baseline_growth_head_count=6
+baseline_growth_count=0

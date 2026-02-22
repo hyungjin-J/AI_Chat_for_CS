@@ -1,7 +1,6 @@
 package com.aichatbot.channels.backoffice.presentation;
 
-import com.aichatbot.contexts.identity.rbac.infrastructure.RbacApprovalService;
-import com.aichatbot.contexts.identity.rbac.infrastructure.RbacChangeRequestRecord;
+import com.aichatbot.contexts.identity.rbac.application.RbacApprovalFacade;
 import com.aichatbot.contexts.operations.audit.AuditLogService;
 import com.aichatbot.platform.error.ApiException;
 import com.aichatbot.platform.observability.TraceGuard;
@@ -26,11 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/admin/rbac")
 public class AdminRbacController {
 
-    private final RbacApprovalService rbacApprovalService;
+    private final RbacApprovalFacade rbacApprovalFacade;
     private final AuditLogService auditLogService;
 
-    public AdminRbacController(RbacApprovalService rbacApprovalService, AuditLogService auditLogService) {
-        this.rbacApprovalService = rbacApprovalService;
+    public AdminRbacController(RbacApprovalFacade rbacApprovalFacade, AuditLogService auditLogService) {
+        this.rbacApprovalFacade = rbacApprovalFacade;
         this.auditLogService = auditLogService;
     }
 
@@ -45,7 +44,7 @@ public class AdminRbacController {
         UUID tenantId = UUID.fromString(TenantContext.getTenantId());
         UserPrincipal principal = PrincipalUtils.currentPrincipal();
         UUID actorUserId = AuditLogService.toUuidOrNull(principal.userId());
-        UUID requestId = rbacApprovalService.createRequest(
+        UUID requestId = rbacApprovalFacade.createRequest(
             tenantId,
             resourceKey,
             request.roleCode(),
@@ -78,7 +77,12 @@ public class AdminRbacController {
         UUID tenantId = UUID.fromString(TenantContext.getTenantId());
         int safeLimit = Math.max(1, Math.min(200, limit));
         int safeOffset = Math.max(0, offset);
-        List<RbacChangeRequestRecord> requests = rbacApprovalService.listRequests(tenantId, status, safeLimit, safeOffset);
+        List<RbacApprovalFacade.RbacApprovalRequest> requests = rbacApprovalFacade.listRequests(
+            tenantId,
+            status,
+            safeLimit,
+            safeOffset
+        );
         List<RbacRequestItem> items = requests.stream()
             .map(record -> new RbacRequestItem(
                 record.id().toString(),
@@ -105,7 +109,7 @@ public class AdminRbacController {
         UserPrincipal principal = PrincipalUtils.currentPrincipal();
         UUID approver = AuditLogService.toUuidOrNull(principal.userId());
         UUID targetRequestId = parseRequiredUuid(requestId, "invalid_request_id");
-        RbacApprovalService.ApprovalResult result = rbacApprovalService.approve(
+        RbacApprovalFacade.RbacApprovalOutcome result = rbacApprovalFacade.approve(
             tenantId,
             targetRequestId,
             approver,
@@ -135,7 +139,7 @@ public class AdminRbacController {
         UserPrincipal principal = PrincipalUtils.currentPrincipal();
         UUID approver = AuditLogService.toUuidOrNull(principal.userId());
         UUID targetRequestId = parseRequiredUuid(requestId, "invalid_request_id");
-        rbacApprovalService.reject(tenantId, targetRequestId, approver, principal.adminLevel(), request.comment());
+        rbacApprovalFacade.reject(tenantId, targetRequestId, approver, principal.adminLevel(), request.comment());
         auditLogService.write(
             tenantId,
             "RBAC_CHANGE_REQUEST_REJECTED",

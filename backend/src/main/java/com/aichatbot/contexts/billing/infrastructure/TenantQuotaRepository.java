@@ -3,6 +3,7 @@ package com.aichatbot.contexts.billing.infrastructure;
 import com.aichatbot.contexts.billing.domain.mapper.TenantQuotaMapper;
 import com.aichatbot.contexts.billing.domain.model.BreachAction;
 import com.aichatbot.contexts.billing.domain.model.TenantQuota;
+import com.aichatbot.contexts.billing.domain.readmodel.TenantQuotaRow;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;

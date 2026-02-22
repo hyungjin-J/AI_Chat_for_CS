@@ -6,7 +6,8 @@ import {
     rejectRbacRequest,
     upsertRbacMatrix,
     type RbacApprovalRequestItem,
-} from "../../../../api/adminApi";
+} from "../../../../shared/api/adminApi";
+import { SectionPanel } from "../../../../widgets";
 
 export function AdminRbacView() {
     const [resourceKey, setResourceKey] = useState("admin.dashboard.summary");
@@ -76,8 +77,7 @@ export function AdminRbacView() {
     }, []);
 
     return (
-        <section>
-            <h2>RBAC Matrix</h2>
+        <SectionPanel title="RBAC Matrix">
             <form className="inline-form" onSubmit={onSubmit}>
                 <label>
                     Resource Key
@@ -136,6 +136,6 @@ export function AdminRbacView() {
                     )}
                 </tbody>
             </table>
-        </section>
+        </SectionPanel>
     );
 }

@@ -1,4 +1,4 @@
-﻿# Spec Sync Report
+# Spec Sync Report
 
 ## 1) 보고 목적
 - 스펙/운영 문서 변경과 Notion 반영 이력을 한 곳에서 추적하기 위한 동기화 보고서입니다.

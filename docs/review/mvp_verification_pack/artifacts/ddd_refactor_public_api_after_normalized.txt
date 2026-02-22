@@ -1,4 +1,4 @@
-﻿DeleteMapping("/sessions/{session_id}")
+DeleteMapping("/sessions/{session_id}")
 GetMapping("/{answer_id}/citations")
 GetMapping("/{tenant_id}/usage-report")
 GetMapping("/approval-requests")

@@ -1,4 +1,4 @@
-﻿# 20260222 Production Continuation Gap Closing Plan
+# 20260222 Production Continuation Gap Closing Plan
 - target_file: `docs/review/plans/20260222_production_continuation_gap_closing_plan.md`
 - generated_at_kst: 2026-02-22
 - base_commit_hash: `97f7502`
@@ -22,14 +22,14 @@
 | DDD | 도메인 내부 레이어 규칙(도메인→infra 역참조 금지) CI 강제 | 부분 | `AGENTS.md`(6.1-B), `scripts/assert_platform_boundary.py`, `.github/workflows/pr-smoke-contract.yml`, `backend/src/main/java/com/aichatbot/contexts/billing/domain/service/CostCalculator.java`, `backend/src/main/java/com/aichatbot/contexts/conversation/message/domain/mapper/MessageMapper.java` | 규칙 문서화는 되어 있으나 CI는 platform/sharedkernel 경계 위주, domain→infra 위반 코드 존재 |
 | 4대 시스템-1 | manual hook 스크립트 존재 | 있다 | `scripts/agent/manual_hook.py`, `scripts/tests/test_manual_hook.py` | 스크립트 + 테스트 존재 |
 | 4대 시스템-1 | `docs/agent_manual` 챕터 분리 + hook 출력 기반 최소 로딩 | 있다 | `docs/agent_manual/01_preflight_and_baseline.md`, `docs/agent_manual/02_working_memory_contract.md`, `docs/agent_manual/03_pr_decomposition_and_agent_roles.md`, `docs/agent_manual/04_gates_notion_and_evidence.md`, `docs/review/mvp_verification_pack/artifacts/orchestrator_control_manual_hook_output.json` | 4챕터 + hook output에 chapter summary 기록 |
-| 4대 시스템-1 | hook 결과를 workpack/보고서에 기록하는 규칙 | 부분 | `docs/agent_manual/04_gates_notion_and_evidence.md`, `docs/review/mvp_verification_pack/artifacts/orchestrator_control_gate_summary.txt`, `docs/workpacks/20260222_orchestrator_preflight_control/02_context.md` | 규칙/샘플은 있으나 CI 강제 없음 |
-| 4대 시스템-2 | Working Memory 3문서 표준(`01/02/03`) | 있다 | `docs/agent_manual/02_working_memory_contract.md`, `docs/workpacks/20260222_orchestrator_preflight_control/01_plan.md`, `docs/workpacks/20260222_orchestrator_preflight_control/02_context.md`, `docs/workpacks/20260222_orchestrator_preflight_control/03_checklist.md` | 표준 + 실사용 예시 존재 |
+| 4대 시스템-1 | hook 결과를 workpack/보고서에 기록하는 규칙 | 부분 | `docs/agent_manual/04_gates_notion_and_evidence.md`, `docs/review/mvp_verification_pack/artifacts/orchestrator_control_gate_summary.txt`, `docs/workpacks/20260222_orchestrator__preflight__control/02_context.md` | 규칙/샘플은 있으나 CI 강제 없음 |
+| 4대 시스템-2 | Working Memory 3문서 표준(`01/02/03`) | 있다 | `docs/agent_manual/02_working_memory_contract.md`, `docs/workpacks/20260222_orchestrator__preflight__control/01_plan.md`, `docs/workpacks/20260222_orchestrator__preflight__control/02_context.md`, `docs/workpacks/20260222_orchestrator__preflight__control/03_checklist.md` | 표준 + 실사용 예시 존재 |
 | 4대 시스템-2 | 어떤 변경에서 workpack 강제되는지 규칙/게이트 | 부분 | `AGENTS.md`(12.3), `docs/agent_manual/02_working_memory_contract.md`, `.github/workflows/pr-smoke-contract.yml` | 규칙은 있으나 CI에 workpack 존재 강제 step 없음 |
 | 4대 시스템-3 | check_all/테스트/빌드/utf8/spec 일괄 실행 경로 | 부분 | `scripts/check_all.ps1`, `scripts/check_all.sh`, `.github/workflows/pr-smoke-contract.yml`, `.github/workflows/release-nightly-full.yml` | check_all은 테스트/빌드 중심, spec/utf8 one-path 강제 부재. spec은 CI에만 존재 |
-| 4대 시스템-3 | self-check 질문(JSON)+checklist 기록 강제 | 부분 | `docs/workpacks/20260222_orchestrator_preflight_control/03_checklist.md`, `docs/review/mvp_verification_pack/artifacts/orchestrator_control_manual_hook_output.json` | checklist/JSON 샘플은 존재하나 self-check JSON 스키마/CI 게이트 없음 |
+| 4대 시스템-3 | self-check 질문(JSON)+checklist 기록 강제 | 부분 | `docs/workpacks/20260222_orchestrator__preflight__control/03_checklist.md`, `docs/review/mvp_verification_pack/artifacts/orchestrator_control_manual_hook_output.json` | checklist/JSON 샘플은 존재하나 self-check JSON 스키마/CI 게이트 없음 |
 | 4대 시스템-3 | mapper namespace drift 검증(전체 XML 커버리지) | 없다 | `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`, `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`, `.github/workflows/pr-smoke-contract.yml`, `scripts` | handoff 문서에 “follow-up risk”로 남아 있고 전용 게이트 스크립트/CI step 부재 |
-| 4대 시스템-4 | Specialized Agents 역할별 산출물 템플릿/경로 | 부분 | `docs/agent_manual/03_pr_decomposition_and_agent_roles.md`, `docs/workpacks/20260222_orchestrator_preflight_control/04_agent_prompts.md` | 역할 모델/프롬프트는 있으나 공용 템플릿 체계와 강제 게이트 없음 |
-| 4대 시스템-4 | 최소 보고서(DDD/SEC/QA) 작성 규칙 | 부분 | `docs/workpacks/20260222_orchestrator_preflight_control/02_context.md`, `docs/workpacks/20260222_orchestrator_preflight_control/03_checklist.md` | 단일 workpack에는 존재하나 전사 표준 규칙/게이트로 고정되지 않음 |
+| 4대 시스템-4 | Specialized Agents 역할별 산출물 템플릿/경로 | 부분 | `docs/agent_manual/03_pr_decomposition_and_agent_roles.md`, `docs/workpacks/20260222_orchestrator__preflight__control/04_agent_prompts.md` | 역할 모델/프롬프트는 있으나 공용 템플릿 체계와 강제 게이트 없음 |
+| 4대 시스템-4 | 최소 보고서(DDD/SEC/QA) 작성 규칙 | 부분 | `docs/workpacks/20260222_orchestrator__preflight__control/02_context.md`, `docs/workpacks/20260222_orchestrator__preflight__control/03_checklist.md` | 단일 workpack에는 존재하나 전사 표준 규칙/게이트로 고정되지 않음 |
 
 ## 2) 문서 SSOT 정합성 검사 (Mismatch + Fix)
 

@@ -1,1 +1,1 @@
-﻿verification_pack_consistency=PASS
+verification_pack_consistency=PASS

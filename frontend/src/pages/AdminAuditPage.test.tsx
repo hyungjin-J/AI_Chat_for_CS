@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AdminAuditPage } from "./AdminAuditPage";
 
-vi.mock("../api/adminApi", () => ({
+vi.mock("../shared/api/adminApi", () => ({
     fetchAuditLogs: vi.fn(async () => ({ tenant_id: "demo-tenant", items: [], trace_id: "trace-1" })),
     fetchAuditDiff: vi.fn(async () => ({
         audit_id: "a1",
@@ -31,7 +31,7 @@ vi.mock("../api/adminApi", () => ({
     downloadAuditExportJob: vi.fn(async () => new Blob(["[]"], { type: "application/json" })),
 }));
 
-import { createAuditExportJob, downloadAuditExportJob } from "../api/adminApi";
+import { createAuditExportJob, downloadAuditExportJob } from "../shared/api/adminApi";
 
 describe("AdminAuditPage", () => {
     const createObjectURL = vi.fn(() => "blob:mock");

@@ -1,4 +1,4 @@
-﻿# AI_Chatbot (CS Support AI Chatbot)
+# AI_Chatbot (CS Support AI Chatbot)
 
 고객센터 상담원을 위한 RAG 기반 AI 챗봇 프로젝트입니다.  
 핵심 목표는 빠른 응답이 아니라, **근거 기반 답변 + 보안 + 운영 추적성**을 동시에 만족하는 운영형 시스템입니다.

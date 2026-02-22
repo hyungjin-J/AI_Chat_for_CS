@@ -1,4 +1,4 @@
-﻿## main...origin/main
+## main...origin/main
  M .github/workflows/pr-smoke-contract.yml
 ?? docs/architecture/DDD_STRUCTURE_AUDIT_AND_REFACTOR_PLAN.md
 ?? docs/architecture/bounded_context_map.md

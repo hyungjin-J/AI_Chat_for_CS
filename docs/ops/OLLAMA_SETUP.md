@@ -1,4 +1,4 @@
-﻿# Ollama Docker 실행 표준 가이드
+# Ollama Docker 실행 표준 가이드
 
 - 대상: AI_Chatbot 프로젝트 개발/검증 환경
 - 기본 원칙: **Ollama는 로컬 설치가 아닌 Docker Compose 실행을 표준으로 사용**

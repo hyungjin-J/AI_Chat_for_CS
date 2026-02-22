@@ -1,4 +1,4 @@
-﻿# HELP application_ready_time_seconds Time taken for the application to be ready to service requests
+# HELP application_ready_time_seconds Time taken for the application to be ready to service requests
 # TYPE application_ready_time_seconds gauge
 application_ready_time_seconds{main_application_class="com.aichatbot.BackendApplication"} 3.66
 # HELP application_started_time_seconds Time taken to start the application

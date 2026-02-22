@@ -1,4 +1,4 @@
-﻿# MVP 테스트 계획 (SSOT)
+# MVP 테스트 계획 (SSOT)
 
 - Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`

@@ -1,4 +1,4 @@
-﻿# 아티팩트 요약본 (교차 검증용 SSOT)
+# 아티팩트 요약본 (교차 검증용 SSOT)
 
 - Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`

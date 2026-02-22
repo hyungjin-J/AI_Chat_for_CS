@@ -1,6 +1,7 @@
 package com.aichatbot.contexts.knowledge.rag.infrastructure;
 
 import com.aichatbot.contexts.knowledge.rag.application.CitationView;
+import com.aichatbot.contexts.knowledge.rag.domain.readmodel.CitationRow;
 import com.aichatbot.contexts.knowledge.rag.domain.mapper.CitationMapper;
 import java.time.Instant;
 import java.util.ArrayList;

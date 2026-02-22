@@ -5,6 +5,7 @@ import com.aichatbot.platform.error.ApiException;
 import com.aichatbot.platform.error.ErrorCatalog;
 import com.aichatbot.platform.observability.TraceGuard;
 import com.aichatbot.contexts.identity.security.UserPrincipal;
+import com.aichatbot.contexts.conversation.message.domain.readmodel.StreamEventView;
 import com.aichatbot.contexts.conversation.message.infrastructure.MessageRepository;
 import com.aichatbot.contexts.conversation.message.infrastructure.StreamEventRepository;
 import com.aichatbot.contexts.conversation.session.infrastructure.ConversationRepository;

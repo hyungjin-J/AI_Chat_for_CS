@@ -1,0 +1,3 @@
+block_legacy_packages
+status=PASS
+violation_count=0

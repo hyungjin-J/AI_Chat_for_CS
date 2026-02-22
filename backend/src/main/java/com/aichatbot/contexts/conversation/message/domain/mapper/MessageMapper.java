@@ -1,6 +1,6 @@
 package com.aichatbot.contexts.conversation.message.domain.mapper;
 
-import com.aichatbot.contexts.conversation.message.infrastructure.MessageRow;
+import com.aichatbot.contexts.conversation.message.domain.readmodel.MessageRow;
 import java.util.List;
 import java.util.UUID;
 import org.apache.ibatis.annotations.Param;

@@ -145,6 +145,27 @@ button:disabled {
     overflow: auto;
 }
 
+.section-panel {
+    display: grid;
+    gap: 12px;
+}
+
+.section-panel__header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.section-panel__header h2 {
+    margin: 0;
+}
+
+.section-panel__header p {
+    margin: 6px 0 0;
+    color: var(--muted);
+}
+
 .toolbar {
     display: flex;
     gap: 10px;
@@ -248,4 +269,3 @@ button:disabled {
         grid-template-columns: 1fr;
     }
 }
-

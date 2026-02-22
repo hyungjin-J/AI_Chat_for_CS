@@ -2,6 +2,7 @@ package com.aichatbot.contexts.conversation.session.infrastructure;
 
 import com.aichatbot.platform.observability.TraceGuard;
 import com.aichatbot.contexts.conversation.session.domain.mapper.ConversationMapper;
+import com.aichatbot.contexts.conversation.session.domain.readmodel.ConversationRow;
 import com.aichatbot.contexts.conversation.session.application.ConversationView;
 import java.util.Optional;
 import java.util.UUID;

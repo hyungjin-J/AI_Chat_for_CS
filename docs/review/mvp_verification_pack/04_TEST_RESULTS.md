@@ -1,4 +1,4 @@
-﻿# MVP 테스트 결과 (SSOT)
+# MVP 테스트 결과 (SSOT)
 
 - Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`

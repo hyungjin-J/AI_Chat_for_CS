@@ -1,4 +1,4 @@
-﻿# Tool Calling 운영 가이드
+# Tool Calling 운영 가이드
 
 ## 목적
 - Spring AI `@Tool` 기반 도구 호출을 채팅 흐름에 연결해, 정책성 정보를 안정적으로 보강합니다.

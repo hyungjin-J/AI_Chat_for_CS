@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aichatbot.contexts.billing.domain.mapper.TenantQuotaMapper">
 
-    <resultMap id="TenantQuotaMap" type="com.aichatbot.contexts.billing.infrastructure.TenantQuotaRow">
+    <resultMap id="TenantQuotaMap" type="com.aichatbot.contexts.billing.domain.readmodel.TenantQuotaRow">
         <constructor>
             <arg column="tenant_key" javaType="java.lang.String" name="tenantId"/>
             <arg column="max_qps" javaType="java.lang.Integer" name="maxQps"/>
