@@ -33,13 +33,19 @@ npm cache verify
 cd frontend
 npm ci --prefer-offline --no-audit --fund=false
 ```
-4. If lock persists, restart terminal and run again.
-5. If still blocked, reboot once and retry before escalating.
+4. Optional helper (retry 3 times with same flags and guidance output).
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/frontend_install_retry.ps1 -MaxAttempts 3
+```
+5. If lock persists, restart terminal and run again.
+6. If still blocked, reboot once and retry before escalating.
+7. If recurring, move the install flow to WSL2 or short local path and re-run from clean workspace.
 
 ## Optional OS-Level Mitigations
 - Keep repository path short (avoid deeply nested folders).
 - Exclude project folder from real-time antivirus scanning if enterprise policy allows.
 - Ensure Windows long path support is enabled by IT policy where applicable.
+- Prefer WSL2 for dependency-heavy installs when Windows endpoint controls repeatedly lock files.
 
 ## Escalation Record (Minimum)
 - Timestamp (KST)

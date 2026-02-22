@@ -13,13 +13,13 @@ When `python scripts/check_node_version.py --check-runtime` fails:
 
 ### Windows (PowerShell)
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/bootstrap_node_22.ps1
+powershell -ExecutionPolicy Bypass -File scripts/bootstrap_node_from_nvmrc.ps1
 python scripts/check_node_version.py --nvmrc .nvmrc --package-json frontend/package.json --check-runtime
 ```
 
 ### macOS / Linux
 ```bash
-bash scripts/bootstrap_node_22.sh
+bash scripts/bootstrap_node_from_nvmrc.sh
 python scripts/check_node_version.py --nvmrc .nvmrc --package-json frontend/package.json --check-runtime
 ```
 
@@ -41,4 +41,17 @@ To reduce network and lock noise, use the same install flags in local checks and
 
 ```bash
 npm ci --prefer-offline --no-audit --fund=false
+```
+
+## Optional Install Retry Helper
+When file locks or transient network failures make `npm ci` flaky, use retry helper scripts:
+
+### Windows
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/frontend_install_retry.ps1 -MaxAttempts 3
+```
+
+### macOS / Linux
+```bash
+bash scripts/frontend_install_retry.sh 3
 ```

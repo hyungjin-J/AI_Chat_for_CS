@@ -1,23 +1,23 @@
 # CHATGPT SELF-CONTAINED BRIEFING (EN)
 
-- updated_at_kst: 2026-02-22 01:45:50 +09:00
-- base_commit_hash: 8718697
+- updated_at_kst: 2026-02-22 13:32:18 +09:00
+- base_commit_hash: c64905b
 - release_tag: 2026.03XX-phase2.1.2-open-risks-burndown
 - branch: main
 - pr_number: N/A (local working tree)
 - handoff_docs_location: chatGPT/
 
 ## 0) Change Summary (Added/Changed/Fixed/Removed, 10 lines)
-- Added: `scripts/bootstrap_node_22.ps1` for Windows Node runtime auto-recovery.
-- Added: `scripts/bootstrap_node_22.sh` for macOS/Linux Node runtime auto-recovery.
-- Added: `scripts/gen_notion_manual_evidence_template.py` for fixed-path evidence generation.
-- Added: `docs/dev/DEV_ENVIRONMENT.md` for Node bootstrap and fallback runtime setup.
-- Added: `docs/ops/runbook_windows_node_npm_lock.md` for Windows npm lock incident handling.
-- Changed: `scripts/check_node_version.py` now emits step-by-step bootstrap guidance on mismatch.
-- Changed: `scripts/check_notion_manual_exception_gate.py` now reports file/field-level failures.
-- Changed: `scripts/lint_chatgpt_handoff_docs.py` now enforces evidence path existence in briefing gate table.
-- Fixed: `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json` now uses `detected_at_kst` and `preflight_ref`.
-- Fixed: `docs/ops/runbook_spec_notion_gate.md` now includes template-first close flow and fixed evidence paths.
+- Added: `scripts/bootstrap_node_from_nvmrc.ps1` for Windows Node runtime recovery from `.nvmrc`.
+- Added: `scripts/bootstrap_node_from_nvmrc.sh` for macOS/Linux Node runtime recovery from `.nvmrc`.
+- Added: optional retry helpers `scripts/frontend_install_retry.ps1` and `scripts/frontend_install_retry.sh`.
+- Changed: `scripts/check_node_version.py` now prints 1~5 actionable recovery steps with bootstrap command.
+- Changed: `scripts/check_all.ps1` fail-fast error now includes bootstrap commands and gate report path.
+- Changed: `docs/dev/DEV_ENVIRONMENT.md` now points to `bootstrap_node_from_nvmrc.*` and retry helper usage.
+- Changed: `docs/ops/runbook_windows_node_npm_lock.md` now includes retry helper and WSL2 fallback guidance.
+- Changed: compatibility wrappers retained in `scripts/bootstrap_node_22.ps1` and `scripts/bootstrap_node_22.sh`.
+- Fixed: PR1 evidence `phase2_1_2_pr1_node_bootstrap_output.txt` generated with mismatch guidance output.
+- Fixed: PR1 evidence `phase2_1_2_pr1_windows_runbook_exists.txt` generated for runbook presence proof.
 
 ## 1) Purpose
 Path-independent briefing for assistants that cannot browse local files directly.
@@ -34,17 +34,8 @@ Path-independent briefing for assistants that cannot browse local files directly
 |---|---|---|
 | Phase2.1.2 start status snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt |
 | Phase2.1.2 baseline patch snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_baseline.patch |
-| Node mismatch guidance output | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_node_ssot_check.txt |
-| Windows bootstrap script output | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_node_bootstrap_windows.txt |
-| Notion template generator guard output | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_template_generator.txt |
-| Notion manual close gate | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_manual_gate.txt |
-| Backend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_backend_test_output.txt |
-| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_test_output.txt |
-| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_build_output.txt |
-| Spec consistency | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_spec_consistency.txt |
-| UTF-8 strict decode | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_utf8_check.txt |
-| ChatGPT handoff doc lint | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_chatgpt_doc_lint.txt |
-| ChatGPT handoff doc lint JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_chatgpt_doc_lint.json |
+| PR1 Node mismatch bootstrap guidance | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr1_node_bootstrap_output.txt |
+| PR1 Windows npm lock runbook presence | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr1_windows_runbook_exists.txt |
 
 ## 4) Notion Manual Exception Evidence (Fixed Names)
 - docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json
@@ -53,17 +44,17 @@ Path-independent briefing for assistants that cannot browse local files directly
 
 ## 5) Open Risks Top5 (Re-evaluated after Phase2.1.2)
 1. Notion auth outage still blocks zero-touch sync by design (fail-closed risk remains intentional).
-2. Node runtime mismatch still requires developer action when nvm is absent, even with bootstrap guidance.
-3. Windows endpoint security policy can still cause intermittent npm file-lock behavior.
-4. Manual Notion close still depends on human patch quality after template generation.
-5. Evidence existence lint currently uses briefing Validation Gate as source; missing references outside that table can bypass the check.
+2. Manual Notion close is still human-driven before PR2 template/gate hardening is fully applied.
+3. ChatGPT doc lint evidence existence is still briefing-table scoped before PR2 final lint expansion.
+4. Windows endpoint security policy can still cause intermittent npm file-lock behavior.
+5. Node runtime mismatch still requires nvm install on first-time developer machines.
 
 ## 6) Next PRs Top5
-1. Add optional `--attempt-install` mode to bootstrap scripts for enterprise-standard Node installers.
-2. Add Windows lock diagnostics collector script and map it into the runbook escalation template.
-3. Add CI job for `scripts/check_notion_manual_exception_gate.py` with template-generated fixtures.
-4. Expand handoff lint evidence existence checks to implementation guide tables as well.
-5. Add a small policy test pack that verifies fixed evidence path constants remain unchanged.
+1. Add `scripts/gen_notion_manual_evidence_templates.py` and switch runbook to plural generator command.
+2. Strengthen `scripts/check_notion_manual_exception_gate.py` with searchable spec_sync pattern output.
+3. Add `docs/notion_exports/README.md` snapshot durability policy for BLOCKED_AUTOMATION sessions.
+4. Extend `scripts/lint_chatgpt_handoff_docs.py` JSON output with evidence existence validation summary.
+5. Regenerate full Phase2.1.2 gates and refresh final Validation Gate evidence table.
 
 ## 7) Conflict Resolution
 If plan/report/evidence conflict, prioritize latest artifacts first, then spec_sync_report.md.

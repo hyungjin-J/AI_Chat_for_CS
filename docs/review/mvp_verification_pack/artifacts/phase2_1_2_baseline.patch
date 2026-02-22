@@ -1,0 +1,7 @@
+﻿diff --git a/docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt b/docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt
+index 273a918..e69de29 100644
+--- a/docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt
++++ b/docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt
+@@ -1,2 +0,0 @@
+-﻿## main...origin/main
+-?? docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt

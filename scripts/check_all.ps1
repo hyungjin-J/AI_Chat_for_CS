@@ -9,13 +9,20 @@ $nodeVersion = (node -v).Trim()
 @"
 node_version=$nodeVersion
 "@ | Out-File -FilePath "$artifactDir\node_version_check.txt" -Encoding utf8
+$nodeGateOutput = "$artifactDir\phase2_1_2_node_ssot_check.txt"
 python scripts/check_node_version.py `
     --nvmrc .nvmrc `
     --package-json frontend/package.json `
     --check-runtime `
-    --output "$artifactDir\phase2_1_1_prA_node_ssot_check.txt"
+    --output $nodeGateOutput
 if ($LASTEXITCODE -ne 0) {
-    throw "node SSOT assertion failed. See $artifactDir\phase2_1_1_prA_node_ssot_check.txt"
+    throw @"
+node SSOT assertion failed (fail-fast).
+Run bootstrap recovery:
+  - Windows: powershell -ExecutionPolicy Bypass -File scripts/bootstrap_node_from_nvmrc.ps1
+  - macOS/Linux: bash scripts/bootstrap_node_from_nvmrc.sh
+Gate report: $nodeGateOutput
+"@
 }
 
 Write-Host "[2/14] docker compose up -d"

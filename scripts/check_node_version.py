@@ -16,19 +16,25 @@ from pathlib import Path
 
 def build_bootstrap_guide() -> str:
     if sys.platform.startswith("win"):
-        bootstrap_command = "powershell -ExecutionPolicy Bypass -File scripts/bootstrap_node_22.ps1"
+        bootstrap_command = (
+            "powershell -ExecutionPolicy Bypass -File scripts/bootstrap_node_from_nvmrc.ps1"
+        )
     else:
-        bootstrap_command = "bash scripts/bootstrap_node_22.sh"
+        bootstrap_command = "bash scripts/bootstrap_node_from_nvmrc.sh"
 
     lines = [
         "",
         "[node-ssot] runtime mismatch detected.",
         "[node-ssot] Recovery steps:",
-        "1) Verify .nvmrc target version: cat .nvmrc",
+        "1) Verify the pinned version in .nvmrc.",
         f"2) Run bootstrap helper: {bootstrap_command}",
-        "3) Re-open shell (if your version manager updated PATH).",
         (
-            "4) Re-run this gate: python scripts/check_node_version.py "
+            "3) If nvm is unavailable, install/enable nvm first "
+            "(Windows: nvm-windows, macOS/Linux: nvm-sh)."
+        ),
+        "4) Re-open shell and confirm runtime with node -v.",
+        (
+            "5) Re-run this gate: python scripts/check_node_version.py "
             "--nvmrc .nvmrc --package-json frontend/package.json --check-runtime"
         ),
     ]
@@ -63,6 +69,7 @@ def main() -> int:
         capture_output=True,
         text=True,
         encoding="utf-8",
+        errors="replace",
     )
     if proc.stdout:
         sys.stdout.write(proc.stdout)
