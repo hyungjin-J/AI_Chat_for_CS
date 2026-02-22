@@ -4,7 +4,7 @@
 핵심 목표는 빠른 응답이 아니라, **근거 기반 답변 + 보안 + 운영 추적성**을 동시에 만족하는 운영형 시스템입니다.
 
 ## TL;DR
-- 현재 기준: **Phase2.1.1 (Release Hygiene & ChatGPT Handoff Hardening) 반영 완료**
+- 현재 기준: **Phase2.1.2 (Open Risks Burn-down) 반영 완료**
 - 최신 기준 문서(SSOT):
   - `docs/review/plans/202603XX_phase2_1_1_release_hygiene_plan.md`
   - `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md`
@@ -15,50 +15,57 @@
   - Hardening Gate 완화 금지(쿠키/CSRF/락아웃/리프레시 회전/UTC 버킷)
   - 스펙 변경 시 Notion 동기화 + 메타 갱신 + `spec_sync_report.md` 필수
 
-## Current Status (Phase2.1.1)
+## Current Status (Phase2.1.2)
 | Item | Status | Evidence |
 |---|---|---|
-| Backend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_1_backend_test_202603XX.txt` |
-| Frontend npm ci | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_1_frontend_npm_ci_202603XX.txt` |
-| Frontend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_1_frontend_test_202603XX.txt` |
-| Frontend build | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_1_frontend_build_202603XX.txt` |
-| ChatGPT doc lint | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint_202603XX.txt` |
-| Spec consistency | PASS (`FAIL=0`) | `docs/review/mvp_verification_pack/artifacts/phase2_1_1_spec_consistency_202603XX.txt` |
-| UTF-8 strict decode | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_1_utf8_check_202603XX.txt` |
-| Notion manual exception gate | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate_202603XX.txt` |
+| Start status snapshot | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt` |
+| Baseline patch snapshot | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_baseline.patch` |
+| Node SSOT guidance check | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_node_ssot_check.txt` |
+| Backend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_backend_test_output.txt` |
+| Frontend tests | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_test_output.txt` |
+| Frontend build | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_build_output.txt` |
+| ChatGPT doc lint | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_chatgpt_doc_lint.txt` |
+| Spec consistency | PASS (`FAIL=0`) | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_spec_consistency.txt` |
+| UTF-8 strict decode | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_utf8_check.txt` |
+| Notion manual exception gate | PASS | `docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_manual_gate.txt` |
 
-## What Changed in Phase2.1.1
+## What Changed in Phase2.1.2
 
-### PR-A: Node 22 SSOT + CI Fail-Fast
-- Node SSOT를 `.nvmrc=22.12.0`으로 고정
-- `frontend/package.json`의 `engines`/`volta`를 동일 기준으로 동기화
-- CI 워크플로우 Node 설정을 `node-version-file: .nvmrc`로 통일
-- Node 불일치 시 즉시 실패:
-  - `scripts/assert_node_ssot.py`
+### W1: Node 런타임 드리프트 완화
+- 플랫폼별 부트스트랩 스크립트 추가:
+  - `scripts/bootstrap_node_22.ps1`
+  - `scripts/bootstrap_node_22.sh`
+- Node 버전 불일치 시 복구 가이드 자동 출력:
+  - `scripts/check_node_version.py`
+  - `docs/dev/DEV_ENVIRONMENT.md`
+
+### W2: Windows npm lock 대응 강화
+- npm 설치 표준 플래그를 로컬/CI 동일하게 적용:
+  - `npm ci --prefer-offline --no-audit --fund=false`
+- 운영 런북 추가:
+  - `docs/ops/runbook_windows_node_npm_lock.md`
+- CI/로컬 검사 스크립트 반영:
+  - `.github/workflows/pr-smoke-contract.yml`
   - `scripts/check_all.ps1`
 
-### PR-B: ChatGPT Handoff Docs Quality Gate
-- 신규 린터:
+### W3: Notion 수동 예외 Close 게이트 고도화
+- 수동 증적 템플릿 생성 스크립트 추가:
+  - `scripts/gen_notion_manual_evidence_template.py`
+- 파일/필드 단위로 상세 진단하도록 검증기 강화:
+  - `scripts/check_notion_manual_exception_gate.py`
+- 운영 절차 업데이트:
+  - `docs/ops/runbook_spec_notion_gate.md`
+- 고정 증적 경로 유지:
+  - `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json`
+  - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+  - `spec_sync_report.md`
+
+### W4: ChatGPT handoff 증적 경로 검증 강화
+- 브리핑 문서의 Validation Gate에서 참조한 증적 파일 존재/범위를 자동 검사:
   - `scripts/lint_chatgpt_handoff_docs.py`
-- 강제 검증:
-  - `updated_at_kst` 실제 값 필수
-  - `base_commit_hash`/`release_tag`/`branch` 필수
-  - C0 제어문자 금지(`\n`, `\r`만 허용)
-  - `race_id` 오탈자 금지(`trace_id`만 허용)
-  - 문서 내 민감 패턴 금지(`<REDACTED>` 표기 사용)
 - 대상 문서:
   - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
   - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
-
-### PR-C (MUST): Notion BLOCKED Manual Exception Close Gate
-- Notion preflight 실패 시 자동 동기화는 fail-closed 유지
-- 수동 예외 닫기(close) 공식 게이트 추가:
-  - `scripts/check_notion_manual_exception_gate.py`
-- 고정 증적 파일:
-  - `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json`
-  - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
-- 운영 절차 원페이지:
-  - `docs/ops/runbook_spec_notion_gate.md`
 
 ## Quick Start
 
@@ -76,7 +83,7 @@ gradlew.bat bootRun
 ### 3) Frontend
 ```bash
 cd frontend
-npm ci
+npm ci --prefer-offline --no-audit --fund=false
 npm run dev
 ```
 
@@ -89,8 +96,9 @@ powershell -ExecutionPolicy Bypass -File scripts/check_all.ps1
 
 ### Individual Checks
 ```powershell
+python scripts/check_node_version.py --nvmrc .nvmrc --package-json frontend/package.json --check-runtime
 cd backend; ./gradlew.bat test --no-daemon
-cd ../frontend; npm ci; npm run test:run; npm run build
+cd ../frontend; npm ci --prefer-offline --no-audit --fund=false; npm run test:run; npm run build
 python ../scripts/spec_consistency_check.py
 python ../scripts/lint_chatgpt_handoff_docs.py --files ../chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md ../chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
 ```
@@ -110,10 +118,12 @@ python ../scripts/lint_chatgpt_handoff_docs.py --files ../chatGPT/CHATGPT_SELF_C
 - Phase2.1.1 plan: `docs/review/plans/202603XX_phase2_1_1_release_hygiene_plan.md`
 - Full report: `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md`
 - Spec sync report: `spec_sync_report.md`
+- Dev guide: `docs/dev/DEV_ENVIRONMENT.md`
 - Ops runbooks:
   - `docs/ops/runbook_scheduler_lock.md`
   - `docs/ops/runbook_audit_chain.md`
   - `docs/ops/runbook_spec_notion_gate.md`
+  - `docs/ops/runbook_windows_node_npm_lock.md`
 - ChatGPT handoff docs:
   - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
   - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`

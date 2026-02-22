@@ -1,0 +1,3 @@
+notion_manual_exception_gate
+status=PASS
+violation_count=0

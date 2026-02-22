@@ -1,0 +1,21 @@
+PASS .nvmrc
+PASS frontend/package.json
+PASS scripts/assert_node_ssot.py
+PASS scripts/check_node_version.py
+PASS scripts/bootstrap_node_22.ps1
+PASS scripts/bootstrap_node_22.sh
+PASS scripts/check_all.ps1
+PASS scripts/lint_chatgpt_handoff_docs.py
+PASS scripts/check_notion_manual_exception_gate.py
+PASS scripts/gen_notion_manual_evidence_template.py
+PASS .github/workflows/pr-smoke-contract.yml
+PASS docs/ops/runbook_spec_notion_gate.md
+PASS docs/ops/runbook_windows_node_npm_lock.md
+PASS docs/dev/DEV_ENVIRONMENT.md
+PASS spec_sync_report.md
+PASS AGENTS.md
+PASS chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
+PASS chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
+PASS docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json
+PASS docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md
+status=PASS

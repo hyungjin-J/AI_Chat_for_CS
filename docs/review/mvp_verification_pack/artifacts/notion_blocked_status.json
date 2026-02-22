@@ -1,7 +1,8 @@
 {
   "status": "BLOCKED_AUTOMATION",
   "reason": "NOTION_MCP_AUTH_REQUIRED",
-  "timestamp_kst": "2026-02-21 23:45:19 +09:00",
+  "detected_at_kst": "2026-02-21 23:45:19 +09:00",
+  "preflight_ref": "docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_preflight.json",
   "manual_patch": "docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md",
   "targets": [
     "https://www.notion.so/2ed405a3a720816594e4dc34972174ec",

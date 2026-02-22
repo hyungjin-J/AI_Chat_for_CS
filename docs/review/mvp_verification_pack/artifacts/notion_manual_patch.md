@@ -7,6 +7,8 @@
   1. Align release hygiene plan lock updates and Notion BLOCKED close gate policy.
   2. Ensure manual exception evidence path is fixed and auditable.
   3. Keep fail-closed behavior while documenting manual close prerequisites.
+- Owner: <REDACTED>
+- Recorded at: 2026-02-21 23:45:19 +09:00
 
 ## Notion targets
 1. https://www.notion.so/2ed405a3a720816594e4dc34972174ec

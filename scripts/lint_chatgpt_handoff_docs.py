@@ -8,12 +8,15 @@ import json
 import re
 import sys
 from dataclasses import asdict, dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 
 REQUIRED_META_KEYS = ("updated_at_kst", "base_commit_hash", "release_tag", "branch")
 UPDATED_AT_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \+09:00$")
 RACE_ID_PATTERN = re.compile(r"\brace_id\b", re.IGNORECASE)
+ARTIFACT_ROOT = "docs/review/mvp_verification_pack/artifacts/"
+ARTIFACT_PATH_PATTERN = re.compile(r"docs/review/mvp_verification_pack/artifacts/[A-Za-z0-9._/\-]+")
+UNSTABLE_EVIDENCE_NAME_PATTERN = re.compile(r"_(?:20\d{6}|20\d{2}XX)(?=\.)")
 FORBIDDEN_LITERAL_PATTERNS = (
     re.compile(r"NOTION_TOKEN"),
     re.compile(r"OPENAI_API_KEY"),
@@ -45,6 +48,36 @@ def parse_meta(lines: list[str]) -> dict[str, str]:
         key, value = line[2:].split(":", 1)
         meta[key.strip()] = value.strip()
     return meta
+
+
+def parse_validation_gate_evidence(lines: list[str]) -> list[tuple[int, str]]:
+    evidence_rows: list[tuple[int, str]] = []
+    in_gate_table = False
+    for line_idx, line in enumerate(lines, start=1):
+        stripped = line.strip()
+        if stripped.lower() == "| gate | status | evidence |":
+            in_gate_table = True
+            continue
+
+        if not in_gate_table:
+            continue
+
+        if not stripped.startswith("|"):
+            break
+
+        cells = [cell.strip() for cell in stripped.split("|")[1:-1]]
+        if len(cells) < 3:
+            continue
+        if cells[0].lower() == "gate" and cells[1].lower() == "status":
+            continue
+        if all(set(cell) <= {"-"} for cell in cells):
+            continue
+
+        evidence_cell = cells[2]
+        for artifact_path in ARTIFACT_PATH_PATTERN.findall(evidence_cell):
+            evidence_rows.append((line_idx, artifact_path))
+
+    return evidence_rows
 
 
 def lint_file(path: Path) -> list[Violation]:
@@ -145,7 +178,65 @@ def lint_file(path: Path) -> list[Violation]:
                 code="DOC_EVIDENCE_PATH_MISSING",
                 message="artifact evidence path missing",
             )
-        )
+            )
+
+    if path.as_posix().endswith("chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md"):
+        evidence_rows = parse_validation_gate_evidence(lines=lines)
+        if not evidence_rows:
+            violations.append(
+                Violation(
+                    file=path.as_posix(),
+                    code="DOC_GATE_EVIDENCE_MISSING",
+                    message="validation gate evidence paths were not parsed from table",
+                )
+            )
+
+        for line_idx, evidence_path in evidence_rows:
+            normalized = evidence_path.replace("\\", "/")
+            if not normalized.startswith(ARTIFACT_ROOT):
+                violations.append(
+                    Violation(
+                        file=path.as_posix(),
+                        code="DOC_EVIDENCE_SCOPE_INVALID",
+                        message=f"evidence path must stay under {ARTIFACT_ROOT}: {normalized}",
+                        line=line_idx,
+                    )
+                )
+                continue
+
+            if ".." in PurePosixPath(normalized).parts:
+                violations.append(
+                    Violation(
+                        file=path.as_posix(),
+                        code="DOC_EVIDENCE_SCOPE_INVALID",
+                        message=f"evidence path must not contain '..': {normalized}",
+                        line=line_idx,
+                    )
+                )
+
+            evidence_file = Path(normalized)
+            if not evidence_file.exists():
+                violations.append(
+                    Violation(
+                        file=path.as_posix(),
+                        code="DOC_EVIDENCE_NOT_FOUND",
+                        message=f"evidence file does not exist: {normalized}",
+                        line=line_idx,
+                    )
+                )
+
+            if UNSTABLE_EVIDENCE_NAME_PATTERN.search(evidence_file.name):
+                violations.append(
+                    Violation(
+                        file=path.as_posix(),
+                        code="DOC_EVIDENCE_UNSTABLE_NAME",
+                        message=(
+                            "evidence filename appears date-suffixed; use stable prefix naming: "
+                            f"{evidence_file.name}"
+                        ),
+                        line=line_idx,
+                    )
+                )
 
     # Forbidden literals (security hygiene).
     for pattern in FORBIDDEN_LITERAL_PATTERNS:

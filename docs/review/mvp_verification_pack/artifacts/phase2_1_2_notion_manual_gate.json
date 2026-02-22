@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "violation_count": 0,
+  "violations": [],
+  "checked_files": {
+    "context": "",
+    "preflight": "",
+    "status_file": "docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json",
+    "manual_patch": "docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md",
+    "spec_sync_report": "spec_sync_report.md"
+  }
+}

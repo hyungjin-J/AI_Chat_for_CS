@@ -29,7 +29,7 @@ if ($LASTEXITCODE -ne 0) {
 Get-Content "$artifactDir\backend_gradle_test_output.txt"
 
 Write-Host "[4/14] frontend build"
-cmd /c "cd /d frontend && npm ci > ..\$artifactDir\frontend_npm_ci_output.txt 2>&1"
+cmd /c "cd /d frontend && npm ci --prefer-offline --no-audit --fund=false > ..\$artifactDir\frontend_npm_ci_output.txt 2>&1"
 if ($LASTEXITCODE -ne 0) {
     throw "frontend npm ci failed: exit_code=$LASTEXITCODE"
 }

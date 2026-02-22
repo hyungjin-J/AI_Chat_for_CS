@@ -288,3 +288,40 @@
 ### 12.2 운영 Close 규칙
 - `scripts/check_notion_manual_exception_gate.py` PASS일 때만 BLOCKED 상태를 운영적으로 Close 처리한다.
 - PASS 전까지는 자동 동기화 우회 완료로 간주하지 않으며, PR 병합 기준에서 예외 경로 미충족으로 실패 처리한다.
+
+## 13) 이번 세션(2026-02-22, Phase2.1.2 Open Risks Burn-down) 운영/게이트 내구성 보강 기록
+- 기준 커밋: `8718697` (working tree)
+- 기준 시각(Asia/Seoul): `2026-02-22 01:45:50 +09:00`
+- 스펙 파일(CSV/XLSX) 추가 변경 여부:
+  - **없음 (No additional spec file edit in this session)**
+- Notion 자동 동기화 상태:
+  - 본 세션은 스펙 파일 변경이 없어 신규 자동 동기화 실행 대상 없음
+
+### 13.1 Notion manual close gate 강화 사항
+- 고정 증적 파일 경로 유지:
+  - `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json`
+  - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
+  - `spec_sync_report.md`
+- 상태 파일 스키마 보강:
+  - `status=BLOCKED_AUTOMATION`
+  - `reason`
+  - `detected_at_kst`
+  - `preflight_ref`
+- 수동 패치 문서 보강:
+  - 메타 4종(Last synced at / Source file / Version / Change summary) 유지
+  - 운영 메타 `Owner`, `Recorded at` 추가
+- 템플릿 생성기 추가:
+  - `scripts/gen_notion_manual_evidence_template.py`
+  - 기본 동작: 기존 고정 파일이 존재하면 overwrite 금지, `--force`일 때만 덮어쓰기
+
+### 13.2 검증/증적
+- 템플릿 생성기 가드 출력:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_template_generator.txt`
+- 수동 close gate 검증 PASS:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_manual_gate.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_manual_gate.json`
+
+### 13.3 비고
+- Fail-closed 원칙 유지:
+  - Notion auth 장애 시 자동 동기화 우회 허용 없음
+  - 수동 close는 증적 3종 + gate PASS 조건 충족 시에만 인정

@@ -1,66 +1,93 @@
-﻿# IMPLEMENTATION GUIDE FOR CHATGPT
+# IMPLEMENTATION GUIDE FOR CHATGPT
 
 - project: AI_Chatbot
 - document_type: Implementation and Operations Handoff Guide
-- updated_at_kst: 2026-02-22 00:40:30 +09:00
-- base_commit_hash: 60c6d97
-- release_tag: 2026.03XX-phase2.1.1-release-hygiene
+- updated_at_kst: 2026-02-22 01:45:50 +09:00
+- base_commit_hash: 8718697
+- release_tag: 2026.03XX-phase2.1.2-open-risks-burndown
 - branch: main
 - pr_number: N/A (local working tree)
 
 ## 0) Change Summary (Added/Changed/Fixed/Removed, 10 lines)
-- Added: explicit preflight artifacts for git status and baseline patch.
-- Added: node check wrapper for compatibility with gate/runbook wording.
-- Added: stable artifact filenames for PR-A/PR-B/PR-C outputs.
-- Added: manual close gate parameter alignment and one-page runbook checks.
-- Changed: CI Node assertion invocation to wrapper script.
-- Changed: doc lint artifact outputs to stable non-date names.
-- Changed: handoff docs to point to final gate artifacts.
-- Fixed: metadata refresh with real timestamp and commit hash.
-- Fixed: AGENTS handoff minimum content requirement reinforcement.
-- Removed: ambiguity in required evidence file naming.
+- Added: Node bootstrap scripts for Windows and macOS/Linux.
+- Added: Notion manual evidence template generator with no-overwrite default.
+- Added: Windows npm lock runbook and dev environment bootstrap guide.
+- Added: Phase2.1.2 validation artifacts for backend/frontend/spec/utf8/doc-lint.
+- Changed: Node check wrapper now prints actionable mismatch recovery instructions.
+- Changed: Notion manual close gate reports exact missing file fields.
+- Changed: Notion gate runbook to include template generation before manual patch.
+- Changed: ChatGPT handoff lint to verify evidence files actually exist.
+- Fixed: Notion blocked status schema (`detected_at_kst`, `preflight_ref`) and patch metadata completeness.
+- Removed: reliance on manual memory for evidence triad creation order.
 
 ## 1) Execution Units
-### PR-A
-- Node SSOT pin maintained at .nvmrc=22.12.0.
-- CI/local fail-fast wired through scripts/check_node_version.py.
+### Phase2.1.1 (baseline already completed)
+- Release hygiene lock and fixed-path evidence adoption.
+- ChatGPT handoff quality gate baseline.
+- Notion manual close gate baseline.
 
-### PR-B
-- scripts/lint_chatgpt_handoff_docs.py enforces metadata/control-char/typo/forbidden-literal policy.
-- chatGPT handoff docs normalized and updated.
-- AGENTS 16.8 handoff rules reinforced.
-
-### PR-C (MUST)
-- Notion BLOCKED manual close gate script enforced.
-- Runbook one-page close flow aligned to CI checks.
+### Phase2.1.2 (this run)
+- W1 Node drift mitigation:
+  - `scripts/bootstrap_node_22.ps1`
+  - `scripts/bootstrap_node_22.sh`
+  - `scripts/check_node_version.py` mismatch guidance
+- W2 Windows npm lock mitigation:
+  - `docs/ops/runbook_windows_node_npm_lock.md`
+  - Local/CI aligned npm install flags (`--prefer-offline --no-audit --fund=false`)
+- W3 Notion manual close hardening:
+  - `scripts/gen_notion_manual_evidence_template.py`
+  - `scripts/check_notion_manual_exception_gate.py` detailed file/field diagnostics
+  - `docs/ops/runbook_spec_notion_gate.md` template-first close flow
+- W4 Artifact drift prevention:
+  - `scripts/lint_chatgpt_handoff_docs.py` now enforces briefing evidence file existence and scope
 
 ## 2) Validation Gate
 | Gate | Status | Evidence |
 |---|---|---|
-| Node SSOT | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_node_ssot_check.txt |
-| Node runtime record | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_node_runtime.txt |
-| check_all fail-fast | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_check_all_failfast.txt |
-| ChatGPT doc lint | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint.txt |
-| ChatGPT doc lint JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint.json |
-| ChatGPT UTF-8 | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_utf8.txt |
-| ChatGPT PII/token scan | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_pii_token_scan.txt |
-| Notion preflight artifact | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_preflight.json |
-| Notion manual gate | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate.txt |
-| Notion manual gate JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_notion_manual_gate.json |
-| Runbook one-page check | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_runbook_onepager_check.txt |
-| Backend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_backend_test_output.txt |
-| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_frontend_test_output.txt |
-| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_frontend_build_output.txt |
-| Spec consistency | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_spec_consistency.txt |
-| UTF-8 strict decode | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_1_utf8_check.txt |
+| Phase2.1.2 start status snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt |
+| Phase2.1.2 baseline patch snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_baseline.patch |
+| Node mismatch guidance output | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_node_ssot_check.txt |
+| Windows bootstrap script output | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_node_bootstrap_windows.txt |
+| Notion template generator guard output | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_template_generator.txt |
+| Notion manual close gate | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_notion_manual_gate.txt |
+| Backend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_backend_test_output.txt |
+| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_test_output.txt |
+| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_frontend_build_output.txt |
+| Spec consistency | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_spec_consistency.txt |
+| UTF-8 strict decode | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_utf8_check.txt |
+| ChatGPT handoff doc lint | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_chatgpt_doc_lint.txt |
+| ChatGPT handoff doc lint JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_2_chatgpt_doc_lint.json |
 
-## 3) Security Notes
-- Never include live secret patterns in docs; use <REDACTED> only.
+## 3) Runbook and Script Additions
+- `docs/dev/DEV_ENVIRONMENT.md`
+- `docs/ops/runbook_windows_node_npm_lock.md`
+- `docs/ops/runbook_spec_notion_gate.md`
+- `scripts/bootstrap_node_22.ps1`
+- `scripts/bootstrap_node_22.sh`
+- `scripts/gen_notion_manual_evidence_template.py`
+
+## 4) Security Notes
+- Never include live secret patterns in docs; use `<REDACTED>` only.
 - Keep trace_id naming canonical; typo forms are rejected by lint.
 - Keep C0 controls out of handoff docs (LF/CR only).
+- Hardening lock, ROLE taxonomy, and standard error shape remain unchanged.
 
-## 4) Source Priority
+## 5) Source Priority
 If conflicts appear:
 1. latest artifacts
 2. spec_sync_report.md
 3. reports/plans
+
+## 6) Open Risks Top5
+1. Notion auth outage still blocks zero-touch sync by design (fail-closed risk remains intentional).
+2. Node runtime mismatch still requires developer action when nvm is absent.
+3. Windows endpoint security policy can still cause intermittent npm file-lock behavior.
+4. Manual Notion close quality still depends on operator review even with templates.
+5. Evidence existence checks are currently anchored to briefing Validation Gate rows.
+
+## 7) Next PRs Top5
+1. Add optional bootstrap auto-install path for managed developer machines.
+2. Automate Windows npm lock diagnostic bundle generation.
+3. Add CI fixture tests for manual close template generation and gate validation.
+4. Expand lint evidence existence checks to all handoff docs with gate tables.
+5. Add regression checks that prevent accidental fixed-path evidence renames.
