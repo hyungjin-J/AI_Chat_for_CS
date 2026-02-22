@@ -1,0 +1,16 @@
+notion_manual_exception_gate
+status=FAIL
+violation_count=10
+spec_sync_required_tokens=notion_blocked_status.json,notion_manual_patch.md,BLOCKED_AUTOMATION
+spec_sync_phase_pattern=Phase2\.1(?:\.\d+)?|phase2_1(?:_\d+)?
+- [STATUS_FIELD_MISSING] tmp/notion_blocked_status.json -> field 'reason' is empty
+- [STATUS_FIELD_MISSING] tmp/notion_blocked_status.json -> field 'detected_at_kst' is empty
+- [STATUS_PREFLIGHT_REF_MISSING] tmp/notion_blocked_status.json -> field 'preflight_ref' points to missing file: tmp/not_exists.json
+- [PATCH_FIELD_MISSING] tmp/notion_manual_patch.md -> field 'Version' is missing or empty
+- [PATCH_FIELD_MISSING] tmp/notion_manual_patch.md -> field 'Change summary' is missing or empty
+- [PATCH_NOTION_URL_MISSING] tmp/notion_manual_patch.md -> Notion target URL is missing
+- [SPEC_SYNC_EVIDENCE_MISSING] tmp/spec_sync_bad.md -> missing required token 'notion_blocked_status.json'
+- [SPEC_SYNC_EVIDENCE_MISSING] tmp/spec_sync_bad.md -> missing required token 'notion_manual_patch.md'
+- [SPEC_SYNC_EVIDENCE_MISSING] tmp/spec_sync_bad.md -> missing required token 'BLOCKED_AUTOMATION'
+- [SPEC_SYNC_PHASE_ENTRY_MISSING] tmp/spec_sync_bad.md -> Phase2.1 manual exception record is missing
+exit_code=1

@@ -15,6 +15,12 @@ EXPECTED_STATUS_FILE = "notion_blocked_status.json"
 EXPECTED_PATCH_FILE = "notion_manual_patch.md"
 REQUIRED_PATCH_FIELDS = ("Last synced at", "Source file", "Version", "Change summary")
 REQUIRED_STATUS_FIELDS = ("status", "reason", "detected_at_kst", "preflight_ref")
+SPEC_SYNC_REQUIRED_TOKENS = (
+    EXPECTED_STATUS_FILE,
+    EXPECTED_PATCH_FILE,
+    "BLOCKED_AUTOMATION",
+)
+SPEC_SYNC_PHASE_PATTERN = r"Phase2\.1(?:\.\d+)?|phase2_1(?:_\d+)?"
 
 
 @dataclass
@@ -221,12 +227,7 @@ def main() -> int:
         )
     else:
         spec_text = spec_sync_path.read_text(encoding="utf-8", errors="strict")
-        required_tokens = [
-            EXPECTED_STATUS_FILE,
-            EXPECTED_PATCH_FILE,
-            "BLOCKED_AUTOMATION",
-        ]
-        for token in required_tokens:
+        for token in SPEC_SYNC_REQUIRED_TOKENS:
             if token not in spec_text:
                 violations.append(
                     Violation(
@@ -236,7 +237,7 @@ def main() -> int:
                         ),
                     )
                 )
-        if not re.search(r"Phase2\.1(?:\.\d+)?|phase2_1(?:_\d+)?", spec_text):
+        if not re.search(SPEC_SYNC_PHASE_PATTERN, spec_text):
             violations.append(
                 Violation(
                     code="SPEC_SYNC_PHASE_ENTRY_MISSING",
@@ -257,6 +258,10 @@ def main() -> int:
             "manual_patch": patch_path.as_posix(),
             "spec_sync_report": spec_sync_path.as_posix(),
         },
+        "spec_sync_expectations": {
+            "required_tokens": list(SPEC_SYNC_REQUIRED_TOKENS),
+            "phase_pattern": SPEC_SYNC_PHASE_PATTERN,
+        },
     }
 
     json_report = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
@@ -269,6 +274,9 @@ def main() -> int:
         "notion_manual_exception_gate",
         f"status={payload['status']}",
         f"violation_count={payload['violation_count']}",
+        "spec_sync_required_tokens="
+        + ",".join(payload["spec_sync_expectations"]["required_tokens"]),
+        f"spec_sync_phase_pattern={payload['spec_sync_expectations']['phase_pattern']}",
     ]
     for item in payload["violations"]:
         txt_lines.append(f"- [{item['code']}] {item['message']}")

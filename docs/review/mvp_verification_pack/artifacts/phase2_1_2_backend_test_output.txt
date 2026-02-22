@@ -13,6 +13,6 @@ Daemon will be stopped at the end of the build
 > Task :testClasses UP-TO-DATE
 > Task :test UP-TO-DATE
 
-BUILD SUCCESSFUL in 8s
+BUILD SUCCESSFUL in 27s
 5 actionable tasks: 1 executed, 4 up-to-date
 Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.0/userguide/configuration_cache_enabling.html

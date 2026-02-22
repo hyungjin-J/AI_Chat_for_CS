@@ -325,3 +325,34 @@
 - Fail-closed 원칙 유지:
   - Notion auth 장애 시 자동 동기화 우회 허용 없음
   - 수동 close는 증적 3종 + gate PASS 조건 충족 시에만 인정
+
+## 14) 이번 세션(2026-02-22, Phase2.1.2 PR1/PR2 분리 수행) 운영/문서 내구성 보강 기록
+- 기준 커밋(base): `c64905b`
+- 기준 시각(Asia/Seoul): `2026-02-22 13:32:18 +09:00`
+- 스펙 파일(CSV/XLSX) 추가 변경 여부:
+  - **없음 (No additional spec file edit in this session)**
+- Notion 자동 동기화 상태:
+  - 본 세션은 스펙 파일 변경이 없어 신규 자동 동기화 실행 대상 없음
+
+### 14.1 PR1 Dev Runtime Resilience 증적
+- 시작 기준선:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_baseline.patch`
+- Node mismatch bootstrap 출력:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr1_node_bootstrap_output.txt`
+- Windows npm lock runbook 존재:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr1_windows_runbook_exists.txt`
+
+### 14.2 PR2 Evidence/Docs Hardening 증적
+- Notion template generator 실행 출력:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr2_notion_template_gen.txt`
+- Notion close gate 의도적 FAIL 메시지:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr2_notion_gate_error_message.txt`
+- Notion export snapshot 정책 문서 존재:
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr2_notion_exports_readme_exists.txt`
+- 정책 문서:
+  - `docs/notion_exports/README.md`
+
+### 14.3 비고
+- Notion BLOCKED_AUTOMATION 수동 close는 기존 고정 증적 3종 정책을 유지한다.
+- Notion export snapshot 경로/시각/커밋 기록은 본 문서(`spec_sync_report.md`)에 누적 관리한다.

@@ -33,8 +33,11 @@
 
 ### W1: Node 런타임 드리프트 완화
 - 플랫폼별 부트스트랩 스크립트 추가:
-  - `scripts/bootstrap_node_22.ps1`
-  - `scripts/bootstrap_node_22.sh`
+  - `scripts/bootstrap_node_from_nvmrc.ps1`
+  - `scripts/bootstrap_node_from_nvmrc.sh`
+- 설치 불안정 대응 재시도 스크립트(선택):
+  - `scripts/frontend_install_retry.ps1`
+  - `scripts/frontend_install_retry.sh`
 - Node 버전 불일치 시 복구 가이드 자동 출력:
   - `scripts/check_node_version.py`
   - `docs/dev/DEV_ENVIRONMENT.md`
@@ -50,11 +53,13 @@
 
 ### W3: Notion 수동 예외 Close 게이트 고도화
 - 수동 증적 템플릿 생성 스크립트 추가:
-  - `scripts/gen_notion_manual_evidence_template.py`
+  - `scripts/gen_notion_manual_evidence_templates.py`
 - 파일/필드 단위로 상세 진단하도록 검증기 강화:
   - `scripts/check_notion_manual_exception_gate.py`
 - 운영 절차 업데이트:
   - `docs/ops/runbook_spec_notion_gate.md`
+- Notion export snapshot 정책 추가:
+  - `docs/notion_exports/README.md`
 - 고정 증적 경로 유지:
   - `docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json`
   - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`
@@ -119,6 +124,7 @@ python ../scripts/lint_chatgpt_handoff_docs.py --files ../chatGPT/CHATGPT_SELF_C
 - Full report: `docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md`
 - Spec sync report: `spec_sync_report.md`
 - Dev guide: `docs/dev/DEV_ENVIRONMENT.md`
+- Notion export policy: `docs/notion_exports/README.md`
 - Ops runbooks:
   - `docs/ops/runbook_scheduler_lock.md`
   - `docs/ops/runbook_audit_chain.md`

@@ -21,7 +21,7 @@
 1. `BLOCKED` 감지
    - 조건: `scripts/notion_ci_auth_preflight.py`가 `NOTION_AUTH_*` 또는 `OPENAI_API_KEY_MISSING`으로 FAIL
 2. 증적 템플릿 생성 (수동 작성 시작 전에 반드시 실행)
-   - `python scripts/gen_notion_manual_evidence_template.py`
+   - `python scripts/gen_notion_manual_evidence_templates.py`
    - 기존 고정 파일이 있으면 기본 동작은 overwrite 금지이며, 필요한 경우에만 `--force` 사용
 3. 수동 패치 수행
    - `docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md`의 placeholder를 실제 값으로 교체
@@ -30,6 +30,8 @@
    - `spec_sync_report.md`에 BLOCKED 사유, 증적 2개 경로, close 시각/결과 기록
 5. Close 게이트 검증
    - `scripts/check_notion_manual_exception_gate.py` PASS일 때만 운영적으로 close
+6. Notion export snapshot 기록(권장)
+   - `docs/notion_exports/README.md` 정책에 따라 markdown/pdf 스냅샷 경로를 `spec_sync_report.md`에 기록
 
 ## Fail-Closed 규칙
 1. preflight FAIL 시 자동 동기화(Codex + MCP) 경로는 즉시 중단한다.

@@ -80,6 +80,52 @@ def parse_validation_gate_evidence(lines: list[str]) -> list[tuple[int, str]]:
     return evidence_rows
 
 
+def collect_briefing_evidence_stats(path: Path) -> dict[str, int | str]:
+    lines = path.read_text(encoding="utf-8", errors="strict").splitlines()
+    evidence_rows = parse_validation_gate_evidence(lines=lines)
+
+    stats: dict[str, int | str] = {
+        "parsed_count": len(evidence_rows),
+        "existing_count": 0,
+        "missing_count": 0,
+        "out_of_scope_count": 0,
+        "path_traversal_count": 0,
+        "unstable_name_count": 0,
+    }
+
+    for _, evidence_path in evidence_rows:
+        normalized = evidence_path.replace("\\", "/")
+        if not normalized.startswith(ARTIFACT_ROOT):
+            stats["out_of_scope_count"] += 1
+            continue
+
+        if ".." in PurePosixPath(normalized).parts:
+            stats["path_traversal_count"] += 1
+            continue
+
+        evidence_file = Path(normalized)
+        if evidence_file.exists():
+            stats["existing_count"] += 1
+        else:
+            stats["missing_count"] += 1
+
+        if UNSTABLE_EVIDENCE_NAME_PATTERN.search(evidence_file.name):
+            stats["unstable_name_count"] += 1
+
+    status = "PASS"
+    if stats["parsed_count"] == 0:
+        status = "FAIL"
+    if (
+        stats["missing_count"] > 0
+        or stats["out_of_scope_count"] > 0
+        or stats["path_traversal_count"] > 0
+        or stats["unstable_name_count"] > 0
+    ):
+        status = "FAIL"
+    stats["status"] = status
+    return stats
+
+
 def lint_file(path: Path) -> list[Violation]:
     violations: list[Violation] = []
     text = path.read_text(encoding="utf-8", errors="strict")
@@ -263,6 +309,7 @@ def main() -> int:
     args = parser.parse_args()
 
     violations: list[Violation] = []
+    evidence_existence_validation: dict[str, int | str] = {}
     for file_path in args.files:
         path = Path(file_path)
         if not path.exists():
@@ -271,11 +318,14 @@ def main() -> int:
             )
             continue
         violations.extend(lint_file(path))
+        if path.as_posix().endswith("chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md"):
+            evidence_existence_validation = collect_briefing_evidence_stats(path=path)
 
     payload = {
         "status": "PASS" if not violations else "FAIL",
         "violation_count": len(violations),
         "violations": [asdict(v) for v in violations],
+        "evidence_existence_validation": evidence_existence_validation,
     }
     report_json = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 
