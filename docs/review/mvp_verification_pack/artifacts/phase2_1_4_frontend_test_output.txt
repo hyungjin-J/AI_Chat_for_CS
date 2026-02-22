@@ -1,4 +1,4 @@
-npm warn EBADENGINE Unsupported engine {
+﻿npm warn EBADENGINE Unsupported engine {
 npm warn EBADENGINE   package: 'frontend@0.0.0',
 npm warn EBADENGINE   required: { node: '22.12.0' },
 npm warn EBADENGINE   current: { node: 'v24.11.1', npm: '11.6.2' }
@@ -24,7 +24,7 @@ Run `npm audit` for details.
 > vitest run
 
 
-[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend[39m
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90m<REDACTED_PATH>/frontend[39m
 
  [32m✓[39m src/utils/errorMapping.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
  [32m✓[39m src/utils/uuid.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
@@ -33,10 +33,10 @@ Run `npm audit` for details.
  [32m✓[39m src/routes/RequireAuth.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 50[2mms[22m[39m
 [90mstderr[2m | src/pages/AdminAuditPage.test.tsx[2m > [22m[2mAdminAuditPage[2m > [22m[2mcreates export job and downloads artifact
 [22m[39mError: Not implemented: navigation (except hash changes)
-    at module.exports (C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\jsdom\lib\jsdom\browser\not-implemented.js:9:17)
-    at navigateFetch (C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\jsdom\lib\jsdom\living\window\navigation.js:77:3)
-    at exports.navigate (C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\jsdom\lib\jsdom\living\window\navigation.js:55:3)
-    at Timeout._onTimeout (C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\jsdom\lib\jsdom\living\nodes\HTMLHyperlinkElementUtils-impl.js:80:7)
+    at module.exports (<REDACTED_PATH>\frontend\node_modules\jsdom\lib\jsdom\browser\not-implemented.js:9:17)
+    at navigateFetch (<REDACTED_PATH>\frontend\node_modules\jsdom\lib\jsdom\living\window\navigation.js:77:3)
+    at exports.navigate (<REDACTED_PATH>\frontend\node_modules\jsdom\lib\jsdom\living\window\navigation.js:55:3)
+    at Timeout._onTimeout (<REDACTED_PATH>\frontend\node_modules\jsdom\lib\jsdom\living\nodes\HTMLHyperlinkElementUtils-impl.js:80:7)
     at listOnTimeout (node:internal/timers:605:17)
     at processTimers (node:internal/timers:541:7) [90mundefined[39m
 
@@ -47,4 +47,6 @@ Run `npm audit` for details.
 [2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
 [2m   Start at [22m 14:48:36
 [2m   Duration [22m 1.77s[2m (transform 333ms, setup 852ms, collect 1.29s, tests 329ms, environment 5.26s, prepare 1.06s)[22m
+
+
 

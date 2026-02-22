@@ -1,4 +1,4 @@
-{
+﻿{
   "status": "PASS",
   "bundle_path": "docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip",
   "required_files": [
@@ -20,3 +20,5 @@
   "violation_count": 0,
   "violations": []
 }
+
+

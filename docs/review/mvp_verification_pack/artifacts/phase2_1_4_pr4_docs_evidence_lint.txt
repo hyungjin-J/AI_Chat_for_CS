@@ -1,7 +1,9 @@
-lint_validation_gate_tables
+﻿lint_validation_gate_tables
 status=PASS
 scanned_files_count=16
 scanned_tables_count=0
 extracted_evidence_paths_count=0
 missing_local_evidence_count=0
 warning_count=0
+
+

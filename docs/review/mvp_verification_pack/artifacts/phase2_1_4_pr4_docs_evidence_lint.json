@@ -1,6 +1,6 @@
-{
+﻿{
   "status": "PASS",
-  "root": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot",
+  "root": ".",
   "target_globs": [
     "docs/reports/**/*.md",
     "docs/ops/runbook_*.md",
@@ -15,3 +15,5 @@
   "warning_count": 0,
   "warnings": []
 }
+
+

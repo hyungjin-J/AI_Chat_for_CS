@@ -212,7 +212,7 @@ def main() -> int:
     missing_paths = sorted({item.path for item in missing})
     payload = {
         "status": "PASS" if not missing else "FAIL",
-        "root": root.as_posix(),
+        "root": Path(args.root).as_posix(),
         "target_globs": globs,
         "scanned_files_count": len(targets),
         "scanned_tables_count": scanned_tables_total,

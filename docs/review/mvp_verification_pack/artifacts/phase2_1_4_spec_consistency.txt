@@ -1,4 +1,4 @@
-PASS=9 FAIL=0
+﻿PASS=9 FAIL=0
 [PASS] summary_reqid_subset: summary=52 missing_in_requirements=0
 [PASS] dev_reqid_subset: dev_refs=41 missing_in_requirements=0
 [PASS] api_note_reqid_subset: api_note_refs=69 missing_in_requirements=0
@@ -8,4 +8,6 @@ PASS=9 FAIL=0
 [PASS] access_level_standard: access_levels=['AUTHENTICATED', 'PUBLIC']
 [PASS] sse_event_term_standard: token_chunk_occurrences=0
 [PASS] uiux94_no_placeholder_keys: placeholder_rows=0
-report: C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\docs\uiux\reports\spec_consistency_check_report.json
+report: <REDACTED_PATH>\docs\uiux\reports\spec_consistency_check_report.json
+
+
