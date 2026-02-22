@@ -5,34 +5,14 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-function Mask-Text {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$Text
-    )
-
-    $masked = $Text
-    $userHome = [Environment]::GetFolderPath("UserProfile")
-    if ($userHome) {
-        $masked = $masked -replace [regex]::Escape($userHome), "<REDACTED_USER_HOME>"
-    }
-
-    # Mask common token-like patterns if they appear in logs.
-    $masked = $masked -replace "(?i)(api[_-]?key\s*[:=]\s*)(\S+)", '$1<REDACTED>'
-    $masked = $masked -replace "(?i)(token\s*[:=]\s*)(\S+)", '$1<REDACTED>'
-    $masked = $masked -replace "(?i)(authorization\s*[:=]\s*)(\S+)", '$1<REDACTED>'
-    return $masked
-}
-
-function Safe-CaptureCommandOutput {
+function Safe-CommandOutput {
     param(
         [Parameter(Mandatory = $true)]
         [string]$Command
     )
 
     try {
-        $raw = cmd /c $Command 2>&1 | Out-String
-        return (Mask-Text -Text $raw.Trim())
+        return (cmd /c $Command 2>&1 | Out-String).Trim()
     } catch {
         return "ERROR: $($_.Exception.Message)"
     }
@@ -40,57 +20,60 @@ function Safe-CaptureCommandOutput {
 
 New-Item -ItemType Directory -Force -Path $ArtifactDir | Out-Null
 
-$workDir = Join-Path $ArtifactDir "windows_npm_lock_diag_bundle"
-if (Test-Path $workDir) {
-    Remove-Item -Recurse -Force $workDir
+$bundleFolder = Join-Path $ArtifactDir "windows_npm_lock_diag_bundle"
+if (Test-Path $bundleFolder) {
+    Remove-Item -Recurse -Force $bundleFolder
 }
-New-Item -ItemType Directory -Force -Path $workDir | Out-Null
+New-Item -ItemType Directory -Force -Path $bundleFolder | Out-Null
 
-$timestamp = [DateTimeOffset]::Now.ToString("yyyy-MM-dd HH:mm:ss zzz")
-$cwd = (Get-Location).Path
-$cwdMasked = Mask-Text -Text $cwd
-$cwdLength = $cwd.Length
+$smokeMode = $env:DIAG_SMOKE -eq "1"
+$kstZone = [System.TimeZoneInfo]::FindSystemTimeZoneById("Korea Standard Time")
+$kstNow = [System.TimeZoneInfo]::ConvertTime([DateTimeOffset]::UtcNow, $kstZone)
+$timestamp = $kstNow.ToString("yyyy-MM-dd HH:mm:ss zzz")
+$cwdLength = ((Get-Location).Path).Length
 $osInfo = Get-CimInstance Win32_OperatingSystem
 
-$summary = @()
-$summary += "windows_npm_lock_diag_bundle"
-$summary += "captured_at_kst=$timestamp"
-$summary += "node_version=$(Safe-CaptureCommandOutput -Command 'node -v')"
-$summary += "npm_version=$(Safe-CaptureCommandOutput -Command 'npm -v')"
-$summary += "os_caption=$(Mask-Text -Text $osInfo.Caption)"
-$summary += "os_version=$(Mask-Text -Text $osInfo.Version)"
-$summary += "cwd=$cwdMasked"
-$summary += "cwd_length=$cwdLength"
-$summary += "notes=No secrets/tokens/PII should be included."
-$summaryText = ($summary -join "`n") + "`n"
-$summaryPath = Join-Path $workDir "diagnostics_summary.txt"
-$summaryText | Out-File -FilePath $summaryPath -Encoding utf8
+$summaryLines = @(
+    "windows_npm_lock_diag_bundle",
+    "captured_at_kst=$timestamp",
+    "diag_smoke_mode=$smokeMode",
+    "bundle_version=phase2_1_4"
+)
+($summaryLines -join "`n") + "`n" | Out-File -FilePath (Join-Path $bundleFolder "summary.txt") -Encoding utf8
 
-$npmLogRoot = Join-Path $env:APPDATA "npm-cache\_logs"
-$logsOut = Join-Path $workDir "npm_log_excerpt.txt"
-if (Test-Path $npmLogRoot) {
-    $recentLogs = Get-ChildItem -Path $npmLogRoot -File | Sort-Object LastWriteTime -Descending | Select-Object -First 3
-    if ($recentLogs.Count -gt 0) {
-        $content = @()
-        foreach ($log in $recentLogs) {
-            $content += "=== log: $(Mask-Text -Text $log.Name) ==="
-            $tail = Get-Content -Path $log.FullName -Tail 120 -ErrorAction SilentlyContinue | Out-String
-            $content += (Mask-Text -Text $tail.Trim())
-            $content += ""
-        }
-        ($content -join "`n") + "`n" | Out-File -FilePath $logsOut -Encoding utf8
-    } else {
-        "No npm logs found under $npmLogRoot" | Out-File -FilePath $logsOut -Encoding utf8
-    }
-} else {
-    "npm log root not found: $(Mask-Text -Text $npmLogRoot)" | Out-File -FilePath $logsOut -Encoding utf8
-}
+("node_version=" + (Safe-CommandOutput -Command "node -v")) + "`n" |
+    Out-File -FilePath (Join-Path $bundleFolder "node_version.txt") -Encoding utf8
+
+("npm_version=" + (Safe-CommandOutput -Command "npm -v")) + "`n" |
+    Out-File -FilePath (Join-Path $bundleFolder "npm_version.txt") -Encoding utf8
+
+@(
+    "os_caption=$($osInfo.Caption)"
+    "os_version=$($osInfo.Version)"
+    "os_build=$($osInfo.BuildNumber)"
+) -join "`n" |
+    Out-File -FilePath (Join-Path $bundleFolder "os_info.txt") -Encoding utf8
+
+@(
+    "cwd_length=$cwdLength"
+    "cwd_path=<REDACTED_PATH>"
+) -join "`n" |
+    Out-File -FilePath (Join-Path $bundleFolder "path_length.txt") -Encoding utf8
+
+$readmeLines = @(
+    "This bundle is sanitized for npm lock diagnostics."
+    "No raw user home path, tokens, keys, or private credentials are included."
+    "When DIAG_SMOKE=1, collection remains minimal for CI safety."
+)
+($readmeLines -join "`n") + "`n" | Out-File -FilePath (Join-Path $bundleFolder "readme.txt") -Encoding utf8
 
 $bundlePath = Join-Path $ArtifactDir $BundleName
 if (Test-Path $bundlePath) {
     Remove-Item -Force $bundlePath
 }
-Compress-Archive -Path (Join-Path $workDir "*") -DestinationPath $bundlePath -Force
+Compress-Archive -Path (Join-Path $bundleFolder "*") -DestinationPath $bundlePath -Force
+Remove-Item -Recurse -Force $bundleFolder
 
-Write-Host "Windows npm lock diagnostic bundle generated:"
-Write-Host $bundlePath
+Write-Host "windows_npm_lock_diag_bundle"
+Write-Host "diag_smoke_mode=$smokeMode"
+Write-Host "bundle_path=$bundlePath"

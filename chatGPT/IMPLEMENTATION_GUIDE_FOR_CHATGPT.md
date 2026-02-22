@@ -2,85 +2,93 @@
 
 - project: AI_Chatbot
 - document_type: Implementation and Operations Handoff Guide
-- updated_at_kst: 2026-02-22 14:17:28 +09:00
-- base_commit_hash: e2bde0e
-- release_tag: 2026.03XX-phase2.1.3-gate-regression-drift-prevention
+- updated_at_kst: 2026-02-22 14:56:27 +09:00
+- base_commit_hash: 7ac802f
+- release_tag: 2026.03XX-phase2.1.4-ci-evidence-archive-contract-safety-diagnostics-evidence-lint
 - branch: main
 - pr_number: N/A (local working tree)
 
 ## 0) Change Summary (Added/Changed/Fixed/Removed, 10 lines)
-- Added: fixed artifact path contract file `scripts/contracts/fixed_artifact_paths.json`.
-- Added: contract validator `scripts/assert_fixed_artifact_paths.py` with remediation output.
-- Added: stdlib gate regression tests under `scripts/tests/`.
-- Added: Windows diagnostic bundle collector `scripts/collect_windows_npm_lock_diag.ps1`.
-- Changed: CI workflow now enforces contract check and `python -m unittest discover`.
-- Changed: handoff lint now scans both docs' Validation Gate tables for evidence paths.
-- Changed: lint JSON now reports table/path coverage and missing path list.
-- Changed: Windows npm lock runbook now includes diagnostics bundle escalation workflow.
-- Fixed: Notion close gate output now prints required spec_sync token/pattern expectations.
-- Fixed: Phase2.1.3 verification artifacts generated with stable prefix naming.
+- Added: `scripts/validate_windows_diag_bundle.py` for deterministic zip-structure/sanitization checks.
+- Added: `scripts/lint_validation_gate_tables.py` for non-chatGPT docs Validation Gate evidence lint.
+- Added: `scripts/tests/test_lint_validation_gate_tables.py` regression tests for docs evidence lint behavior.
+- Changed: `pr-smoke-contract.yml` now adds windows diag smoke job (`DIAG_SMOKE=1`) and PR4 docs lint step.
+- Changed: CI artifact archive now includes gate evidence patterns plus Windows diag zip, with `if: always()`.
+- Changed: `release-nightly-full.yml` upload policy now mirrors PR smoke archive policy.
+- Changed: `scripts/assert_fixed_artifact_paths.py` blocks backslash/absolute/traversal contract entries.
+- Changed: `scripts/collect_windows_npm_lock_diag.ps1` enforces fixed zip entry set and redacted path output.
+- Fixed: Phase2.1.4 evidence artifacts emitted with stable `phase2_1_4_*` naming.
+- Fixed: Gate regression suite passes with contract safety and docs evidence lint tests included.
 
 ## 1) Execution Units
-### Phase2.1.3 Unit A: Artifact Path Contract
+### Phase2.1.4 Unit A: CI Evidence Archive
 - Files:
-  - `scripts/contracts/fixed_artifact_paths.json`
+  - `.github/workflows/pr-smoke-contract.yml`
+  - `.github/workflows/release-nightly-full.yml`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr1_ci_artifact_upload_policy.txt`
+- Goal:
+  - Upload gate evidence even on failed runs (`if: always()`).
+  - Keep 30-day retention and non-blocking missing-file behavior (`if-no-files-found: warn`).
+
+### Phase2.1.4 Unit B: Contract Safety Lock
+- Files:
   - `scripts/assert_fixed_artifact_paths.py`
-  - `.github/workflows/pr-smoke-contract.yml`
-- Goal:
-  - Prevent rename drift of fixed evidence paths.
-  - Fail CI when required evidence paths disappear or move out of contract scope.
-
-### Phase2.1.3 Unit B: chatGPT Lint Coverage Expansion
-- Files:
-  - `scripts/lint_chatgpt_handoff_docs.py`
-  - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
-  - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
-- Goal:
-  - Parse Validation Gate evidence paths from both handoff documents.
-  - Fail on missing local evidence and expose coverage metrics in JSON.
-
-### Phase2.1.3 Unit C: Gate Regression Tests
-- Files:
-  - `scripts/tests/test_lint_chatgpt_handoff_docs.py`
-  - `scripts/tests/test_notion_templates.py`
-  - `scripts/tests/test_notion_manual_exception_gate.py`
   - `scripts/tests/test_fixed_artifact_contract.py`
-  - `.github/workflows/pr-smoke-contract.yml`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr2_contract_safety_test_output.txt`
 - Goal:
-  - Protect gate scripts from regressions via deterministic stdlib `unittest` execution.
+  - Reject path traversal, absolute path, and Windows backslash entries in contract JSON.
+  - Emit remediation-oriented failures for 3-minute operator recovery.
 
-### Phase2.1.3 Unit D: Windows npm Lock Diagnostics
+### Phase2.1.4 Unit C: Windows Diagnostics Fixture and Smoke
 - Files:
   - `scripts/collect_windows_npm_lock_diag.ps1`
+  - `scripts/validate_windows_diag_bundle.py`
   - `docs/ops/runbook_windows_node_npm_lock.md`
-  - `docs/review/mvp_verification_pack/artifacts/phase2_1_3_windows_diag_script_exists.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_validate.json`
+  - `.github/workflows/pr-smoke-contract.yml`
 - Goal:
-  - Provide sanitized diagnostic bundle output and escalation-ready operational flow.
+  - Validate fixed zip structure and sanitization in `windows-latest` CI smoke job.
+  - Keep diagnostics bundle useful while excluding sensitive path/token patterns.
+
+### Phase2.1.4 Unit D: Evidence Lint Expansion (Non-chatGPT Docs)
+- Files:
+  - `scripts/lint_validation_gate_tables.py`
+  - `scripts/tests/test_lint_validation_gate_tables.py`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.txt`
+  - `docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.json`
+- Goal:
+  - Scan docs reports/runbooks/plans for Validation Gate Evidence local-path drift.
+  - Fail CI on missing local evidence paths while warning external links.
 
 ## 2) Validation Gate
 | Gate | Status | Evidence |
 |---|---|---|
-| Phase2.1.3 start status snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_git_status_start.txt |
-| Phase2.1.3 baseline patch snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_baseline.patch |
-| Fixed artifact contract check | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_fixed_artifact_contract_check.txt |
-| Gate regression unittest | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_unittest_output.txt |
-| Windows diag script presence | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_windows_diag_script_exists.txt |
-| Backend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_backend_test_output.txt |
-| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_frontend_test_output.txt |
-| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_frontend_build_output.txt |
-| Spec consistency | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_spec_consistency.txt |
-| UTF-8 strict decode | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_utf8_check.txt |
-| ChatGPT handoff doc lint | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.txt |
-| ChatGPT handoff doc lint JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.json |
+| Phase2.1.4 start status snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_git_status_start.txt |
+| Phase2.1.4 baseline patch snapshot | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_baseline.patch |
+| PR1 CI artifact upload policy | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr1_ci_artifact_upload_policy.txt |
+| Fixed artifact contract check | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_fixed_artifact_contract_check.txt |
+| PR2 contract safety unittest | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr2_contract_safety_test_output.txt |
+| PR3 windows diag smoke output | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt |
+| PR3 windows diag validate JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_validate.json |
+| PR4 docs evidence lint | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.txt |
+| PR4 docs evidence lint JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.json |
+| Gate regression unittest | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_unittest_output.txt |
+| Backend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_backend_test_output.txt |
+| Frontend tests | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_test_output.txt |
+| Frontend build | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_build_output.txt |
+| Spec consistency | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_spec_consistency.txt |
+| UTF-8 strict decode | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_utf8_check.txt |
+| ChatGPT handoff doc lint | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.txt |
+| ChatGPT handoff doc lint JSON | PASS | docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.json |
 
 ## 3) Runbook and Script Additions
-- `scripts/contracts/fixed_artifact_paths.json`
-- `scripts/assert_fixed_artifact_paths.py`
-- `scripts/tests/test_lint_chatgpt_handoff_docs.py`
-- `scripts/tests/test_notion_templates.py`
-- `scripts/tests/test_notion_manual_exception_gate.py`
-- `scripts/tests/test_fixed_artifact_contract.py`
 - `scripts/collect_windows_npm_lock_diag.ps1`
+- `scripts/validate_windows_diag_bundle.py`
+- `scripts/lint_validation_gate_tables.py`
+- `scripts/tests/test_lint_validation_gate_tables.py`
+- `.github/workflows/pr-smoke-contract.yml` (windows diag smoke + docs lint + archive)
+- `.github/workflows/release-nightly-full.yml` (archive parity)
 - `docs/ops/runbook_windows_node_npm_lock.md`
 
 ## 4) Security Notes
@@ -96,15 +104,15 @@ If conflicts appear:
 3. reports/plans
 
 ## 6) Open Risks Top5
-1. Notion auth outage still blocks zero-touch sync by design (fail-closed risk remains intentional).
-2. Manual Notion close still depends on operator quality despite stronger diagnostics.
-3. Windows endpoint security policy can still cause intermittent npm file-lock behavior.
-4. First-time developer machines still require nvm bootstrap prerequisites.
-5. Future phase evidence paths must be intentionally appended to contract to avoid false confidence.
+1. Notion auth outage still blocks zero-touch sync by design (fail-closed remains intentional).
+2. Non-chatGPT docs currently expose no Validation Gate tables, so PR4 lint runs as preventive contract.
+3. Windows diagnostics smoke remains intentionally minimal and may omit rare forensic hints.
+4. Fixed artifact contract still needs explicit governance when introducing new mandatory evidence files.
+5. Artifact retention in GitHub Actions (30 days) may be insufficient for extended audits.
 
 ## 7) Next PRs Top5
-1. Add CI upload/archive policy for Phase2.1.3 contract and unittest artifacts.
-2. Add smoke fixtures for Windows diagnostic bundle zip structure verification.
-3. Expand evidence-path lint coverage to additional report/runbook tables.
-4. Add contract-review helper that proposes diff-aware path additions for new phases.
-5. Add non-Windows diagnostic equivalent for npm lock anomalies on macOS/Linux.
+1. Add non-Windows diagnostics fixture and validator for npm lock parity across macOS/Linux.
+2. Expand fixed contract set to include selected Phase2.1.4 mandatory artifacts.
+3. Seed docs fixtures with Validation Gate tables to keep PR4 lint exercised continuously.
+4. Add CI comment summary with key artifact links (`run_id`, failed gates, remediation hints).
+5. Introduce reviewer-ack workflow for contract JSON modifications (safety governance).

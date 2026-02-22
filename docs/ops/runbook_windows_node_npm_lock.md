@@ -48,14 +48,39 @@ When issue persists after standard recovery, collect a sanitized diagnostics bun
 powershell -ExecutionPolicy Bypass -File scripts/collect_windows_npm_lock_diag.ps1
 ```
 
+CI smoke mode (minimal and deterministic output):
+
+```powershell
+$env:DIAG_SMOKE="1"
+powershell -ExecutionPolicy Bypass -File scripts/collect_windows_npm_lock_diag.ps1
+```
+
 Bundle output:
 - `docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip`
+
+Expected zip entries (fixed contract):
+- `summary.txt`
+- `node_version.txt`
+- `npm_version.txt`
+- `os_info.txt`
+- `path_length.txt`
+- `readme.txt`
+
+Sanitization policy:
+- User home path (`C:\Users\...`) must not be emitted as raw text.
+- Access token, API key, Bearer token style strings must not be emitted.
+- Raw npm debug logs are excluded by default to avoid accidental sensitive leakage.
 
 Escalation flow:
 1. Generate bundle and confirm timestamp.
 2. Attach bundle to internal escalation ticket.
-3. Include retry count, error code, and whether reboot/WSL fallback was attempted.
-4. Do not attach raw token values, private keys, or user-identifying data.
+3. Run validator and attach result.
+```powershell
+python scripts/validate_windows_diag_bundle.py `
+  --bundle docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip
+```
+4. Include retry count, error code, and whether reboot/WSL fallback was attempted.
+5. Do not attach raw token values, private keys, or user-identifying data.
 
 ## Optional OS-Level Mitigations
 - Keep repository path short (avoid deeply nested folders).

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "bundle_path": "docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip",
+  "required_files": [
+    "node_version.txt",
+    "npm_version.txt",
+    "os_info.txt",
+    "path_length.txt",
+    "readme.txt",
+    "summary.txt"
+  ],
+  "zip_entries": [
+    "node_version.txt",
+    "npm_version.txt",
+    "os_info.txt",
+    "path_length.txt",
+    "readme.txt",
+    "summary.txt"
+  ],
+  "violation_count": 0,
+  "violations": []
+}

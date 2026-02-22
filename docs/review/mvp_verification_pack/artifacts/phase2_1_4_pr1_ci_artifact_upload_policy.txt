@@ -9,7 +9,9 @@ artifact_upload_step:
 - if-no-files-found=warn
 - retention-days=30
 - name=gate-evidence-${{ github.workflow }}-${{ github.run_id }}
+- name=gate-evidence-${{ github.workflow }}-${{ github.run_id }}-windows-diag
 paths:
 - docs/review/mvp_verification_pack/artifacts/phase2_1_3_*
 - docs/review/mvp_verification_pack/artifacts/phase2_1_4_*
+- docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip
 - scripts/contracts/fixed_artifact_paths.json

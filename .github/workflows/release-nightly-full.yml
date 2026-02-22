@@ -83,6 +83,7 @@ jobs:
           path: |
             docs/review/mvp_verification_pack/artifacts/phase2_1_3_*
             docs/review/mvp_verification_pack/artifacts/phase2_1_4_*
+            docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip
             scripts/contracts/fixed_artifact_paths.json
 
       - name: Stop infra

@@ -61,13 +61,13 @@ jobs:
         shell: pwsh
         run: |
           python scripts/assert_fixed_artifact_paths.py `
-            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_3_fixed_artifact_contract_check.txt
+            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_4_fixed_artifact_contract_check.txt
 
       - name: Gate regression unittest
         shell: pwsh
         run: |
           python -m unittest discover -s scripts/tests -p "test_*.py" *>&1 `
-            | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/phase2_1_3_unittest_output.txt
+            | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/phase2_1_4_unittest_output.txt
           if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
           }
@@ -77,8 +77,15 @@ jobs:
         run: |
           python scripts/lint_chatgpt_handoff_docs.py `
             --files chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md `
-            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.json `
-            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_3_chatgpt_doc_lint.txt
+            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.json `
+            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.txt
+
+      - name: Validation Gate docs evidence lint
+        shell: pwsh
+        run: |
+          python scripts/lint_validation_gate_tables.py `
+            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.json `
+            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.txt
 
       - name: Upload gate evidence artifacts
         if: always()
@@ -90,4 +97,52 @@ jobs:
           path: |
             docs/review/mvp_verification_pack/artifacts/phase2_1_3_*
             docs/review/mvp_verification_pack/artifacts/phase2_1_4_*
+            docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip
             scripts/contracts/fixed_artifact_paths.json
+
+  windows-diag-smoke:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node (.nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Collect and validate Windows npm lock diagnostics bundle
+        shell: pwsh
+        run: |
+          $env:DIAG_SMOKE = "1"
+          powershell -ExecutionPolicy Bypass -File scripts/collect_windows_npm_lock_diag.ps1 *>&1 `
+            | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+          python scripts/validate_windows_diag_bundle.py `
+            --bundle docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip `
+            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_validate.json *>&1 `
+            | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt -Append
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Upload windows diag smoke artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-evidence-${{ github.workflow }}-${{ github.run_id }}-windows-diag
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt
+            docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_validate.json
+            docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip

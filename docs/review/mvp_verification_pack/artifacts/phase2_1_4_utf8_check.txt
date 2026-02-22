@@ -1,0 +1,31 @@
+utf8_strict_decode_check
+checked_files=28
+failure_count=0
+PASS .github/workflows/pr-smoke-contract.yml
+PASS .github/workflows/release-nightly-full.yml
+PASS chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
+PASS chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
+PASS docs/ops/runbook_windows_node_npm_lock.md
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_backend_test_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_baseline.patch
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.json
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_fixed_artifact_contract_check.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_build_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_test_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_git_status_start.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr1_ci_artifact_upload_policy.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr2_contract_safety_test_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_smoke.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr3_windows_diag_validate.json
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.json
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_spec_consistency.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_unittest_output.txt
+PASS docs/review/mvp_verification_pack/artifacts/phase2_1_4_utf8_check.txt
+PASS scripts/assert_fixed_artifact_paths.py
+PASS scripts/collect_windows_npm_lock_diag.ps1
+PASS scripts/lint_validation_gate_tables.py
+PASS scripts/tests/test_fixed_artifact_contract.py
+PASS scripts/tests/test_lint_validation_gate_tables.py
+PASS scripts/validate_windows_diag_bundle.py
