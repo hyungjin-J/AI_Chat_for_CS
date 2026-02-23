@@ -1,4 +1,4 @@
-package com.aichatbot.contexts.billing.infrastructure;
+package com.aichatbot.contexts.billing.domain.model;
 
 import java.time.Instant;
 

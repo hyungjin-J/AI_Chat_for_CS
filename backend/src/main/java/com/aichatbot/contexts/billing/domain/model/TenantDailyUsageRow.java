@@ -1,4 +1,4 @@
-package com.aichatbot.contexts.billing.infrastructure;
+package com.aichatbot.contexts.billing.domain.model;
 
 import java.math.BigDecimal;
 import java.time.Instant;

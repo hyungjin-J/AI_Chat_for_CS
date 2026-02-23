@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aichatbot.contexts.billing.domain.mapper.GenerationLogMapper">
 
-    <resultMap id="GenerationLogEntryMap" type="com.aichatbot.contexts.billing.infrastructure.GenerationLogRow">
+    <resultMap id="GenerationLogEntryMap" type="com.aichatbot.contexts.billing.domain.model.GenerationLogRow">
         <constructor>
             <arg column="id" javaType="java.lang.String" name="id"/>
             <arg column="tenant_key" javaType="java.lang.String" name="tenantId"/>

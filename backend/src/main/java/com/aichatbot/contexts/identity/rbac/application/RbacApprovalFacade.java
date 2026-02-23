@@ -1,7 +1,7 @@
 package com.aichatbot.contexts.identity.rbac.application;
 
 import com.aichatbot.contexts.identity.rbac.infrastructure.RbacApprovalService;
-import com.aichatbot.contexts.identity.rbac.infrastructure.RbacChangeRequestRecord;
+import com.aichatbot.contexts.identity.rbac.domain.model.RbacChangeRequestRecord;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

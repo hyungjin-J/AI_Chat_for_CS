@@ -1,7 +1,4 @@
-node_ssot_assertion
-expected=22.12.0
-nvmrc=22.12.0
-engines_node=22.12.0
-volta_node=22.12.0
-runtime_node=v22.12.0
-status=PASS
+node_version=
+v22.12.0
+npm_version=
+10.9.0

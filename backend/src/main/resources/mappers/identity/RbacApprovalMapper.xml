@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aichatbot.contexts.identity.rbac.domain.mapper.RbacApprovalMapper">
 
-    <resultMap id="RbacChangeRequestMap" type="com.aichatbot.contexts.identity.rbac.infrastructure.RbacChangeRequestRecord">
+    <resultMap id="RbacChangeRequestMap" type="com.aichatbot.contexts.identity.rbac.domain.model.RbacChangeRequestRecord">
         <constructor>
             <arg column="id" javaType="java.util.UUID"/>
             <arg column="tenant_id" javaType="java.util.UUID"/>

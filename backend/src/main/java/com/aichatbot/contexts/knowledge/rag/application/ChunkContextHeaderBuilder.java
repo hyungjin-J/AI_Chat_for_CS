@@ -1,6 +1,6 @@
 package com.aichatbot.contexts.knowledge.rag.application;
 
-import com.aichatbot.contexts.knowledge.rag.infrastructure.ChunkSearchRow;
+import com.aichatbot.contexts.knowledge.rag.domain.model.ChunkSearchRow;
 import org.springframework.stereotype.Component;
 
 @Component

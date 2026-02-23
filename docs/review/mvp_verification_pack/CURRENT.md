@@ -1,4 +1,4 @@
-﻿# Verification Pack CURRENT
+# Verification Pack CURRENT
 
 - Last synced at: 2026-02-21 03:25 (KST)
 - Git commit hash: `working-tree`

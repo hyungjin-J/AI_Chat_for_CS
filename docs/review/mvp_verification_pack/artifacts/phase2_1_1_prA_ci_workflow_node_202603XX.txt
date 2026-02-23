@@ -1,4 +1,4 @@
-﻿PR-A CI Node workflow alignment check
+PR-A CI Node workflow alignment check
 
 .github/workflows/provider-regression-nightly.yml:28:            - name: Setup Node (.nvmrc)
 .github/workflows/provider-regression-nightly.yml:31:                  node-version-file: ".nvmrc"

@@ -1,0 +1,4 @@
+domain_layer_purity_burndown
+baseline_before_count=6
+baseline_after_count=0
+reduced_count=6

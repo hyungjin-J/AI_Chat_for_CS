@@ -1,128 +1,166 @@
 # IMPLEMENTATION GUIDE FOR CHATGPT
 
-- project: AI_Chatbot
-- updated_at_kst: 2026-02-22 23:12:30 +09:00
+- updated_at_kst: 2026-02-24 00:56:11 +09:00
 - base_commit_hash: 97f7502
-- current_head_short: b6e156e
-- release_tag: 2026.03XX-ddd-refactor-backend-security-guard-remediation
+- current_head_short: 0115add
+- release_tag: 2026.03XX-quality-hardening-workpack
 - branch: main
 
-## 0) Scope
-This continuation finalized:
-1. Ratchet gate integrity hardening (baseline growth fail-closed)
-2. SSOT handoff doc unification
-3. Baseline debt burn-down updates
-4. Reproducible artifact refresh and preflight sync
+## 0) Change Summary (Added/Changed/Fixed/Removed, 10 lines)
+- Added: `scripts/spec_consistency_check.py` with CSV/XLSX ReqID integrity checks and terminology validation.
+- Added: `scripts/tests/test_spec_consistency_check.py` for deterministic PASS/FAIL regression coverage.
+- Added: `scripts/assert_spec_sync_report_updated.py` to enforce report update on canonical spec changes.
+- Added: `scripts/tests/test_assert_spec_sync_report_updated.py` to verify fail-closed spec sync behavior.
+- Added: `scripts/check_workspace_path_ascii.py` and unit tests for local unicode-path warning behavior.
+- Added: `docs/ops/NODE22_UNICODE_WORKSPACE_GUIDE.md` for reproducible frontend execution guidance.
+- Changed: `.github/workflows/pr-smoke-contract.yml` and `.github/workflows/release-nightly-full.yml` to run new gates.
+- Changed: ChatGPT handoff update gate default mode to `core-only` (fail on core changes, warn on non-core).
+- Changed: UTF-8 Wave2 conservative conversion batch lowered full-scan baseline from 98 to 78.
+- Changed: domain boundary refactors in billing/identity/knowledge to reduce purity debt without relaxing security invariants.
+- Fixed: full-scan UTF-8 baseline artifacts and normalization reports after safe BOM-focused conversion batch.
+- Removed: undocumented handoff gap by aligning this guide and briefing to AGENTS 16.8 mandatory handoff content.
+
+## 1) Scope Implemented
+This continuation covers:
+1. Automated spec consistency verification
+2. Spec sync report fail-closed enforcement
+3. Domain purity debt burn-down
+4. UTF-8 baseline debt burn-down
+5. Node22 unicode workspace reproducibility hardening
+6. CI integration and evidence refresh
 
 Primary audit entry:
 - `docs/review/agent_reports/CONTINUATION_PREFLIGHT_AUDIT.md`
 
-## 1) Implemented Changes
+## 2) Implementation Details
 
-### 1.1 Baseline Growth Guard Hardening
-Updated scripts:
-- `scripts/assert_domain_layer_boundaries.py`
-- `scripts/assert_backoffice_acl_boundary.py`
-- `scripts/assert_utf8_strict.py`
+### 2.1 Spec Consistency Gate
+Files:
+- `scripts/spec_consistency_check.py`
+- `scripts/tests/test_spec_consistency_check.py`
 
-Key behavior:
-- baseline growth check compares `base_ref` vs `head` baseline counts.
-- `baseline_count_head > baseline_count_base` => FAIL.
-- bootstrap-safe fallback when baseline file is absent in base ref:
-  - `baseline_growth_base_source=head-fallback:missing-in-<ref>`
-  - avoids false failure during first introduction PR.
+Behavior:
+- Builds ReqID SSOT from requirements CSV.
+- Validates ReqID references in Summary CSV.
+- Parses API workbook `전체API목록` `비고` field for `ReqID:` and `ReqID+:` tokens.
+- Scans UIUX/DB workbooks for ReqID-like tokens and validates against SSOT.
+- Verifies minimal terminology consistency: `secret_ref`, ROLE taxonomy, SSE event set.
 
-Tests:
-- `scripts/tests/test_assert_domain_layer_boundaries.py`
-- `scripts/tests/test_assert_backoffice_acl_boundary.py`
-- `scripts/tests/test_assert_utf8_strict.py`
-- baseline growth scenarios covered: increase FAIL / same PASS / decrease PASS.
+Outputs:
+- `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.txt`
+- `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.json`
+- `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt`
 
-### 1.2 Workpack/Report v2 Stability
-Updated:
-- `scripts/assert_workpack_agent_report_contract.py`
+### 2.2 Spec Sync Report Update Gate
+Files:
+- `scripts/assert_spec_sync_report_updated.py`
+- `scripts/tests/test_assert_spec_sync_report_updated.py`
 
-Fix:
-- deleted/renamed legacy topic paths are filtered out from topic validation by requiring current topic directory existence.
-- prevents false FAIL on removed old topic folders.
+Behavior:
+- Detects canonical spec file changes via git diff.
+- Requires `spec_sync_report.md` change when canonical spec changes are present.
+- Optionally validates metadata tokens: Last synced at / Source file / Version or commit / Change summary.
 
-### 1.3 Baseline Burn-down
-1. Domain purity:
-- baseline tightened from 9 to 6.
-- baseline file: `docs/review/mvp_verification_pack/artifacts/domain_layer_purity_baseline_violations.json`
+Outputs:
+- `docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.json`
 
-2. UTF-8 full-scan:
-- low-risk BOM cleanup executed for 30 files.
-- baseline tightened from 148 to 118.
-- baseline file: `docs/review/mvp_verification_pack/artifacts/utf8_full_scan_baseline_violations.json`
-- hash evidence:
-  - `docs/review/mvp_verification_pack/artifacts/utf8_bom_normalization_report.md`
-  - `docs/review/mvp_verification_pack/artifacts/utf16_normalization_report.md`
+### 2.3 Domain Purity Burn-down
+Highlights:
+- Boundary violations addressed by moving row/record types to domain model package.
+- Billing cost dependency path refactored through domain port style.
+- Ratchet gate evidence refreshed with reduced baseline.
 
-3. Backoffice ACL:
-- machine baseline JSON in use:
-  - `docs/review/mvp_verification_pack/artifacts/backoffice_acl_boundary_baseline_violations.json`
-- current baseline count remains 0.
+Outputs:
+- `docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/domain_layer_purity_burndown_summary.txt`
+- `docs/review/mvp_verification_pack/artifacts/domain_layer_purity_baseline_violations.json`
 
-### 1.4 Node Runtime Discipline Evidence Refresh
-PASS evidence under Node 22.12.0:
-- `docs/review/mvp_verification_pack/artifacts/node_ssot_pass_on_22120.txt`
-- `docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt`
-- `docs/review/mvp_verification_pack/artifacts/frontend_npm_ci_pass_on_22120.txt`
-- `docs/review/mvp_verification_pack/artifacts/continuation_preflight_frontend_test.txt`
-- `docs/review/mvp_verification_pack/artifacts/continuation_preflight_frontend_build.txt`
+### 2.4 UTF-8 Baseline Burn-down
+Files:
+- `scripts/normalize_utf8.py`
 
-Note:
-- on this machine, direct Node22 execution under the original Unicode workspace path was unstable for frontend tests.
-- PASS evidence was generated with Node22 in an ASCII temp workspace copy to avoid path-encoding runtime issues, without changing repo code/contracts.
+Highlights:
+- Safe BOM-focused normalization batch with evidence reporting.
+- Baseline reduced while ratchet remained fail-closed.
 
-## 2) CI Wiring Summary
-Workflows updated:
-- `.github/workflows/pr-smoke-contract.yml`
-- `.github/workflows/release-nightly-full.yml`
+Outputs:
+- `docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/utf8_full_scan_current.txt`
+- `docs/review/mvp_verification_pack/artifacts/utf8_bom_normalization_report.md`
+- `docs/review/mvp_verification_pack/artifacts/utf16_normalization_report.md`
 
-Enforced steps include:
-1. workpack trigger consistency
-2. workpack/report v2 gate
-3. domain purity ratchet (+ baseline growth guard)
-4. backoffice ACL ratchet (+ baseline growth guard)
-5. frontend import boundary gate
-6. UTF-8 strict diff-scope gate
-7. UTF-8 full-scan ratchet gate (nightly + PR contract path)
-8. scaffold contract smoke gate
-9. mapper namespace + legacy package + platform boundary gates
+### 2.5 Node22 Unicode Workspace Mitigation
+Files:
+- `scripts/check_workspace_path_ascii.py`
+- `scripts/bootstrap_node_from_nvmrc.ps1`
+- `docs/ops/NODE22_UNICODE_WORKSPACE_GUIDE.md`
 
-## 3) Latest Verification Snapshot
-| Check | Result | Evidence |
+Highlights:
+- Local warning-only guard to avoid CI noise.
+- Repro evidence documents unicode-path failure and ASCII workspace success path.
+
+Output:
+- `docs/review/mvp_verification_pack/artifacts/node22_unicode_workspace_repro.txt`
+
+### 2.6 ChatGPT Handoff Update Gate Tuning
+Files:
+- `scripts/assert_chatgpt_handoff_updated.py`
+- `scripts/tests/test_assert_chatgpt_handoff_updated.py`
+
+Policy:
+- Default mode is `core-only`.
+- `core-only` blocks merge only for core implementation changes without both handoff docs updates.
+- Non-core changes produce warning only to reduce developer friction.
+- `strict-all` remains available for temporary hard lock if needed.
+
+Output:
+- `docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.txt`
+
+## 3) Validation Gates
+| Gate | Status | Evidence |
 |---|---|---|
-| Script tests | PASS (65) | `docs/review/mvp_verification_pack/artifacts/continuation_preflight_scripts_unittest.txt` |
-| Trigger consistency | PASS | `docs/review/mvp_verification_pack/artifacts/continuation_trigger_consistency_gate.txt` |
-| Workpack/report v2 | PASS | `docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.txt` |
-| Domain ratchet | PASS | `docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.txt` |
+| Workpack/report v2 contract | PASS | `docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.txt` |
+| Workpack trigger consistency | PASS | `docs/review/mvp_verification_pack/artifacts/continuation_trigger_consistency_gate.txt` |
+| Domain purity ratchet | PASS | `docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.txt` |
 | Backoffice ACL ratchet | PASS | `docs/review/mvp_verification_pack/artifacts/backoffice_acl_boundary_gate.txt` |
-| UTF-8 diff-scope | PASS | `docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.txt` |
+| Frontend import boundary | PASS | `docs/review/mvp_verification_pack/artifacts/frontend_import_boundary_gate.txt` |
+| UTF-8 strict diff-scope | PASS | `docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.txt` |
 | UTF-8 full-scan ratchet | PASS | `docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.txt` |
 | Scaffold smoke | PASS | `docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.txt` |
-| Backend test/build | PASS | `docs/review/mvp_verification_pack/artifacts/continuation_preflight_backend_test.txt` |
-| Billing parity | PASS | `docs/review/mvp_verification_pack/artifacts/billing_parity_summary.txt` |
-| Frontend npm ci/test/build (Node22) | PASS | `docs/review/mvp_verification_pack/artifacts/frontend_npm_ci_pass_on_22120.txt` |
-| Public API compare | PASS (`added=0`, `removed=0`) | `docs/review/mvp_verification_pack/artifacts/continuation_preflight_public_api_compare.txt` |
+| Spec consistency check | PASS | `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.txt` |
+| Spec sync report update gate | PASS | `docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt` |
+| ChatGPT handoff update gate | PASS | `docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.txt` |
+| Quality validation summary | PASS | `docs/review/mvp_verification_pack/artifacts/quality_workpack_validation_summary.txt` |
 
-## 4) Open Risk Status
-1. R1 Node runtime mismatch: CLOSED
-2. R2 Domain purity baseline burn-down start: CLOSED
-3. R3 UTF-8 full-repo control: CLOSED
-4. R4 Spec-only + Notion exception E2E path: CLOSED
+## 4) Baseline Delta
+- Domain purity baseline: 6 -> 0
+- UTF-8 full-scan baseline: 118 -> 78
+- API compare: added=0, removed=0
 
-## 5) Remaining Backlog
-1. Domain purity baseline backlog: 6 items
-2. UTF-8 historical baseline backlog: 118 items
+## 5) Remaining Risks Top5
+1. UTF-8 residual baseline remains non-trivial and should be reduced in controlled waves.
+2. Node22 unicode-path instability can still impact developers who skip ASCII workspace mitigation.
+3. Spec terminology checks are intentionally minimal and should be expanded gradually.
+4. Notion synchronization traceability still depends on explicit report discipline.
+5. Large artifact inventory can hide regressions without periodic curation.
 
-## 6) Safety Confirmation
-- No ROLE taxonomy changes.
-- No error payload contract changes.
+## 6) Next PRs Top5
+1. Add broader terminology checks to spec consistency gate with curated allowlist.
+2. Continue UTF-8 burn-down toward sub-80 baseline while preserving ratchet strictness.
+3. Extend Node workspace guide with one-command mirror-and-run helper.
+4. Tighten evidence curation for stale artifact cleanup and easier gate reading.
+5. Incrementally strengthen automation around sync and handoff completeness checks.
+
+## 7) Safety Confirmation
+- No ROLE taxonomy change.
+- No error payload shape change.
 - No fail-closed answer contract relaxation.
 - No hardening lock relaxation.
 - No tenant/RBAC authority relaxation.
 - No public API/SSE contract break.
-- No secrets/tokens/raw PII in artifacts.
+- No secrets/tokens/raw PII in committed artifacts.
+
+## 8) Conflict Resolution Note (SSOT)
+- In conflict, latest artifacts under `docs/review/mvp_verification_pack/artifacts/*` take precedence.
+- `spec_sync_report.md` remains the sync log precedence target for spec/document synchronization conflicts.

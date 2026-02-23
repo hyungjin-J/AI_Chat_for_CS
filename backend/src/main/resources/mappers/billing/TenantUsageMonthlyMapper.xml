@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aichatbot.contexts.billing.domain.mapper.TenantUsageMonthlyMapper">
 
-    <resultMap id="TenantMonthlyUsageRowMap" type="com.aichatbot.contexts.billing.infrastructure.TenantMonthlyUsageRow">
+    <resultMap id="TenantMonthlyUsageRowMap" type="com.aichatbot.contexts.billing.domain.model.TenantMonthlyUsageRow">
         <constructor>
             <arg column="tenant_key" javaType="java.lang.String" name="tenantId"/>
             <arg column="usage_month_date" javaType="java.time.LocalDate" name="usageMonthDate"/>

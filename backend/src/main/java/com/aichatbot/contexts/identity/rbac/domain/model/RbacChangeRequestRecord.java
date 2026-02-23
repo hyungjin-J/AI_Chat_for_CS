@@ -1,4 +1,4 @@
-package com.aichatbot.contexts.identity.rbac.infrastructure;
+package com.aichatbot.contexts.identity.rbac.domain.model;
 
 import java.time.Instant;
 import java.util.UUID;

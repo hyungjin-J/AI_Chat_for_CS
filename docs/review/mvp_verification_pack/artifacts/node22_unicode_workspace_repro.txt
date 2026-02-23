@@ -1,0 +1,11 @@
+node22_unicode_workspace_repro
+date_utc=2026-02-23T14:56:30Z
+unicode_workspace=C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend
+runtime=v22.12.0 (portable)
+npm_ci_unicode_status=FAIL
+npm_ci_unicode_error_code=3221225477
+npm_ci_unicode_error_target=node_modules/esbuild/install.js
+ascii_workspace=C:/Users/hjjmj/AppData/Local/Temp/AI_Chatbot_ascii_workspace/frontend
+npm_ci_ascii_status=PASS
+frontend_test_run_ascii_status=PASS (7 files, 15 tests)
+frontend_build_ascii_status=PASS

@@ -1,5 +1,6 @@
 package com.aichatbot.contexts.identity.rbac.infrastructure;
 
+import com.aichatbot.contexts.identity.rbac.domain.model.RbacChangeRequestRecord;
 import com.aichatbot.platform.error.ApiException;
 import com.aichatbot.platform.error.ErrorCatalog;
 import java.time.Clock;

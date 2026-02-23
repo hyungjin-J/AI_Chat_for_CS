@@ -2,6 +2,7 @@ package com.aichatbot.contexts.billing.infrastructure;
 
 import com.aichatbot.contexts.billing.domain.mapper.TenantUsageDailyMapper;
 import com.aichatbot.contexts.billing.domain.model.TenantDailyUsage;
+import com.aichatbot.contexts.billing.domain.model.TenantDailyUsageRow;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;

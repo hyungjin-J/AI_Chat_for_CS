@@ -1,4 +1,4 @@
-package com.aichatbot.contexts.knowledge.rag.infrastructure;
+package com.aichatbot.contexts.knowledge.rag.domain.model;
 
 public record ChunkSearchRow(
     String chunkId,

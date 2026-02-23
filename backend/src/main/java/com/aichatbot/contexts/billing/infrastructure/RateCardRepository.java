@@ -2,6 +2,7 @@ package com.aichatbot.contexts.billing.infrastructure;
 
 import com.aichatbot.contexts.billing.domain.mapper.RateCardMapper;
 import com.aichatbot.contexts.billing.domain.model.CostRateCard;
+import com.aichatbot.contexts.billing.domain.port.RateCardLookup;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class RateCardRepository {
+public class RateCardRepository extends RateCardLookup {
 
     private final RateCardMapper rateCardMapper;
     private final String persistenceMode;
@@ -50,6 +51,7 @@ public class RateCardRepository {
         rateCards.add(rateCard);
     }
 
+    @Override
     public Optional<CostRateCard> findApplicable(String providerId, String modelId, Instant at) {
         if (useMapperPersistence()) {
             return Optional.ofNullable(rateCardMapper.findApplicable(providerId, modelId, at));

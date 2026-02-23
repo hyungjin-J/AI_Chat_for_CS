@@ -1,0 +1,25 @@
+quality_workpack_validation_summary
+generated_at_utc=2026-02-23T15:53:49.227288Z
+node_ssot_check=PASS (runtime v22.12.0)
+workpack_agent_report_contract=PASS
+workpack_trigger_consistency=PASS
+scaffold_contract_smoke=PASS
+mapper_namespace_gate=PASS
+legacy_package_blocker=PASS
+backoffice_acl_boundary_gate=PASS
+frontend_import_boundary_gate=PASS
+scripts_unittest=PASS (85 tests)
+backend_gradle_test=PASS
+frontend_unicode_workspace_node22_npm_ci=FAIL(code=3221225477)
+frontend_ascii_workspace_node22_npm_ci=PASS
+frontend_ascii_workspace_node22_test_run=PASS
+frontend_ascii_workspace_node22_build=PASS
+spec_consistency_check=PASS
+spec_sync_report_gate=PASS
+chatgpt_doc_lint=PASS
+chatgpt_handoff_update_gate=PASS
+chatgpt_handoff_update_mode=core-only
+domain_layer_boundary_gate=PASS
+continuation_utf8_strict_gate=PASS
+utf8_full_scan_ratchet_gate=PASS (baseline=78,new=0)
+public_api_compare_reference=PASS

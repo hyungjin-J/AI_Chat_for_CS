@@ -1,1 +1,1 @@
-﻿PASS: scripts/collect_windows_npm_lock_diag.ps1 exists
+PASS: scripts/collect_windows_npm_lock_diag.ps1 exists

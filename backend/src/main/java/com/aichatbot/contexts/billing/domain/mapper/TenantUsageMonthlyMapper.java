@@ -1,6 +1,6 @@
 package com.aichatbot.contexts.billing.domain.mapper;
 
-import com.aichatbot.contexts.billing.infrastructure.TenantMonthlyUsageRow;
+import com.aichatbot.contexts.billing.domain.model.TenantMonthlyUsageRow;
 import java.time.LocalDate;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;

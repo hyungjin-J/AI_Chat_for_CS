@@ -38,12 +38,27 @@ function Read-CurrentNodeVersion {
     return $runtime.TrimStart("v")
 }
 
+function Invoke-WorkspaceAsciiWarning {
+    $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
+    if (-not $pythonCommand) {
+        return
+    }
+
+    $asciiCheckScript = Join-Path $PSScriptRoot "check_workspace_path_ascii.py"
+    if (-not (Test-Path -Path $asciiCheckScript)) {
+        return
+    }
+
+    & python $asciiCheckScript --path (Get-Location).Path
+}
+
 try {
     $required = Read-RequiredNodeVersion -Path $NvmrcPath
     $current = Read-CurrentNodeVersion
 
     if ($current -eq $required) {
         Write-Host "[OK] Node runtime already matches .nvmrc ($required)."
+        Invoke-WorkspaceAsciiWarning
         Write-Host "[NEXT] Continue with: npm ci --prefer-offline --no-audit --fund=false"
         exit 0
     }
@@ -72,6 +87,7 @@ try {
         $after = Read-CurrentNodeVersion
         if ($after -eq $required) {
             Write-Host "[OK] Node runtime switched to $after."
+            Invoke-WorkspaceAsciiWarning
             Write-Host "[NEXT] Re-run gate: python scripts/check_node_version.py --nvmrc .nvmrc --package-json frontend/package.json --check-runtime"
             exit 0
         }

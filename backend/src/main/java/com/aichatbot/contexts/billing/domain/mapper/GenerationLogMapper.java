@@ -1,6 +1,6 @@
 package com.aichatbot.contexts.billing.domain.mapper;
 
-import com.aichatbot.contexts.billing.infrastructure.GenerationLogRow;
+import com.aichatbot.contexts.billing.domain.model.GenerationLogRow;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;

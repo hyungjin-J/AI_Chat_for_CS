@@ -1,4 +1,4 @@
-﻿phase2_1_4_pr1_ci_artifact_upload_policy
+phase2_1_4_pr1_ci_artifact_upload_policy
 status=APPLIED
 workflows_updated:
 - .github/workflows/pr-smoke-contract.yml

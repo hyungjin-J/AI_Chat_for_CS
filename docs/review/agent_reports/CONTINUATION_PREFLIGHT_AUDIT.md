@@ -91,3 +91,21 @@ Note:
 - Tenant isolation / RBAC server authority unchanged.
 - Public REST/SSE contract unchanged.
 - No secrets, tokens, or raw PII were added to docs/artifacts.
+
+## 9) Addendum (2026-02-24 00:16:11 +09:00)
+1. ChatGPT handoff docs were fully refreshed to satisfy AGENTS 16.8 mandatory format:
+   - `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
+   - `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
+2. ChatGPT handoff lint was re-run and PASS:
+   - `docs/review/mvp_verification_pack/artifacts/chatgpt_doc_lint_manual.txt`
+3. Recurrence prevention gate was added (fail-closed):
+   - script: `scripts/assert_chatgpt_handoff_updated.py`
+   - test: `scripts/tests/test_assert_chatgpt_handoff_updated.py`
+   - evidence: `docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.txt`
+   - policy mode: `core-only` (core changes: fail-closed, non-core changes: warning)
+4. CI wiring updated:
+   - `.github/workflows/pr-smoke-contract.yml`
+   - `.github/workflows/release-nightly-full.yml`
+5. Current baseline status reflected by latest artifacts:
+   - domain purity baseline: `6 -> 0` (`domain_layer_purity_burndown_summary.txt`)
+   - UTF-8 full-scan baseline: `118 -> 98` (`utf8_full_scan_ratchet_gate.txt`)

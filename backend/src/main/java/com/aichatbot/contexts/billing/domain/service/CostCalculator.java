@@ -2,7 +2,7 @@ package com.aichatbot.contexts.billing.domain.service;
 
 import com.aichatbot.contexts.billing.domain.model.CostRateCard;
 import com.aichatbot.contexts.billing.domain.model.GenerationLogEntry;
-import com.aichatbot.contexts.billing.infrastructure.RateCardRepository;
+import com.aichatbot.contexts.billing.domain.port.RateCardLookup;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
@@ -15,14 +15,14 @@ public class CostCalculator {
 
     private static final BigDecimal ONE_THOUSAND = new BigDecimal("1000");
 
-    private final RateCardRepository rateCardRepository;
+    private final RateCardLookup rateCardLookup;
 
-    public CostCalculator(RateCardRepository rateCardRepository) {
-        this.rateCardRepository = rateCardRepository;
+    public CostCalculator(RateCardLookup rateCardLookup) {
+        this.rateCardLookup = rateCardLookup;
     }
 
     public BigDecimal estimateCost(GenerationLogEntry entry) {
-        Optional<CostRateCard> rateCard = rateCardRepository.findApplicable(
+        Optional<CostRateCard> rateCard = rateCardLookup.findApplicable(
             entry.providerId(),
             entry.modelId(),
             entry.createdAt()
@@ -38,7 +38,7 @@ public class CostCalculator {
         int outputTokens,
         int toolCalls
     ) {
-        Optional<CostRateCard> rateCard = rateCardRepository.findApplicable(providerId, modelId, at);
+        Optional<CostRateCard> rateCard = rateCardLookup.findApplicable(providerId, modelId, at);
         if (rateCard.isEmpty()) {
             return BigDecimal.ZERO;
         }

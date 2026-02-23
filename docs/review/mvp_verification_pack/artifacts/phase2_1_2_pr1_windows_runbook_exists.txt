@@ -1,1 +1,1 @@
-﻿PASS: docs/ops/runbook_windows_node_npm_lock.md exists
+PASS: docs/ops/runbook_windows_node_npm_lock.md exists

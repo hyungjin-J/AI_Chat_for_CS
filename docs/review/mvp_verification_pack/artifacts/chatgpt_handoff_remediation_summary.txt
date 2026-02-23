@@ -1,0 +1,10 @@
+chatgpt_handoff_remediation_summary
+updated_at_kst=2026-02-24 00:19:59 +09:00
+head_short=0115add
+chatgpt_docs_refresh=PASS
+chatgpt_doc_lint=PASS
+chatgpt_handoff_update_gate=PASS
+ci_wiring_pr_nightly=PASS
+policy=fail-closed on core implementation changes without both chatGPT docs updated
+mode=core-only (fail only on core implementation changes, warn on non-core)
+

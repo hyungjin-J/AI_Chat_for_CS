@@ -1,1 +1,1 @@
-﻿PASS: docs/notion_exports/README.md exists
+PASS: docs/notion_exports/README.md exists

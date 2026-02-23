@@ -1,0 +1,7 @@
+assert_spec_sync_report_updated
+status=PASS
+changed_files_count=105
+spec_changed_count=0
+spec_sync_report_changed=False
+require_metadata=True
+violation_count=0

@@ -1,2 +1,2 @@
-﻿## main...origin/main
+## main...origin/main
 ?? docs/review/mvp_verification_pack/artifacts/phase2_1_1_git_status_start.txt

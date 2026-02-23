@@ -2,6 +2,7 @@ package com.aichatbot.contexts.billing.infrastructure;
 
 import com.aichatbot.contexts.billing.domain.mapper.GenerationLogMapper;
 import com.aichatbot.contexts.billing.domain.model.GenerationLogEntry;
+import com.aichatbot.contexts.billing.domain.model.GenerationLogRow;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneOffset;

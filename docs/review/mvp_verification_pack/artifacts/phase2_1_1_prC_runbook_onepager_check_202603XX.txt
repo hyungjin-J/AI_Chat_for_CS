@@ -1,4 +1,4 @@
-﻿phase2_1_1 PR-C runbook onepager check
+phase2_1_1 PR-C runbook onepager check
 5:공식 수동 예외 경로(`BLOCKED -> Manual Patch -> Evidence -> Close`)를 운영 가능하게 표준화한다.
 15:## One-Page Operational Flow (MUST)
 16:1. `BLOCKED` 감지  

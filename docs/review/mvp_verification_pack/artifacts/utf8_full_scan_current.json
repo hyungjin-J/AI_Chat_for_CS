@@ -1,38 +1,8 @@
 {
   "status": "FAIL",
-  "scanned_file_count": 8611,
-  "violation_count": 149,
+  "scanned_file_count": 1041,
+  "violation_count": 78,
   "violations": [
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/DEMO_RUNBOOK.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/ops/BRANCH_PROTECTION_SETUP.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/ops/OLLAMA_SETUP.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/ops/runbook_audit_chain.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/ops/runbook_scheduler_lock.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/ops/tool_calling.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
     {
       "code": "UTF8_BOM_FORBIDDEN",
       "path": "docs/references/CS AI Chatbot_Requirements Statement.csv",
@@ -49,219 +19,9 @@
       "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
     },
     {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/release/release-checklist.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/reports/PROJECT_FULL_IMPLEMENTATION_AND_HARDENING_REPORT_202603XX.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/00_EXEC_SUMMARY.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/03_TEST_PLAN.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/04_TEST_RESULTS.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/05_E2E_EVIDENCE.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/06_ARTIFACT_SUMMARY_FOR_CROSS_CHECK.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/_DEPRECATED/README.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/analysis_llm_provider_001.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/artifact_sanitization_scan.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
       "code": "NON_UTF8_TEXT",
       "path": "docs/review/mvp_verification_pack/artifacts/backend_bootrun_postgres_output.txt",
       "details": "strict UTF-8 decode failed at byte 941"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/branch_protection_check.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/budget_429_checks.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/citations_api_response.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/e2e_curl_transcripts.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/gap_closure_consistency_output.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/golive_ci_gate_status.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/golive_git_status_start.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/golive_node_version.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/golive_notion_sync_status.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/idempotency_409_proof.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/idempotency_negative_422.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/idempotency_redis_e2e.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/metrics_raw.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/metrics_report.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/mybatis_dollar_scan_output.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/node_version_check.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_1_git_status_start.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_ci_workflow_node_202603XX.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_node_runtime.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_1_prA_node_runtime_202603XX.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_1_prC_runbook_onepager_check_202603XX.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_2_git_status_start.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr1_windows_runbook_exists.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_2_pr2_notion_exports_readme_exists.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_3_git_status_start.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_3_windows_diag_script_exists.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_4_backend_test_output.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_4_fixed_artifact_contract_check.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_build_output.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_4_frontend_test_output.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_4_git_status_start.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr1_ci_artifact_upload_policy.txt",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
     },
     {
       "code": "UTF8_BOM_FORBIDDEN",
@@ -385,16 +145,6 @@
     },
     {
       "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/CHANGELOG.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "docs/review/mvp_verification_pack/CURRENT.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
       "path": "docs/review/plans/20260220_gap_closure_design_and_hardening_plan.md",
       "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
     },
@@ -426,11 +176,6 @@
     {
       "code": "UTF8_BOM_FORBIDDEN",
       "path": "docs/uiux/Figma_to_React_Checklist.md",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "frontend/node_modules/whatwg-url/README.md",
       "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
     },
     {
@@ -505,76 +250,6 @@
     },
     {
       "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/ci_notion_sync_context.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/ci_notion_sync_context_test.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/create_customer_print_pack.py",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/create_session_idem_redis.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/login.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/login_body.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/login_body_idem_redis.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/message_body.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/message_body_fail_closed.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/message_body_pii.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_login.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_message_fail.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_message_normal.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_message_normal_1.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
       "path": "tmp/metrics_message_normal_10.json",
       "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
     },
@@ -625,27 +300,7 @@
     },
     {
       "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_message_normal_2.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
       "path": "tmp/metrics_message_normal_20.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_message_normal_3.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_message_normal_4.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_message_normal_5.json",
       "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
     },
     {
@@ -666,11 +321,6 @@
     {
       "code": "UTF8_BOM_FORBIDDEN",
       "path": "tmp/metrics_message_normal_9.json",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/metrics_session.json",
       "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
     },
     {
@@ -721,11 +371,6 @@
     {
       "code": "UTF8_BOM_FORBIDDEN",
       "path": "tmp/run_backend_check.ps1",
-      "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
-    },
-    {
-      "code": "UTF8_BOM_FORBIDDEN",
-      "path": "tmp/session_body.json",
       "details": "UTF-8 with BOM is forbidden; use UTF-8 without BOM"
     },
     {

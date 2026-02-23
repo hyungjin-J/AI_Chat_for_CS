@@ -57,6 +57,26 @@ jobs:
             --output-txt docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.txt `
             --output-json docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.json
 
+      - name: Spec sync report update gate
+        shell: pwsh
+        run: |
+          python scripts/assert_spec_sync_report_updated.py `
+            --base-ref "origin/$env:GITHUB_BASE_REF" `
+            --head-ref "HEAD" `
+            --require-metadata `
+            --output-txt docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.json
+
+      - name: ChatGPT handoff update gate
+        shell: pwsh
+        run: |
+          python scripts/assert_chatgpt_handoff_updated.py `
+            --base-ref "origin/$env:GITHUB_BASE_REF" `
+            --head-ref "HEAD" `
+            --mode "core-only" `
+            --output-txt docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.json
+
       - name: Workpack trigger consistency gate
         shell: pwsh
         run: |
@@ -143,7 +163,10 @@ jobs:
       - name: Spec consistency check
         shell: pwsh
         run: |
-          python scripts/spec_consistency_check.py
+          python scripts/spec_consistency_check.py `
+            --report-json docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.json `
+            --report-txt docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.txt `
+            --pass-artifact docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt
 
       - name: Fixed artifact contract check
         shell: pwsh
@@ -204,6 +227,11 @@ jobs:
             docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt
             docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.*
             docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.*
+            docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.*
+            docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.*
+            docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_remediation_summary.txt
+            docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.*
+            docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt
             docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip
             scripts/contracts/fixed_artifact_paths.json
 

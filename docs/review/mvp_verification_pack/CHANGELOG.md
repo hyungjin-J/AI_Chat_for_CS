@@ -1,4 +1,4 @@
-﻿# MVP Verification Pack 변경 이력
+# MVP Verification Pack 변경 이력
 
 - Last synced at: 2026-02-21 03:25 (KST)
 - Version(commit): `working-tree`

@@ -1,7 +1,7 @@
 package com.aichatbot.contexts.knowledge.rag.application;
 
 import com.aichatbot.platform.privacy.PiiMaskingService;
-import com.aichatbot.contexts.knowledge.rag.infrastructure.ChunkSearchRow;
+import com.aichatbot.contexts.knowledge.rag.domain.model.ChunkSearchRow;
 import com.aichatbot.contexts.knowledge.rag.infrastructure.KbSearchRepository;
 import java.time.Instant;
 import java.util.Comparator;
