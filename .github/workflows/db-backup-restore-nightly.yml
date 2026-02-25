@@ -1,0 +1,60 @@
+name: db-backup-restore-nightly
+
+on:
+  schedule:
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: db-backup-restore-nightly
+  cancel-in-progress: false
+
+jobs:
+  db-backup-restore:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    env:
+      COMPOSE_FILE: infra/docker-compose.yml
+      ARTIFACT_ROOT: docs/review/mvp_verification_pack/artifacts
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Ensure artifact directory
+        shell: pwsh
+        run: New-Item -ItemType Directory -Path "${env:ARTIFACT_ROOT}" -Force | Out-Null
+
+      - name: Run backup restore rehearsal
+        shell: pwsh
+        run: |
+          python scripts/db_backup_restore_rehearsal.py `
+            --ci `
+            --compose-file "${env:COMPOSE_FILE}" `
+            --artifact-dir "${env:ARTIFACT_ROOT}"
+
+      - name: Upload backup restore rehearsal artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: db-backup-restore-nightly-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            docs/review/mvp_verification_pack/artifacts/db_backup_restore_rehearsal_*.txt
+            docs/review/mvp_verification_pack/artifacts/db_backup_restore_rehearsal_*.json
+
+      - name: Compose down clean volume
+        if: always()
+        shell: pwsh
+        run: |
+          docker compose -f "${env:COMPOSE_FILE}" down -v
+          exit 0
+

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """UI-API latency budget calculator and markdown writer."""
 
 from __future__ import annotations

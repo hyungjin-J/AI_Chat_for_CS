@@ -1,0 +1,7 @@
+artifact_index_gate
+status=PASS
+check_mode=True
+indexed_file_count=367
+index_md_path=C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.md
+index_json_path=C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.json
+violation_count=0

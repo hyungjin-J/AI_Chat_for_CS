@@ -1,4 +1,4 @@
-﻿요구사항명,수용 기준/테스트 케이스,언어&툴,업무구분,요구사항 내용,요구사항ID,중요도&난이도&유형,필요 스킬
+요구사항명,수용 기준/테스트 케이스,언어&툴,업무구분,요구사항 내용,요구사항ID,중요도&난이도&유형,필요 스킬
 템플릿 placeholder 자동 채움,"- 치환 성공/미존재 변수 처리
 - PII는 마스킹된 형태로만 채움
 - 치환 결과가 너무 길면 요약/압축 규칙 적용(선택)","Spring AI(선택), Java",상담템플릿,"근거/질문/LLM 결과에서 변수(주문번호/정책조항 등)를 추출해 템플릿에 치환하고, 미존재 변수는 빈칸/가이드로 남긴다.",TMP-002,PHASE1 | Should | 난이도:상 | 유형:TMP,정보추출/치환로직/검증
@@ -64,7 +64,7 @@ Ollama + 외부 API Provider 이중 지원,"- 설정 변경으로 Provider 전�
 - 변경 이력/롤백 동작
 - 비밀키는 DB에 평문 저장 금지(참조키로 관리)","React Admin UI, Spring Boot","관리자, 운영관리",모델(Provider/모델명/엔드포인트/파라미터/키참조) 등록/수정/삭제 및 활성 전환/롤백을 제공한다.,ADM-001,PHASE1 | Must | 난이도:중 | 유형:ADM,CRUD/권한/비밀관리
 하이브리드 검색 + 필터링,"- 필터/정렬/TopK 동작
-- 성능(응답시간) 목표 충족","Elasticsearch/OpenSearch(선택), Vector DB",지식베이스,벡터 검색 + 키워드(BM25) 혼합 및 메타데이터(버전/시행일/부서) 필터를 지원한다.,AI-004,PHASE1 | Should | 난이도:중 | 유형:KB,검색/랭킹/성능튜닝
+- 성능(응답시간) 목표 충족","Elasticsearch/OpenSearch(선택), Vector DB",지식베이스,벡터 검색 + 키워드(BM25) 혼합 및 메타데이터(버전/시행일/부서) 필터를 지원한다.,AI-004,PHASE1 | Must | 난이도:상 | 유형:AI,검색/랭킹/성능튜닝
 "[Phase2] MCP transport policy (dev: STDIO, prod: SSE/HTTP)","- Not included in Phase 1 release
 - Apply after transport and audit standards are approved
 - Provide immediate block/bypass path on incident",SSE/HTTP / Observability,MCP,Out of MVP scope. Move to Phase 2~3 and apply after production transport standards (security/observability/recovery) are finalized.,MCP-002,PHASE1 | Should | 난이도:상 | 유형:MCP,Transport Operations / Recovery
@@ -144,7 +144,7 @@ KB/인덱싱 운영(ingest job/index version/vector index status),"- ingest job 
 RBAC Forbidden(403) 공통 응답 규약,"- 권한 불일치 요청은 403
 - trace_id/audit_id 포함
 - PII 비노출
-- Note: PHASE? (근거 부족, 결정 필요)","Spring Security, API Gateway",보안/공통규약,권한 없는 호출은 표준 403 에러 응답으로 차단하고 감사로그를 남긴다.,API-403,PHASE? | Must | 난이도:중 | 유형:API,RBAC/에러규약/감사로그
+- Note: PHASE? (근거 부족, 결정 필요)","Spring Security, API Gateway",보안/공통규약,권한 없는 호출은 표준 403 에러 응답으로 차단하고 감사로그를 남긴다.,API-403,PHASE1 | Must | 난이도:중 | 유형:API,RBAC/에러규약/감사로그
 KB ?? ?? ????/??/??/??,"- draft/approved/deprecated ?? ?? ??
 - ??? ??? ?? read-path ??
-- ??/?? ?? ? ??? ??","Workflow Engine, PostgreSQL, Audit Log",?????,KB ?? ?? ??(draft/approved/deprecated)? ??/??/?? ??? ???? ?? ?? ??? approved ??? ????.,KB-003,PHASE1 | Should | ???:? | ??:KB,?? ????/????/????
+- ??/?? ?? ? ??? ??","Workflow Engine, PostgreSQL, Audit Log",?????,KB ?? ?? ??(draft/approved/deprecated)? ??/??/?? ??? ???? ?? ?? ??? approved ??? ????.,KB-003,PHASE1 | Should | 난이도:중 | 유형:KB,?? ????/????/????

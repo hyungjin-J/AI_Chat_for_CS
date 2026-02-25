@@ -1,0 +1,11 @@
+db_smoke_test
+status=PASS
+method=docker-exec
+host=localhost
+port=5432
+database=aichatbot
+select_1=PASS
+vector_extension=PASS
+expected_tables=6/6
+temp_write_read=PASS
+violation_count=0

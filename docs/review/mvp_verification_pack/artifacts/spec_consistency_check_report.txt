@@ -2,4 +2,7 @@ PASS spec_consistency_check
 total_reqids_in_requirements=78
 total_reqid_tokens_found_in_each_spec={"api_note": 262, "db": 0, "development": 0, "requirements": 78, "summary": 52, "uiux": 409}
 invalid_tokens_count=0
+placeholder_hits=0
+placeholder_scan_targets=[{"columns": [{"column": "F", "header": "매핑대상 screen id"}, {"column": "G", "header": "매핑대상 시트명"}, {"column": "B", "header": "항목키"}], "header_row": 3, "sheet": "94_미매핑처분"}]
+uiux_error_contract={"assumptions": {"ASSUME-001": {"col_b": "Resolved (근거 확정)", "col_d": "SEC-003-409-PII를 PII 검출 차단(HTTP 409)으로 확정", "col_e": "Resolved (SEC-003 요구사항 + 화면 예외사항 + 운영 PII 대응 규약 반영)", "col_g": "후속 없음 (01_에러메시지코드 SEC-003-409-PII 확정)", "exists": true, "row": 14}, "ASSUME-002": {"col_b": "Resolved (근거 확정)", "col_d": "SYS-001-404를 활성 세션 미존재(HTTP 404)로 확정", "col_e": "Resolved (SYS-001 세션 생성/복원 요구사항 + 화면 session_id 예외 규칙 반영)", "col_g": "후속 없음 (01_에러메시지코드 SYS-001-404 확정)", "exists": true, "row": 15}}, "error_sheet": "01_에러메시지코드", "inconsistency_sheet": "90_불일치목록", "target_codes": {"SEC-003-409-PII": {"exists": true, "expected_http": "409", "http": "409", "message": "민감정보(PII)가 감지되어 요청이 차단되었습니다. 민감정보를 제거한 뒤 다시 시도해 주세요.", "row": 28}, "SYS-001-404": {"exists": true, "expected_http": "404", "http": "404", "message": "요청한 세션을 찾을 수 없습니다. 새 세션을 시작한 뒤 다시 시도해 주세요.", "row": 29}}}
 violation_count=0

@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import fnmatch
 import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
@@ -19,6 +20,15 @@ DEFAULT_CODE_FILTER = [
     "UTF32_BOM_FORBIDDEN",
 ]
 DEFAULT_FALLBACK_ENCODINGS = ["cp949", "euc-kr", "latin-1"]
+CANONICAL_SPEC_BASENAMES = {
+    "cs ai chatbot_requirements statement.csv",
+    "summary of key features.csv",
+    "development environment.csv",
+    "cs_ai_chatbot_db.xlsx",
+    "cs_rag_ui_ux_\uc124\uacc4\uc11c.xlsx",
+}
+CANONICAL_SPEC_BASENAME_GLOBS = ("google_ready_api_spec*.xlsx",)
+CANONICAL_SPEC_CONFIRMATION = "I understand Notion sync is required"
 
 
 @dataclass
@@ -68,6 +78,16 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--allow-fallback-encodings", nargs="*", default=DEFAULT_FALLBACK_ENCODINGS)
+    parser.add_argument(
+        "--allow-canonical-spec",
+        action="store_true",
+        help="Allow canonical spec files to be normalized (dangerous; requires confirmation phrase)",
+    )
+    parser.add_argument(
+        "--canonical-spec-confirm",
+        default="",
+        help="Typed confirmation phrase required with --allow-canonical-spec",
+    )
     parser.add_argument("--report-md")
     parser.add_argument("--report-json")
     return parser.parse_args()
@@ -269,6 +289,51 @@ def write_output(path: Path | None, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
+def is_canonical_spec_path(path_value: str) -> bool:
+    basename = Path(path_value).name.strip().casefold()
+    if basename in CANONICAL_SPEC_BASENAMES:
+        return True
+    return any(fnmatch.fnmatch(basename, pattern) for pattern in CANONICAL_SPEC_BASENAME_GLOBS)
+
+
+def validate_canonical_spec_guard(args: argparse.Namespace, input_paths: list[str]) -> tuple[bool, str]:
+    canonical_paths = sorted(path for path in input_paths if is_canonical_spec_path(path))
+    if not canonical_paths:
+        return True, ""
+
+    if not args.allow_canonical_spec:
+        message = "\n".join(
+            [
+                "normalize_utf8.py fail-fast: canonical spec files are blocked by default.",
+                "Use --allow-canonical-spec with explicit confirmation only when Notion/spec sync updates are planned.",
+                "blocked_paths:",
+                *[f"- {path}" for path in canonical_paths],
+            ]
+        )
+        return False, message
+
+    if args.canonical_spec_confirm.strip() != CANONICAL_SPEC_CONFIRMATION:
+        message = "\n".join(
+            [
+                "normalize_utf8.py fail-fast: --allow-canonical-spec requires exact confirmation phrase.",
+                f"required_confirmation: {CANONICAL_SPEC_CONFIRMATION}",
+                "blocked_paths:",
+                *[f"- {path}" for path in canonical_paths],
+            ]
+        )
+        return False, message
+
+    warning = "\n".join(
+        [
+            "WARNING: canonical spec normalization override is active.",
+            "You are responsible for Notion/spec_sync_report workflow compliance.",
+            "override_paths:",
+            *[f"- {path}" for path in canonical_paths],
+        ]
+    )
+    return True, warning
+
+
 def main() -> int:
     args = parse_args()
     root = Path(args.root).resolve()
@@ -291,6 +356,13 @@ def main() -> int:
     if max_files > 0:
         input_paths = input_paths[:max_files]
 
+    guard_ok, guard_message = validate_canonical_spec_guard(args, input_paths)
+    if not guard_ok:
+        sys.stderr.write(guard_message + "\n")
+        return 2
+    if guard_message:
+        sys.stderr.write(guard_message + "\n")
+
     results: list[ConversionResult] = []
     for rel in input_paths:
         absolute = root / rel
@@ -300,10 +372,13 @@ def main() -> int:
                     path=rel,
                     old_encoding="missing",
                     new_encoding="utf-8",
+                    action="MISSING_FILE",
                     old_bytes_sha256="",
                     new_bytes_sha256="",
                     old_decoded_sha256="",
                     new_decoded_sha256="",
+                    old_line_endings="UNKNOWN",
+                    new_line_endings="UNKNOWN",
                     changed=False,
                     status="SKIPPED",
                     message="file not found",

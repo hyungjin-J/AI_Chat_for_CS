@@ -1,4 +1,4 @@
-﻿windows_npm_lock_diag_bundle
+windows_npm_lock_diag_bundle
 diag_smoke_mode=True
 bundle_path=docs\review\mvp_verification_pack\artifacts\windows_npm_lock_diag_bundle.zip
 windows_npm_lock_diag_bundle_validate

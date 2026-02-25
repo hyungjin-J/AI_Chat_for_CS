@@ -1,0 +1,40 @@
+{
+  "status": "FAIL",
+  "artifact_date": "20260225",
+  "started_at_utc": "2026-02-25T15:22:51.419810Z",
+  "finished_at_utc": "2026-02-25T15:22:52.056292Z",
+  "duration_ms": 640,
+  "compose_file": "infra/docker-compose.yml",
+  "database": "aichatbot",
+  "postgres_service": "postgres",
+  "redis_service": "redis",
+  "dump_path": "tmp/db_backup_restore/db_backup_restore_20260225.dump",
+  "dump_sha256": "",
+  "checks": {
+    "compose_down_source": {
+      "status": "FAIL",
+      "details": "command=docker compose -f infra/docker-compose.yml down -v\nerror during connect: Get \"http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.51/containers/json?all=1&filters=%7B%22label%22%3A%7B%22com.docker.compose.config-hash%22%3Atrue%2C%22com.docker.compose.oneoff%3DFalse%22%3Atrue%2C%22com.docker.compose.project%3Dinfra%22%3Atrue%7D%7D\": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+    },
+    "compose_down_final": {
+      "status": "FAIL",
+      "details": "command=docker compose -f infra/docker-compose.yml down -v\nerror during connect: Get \"http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.51/containers/json?all=1&filters=%7B%22label%22%3A%7B%22com.docker.compose.config-hash%22%3Atrue%2C%22com.docker.compose.oneoff%3DFalse%22%3Atrue%2C%22com.docker.compose.project%3Dinfra%22%3Atrue%7D%7D\": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+    },
+    "dump_retention": {
+      "status": "REMOVED",
+      "details": "already absent"
+    }
+  },
+  "violation_count": 2,
+  "violations": [
+    {
+      "code": "COMPOSE_DOWN_SOURCE_FAILED",
+      "message": "failed to reset source volume before rehearsal",
+      "details": "command=docker compose -f infra/docker-compose.yml down -v\nerror during connect: Get \"http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.51/containers/json?all=1&filters=%7B%22label%22%3A%7B%22com.docker.compose.config-hash%22%3Atrue%2C%22com.docker.compose.oneoff%3DFalse%22%3Atrue%2C%22com.docker.compose.project%3Dinfra%22%3Atrue%7D%7D\": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+    },
+    {
+      "code": "COMPOSE_DOWN_FINAL_FAILED",
+      "message": "final compose down -v failed",
+      "details": "command=docker compose -f infra/docker-compose.yml down -v\nerror during connect: Get \"http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.51/containers/json?all=1&filters=%7B%22label%22%3A%7B%22com.docker.compose.config-hash%22%3Atrue%2C%22com.docker.compose.oneoff%3DFalse%22%3Atrue%2C%22com.docker.compose.project%3Dinfra%22%3Atrue%7D%7D\": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+    }
+  ]
+}

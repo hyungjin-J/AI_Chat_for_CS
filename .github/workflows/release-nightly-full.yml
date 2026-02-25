@@ -63,6 +63,7 @@ jobs:
             --base-ref "origin/main" `
             --head-ref "HEAD" `
             --require-metadata `
+            --require-notion-evidence-format `
             --output-txt docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt `
             --output-json docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.json
 
@@ -140,6 +141,17 @@ jobs:
             --output-txt docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.txt `
             --output-json docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.json
 
+      - name: Artifact index freshness gate
+        shell: pwsh
+        run: |
+          python scripts/build_artifact_index.py `
+            --check `
+            --artifact-root docs/review/mvp_verification_pack/artifacts `
+            --index-md docs/review/mvp_verification_pack/artifacts/_INDEX.md `
+            --index-json docs/review/mvp_verification_pack/artifacts/_INDEX.json `
+            --gate-output-txt docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt `
+            --gate-output-json docs/review/mvp_verification_pack/artifacts/artifact_index_gate.json
+
       - name: Scaffold contract smoke gate
         shell: pwsh
         run: |
@@ -201,6 +213,8 @@ jobs:
             docs/review/mvp_verification_pack/artifacts/frontend_import_boundary_gate.*
             docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.*
             docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.*
+            docs/review/mvp_verification_pack/artifacts/artifact_index_gate.*
+            docs/review/mvp_verification_pack/artifacts/_INDEX.*
             docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.*
             docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt
             docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.*

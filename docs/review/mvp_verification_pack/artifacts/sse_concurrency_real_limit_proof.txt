@@ -1,4 +1,4 @@
-﻿mode=real_limit
+mode=real_limit
 sse_concurrency_limit=2
 sse_hold_ms=3000
 third_status=429

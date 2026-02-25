@@ -1,4 +1,4 @@
-﻿http_post_message_trace_id=15b2f7b4-7706-429d-bcd7-589fe5fce6d0
+http_post_message_trace_id=15b2f7b4-7706-429d-bcd7-589fe5fce6d0
 message_response_trace_id=15b2f7b4-7706-429d-bcd7-589fe5fce6d0
 db_message_trace_id=15b2f7b4-7706-429d-bcd7-589fe5fce6d0
 message_id=39c9430e-46a0-474c-85b0-ceaa557f7572

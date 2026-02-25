@@ -1,4 +1,4 @@
-﻿# Phase2.1 PR2 Notion Manual Sync Patch
+# Phase2.1 PR2 Notion Manual Sync Patch
 
 - generated_at_kst: 2026-02-21 22:58:08 +09:00
 - source_commit: 79383ab (working tree)

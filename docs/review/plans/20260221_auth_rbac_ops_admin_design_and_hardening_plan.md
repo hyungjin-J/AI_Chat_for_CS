@@ -1,4 +1,4 @@
-﻿# 20260221 Auth RBAC Ops-Admin Design and Hardening Plan
+# 20260221 Auth RBAC Ops-Admin Design and Hardening Plan
 
 - generated_at: 2026-02-21
 - scope: Auth + RBAC + Ops/Admin Console + Audit Hardening

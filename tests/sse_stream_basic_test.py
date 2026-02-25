@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Basic SSE contract tests for UI-level behavior assumptions."""
 
 from __future__ import annotations

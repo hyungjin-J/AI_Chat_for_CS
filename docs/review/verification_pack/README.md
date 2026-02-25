@@ -1,4 +1,4 @@
-﻿# Verification Pack (Project Completion)
+# Verification Pack (Project Completion)
 
 ## 1. 목적
 - 본 문서는 프로젝트 완성 검증을 재현하기 위한 실행 가이드다.

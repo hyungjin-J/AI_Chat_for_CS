@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "method": "docker-exec",
+  "host": "localhost",
+  "port": 5432,
+  "database": "aichatbot",
+  "expected_tables": [
+    "flyway_schema_history",
+    "tb_conversation",
+    "tb_kb_chunk_embedding",
+    "tb_message",
+    "tb_tenant",
+    "tb_user"
+  ],
+  "checks": {
+    "select_1": "PASS",
+    "vector_extension": "PASS",
+    "expected_tables": "6/6",
+    "temp_write_read": "PASS"
+  },
+  "violation_count": 0,
+  "violations": []
+}

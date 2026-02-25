@@ -1,4 +1,4 @@
-﻿input_sample=refund policy. contact [EMAIL] or [PHONE] order [ORDER_ID]
+input_sample=refund policy. contact [EMAIL] or [PHONE] order [ORDER_ID]
 masked_in_rag_search_log=[mode=keyword_fallback] refund policy. contact ***@*** or ***-**** order ORDER-***
 citation_excerpt_masked=Refund policy: approved refunds are returned to original payment method within 3-5 business days. 문의 이메일 ***@***
 contains_raw_email_pattern=False

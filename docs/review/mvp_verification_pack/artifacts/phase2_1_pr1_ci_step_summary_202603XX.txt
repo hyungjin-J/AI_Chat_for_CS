@@ -1,4 +1,4 @@
-﻿PR1 Notion CI token ops summary
+PR1 Notion CI token ops summary
 - Workflow updated: .github/workflows/notion-zero-touch-sync.yml
   - setup-node now uses node-version-file: .nvmrc
   - preflight step added: scripts/notion_ci_auth_preflight.py

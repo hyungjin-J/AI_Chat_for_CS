@@ -1,4 +1,4 @@
-﻿command: python scripts/spec_consistency_check.py
+command: python scripts/spec_consistency_check.py
 executed_at: 2026-02-21
 result: FAIL (PASS=7 FAIL=1)
 

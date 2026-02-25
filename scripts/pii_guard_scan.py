@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Scan docs/code/log samples for potential PII or secret leakage."""
 
 from __future__ import annotations

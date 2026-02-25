@@ -21,7 +21,38 @@ python scripts/check_workspace_path_ascii.py --path .
 - `status=PASS`: current path is ASCII-only.
 - `status=WARNING`: move to ASCII-only temp path for frontend runs.
 
-## Recommended local workaround (Windows)
+## One-command helper (Windows, recommended)
+
+Use this helper first. It keeps CI behavior unchanged (warning-only path check), but
+automates local mirror-and-run when needed.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/mirror_and_run_frontend.ps1
+```
+
+Behavior:
+- Detects non-ASCII workspace path via `scripts/check_workspace_path_ascii.py` (warning-only).
+- Mirrors repo to ASCII temp path when needed.
+- Runs `scripts/bootstrap_node_from_nvmrc.ps1`.
+- Runs frontend commands in order: `npm ci`, `npm run test:run`, `npm run build`.
+
+Useful options:
+
+```powershell
+# Always mirror (even when source path is ASCII)
+powershell -ExecutionPolicy Bypass -File scripts/mirror_and_run_frontend.ps1 -ForceMirror
+
+# Custom mirror root (must be ASCII-only path)
+powershell -ExecutionPolicy Bypass -File scripts/mirror_and_run_frontend.ps1 -MirrorRoot C:\Temp\AI_Chatbot_ascii_workspace
+
+# Smoke mode: verify mirror path handling only, skip node/npm steps
+powershell -ExecutionPolicy Bypass -File scripts/mirror_and_run_frontend.ps1 `
+  -ForceMirror `
+  -SkipNodeBootstrap -SkipInstall -SkipTests -SkipBuild `
+  -SmokeArtifactPath docs/review/mvp_verification_pack/artifacts/node22_unicode_mirror_helper_smoke.txt
+```
+
+## Manual workaround (Windows fallback)
 
 ```powershell
 $src = (Resolve-Path .).Path

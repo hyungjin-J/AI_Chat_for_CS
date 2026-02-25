@@ -1,4 +1,4 @@
-﻿# 202603XX Production Readiness Phase2 Plan
+# 202603XX Production Readiness Phase2 Plan
 
 - status: `PLAN_LOCK_DRAFT`
 - generated_at: `2026-02-21`

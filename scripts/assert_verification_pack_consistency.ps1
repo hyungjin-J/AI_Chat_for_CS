@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 
 $packDir = "docs/review/mvp_verification_pack"
 $artifactDir = Join-Path $packDir "artifacts"

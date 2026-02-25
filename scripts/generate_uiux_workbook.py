@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Generate CS_RAG_UI_UX_?ㅺ퀎??xlsx from template workbook."""
 
 from __future__ import annotations

@@ -1,4 +1,4 @@
-﻿# 2026-02-20 Gap Closure Design and Hardening Plan
+# 2026-02-20 Gap Closure Design and Hardening Plan
 
 - generated_at: 2026-02-20
 - scope: Completion 증빙 강화 + 회귀 방지 게이트 보강

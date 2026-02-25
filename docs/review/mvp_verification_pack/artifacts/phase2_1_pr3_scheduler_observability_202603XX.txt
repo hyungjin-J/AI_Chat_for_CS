@@ -1,4 +1,4 @@
-﻿Scheduler self-healing observability checkpoints
+Scheduler self-healing observability checkpoints
 - Source code: backend/src/main/java/com/aichatbot/global/scheduler/SchedulerLockService.java
   - emits meter: scheduler_lock_events_total{lock_key,outcome}
 - Source code: backend/src/main/java/com/aichatbot/global/scheduler/SchedulerLockJanitorJob.java

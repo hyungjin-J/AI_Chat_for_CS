@@ -4,7 +4,7 @@
   "baseline_violation_count": 0,
   "new_violation_count": 0,
   "resolved_baseline_count": 0,
-  "baseline_growth_base_source": "head",
+  "baseline_growth_base_source": "git:origin/main",
   "baseline_growth_base_count": 0,
   "baseline_growth_head_count": 0,
   "baseline_growth_count": 0,

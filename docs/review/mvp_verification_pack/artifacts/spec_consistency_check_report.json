@@ -1,7 +1,7 @@
 {
   "status": "PASS",
-  "generated_at_utc": "2026-02-23T15:56:42.796757+00:00",
-  "commit": "0115add",
+  "generated_at_utc": "2026-02-25T16:03:12.285802+00:00",
+  "commit": "a83c840",
   "summary": {
     "total_reqids_in_requirements": 78,
     "total_reqid_tokens_found_in_each_spec": {
@@ -23,8 +23,8 @@
     "invalid_tokens_count": 0
   },
   "terminology": {
-    "secret_ref_hits": 71,
-    "secret_alias_hits": 1,
+    "secret_ref_hits": 81,
+    "secret_alias_hits": 65,
     "role_tokens_found": [
       "ADMIN",
       "AGENT",
@@ -40,7 +40,97 @@
       "safe_response",
       "token",
       "tool"
-    ]
+    ],
+    "required_token_hits": {
+      "X-Tenant-Key": 101,
+      "X-Trace-Id": 100,
+      "citation": 22,
+      "details": 69,
+      "done": 13,
+      "error": 24,
+      "error_code": 160,
+      "heartbeat": 7,
+      "message": 96,
+      "safe_response": 19,
+      "secret_ref": 81,
+      "tenant_key": 72,
+      "token": 35,
+      "tool": 59,
+      "trace_id": 304
+    },
+    "optional_token_hits": {
+      "Idempotency-Key": 122,
+      "Last-Event-ID": 4
+    },
+    "forbidden_variant_hits": {
+      "errorCode": 0,
+      "safe-response": 0,
+      "safeResponse": 0,
+      "tenantKey": 0,
+      "traceID": 0,
+      "traceId": 0
+    }
+  },
+  "placeholder_scan": {
+    "scanned_targets": [
+      {
+        "sheet": "94_미매핑처분",
+        "header_row": 3,
+        "columns": [
+          {
+            "header": "매핑대상 screen id",
+            "column": "F"
+          },
+          {
+            "header": "매핑대상 시트명",
+            "column": "G"
+          },
+          {
+            "header": "항목키",
+            "column": "B"
+          }
+        ]
+      }
+    ],
+    "placeholder_hits": 0
+  },
+  "uiux_error_contract": {
+    "error_sheet": "01_에러메시지코드",
+    "inconsistency_sheet": "90_불일치목록",
+    "target_codes": {
+      "SEC-003-409-PII": {
+        "exists": true,
+        "row": 28,
+        "message": "민감정보(PII)가 감지되어 요청이 차단되었습니다. 민감정보를 제거한 뒤 다시 시도해 주세요.",
+        "http": "409",
+        "expected_http": "409"
+      },
+      "SYS-001-404": {
+        "exists": true,
+        "row": 29,
+        "message": "요청한 세션을 찾을 수 없습니다. 새 세션을 시작한 뒤 다시 시도해 주세요.",
+        "http": "404",
+        "expected_http": "404"
+      }
+    },
+    "assumptions": {
+      "ASSUME-001": {
+        "exists": true,
+        "row": 14,
+        "col_b": "Resolved (근거 확정)",
+        "col_d": "SEC-003-409-PII를 PII 검출 차단(HTTP 409)으로 확정",
+        "col_e": "Resolved (SEC-003 요구사항 + 화면 예외사항 + 운영 PII 대응 규약 반영)",
+        "col_g": "후속 없음 (01_에러메시지코드 SEC-003-409-PII 확정)"
+      },
+      "ASSUME-002": {
+        "exists": true,
+        "row": 15,
+        "col_b": "Resolved (근거 확정)",
+        "col_d": "SYS-001-404를 활성 세션 미존재(HTTP 404)로 확정",
+        "col_e": "Resolved (SYS-001 세션 생성/복원 요구사항 + 화면 session_id 예외 규칙 반영)",
+        "col_g": "후속 없음 (01_에러메시지코드 SYS-001-404 확정)"
+      }
+    }
   },
   "violation_count": 0,
   "violations": []

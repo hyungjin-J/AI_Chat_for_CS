@@ -1,4 +1,4 @@
-﻿HTTP/1.1 403 
+HTTP/1.1 403 
 X-Trace-Id: d6208550-105b-4cc3-bb91-81cbce2dc705
 Content-Type: application/json;charset=UTF-8
 Content-Length: 177

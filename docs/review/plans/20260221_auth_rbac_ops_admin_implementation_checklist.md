@@ -1,4 +1,4 @@
-﻿# 20260221 Auth/RBAC/Ops-Admin Implementation Checklist
+# 20260221 Auth/RBAC/Ops-Admin Implementation Checklist
 
 - baseline_patch: `dirty_baseline.patch`
 - policy_source: `docs/review/plans/20260221_auth_rbac_ops_admin_design_and_hardening_plan.md`

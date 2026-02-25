@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Release gate checks for AI_Chatbot.
 
 Checks:

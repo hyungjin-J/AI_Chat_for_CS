@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-02-25T16:04:02.697821+00:00",
+  "base_ref": "origin/main",
+  "head_ref": "HEAD",
+  "changed_files_count": 0,
+  "spec_changed_count": 0,
+  "spec_changed": [],
+  "pass_count": 7,
+  "fail_count": 0,
+  "checks": [
+    {
+      "name": "requirements_master_valid",
+      "passed": true,
+      "detail": "req_ids=78 malformed=0 duplicates=0",
+      "samples": []
+    },
+    {
+      "name": "summary_reqid_subset",
+      "passed": true,
+      "detail": "summary_refs=52 missing=0",
+      "samples": []
+    },
+    {
+      "name": "devenv_reqid_subset",
+      "passed": true,
+      "detail": "devenv_refs=41 missing=0",
+      "samples": []
+    },
+    {
+      "name": "api_reqid_subset",
+      "passed": true,
+      "detail": "api_refs=69 missing=0",
+      "samples": []
+    },
+    {
+      "name": "uiux_reqid_subset",
+      "passed": true,
+      "detail": "uiux_refs=77 missing=0 source=UIUX_Spec.md",
+      "samples": []
+    },
+    {
+      "name": "spec_sync_report_required",
+      "passed": true,
+      "detail": "no spec file changes",
+      "samples": []
+    },
+    {
+      "name": "placeholder_tbd_critical_fields",
+      "passed": true,
+      "detail": "placeholder_hits=0",
+      "samples": []
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿# Figma to React Checklist
+# Figma to React Checklist
 
 ## 목적
 Figma 노드 `10301:23060` 기반 설계를 React 구현으로 옮길 때, 시각/행동/정책 정합성을 릴리즈 전에 검증한다.

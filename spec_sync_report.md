@@ -454,3 +454,71 @@
 ### 17.3 GitHub 기록 대상
 - 본 세션 기준 워크트리 전체 변경을 커밋 대상으로 확정
 - 원격: origin (main 브랜치)
+
+## 18) Session (2026-02-25 Canonical UTF-8 Wave10)
+- Last synced at: 2026-02-25 23:39:05 +09:00
+- Source file:
+  - docs/references/CS AI Chatbot_Requirements Statement.csv
+  - docs/references/Development environment.csv
+  - docs/references/Summary of key features.csv
+- Version(or commit): git commit `a83c840` (working tree)
+- Change summary:
+  1. Removed UTF-8 BOM from the 3 canonical spec CSV files under explicit canonical override flow.
+  2. Preserved CSV structure/header/column semantics (encoding-only normalization).
+  3. Regenerated UTF-8 evidence and reached full-scan residual baseline 0.
+  4. Completed same-session Notion sync for Summary/Requirements/Development pages.
+  5. Updated handoff/workpack/agent-report artifacts for merge-block closure.
+
+### 18.1 Notion Sync Results
+- Summary page: https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149
+  - Status: DONE
+  - Session block: `Session Update (2026-02-25 Canonical UTF-8 Wave10)`
+- Requirements page: https://www.notion.so/2ed405a3a720816594e4dc34972174ec
+  - Status: DONE
+  - Session block: `Session Update (2026-02-25 Canonical UTF-8 Wave10)`
+- Development page: https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7
+  - Status: DONE
+  - Session block: `Session Update (2026-02-25 Canonical UTF-8 Wave10)`
+
+### 18.2 Evidence Artifacts
+- UTF-8 normalization evidence:
+  - docs/review/mvp_verification_pack/artifacts/utf8_normalization_wave10_report.md
+  - docs/review/mvp_verification_pack/artifacts/utf8_normalization_wave10_report.json
+- UTF-8 gate evidence:
+  - docs/review/mvp_verification_pack/artifacts/utf8_full_scan_current.txt
+  - docs/review/mvp_verification_pack/artifacts/utf8_full_scan_current.json
+  - docs/review/mvp_verification_pack/artifacts/utf8_full_scan_baseline_violations.json
+  - docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.txt
+  - docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.json
+  - docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.txt
+  - docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.json
+- Freshness and contract gates:
+  - docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt
+  - docs/review/mvp_verification_pack/artifacts/artifact_index_gate.json
+  - docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt
+  - docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.json
+  - docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.txt
+  - docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.json
+  - docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.txt
+  - docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.json
+
+### 18.3 Notion Fallback Path
+- Fallback required: NO
+- Result: MCP sync succeeded for all required pages; manual exception gate path was not invoked.
+
+## 12) 2026-02-25 UIUX Error Code TBD Resolution
+- Last synced at: `2026-02-26 00:51:01 +09:00`
+- Source file: `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+- Version(or commit): `a83c840` (working tree)
+- Change summary:
+  1. Finalized `SEC-003-409-PII` in the UIUX error catalog (`01_` sheet) and normalized HTTP to `409`.
+  2. Finalized `SYS-001-404` in the UIUX error catalog (`01_` sheet) and normalized HTTP to `404`.
+  3. Updated `ASSUME-001` and `ASSUME-002` to `Resolved` in the inconsistency sheet (`90_`).
+  4. Updated values only; workbook structure/header/formula/style remained unchanged.
+- Notion sync target: `https://www.notion.so/UI-UX-2ee405a3a72080a58c93d967ef0f2444`
+- Notion sync result: `DONE` (metadata block updated in same session)
+- Validation evidence:
+  - `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.json`
+  - `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.txt`
+  - `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt`
+  - `docs/review/mvp_verification_pack/artifacts/release_check_report.json`

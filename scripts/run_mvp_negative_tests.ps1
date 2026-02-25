@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 
 $artifactDir = "docs/review/mvp_verification_pack/artifacts"
 New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null

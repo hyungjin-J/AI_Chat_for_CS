@@ -1,4 +1,4 @@
-﻿provider_regression_evidence=PASS
+provider_regression_evidence=PASS
 latest_result_status=SKIPPED
 latest_pass_utc=2026-02-18T15:36:00Z
 latest_pass_commit=3e057a3

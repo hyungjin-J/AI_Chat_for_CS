@@ -1,0 +1,12 @@
+mirror_and_run_frontend
+status=PASS
+source_root=C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot
+run_root=C:\Users\hjjmj\AppData\Local\Temp\AI_Chatbot_ascii_workspace
+path_mode=mirrored
+mirror_requested=True
+mirror_performed=True
+dry_run=False
+node_bootstrap_ran=False
+npm_ci_ran=False
+npm_test_ran=False
+npm_build_ran=False

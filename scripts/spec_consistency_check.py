@@ -25,12 +25,65 @@ SSE_EVENT_RE = re.compile(r"\b(token|tool|citation|done|error|heartbeat|safe_res
 ROLE_TAXONOMY = {"AGENT", "CUSTOMER", "ADMIN", "OPS", "SYSTEM"}
 SSE_EVENT_SET = {"token", "tool", "citation", "done", "error", "heartbeat", "safe_response"}
 PLACEHOLDER_VALUES = {"", "-", "N/A", "NA", "NONE", "NULL"}
+UIUX_PLACEHOLDER_VALUES = {"", "-", "—", "TBD", "TODO", "TEMP", "PLACEHOLDER", "N/A", "NA"}
+
+ERROR_PAYLOAD_FIELDS = ("error_code", "message", "trace_id", "details")
+TRACE_TENANT_HEADERS = ("X-Trace-Id", "X-Tenant-Key")
+OPTIONAL_HEADERS = ("Idempotency-Key", "Last-Event-ID")
+SNAKE_CASE_CONTRACT_FIELDS = ("trace_id", "tenant_key")
 
 # Keep Korean labels as escapes to avoid shell/codepage drift on Windows.
 KOR_REQ_ID = "\uc694\uad6c\uc0ac\ud56dID"      # 요구사항ID
 KOR_API_LIST = "\uc804\uccb4API\ubaa9\ub85d"   # 전체API목록
 KOR_NOTE = "\ube44\uace0"                      # 비고
 KOR_ROLE = "\uad8c\ud55c"                      # 권한
+KOR_UIUX_UNMAPPED_PREFIX = "94_"
+KOR_UIUX_MAPPING_KEY = "\ud56d\ubaa9\ud0a4"  # 항목키
+KOR_UIUX_MAPPING_SCREEN = "\ub9e4\ud551\ub300\uc0c1 screen id"  # 매핑대상 screen id
+KOR_UIUX_MAPPING_SHEET = "\ub9e4\ud551\ub300\uc0c1 \uc2dc\ud2b8\uba85"  # 매핑대상 시트명
+KOR_UIUX_ERROR_PREFIX = "01_"
+KOR_UIUX_INCONSISTENCY_PREFIX = "90_"
+
+UIUX_TARGET_ERROR_CONTRACT = {
+    "SEC-003-409-PII": {"http_status": "409", "assume_id": "ASSUME-001"},
+    "SYS-001-404": {"http_status": "404", "assume_id": "ASSUME-002"},
+}
+
+
+@dataclass(frozen=True)
+class TerminologyCheckSpec:
+    code_suffix: str
+    required_tokens: tuple[str, ...]
+    optional_tokens: tuple[str, ...] = ()
+    forbidden_variants: tuple[tuple[str, str], ...] = ()
+
+
+TERMINOLOGY_CHECK_SPECS: tuple[TerminologyCheckSpec, ...] = (
+    TerminologyCheckSpec(
+        code_suffix="SECRET_REF",
+        required_tokens=("secret_ref",),
+    ),
+    TerminologyCheckSpec(
+        code_suffix="ERROR_PAYLOAD",
+        required_tokens=ERROR_PAYLOAD_FIELDS,
+        forbidden_variants=(("errorCode", "error_code"),),
+    ),
+    TerminologyCheckSpec(
+        code_suffix="SSE_EVENT",
+        required_tokens=tuple(sorted(SSE_EVENT_SET)),
+        forbidden_variants=(("safeResponse", "safe_response"), ("safe-response", "safe_response")),
+    ),
+    TerminologyCheckSpec(
+        code_suffix="TRACE_TENANT_HEADER",
+        required_tokens=TRACE_TENANT_HEADERS,
+        optional_tokens=OPTIONAL_HEADERS,
+    ),
+    TerminologyCheckSpec(
+        code_suffix="SNAKE_CASE",
+        required_tokens=SNAKE_CASE_CONTRACT_FIELDS,
+        forbidden_variants=(("traceId", "trace_id"), ("traceID", "trace_id"), ("tenantKey", "tenant_key")),
+    ),
+)
 
 
 @dataclass
@@ -327,6 +380,11 @@ def validate_api_notes_and_roles(
         ),
         start=2,
     ):
+        for col_index, cell_value in enumerate(row_values, start=1):
+            if isinstance(cell_value, str) and cell_value.strip():
+                cell_ref = f"{get_column_letter(col_index)}{row_number}"
+                corpus.append((to_rel(api_workbook, root), f"{worksheet.title}!{cell_ref}", cell_value))
+
         if role_col is not None and role_col < len(row_values):
             raw_role = row_values[role_col]
             if isinstance(raw_role, str) and raw_role.strip():
@@ -336,9 +394,6 @@ def validate_api_notes_and_roles(
                         role_tokens.add(token)
 
         note_cell = row_values[note_col] if note_col < len(row_values) else None
-        if isinstance(note_cell, str) and note_cell.strip():
-            cell_ref = f"{get_column_letter(note_col + 1)}{row_number}"
-            corpus.append((to_rel(api_workbook, root), f"{worksheet.title}!{cell_ref}", note_cell))
         if not isinstance(note_cell, str):
             continue
 
@@ -571,36 +626,372 @@ def collect_csv_corpus(root: Path, csv_path: Path) -> list[tuple[str, str, str]]
     return corpus
 
 
+def normalize_cell_text(value: object) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    return str(value).strip()
+
+
+def compile_token_pattern(token: str) -> re.Pattern[str]:
+    return re.compile(rf"(?<![A-Za-z0-9_]){re.escape(token)}(?![A-Za-z0-9_])", re.IGNORECASE)
+
+
+def find_token_occurrences(corpus: list[tuple[str, str, str]], token: str) -> list[tuple[str, str]]:
+    pattern = compile_token_pattern(token)
+    occurrences: list[tuple[str, str]] = []
+    for file_path, location, text in corpus:
+        if pattern.search(text):
+            occurrences.append((file_path, location))
+    return occurrences
+
+
+def detect_uiux_placeholder_rows(
+    worksheet,
+    header_row: int,
+    target_columns: dict[str, int],
+    max_col: int,
+) -> list[tuple[int, int, str, str]]:
+    hits: list[tuple[int, int, str, str]] = []
+    for row_number in range(header_row + 1, worksheet.max_row + 1):
+        row_values = [
+            normalize_cell_text(worksheet.cell(row=row_number, column=col_index).value)
+            for col_index in range(1, max_col + 1)
+        ]
+        if not any(row_values):
+            continue
+
+        for header_name, col_index in target_columns.items():
+            value = normalize_cell_text(worksheet.cell(row=row_number, column=col_index).value)
+            if value.upper() in UIUX_PLACEHOLDER_VALUES:
+                token = value if value else "<blank>"
+                hits.append((row_number, col_index, header_name, token))
+    return hits
+
+
+def detect_uiux_mapping_placeholders(
+    root: Path,
+    uiux_workbook: Path,
+    violations: list[Violation],
+) -> dict[str, object]:
+    workbook = load_workbook(uiux_workbook, data_only=False, read_only=True)
+    scanned_targets: list[dict[str, object]] = []
+    placeholder_hits = 0
+
+    target_sheets = [worksheet for worksheet in workbook.worksheets if worksheet.title.startswith(KOR_UIUX_UNMAPPED_PREFIX)]
+    if not target_sheets:
+        add_violation(
+            violations,
+            "PLACEHOLDER_UIUX_TARGET_SHEET_MISSING",
+            uiux_workbook,
+            root,
+            "workbook",
+            KOR_UIUX_UNMAPPED_PREFIX,
+            "UIUX workbook missing expected 94_* unmapped disposition sheet",
+        )
+        workbook.close()
+        return {"scanned_targets": [], "placeholder_hits": 0}
+
+    target_header_markers = {
+        KOR_UIUX_MAPPING_KEY: [KOR_UIUX_MAPPING_KEY],
+        KOR_UIUX_MAPPING_SCREEN: [KOR_UIUX_MAPPING_SCREEN],
+        KOR_UIUX_MAPPING_SHEET: [KOR_UIUX_MAPPING_SHEET],
+    }
+
+    for worksheet in target_sheets:
+        max_col = min(worksheet.max_column, 24)
+        header_row: int | None = None
+        target_columns: dict[str, int] = {}
+
+        for row_number in range(1, min(30, worksheet.max_row) + 1):
+            row_column_matches: dict[str, int] = {}
+            for col_index in range(1, max_col + 1):
+                header_text = normalize_cell_text(worksheet.cell(row=row_number, column=col_index).value).lower()
+                if not header_text:
+                    continue
+                for canonical_header, aliases in target_header_markers.items():
+                    if canonical_header in row_column_matches:
+                        continue
+                    if any(alias in header_text for alias in aliases):
+                        row_column_matches[canonical_header] = col_index
+
+            if len(row_column_matches) == len(target_header_markers):
+                header_row = row_number
+                target_columns = row_column_matches
+                break
+
+        if header_row is None:
+            add_violation(
+                violations,
+                "PLACEHOLDER_UIUX_HEADER_NOT_FOUND",
+                uiux_workbook,
+                root,
+                f"sheet={worksheet.title}",
+                "",
+                "unable to locate UIUX unmapped mapping headers for placeholder scan",
+            )
+            continue
+
+        scanned_target = {
+            "sheet": worksheet.title,
+            "header_row": header_row,
+            "columns": [
+                {"header": header_name, "column": get_column_letter(target_columns[header_name])}
+                for header_name in sorted(target_columns)
+            ],
+        }
+        scanned_targets.append(scanned_target)
+
+        hits = detect_uiux_placeholder_rows(
+            worksheet=worksheet,
+            header_row=header_row,
+            target_columns=target_columns,
+            max_col=max(max_col, max(target_columns.values())),
+        )
+        placeholder_hits += len(hits)
+        for row_number, col_index, header_name, token in hits:
+            cell_ref = f"{get_column_letter(col_index)}{row_number}"
+            add_violation(
+                violations,
+                "PLACEHOLDER_UIUX_MAPPING_VALUE",
+                uiux_workbook,
+                root,
+                f"sheet={worksheet.title} cell={cell_ref} header={header_name}",
+                token,
+                "placeholder value detected in UIUX mapping column",
+            )
+
+    workbook.close()
+    scanned_targets_sorted = sorted(
+        scanned_targets,
+        key=lambda item: (str(item["sheet"]), int(item["header_row"])),
+    )
+    return {
+        "scanned_targets": scanned_targets_sorted,
+        "placeholder_hits": placeholder_hits,
+    }
+
+
+def _sheet_by_prefix(workbook, prefix: str):
+    for worksheet in workbook.worksheets:
+        if worksheet.title.startswith(prefix):
+            return worksheet
+    return None
+
+
+def _is_uiux_placeholder(value: str) -> bool:
+    normalized = value.strip()
+    if not normalized:
+        return True
+    upper = normalized.upper()
+    if upper in UIUX_PLACEHOLDER_VALUES:
+        return True
+    return "TBD" in upper
+
+
+def detect_uiux_error_contract(
+    root: Path,
+    uiux_workbook: Path,
+    violations: list[Violation],
+) -> dict[str, object]:
+    workbook = load_workbook(uiux_workbook, data_only=False, read_only=True)
+    error_sheet = _sheet_by_prefix(workbook, KOR_UIUX_ERROR_PREFIX)
+    inconsistency_sheet = _sheet_by_prefix(workbook, KOR_UIUX_INCONSISTENCY_PREFIX)
+
+    summary: dict[str, object] = {
+        "error_sheet": error_sheet.title if error_sheet is not None else None,
+        "inconsistency_sheet": inconsistency_sheet.title if inconsistency_sheet is not None else None,
+        "target_codes": {},
+        "assumptions": {},
+    }
+
+    if error_sheet is None:
+        add_violation(
+            violations,
+            "UIUX_ERROR_SHEET_MISSING",
+            uiux_workbook,
+            root,
+            "workbook",
+            KOR_UIUX_ERROR_PREFIX,
+            "UIUX workbook missing 01_ error catalog sheet",
+        )
+    if inconsistency_sheet is None:
+        add_violation(
+            violations,
+            "UIUX_INCONSISTENCY_SHEET_MISSING",
+            uiux_workbook,
+            root,
+            "workbook",
+            KOR_UIUX_INCONSISTENCY_PREFIX,
+            "UIUX workbook missing 90_ inconsistency sheet",
+        )
+    if error_sheet is None or inconsistency_sheet is None:
+        workbook.close()
+        return summary
+
+    error_rows: dict[str, int] = {}
+    for row_number in range(1, min(error_sheet.max_row, 2000) + 1):
+        code = normalize_cell_text(error_sheet.cell(row=row_number, column=1).value)
+        if code in UIUX_TARGET_ERROR_CONTRACT:
+            error_rows[code] = row_number
+
+    for code, rule in UIUX_TARGET_ERROR_CONTRACT.items():
+        row_number = error_rows.get(code)
+        if row_number is None:
+            add_violation(
+                violations,
+                "UIUX_ERROR_CODE_MISSING",
+                uiux_workbook,
+                root,
+                f"sheet={error_sheet.title}",
+                code,
+                "required UIUX error code row is missing",
+            )
+            summary["target_codes"][code] = {"exists": False}
+            continue
+
+        message_value = normalize_cell_text(error_sheet.cell(row=row_number, column=2).value)
+        http_value = normalize_cell_text(error_sheet.cell(row=row_number, column=3).value)
+        expected_http = str(rule["http_status"])
+
+        summary["target_codes"][code] = {
+            "exists": True,
+            "row": row_number,
+            "message": message_value,
+            "http": http_value,
+            "expected_http": expected_http,
+        }
+
+        if _is_uiux_placeholder(message_value):
+            add_violation(
+                violations,
+                "UIUX_ERROR_MESSAGE_PLACEHOLDER",
+                uiux_workbook,
+                root,
+                f"sheet={error_sheet.title} cell=B{row_number}",
+                message_value or "<blank>",
+                "UIUX error message must not contain placeholder/TBD value",
+            )
+
+        if http_value != expected_http:
+            add_violation(
+                violations,
+                "UIUX_ERROR_HTTP_MISMATCH",
+                uiux_workbook,
+                root,
+                f"sheet={error_sheet.title} cell=C{row_number}",
+                f"{http_value}->{expected_http}",
+                "UIUX HTTP status must match error code token status",
+            )
+
+    assume_rows: dict[str, int] = {}
+    for row_number in range(1, min(inconsistency_sheet.max_row, 2000) + 1):
+        item_id = normalize_cell_text(inconsistency_sheet.cell(row=row_number, column=1).value)
+        if item_id.startswith("ASSUME-"):
+            assume_rows[item_id] = row_number
+
+    for _, rule in UIUX_TARGET_ERROR_CONTRACT.items():
+        assume_id = str(rule["assume_id"])
+        row_number = assume_rows.get(assume_id)
+        if row_number is None:
+            add_violation(
+                violations,
+                "UIUX_ASSUME_MISSING",
+                uiux_workbook,
+                root,
+                f"sheet={inconsistency_sheet.title}",
+                assume_id,
+                "required ASSUME row is missing in 90_ sheet",
+            )
+            summary["assumptions"][assume_id] = {"exists": False}
+            continue
+
+        decision_b = normalize_cell_text(inconsistency_sheet.cell(row=row_number, column=2).value)
+        decision_d = normalize_cell_text(inconsistency_sheet.cell(row=row_number, column=4).value)
+        decision_e = normalize_cell_text(inconsistency_sheet.cell(row=row_number, column=5).value)
+        decision_g = normalize_cell_text(inconsistency_sheet.cell(row=row_number, column=7).value)
+
+        summary["assumptions"][assume_id] = {
+            "exists": True,
+            "row": row_number,
+            "col_b": decision_b,
+            "col_d": decision_d,
+            "col_e": decision_e,
+            "col_g": decision_g,
+        }
+
+        resolved_marked = "resolved" in decision_b.lower() and "resolved" in decision_e.lower()
+        has_tbd = any("TBD" in value.upper() for value in (decision_b, decision_d, decision_e, decision_g))
+        if not resolved_marked or has_tbd:
+            add_violation(
+                violations,
+                "UIUX_ASSUME_UNRESOLVED",
+                uiux_workbook,
+                root,
+                f"sheet={inconsistency_sheet.title} row={row_number}",
+                assume_id,
+                "ASSUME row must be resolved and must not contain TBD placeholders",
+            )
+
+    workbook.close()
+    return summary
+
+
 def validate_terminology(
     root: Path,
     corpus: list[tuple[str, str, str]],
     role_tokens: set[str],
     violations: list[Violation],
 ) -> dict[str, object]:
-    secret_ref_hits = 0
+    required_token_hits: dict[str, int] = {}
+    optional_token_hits: dict[str, int] = {}
+    forbidden_variant_hits: dict[str, int] = {}
+
     secret_alias_hits = 0
     sse_found: set[str] = set()
 
     for _, _, text in corpus:
         lowered = text.lower()
-        if "secret_ref" in lowered:
-            secret_ref_hits += 1
         if "key_ref" in lowered or "api_key_ref" in lowered:
             secret_alias_hits += 1
 
         for token in SSE_EVENT_RE.findall(text):
             sse_found.add(token.lower())
 
-    if secret_ref_hits == 0:
-        add_violation(
-            violations,
-            "TERMINOLOGY_SECRET_REF_MISSING",
-            root / "docs/references",
-            root,
-            "corpus",
-            "secret_ref",
-            "secret_ref terminology was not found in scanned specs",
-        )
+    for spec in TERMINOLOGY_CHECK_SPECS:
+        for token in spec.required_tokens:
+            occurrences = find_token_occurrences(corpus, token)
+            required_token_hits[token] = len(occurrences)
+            if not occurrences:
+                add_violation(
+                    violations,
+                    f"TERMINOLOGY_{spec.code_suffix}_MISSING",
+                    root / "docs/references",
+                    root,
+                    "corpus",
+                    token,
+                    f"required terminology token '{token}' was not found in scanned specs",
+                )
+
+        for token in spec.optional_tokens:
+            occurrences = find_token_occurrences(corpus, token)
+            optional_token_hits[token] = len(occurrences)
+
+        for variant, canonical in spec.forbidden_variants:
+            occurrences = find_token_occurrences(corpus, variant)
+            forbidden_variant_hits[variant] = len(occurrences)
+            if occurrences:
+                file_path, location = occurrences[0]
+                add_violation(
+                    violations,
+                    f"TERMINOLOGY_{spec.code_suffix}_VARIANT",
+                    resolve_path(root, file_path),
+                    root,
+                    location,
+                    variant,
+                    f"use canonical token '{canonical}' instead of '{variant}'",
+                )
 
     unknown_roles = sorted(token for token in role_tokens if token not in ROLE_TAXONOMY)
     for token in unknown_roles:
@@ -626,24 +1017,23 @@ def validate_terminology(
             "one or more ROLE taxonomy strings were not found",
         )
 
-    missing_sse = sorted(SSE_EVENT_SET - sse_found)
-    if missing_sse:
-        add_violation(
-            violations,
-            "TERMINOLOGY_SSE_MISSING",
-            root / "docs/references",
-            root,
-            "corpus",
-            ",".join(missing_sse),
-            "one or more required SSE event terms were not found",
-        )
-
+    secret_ref_hits = required_token_hits.get("secret_ref", 0)
     return {
         "secret_ref_hits": secret_ref_hits,
         "secret_alias_hits": secret_alias_hits,
         "role_tokens_found": sorted(role_tokens),
         "sse_events_found": sorted(sse_found),
+        "required_token_hits": {key: required_token_hits[key] for key in sorted(required_token_hits)},
+        "optional_token_hits": {key: optional_token_hits[key] for key in sorted(optional_token_hits)},
+        "forbidden_variant_hits": {key: forbidden_variant_hits[key] for key in sorted(forbidden_variant_hits)},
     }
+
+
+def sort_violations(items: list[Violation]) -> list[Violation]:
+    return sorted(
+        items,
+        key=lambda item: (item.code, item.file, item.location, item.token, item.message),
+    )
 
 
 def build_pass_artifact(root: Path, output_path: Path, payload: dict[str, object]) -> None:
@@ -735,6 +1125,18 @@ def main() -> int:
         role_tokens=api_role_tokens,
         violations=violations,
     )
+    placeholder_summary = detect_uiux_mapping_placeholders(
+        root=root,
+        uiux_workbook=uiux_workbook,
+        violations=violations,
+    )
+    uiux_error_contract_summary = detect_uiux_error_contract(
+        root=root,
+        uiux_workbook=uiux_workbook,
+        violations=violations,
+    )
+
+    violations = sort_violations(violations)
 
     reqid_token_counts = {
         "requirements": req_count,
@@ -757,6 +1159,8 @@ def main() -> int:
             "invalid_tokens_count": invalid_tokens_count,
         },
         "terminology": terminology_summary,
+        "placeholder_scan": placeholder_summary,
+        "uiux_error_contract": uiux_error_contract_summary,
         "violation_count": len(violations),
         "violations": [asdict(item) for item in violations],
     }
@@ -770,6 +1174,11 @@ def main() -> int:
         "total_reqid_tokens_found_in_each_spec="
         + json.dumps(reqid_token_counts, ensure_ascii=False, sort_keys=True),
         f"invalid_tokens_count={invalid_tokens_count}",
+        f"placeholder_hits={placeholder_summary['placeholder_hits']}",
+        "placeholder_scan_targets="
+        + json.dumps(placeholder_summary["scanned_targets"], ensure_ascii=False, sort_keys=True),
+        "uiux_error_contract="
+        + json.dumps(uiux_error_contract_summary, ensure_ascii=False, sort_keys=True),
         f"violation_count={payload['violation_count']}",
     ]
     for item in violations:

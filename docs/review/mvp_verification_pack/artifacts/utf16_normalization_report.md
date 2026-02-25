@@ -1,15 +1,14 @@
 # UTF-16 Normalization Report
 
-- generated_at_utc: 2026-02-23T15:53:49Z
+- generated_at_utc: 2026-02-25T14:35:30Z
 - prior_normalized_count: 42
 - current_session_new_utf16_conversions: 0
 - decoded_hash_mismatch_count: 0
-- note: Wave2 focused on low-risk UTF-8 BOM reduction; no additional UTF-16 files were converted.
+- note: Wave9 and Wave10 completed UTF-8 normalization closure; no UTF-16 BOM residuals were found in this session.
 
-## Current NON_UTF8_TEXT Residuals (2)
+## Current NON_UTF8_TEXT Residuals (0)
 
-- `docs/review/mvp_verification_pack/artifacts/backend_bootrun_postgres_output.txt`
-- `docs/review/mvp_verification_pack/artifacts/sse_concurrency_contract_test_output.txt`
+- none
 
 ## Verification
 
@@ -23,5 +22,5 @@ python scripts/assert_utf8_strict.py `
 ```
 
 Expected:
-- `violation_count=78`
-- `NON_UTF8_TEXT` count remains `2`
+- `violation_count=0`
+- `NON_UTF8_TEXT` count remains `0`

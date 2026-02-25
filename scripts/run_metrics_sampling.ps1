@@ -1,4 +1,4 @@
-﻿param(
+param(
     [int]$SampleCount = 20
 )
 

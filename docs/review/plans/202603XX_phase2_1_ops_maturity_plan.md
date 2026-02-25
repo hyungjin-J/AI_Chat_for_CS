@@ -1,4 +1,4 @@
-﻿# 202603XX Phase2.1 Ops Maturity Plan
+# 202603XX Phase2.1 Ops Maturity Plan
 
 - status: `IMPLEMENTATION_BASELINE_LOCKED`
 - reference:

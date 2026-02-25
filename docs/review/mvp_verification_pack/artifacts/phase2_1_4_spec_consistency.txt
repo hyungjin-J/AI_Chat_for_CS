@@ -1,4 +1,4 @@
-﻿PASS=9 FAIL=0
+PASS=9 FAIL=0
 [PASS] summary_reqid_subset: summary=52 missing_in_requirements=0
 [PASS] dev_reqid_subset: dev_refs=41 missing_in_requirements=0
 [PASS] api_note_reqid_subset: api_note_refs=69 missing_in_requirements=0

@@ -1,21 +1,9 @@
 {
-  "updated_at": "2026-02-17T17:26:48",
+  "updated_at": "2026-02-25T22:03:30",
   "entries": [
     {
       "target": "Requirements.csv",
-      "detail": "신규 ReqID 24건 추가"
-    },
-    {
-      "target": "Requirements.csv",
       "detail": "용어(secret_ref/SSE/endpoint) 정규화 적용"
-    },
-    {
-      "target": "Summary.csv",
-      "detail": "API-403 행 추가"
-    },
-    {
-      "target": "Summary.csv",
-      "detail": "Phase 미확정 1건에 Note 추가"
     },
     {
       "target": "Summary.csv",
@@ -27,7 +15,7 @@
     },
     {
       "target": "google_ready_api_spec.xlsx",
-      "detail": "전체API목록 secret_ref 표준화 11셀 반영"
+      "detail": "전체API목록 secret_ref 표준화 68셀 반영"
     },
     {
       "target": "CS_AI_CHATBOT_DB.xlsx",
@@ -35,7 +23,7 @@
     },
     {
       "target": "CS_RAG_UI_UX_설계서.xlsx",
-      "detail": "90/91/93/94 갱신 (API-403 추가, 94 placeholder 1건 제거, BackendOnly/N-A=4)"
+      "detail": "90/91/93/94 갱신 (API-403 추가, 94 placeholder 0건 제거, BackendOnly/N-A=4)"
     }
   ]
 }

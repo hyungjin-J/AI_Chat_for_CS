@@ -1,9 +1,16 @@
 {
   "status": "PASS",
-  "changed_files_count": 105,
-  "spec_changed_count": 0,
-  "spec_changed_files": [],
-  "spec_sync_report_changed": false,
+  "changed_files_count": 148,
+  "spec_changed_count": 6,
+  "spec_changed_files": [
+    "docs/references/CS AI Chatbot_Requirements Statement.csv",
+    "docs/references/CS_AI_CHATBOT_DB.xlsx",
+    "docs/references/Development environment.csv",
+    "docs/references/Summary of key features.csv",
+    "docs/references/google_ready_api_spec_v0.3_20260216.xlsx",
+    "docs/uiux/CS_RAG_UI_UX_/354/204/244/352/263/204/354/204/234.xlsx"
+  ],
+  "spec_sync_report_changed": true,
   "require_metadata": true,
   "violations": []
 }

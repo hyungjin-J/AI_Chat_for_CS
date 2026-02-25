@@ -3,15 +3,38 @@
 > vitest run
 
 
-[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend[39m
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/hjjmj/AppData/Local/Temp/ai_chatbot_ascii_run/frontend[39m
 
- [32m✓[39m src/utils/uuid.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 2[2mms[22m[39m
- [32m✓[39m src/utils/errorMapping.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
- [32m✓[39m src/utils/sseParser.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
- [32m✓[39m src/App.invalid-id-guard.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/utils/uuid.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/utils/errorMapping.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/utils/sseParser.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/api/httpClient.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/routes/RequireAuth.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+node.exe : [90mstderr[2m | src/pages/AdminAuditPage.test.tsx[2m > [22m[2mAdminAuditPage[2m > [22m[2mcreates exp
+ort job and downloads artifact
+At C:\Users\hjjmj\AppData\Local\Temp\node-v22.12.0-win-x64\npm.ps1:29 char:3
++   & $NODE_EXE $NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([90mstderr[2m...nloads artifact:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[22m[39mError: Not implemented: navigation (except hash changes)
+    at module.exports (C:\Users\hjjmj\AppData\Local\Temp\ai_chatbot_ascii_run\frontend\node_modules\jsdom\lib\jsdom\bro
+wser\not-implemented.js:9:17)
+    at navigateFetch (C:\Users\hjjmj\AppData\Local\Temp\ai_chatbot_ascii_run\frontend\node_modules\jsdom\lib\jsdom\livi
+ng\window\navigation.js:77:3)
+    at exports.navigate (C:\Users\hjjmj\AppData\Local\Temp\ai_chatbot_ascii_run\frontend\node_modules\jsdom\lib\jsdom\l
+iving\window\navigation.js:55:3)
+    at Timeout._onTimeout (C:\Users\hjjmj\AppData\Local\Temp\ai_chatbot_ascii_run\frontend\node_modules\jsdom\lib\jsdom
+\living\nodes\HTMLHyperlinkElementUtils-impl.js:80:7)
+    at listOnTimeout (node:internal/timers:594:17)
+    at processTimers (node:internal/timers:529:7) [90mundefined[39m
 
-[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
-[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
-[2m   Start at [22m 03:05:51
-[2m   Duration [22m 1.19s[2m (transform 124ms, setup 369ms, collect 258ms, tests 51ms, environment 2.19s, prepare 446ms)[22m
+ [32m✓[39m src/pages/AdminAuditPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m src/pages/LoginPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 169[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 23:50:12
+[2m   Duration [22m 14.51s[2m (transform 1.02s, setup 13.70s, collect 7.41s, tests 459ms, environment 68.43s, prepare 2.43s)[22m
 

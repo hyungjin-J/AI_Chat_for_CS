@@ -1,4 +1,4 @@
-﻿# baseline_file_count=26
+# baseline_file_count=26
 # current_file_count=118
 # new_since_baseline_count=92
 

@@ -97,6 +97,85 @@ class NormalizeUtf8Test(unittest.TestCase):
             self.assertIn("binary file detected", item["message"])
             self.assertEqual(target.read_bytes(), original)
 
+    def test_missing_file_is_reported_as_skipped(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            report_json = root / "report_missing.json"
+
+            proc = self.run_script(
+                root,
+                "--paths",
+                "missing.txt",
+                "--report-json",
+                str(report_json),
+            )
+            self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+            data = json.loads(report_json.read_text(encoding="utf-8"))
+            item = data["results"][0]
+            self.assertEqual(item["status"], "SKIPPED")
+            self.assertEqual(item["action"], "MISSING_FILE")
+            self.assertEqual(item["old_line_endings"], "UNKNOWN")
+            self.assertEqual(item["new_line_endings"], "UNKNOWN")
+            self.assertEqual(item["message"], "file not found")
+
+    def test_canonical_spec_guard_blocks_by_default(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "docs/references/Development environment.csv"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(b"\xef\xbb\xbfname,desc\nx,y\n")
+
+            proc = self.run_script(
+                root,
+                "--paths",
+                "docs/references/Development environment.csv",
+            )
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("canonical spec files are blocked by default", proc.stderr)
+            self.assertTrue(target.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_canonical_spec_guard_requires_confirmation_with_override(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "docs/references/Summary of key features.csv"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(b"\xef\xbb\xbfname,desc\nx,y\n")
+
+            proc = self.run_script(
+                root,
+                "--paths",
+                "docs/references/Summary of key features.csv",
+                "--allow-canonical-spec",
+            )
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("requires exact confirmation phrase", proc.stderr)
+            self.assertTrue(target.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_canonical_spec_guard_allows_with_confirmation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "docs/references/google_ready_api_spec_v0.3_20260216.xlsx"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(b"\xef\xbb\xbfplaceholder\n")
+            report_json = root / "canonical_report.json"
+
+            proc = self.run_script(
+                root,
+                "--paths",
+                "docs/references/google_ready_api_spec_v0.3_20260216.xlsx",
+                "--allow-canonical-spec",
+                "--canonical-spec-confirm",
+                "I understand Notion sync is required",
+                "--report-json",
+                str(report_json),
+            )
+            self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+            self.assertIn("override is active", proc.stderr)
+            self.assertFalse(target.read_bytes().startswith(b"\xef\xbb\xbf"))
+            data = json.loads(report_json.read_text(encoding="utf-8"))
+            self.assertEqual(data["changed_count"], 1)
+            self.assertEqual(data["results"][0]["action"], "BOM_REMOVED")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,4 @@
-﻿{
+{
   "status": "PASS",
   "root": ".",
   "target_globs": [
@@ -6,7 +6,7 @@
     "docs/ops/runbook_*.md",
     "docs/review/plans/**/*.md"
   ],
-  "scanned_files_count": 16,
+  "scanned_files_count": 19,
   "scanned_tables_count": 0,
   "extracted_evidence_paths_count": 0,
   "missing_local_evidence_count": 0,
@@ -15,5 +15,3 @@
   "warning_count": 0,
   "warnings": []
 }
-
-

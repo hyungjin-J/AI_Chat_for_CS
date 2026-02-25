@@ -1,6 +1,6 @@
-﻿services:
+services:
   postgres:
-    image: postgres:16.12
+    image: pgvector/pgvector:pg16
     container_name: aichatbot-postgres
     restart: unless-stopped
     environment:
@@ -16,6 +16,24 @@
       interval: 10s
       timeout: 5s
       retries: 10
+
+  flyway:
+    image: flyway/flyway:10.20.0
+    container_name: aichatbot-flyway
+    command:
+      - -url=jdbc:postgresql://postgres:5432/${POSTGRES_DB:-aichatbot}
+      - -user=${POSTGRES_USER:-aichatbot}
+      - -password=${POSTGRES_PASSWORD:-local-dev-only-password}
+      - -connectRetries=30
+      - -locations=filesystem:/flyway/sql,filesystem:/flyway/sql-postgresql
+      - migrate
+    volumes:
+      - ../backend/src/main/resources/db/migration:/flyway/sql:ro
+      - ../backend/src/main/resources/db/postgresql-migration:/flyway/sql-postgresql:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["db-tools"]
 
   redis:
     image: redis:7

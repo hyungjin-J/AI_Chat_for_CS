@@ -1,4 +1,4 @@
-﻿401_status=401
+401_status=401
 401_error_code=SEC-001-401
 401_raw=HTTP/1.1 401  X-Trace-Id: f6d7001a-f101-4715-871d-c48a026db149 X-Content-Type-Options: nosniff X-XSS-Protection: 0 Cache-Control: no-cache, no-store, max-age=0, must-revalidate Pragma: no-cache Expires: 0 X-Frame-Options: DENY Content-Type: application/json;charset=UTF-8 Content-Length: 192 Date: Wed, 18 Feb 2026 10:57:35 GMT  {"error_code":"SEC-001-401","message":"인증이 만료되었습니다. 다시 로그인해 주세요.","trace_id":"f6d7001a-f101-4715-871d-c48a026db149","details":["authentication_required"]}
 

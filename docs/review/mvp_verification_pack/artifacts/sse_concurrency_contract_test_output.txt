@@ -5,7 +5,7 @@ Daemon will be stopped at the end of the build
 > Task :classes UP-TO-DATE
 
 > Task :compileTestJava
-C:\Users\hjjmj\OneDrive\¹ÙÅÁ È­¸é\AI_Chatbot\backend\src\test\java\com\aichatbot\message\presentation\SseConcurrencyLimitContractTest.java:50: warning: [removal] SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+C:\Users\hjjmj\OneDrive\ë°”íƒ• í™”ë©´\AI_Chatbot\backend\src\test\java\com\aichatbot\message\presentation\SseConcurrencyLimitContractTest.java:50: warning: [removal] SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
     @SpyBean
      ^
 1 warning
