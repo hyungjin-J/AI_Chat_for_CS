@@ -6,7 +6,7 @@ import ch.qos.logback.core.read.ListAppender;
 import com.aichatbot.contexts.conversation.llm.application.LlmService;
 import com.aichatbot.contexts.conversation.message.application.MessageView;
 import com.aichatbot.contexts.conversation.message.infrastructure.MessageRepository;
-import com.aichatbot.contexts.knowledge.rag.application.CitationView;
+import com.aichatbot.contexts.knowledge.rag.domain.readmodel.CitationView;
 import com.aichatbot.contexts.knowledge.rag.infrastructure.CitationRepository;
 import com.aichatbot.contexts.knowledge.rag.infrastructure.RagSearchLogRepository;
 import com.fasterxml.jackson.databind.JsonNode;

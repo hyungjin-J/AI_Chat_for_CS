@@ -1,16 +1,19 @@
 package com.aichatbot.contexts.knowledge.rag.infrastructure;
 
-import com.aichatbot.contexts.knowledge.rag.application.CitationView;
 import com.aichatbot.contexts.knowledge.rag.domain.readmodel.CitationRow;
+import com.aichatbot.contexts.knowledge.rag.domain.port.CitationStore;
+import com.aichatbot.contexts.knowledge.rag.domain.readmodel.CitationView;
 import com.aichatbot.contexts.knowledge.rag.domain.mapper.CitationMapper;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
+@Primary
 @Repository
-public class CitationRepository {
+public class CitationRepository implements CitationStore {
 
     private final CitationMapper citationMapper;
 
@@ -18,6 +21,7 @@ public class CitationRepository {
         this.citationMapper = citationMapper;
     }
 
+    @Override
     public void save(UUID tenantId, UUID messageId, Instant messageCreatedAt, UUID chunkId, int rankNo, String excerptMasked) {
         citationMapper.save(
             UUID.randomUUID(),
@@ -30,6 +34,7 @@ public class CitationRepository {
         );
     }
 
+    @Override
     public List<CitationView> findByMessageId(UUID tenantId, UUID messageId, Integer cursorRankNo, int limit) {
         List<CitationRow> rows = citationMapper.findByMessageId(
             tenantId,

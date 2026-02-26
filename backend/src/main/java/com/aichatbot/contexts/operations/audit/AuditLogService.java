@@ -116,8 +116,27 @@ public class AuditLogService {
         return auditLogRepository.search(tenantId, fromUtc, toUtc, actorUserId, actionType, traceId, limit, offset);
     }
 
+    public List<AuditLogView> searchView(
+        UUID tenantId,
+        Instant fromUtc,
+        Instant toUtc,
+        UUID actorUserId,
+        String actionType,
+        UUID traceId,
+        int limit,
+        int offset
+    ) {
+        return search(tenantId, fromUtc, toUtc, actorUserId, actionType, traceId, limit, offset).stream()
+            .map(AuditLogView::from)
+            .toList();
+    }
+
     public Optional<PersistentAuditLogEntry> findById(UUID auditId) {
         return auditLogRepository.findById(auditId);
+    }
+
+    public Optional<AuditLogView> findViewById(UUID auditId) {
+        return findById(auditId).map(AuditLogView::from);
     }
 
     public void writeExportLog(UUID tenantId, UUID requestedBy, String format, Instant fromUtc, Instant toUtc, int rowCount) {
@@ -174,6 +193,38 @@ public class AuditLogService {
 
     private String safe(String value) {
         return value == null ? "" : value;
+    }
+
+    public record AuditLogView(
+        UUID id,
+        UUID tenantId,
+        UUID traceId,
+        String actionType,
+        UUID actorUserId,
+        String actorRole,
+        String targetType,
+        String targetId,
+        String beforeJson,
+        String afterJson,
+        Long chainSeq,
+        Instant createdAt
+    ) {
+        static AuditLogView from(PersistentAuditLogEntry entry) {
+            return new AuditLogView(
+                entry.id(),
+                entry.tenantId(),
+                entry.traceId(),
+                entry.actionType(),
+                entry.actorUserId(),
+                entry.actorRole(),
+                entry.targetType(),
+                entry.targetId(),
+                entry.beforeJson(),
+                entry.afterJson(),
+                entry.chainSeq(),
+                entry.createdAt()
+            );
+        }
     }
 }
 

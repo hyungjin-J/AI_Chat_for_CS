@@ -1,8 +1,30 @@
 assert_spec_sync_report_updated
-status=PASS
-changed_files_count=148
-spec_changed_count=6
+status=FAIL
+changed_files_count=190
+spec_changed_count=5
 spec_sync_report_changed=True
 require_metadata=True
-violation_count=0
-spec_changed_files=docs/references/CS AI Chatbot_Requirements Statement.csv,docs/references/CS_AI_CHATBOT_DB.xlsx,docs/references/Development environment.csv,docs/references/Summary of key features.csv,docs/references/google_ready_api_spec_v0.3_20260216.xlsx,docs/uiux/CS_RAG_UI_UX_/354/204/244/352/263/204/354/204/234.xlsx
+require_notion_evidence_format=True
+head_commit=3d56064664742d4990e015a7f25c14a882f5cc89
+head_commit_short=3d56064
+evidence_section_count=19
+violation_count=5
+spec_changed_files=docs/references/CS AI Chatbot_Requirements Statement.csv,docs/references/CS_AI_CHATBOT_DB.xlsx,docs/references/Development environment.csv,docs/references/Summary of key features.csv,docs/references/google_ready_api_spec_v0.3_20260216.xlsx
+source_evidence=docs/references/CS AI Chatbot_Requirements Statement.csv status=FAIL expected_notion_url=https://www.notion.so/2ed405a3a720816594e4dc34972174ec matched_section_count=1
+  matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458
+  failed_check_codes=SPEC_SYNC_VERSION_HEAD_MISMATCH
+source_evidence=docs/references/CS_AI_CHATBOT_DB.xlsx status=FAIL expected_notion_url=https://www.notion.so/2ed405a3a720812180d9d508b77f31a4 matched_section_count=0
+  failed_check_codes=SPEC_SYNC_EVIDENCE_BLOCK_MISSING
+source_evidence=docs/references/Development environment.csv status=FAIL expected_notion_url=https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7 matched_section_count=1
+  matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458
+  failed_check_codes=SPEC_SYNC_VERSION_HEAD_MISMATCH
+source_evidence=docs/references/Summary of key features.csv status=FAIL expected_notion_url=https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149 matched_section_count=1
+  matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458
+  failed_check_codes=SPEC_SYNC_VERSION_HEAD_MISMATCH
+source_evidence=docs/references/google_ready_api_spec_v0.3_20260216.xlsx status=FAIL expected_notion_url=https://www.notion.so/2ed405a3a720816594e4dc34972174ec matched_section_count=0
+  failed_check_codes=SPEC_SYNC_EVIDENCE_BLOCK_MISSING
+- [SPEC_SYNC_VERSION_HEAD_MISMATCH] Version/commit hash must include current HEAD commit hash :: source_file=docs/references/CS AI Chatbot_Requirements Statement.csv; expected_notion_url=https://www.notion.so/2ed405a3a720816594e4dc34972174ec; matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458
+- [SPEC_SYNC_EVIDENCE_BLOCK_MISSING] spec_sync_report.md is missing source-specific evidence block :: source_file=docs/references/CS_AI_CHATBOT_DB.xlsx; expected_notion_url=https://www.notion.so/2ed405a3a720812180d9d508b77f31a4; matched_sections=none
+- [SPEC_SYNC_VERSION_HEAD_MISMATCH] Version/commit hash must include current HEAD commit hash :: source_file=docs/references/Development environment.csv; expected_notion_url=https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7; matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458
+- [SPEC_SYNC_VERSION_HEAD_MISMATCH] Version/commit hash must include current HEAD commit hash :: source_file=docs/references/Summary of key features.csv; expected_notion_url=https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149; matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458
+- [SPEC_SYNC_EVIDENCE_BLOCK_MISSING] spec_sync_report.md is missing source-specific evidence block :: source_file=docs/references/google_ready_api_spec_v0.3_20260216.xlsx; expected_notion_url=https://www.notion.so/2ed405a3a720816594e4dc34972174ec; matched_sections=none

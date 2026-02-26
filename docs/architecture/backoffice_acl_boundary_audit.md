@@ -7,12 +7,12 @@
 ## Rules
 1. `channels/backoffice/**` may import:
 - `contexts.*.application.*`
-- `contexts.*.domain.*` (DTO/readonly model only)
 - `platform.*`
 - `sharedkernel.*`
 2. `channels/backoffice/**` must not import:
 - `contexts.*.infrastructure.*`
 - `contexts.*.presentation.*`
+- `contexts.*.domain.*`
 3. Cross-context interaction must pass through application facades/ports.
 
 ## Current Baseline (Ratchet)
@@ -33,5 +33,6 @@
   - `import com.aichatbot.contexts.identity.rbac.application.RbacApprovalFacade;`
 - Forbidden:
   - `import com.aichatbot.contexts.operations.infrastructure.OpsRepository;`
+  - `import com.aichatbot.contexts.operations.domain.OpsMetricTotal;`
   - `import com.aichatbot.contexts.identity.rbac.infrastructure.RbacApprovalService;`
   - `import com.aichatbot.contexts.identity.presentation.AuthController;`

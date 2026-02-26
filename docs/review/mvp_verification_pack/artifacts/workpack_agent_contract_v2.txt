@@ -1,16 +1,16 @@
 assert_workpack_agent_report_contract
 status=PASS
 high_risk_triggered=True
-changed_files_count=139
+changed_files_count=190
 scope_backend=True
 scope_frontend=False
 scope_security=True
 scope_spec_only=False
 required_report_files=DDD_report.md,QA_report.md,SEC_report.md
-changed_workpack_topics=20260225_canonical__spec__utf8__notion__sync
-changed_agent_report_topics=20260225_canonical__spec__utf8__notion__sync
-eligible_topics=20260225_canonical__spec__utf8__notion__sync
-manual_hook_workpack_topics=20260225_canonical__spec__utf8__notion__sync
-scope_tokens=202603xx,acl,admin,and,api,artifact,artifacts,assert,attempts,auth,backoffice,baseline,basic,blocked,bom,bootrun,boundary,branch,briefing,budget,build,burndown,calculator,cast,changes,chatbot,check,checklist,checks,closure,code,compose,concurrency,consistency,contained,context,continuation,contract,cs ai chatbot,csv,current,delta,design,dev,development environment,diag,dirty,doc,docker,dryrun,enablement,evidence,execution,exit,figma,fixed,for,foundation,full,gap,gate,generate,google,gradle,guard,guide,handoff,hardening,helper,implementation,index,indexes,infra,isolation,json,latency,layer,limit,lint,local,manual,masking,maturity,metrics,migration,mirror,mvp,negative,nightly,node22,normalization,normalize,notion,npm,observability,ollama,ops,output,pack,pass,patch,pgvector,phase2,pii,plan,plans,platform,postgres,postgresql,pr1,pr2,pr3,pr4,process,production,proof,properties,protection,provider,ps1,query,rag,ratchet,rbac,react,readiness,readme,ready,real,references,regression,release,report,requirements statement,residuals,resources,run,safety,sampling,sanity,scaffold,scan,scheduler,secrets,self,smoke,spec,sql,sse,status,step,stream,strict,summary,summary of key features,sync,tenant,tests,trace,traceability,txt,uiux,unicode,unittest,update,utf16,utf8,uuid,v10,v11,validate,verification,violations,wave10,wave3,wave4,wave5,wave6,wave7,wave8,wave9,windows,workbook,workpack,workspace,xlsx,yml
+changed_workpack_topics=20260225_canonical__spec__utf8__notion__sync,20260226_domain__boundary__hardening__ops__rag__admin
+changed_agent_report_topics=20260225_canonical__spec__utf8__notion__sync,20260226_domain__boundary__hardening__ops__rag__admin
+eligible_topics=20260225_canonical__spec__utf8__notion__sync,20260226_domain__boundary__hardening__ops__rag__admin
+manual_hook_workpack_topics=20260225_canonical__spec__utf8__notion__sync,20260226_domain__boundary__hardening__ops__rag__admin
+scope_tokens="docs,20260226t134334z,202603xx,acl,admin,all,and,api,archive,artifact,artifacts,assert,attempts,auth,backoffice,backup,baseline,basic,blocked,bom,bootrun,boundaries,boundary,branch,briefing,budget,build,bundles,burndown,calculator,cast,changes,chatbot,check,checklist,checks,citationqueryservice,citationstore,citationview,closure,code,compose,concurrency,consistency,contained,context,continuation,contract,contracts,cs ai chatbot,csv,current,delta,design,dev,development environment,diag,diagnostics,dirty,doc,docker,dryrun,enablement,evidence,execution,exit,failfast,figma,fixed,for,foundation,full,gap,gate,generate,google,gradle,guard,guide,handoff,hardening,helper,hygiene,implementation,index,indexes,infra,isolation,json,kbsearchstore,knowledge,latency,layer,limit,lint,local,manifest,manual,masking,maturity,metrics,migration,mirror,mvp,negative,nightly,node,node22,normalization,normalize,notion,npm,observability,ollama,onepager,operations,ops,opsblockstore,opseventstore,opsmetricstore,output,pack,pass,patch,pgvector,phase2,pii,plan,plans,platform,port,postgres,postgresql,pr1,pr2,pr3,pr4,pra,prb,prc,preflight,process,production,proof,properties,protection,provider,ps1,query,rag,ragsearchlogstore,ratchet,rbac,react,readiness,readme,readmodel,ready,real,references,regression,rehearsal,release,report,requirements statement,residuals,resources,restore,run,runbook,runtime,safety,sampling,sanity,scaffold,scan,scheduler,secrets,self,smoke,spec,sql,sse,ssot,status,step,stream,strict,summary,summary of key features,sync,tenant,tests,token,trace,traceability,txt,uiux,unicode,unittest,update,updated,utf16,utf8,uuid,v10,v11,validate,verification,violations,wave10,wave3,wave4,wave5,wave6,wave7,wave8,wave9,waven,windows,workbook,workpack,workspace,xlsx,xlsx",yml,zip
 notion_manual_exception_gate_ran=False
 violation_count=0

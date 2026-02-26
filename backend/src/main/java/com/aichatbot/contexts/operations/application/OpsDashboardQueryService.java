@@ -1,8 +1,6 @@
 package com.aichatbot.contexts.operations.application;
 
-import com.aichatbot.contexts.operations.domain.OpsMetricRow;
-import com.aichatbot.contexts.operations.domain.OpsMetricTotal;
-import com.aichatbot.contexts.operations.infrastructure.OpsRepository;
+import com.aichatbot.contexts.operations.domain.port.OpsMetricStore;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -11,17 +9,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpsDashboardQueryService {
 
-    private final OpsRepository opsRepository;
+    private final OpsMetricStore opsRepository;
 
-    public OpsDashboardQueryService(OpsRepository opsRepository) {
+    public OpsDashboardQueryService(OpsMetricStore opsRepository) {
         this.opsRepository = opsRepository;
     }
 
-    public List<OpsMetricTotal> loadSummary(UUID tenantId, Instant fromUtc, Instant toUtc) {
-        return opsRepository.findSummary(tenantId, fromUtc, toUtc);
+    public List<OpsMetricSummaryView> loadSummary(UUID tenantId, Instant fromUtc, Instant toUtc) {
+        return opsRepository.findSummary(tenantId, fromUtc, toUtc).stream()
+            .map(row -> new OpsMetricSummaryView(row.metricKey(), row.metricValue()))
+            .toList();
     }
 
-    public List<OpsMetricRow> loadSeries(UUID tenantId, Instant fromUtc, Instant toUtc) {
-        return opsRepository.findSeries(tenantId, fromUtc, toUtc);
+    public List<OpsMetricSeriesView> loadSeries(UUID tenantId, Instant fromUtc, Instant toUtc) {
+        return opsRepository.findSeries(tenantId, fromUtc, toUtc).stream()
+            .map(row -> new OpsMetricSeriesView(row.hourBucketUtc(), row.metricKey(), row.metricValue()))
+            .toList();
+    }
+
+    public record OpsMetricSummaryView(String metricKey, long metricValue) {
+    }
+
+    public record OpsMetricSeriesView(Instant hourBucketUtc, String metricKey, long metricValue) {
     }
 }

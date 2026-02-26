@@ -17,7 +17,9 @@
     "lint": "eslint .",
     "test": "vitest",
     "test:run": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "mirror:run": "python ../scripts/mirror_and_run_frontend.py --source-root ..",
+    "mirror:smoke": "python ../scripts/mirror_and_run_frontend.py --source-root .. --force-mirror --skip-node-bootstrap --skip-install --skip-tests --skip-build --smoke-artifact-path ../docs/review/mvp_verification_pack/artifacts/node22_unicode_mirror_helper_smoke.txt"
   },
   "dependencies": {
     "axios": "^1.13.2",

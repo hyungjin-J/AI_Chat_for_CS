@@ -1,7 +1,7 @@
 package com.aichatbot.contexts.operations.application;
 
 import com.aichatbot.contexts.operations.domain.OpsBlockRecord;
-import com.aichatbot.contexts.operations.infrastructure.OpsRepository;
+import com.aichatbot.contexts.operations.domain.port.OpsBlockStore;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Optional;
@@ -12,15 +12,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpsBlockService {
 
-    private final OpsRepository opsRepository;
+    private final OpsBlockStore opsRepository;
     private final Clock clock;
 
     @Autowired
-    public OpsBlockService(OpsRepository opsRepository) {
+    public OpsBlockService(OpsBlockStore opsRepository) {
         this(opsRepository, Clock.systemUTC());
     }
 
-    OpsBlockService(OpsRepository opsRepository, Clock clock) {
+    OpsBlockService(OpsBlockStore opsRepository, Clock clock) {
         this.opsRepository = opsRepository;
         this.clock = clock;
     }

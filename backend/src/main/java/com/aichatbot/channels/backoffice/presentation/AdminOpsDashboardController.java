@@ -3,15 +3,11 @@ package com.aichatbot.channels.backoffice.presentation;
 import com.aichatbot.contexts.operations.audit.AuditLogService;
 import com.aichatbot.contexts.operations.audit.AuditChainVerifierService;
 import com.aichatbot.contexts.operations.audit.AuditExportJobService;
-import com.aichatbot.contexts.operations.audit.domain.AuditExportJobRecord;
-import com.aichatbot.contexts.operations.audit.domain.PersistentAuditLogEntry;
 import com.aichatbot.contexts.operations.application.OpsDashboardQueryService;
 import com.aichatbot.platform.error.ApiException;
 import com.aichatbot.platform.observability.TraceGuard;
 import com.aichatbot.contexts.identity.security.PrincipalUtils;
 import com.aichatbot.platform.tenancy.TenantContext;
-import com.aichatbot.contexts.operations.domain.OpsMetricRow;
-import com.aichatbot.contexts.operations.domain.OpsMetricTotal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
@@ -59,9 +55,9 @@ public class AdminOpsDashboardController {
         @RequestParam(value = "to_utc", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant toUtc
     ) {
         UUID resolvedTenantId = resolveTenantScope(tenantId);
-        List<OpsMetricTotal> rows = opsDashboardQueryService.loadSummary(resolvedTenantId, fromUtc, toUtc);
+        List<OpsDashboardQueryService.OpsMetricSummaryView> rows = opsDashboardQueryService.loadSummary(resolvedTenantId, fromUtc, toUtc);
         Map<String, Long> totals = new LinkedHashMap<>();
-        for (OpsMetricTotal row : rows) {
+        for (OpsDashboardQueryService.OpsMetricSummaryView row : rows) {
             totals.put(row.metricKey(), row.metricValue());
         }
         return new DashboardSummaryResponse(
@@ -78,7 +74,7 @@ public class AdminOpsDashboardController {
         @RequestParam(value = "to_utc", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant toUtc
     ) {
         UUID resolvedTenantId = resolveTenantScope(tenantId);
-        List<OpsMetricRow> series = opsDashboardQueryService.loadSeries(resolvedTenantId, fromUtc, toUtc);
+        List<OpsDashboardQueryService.OpsMetricSeriesView> series = opsDashboardQueryService.loadSeries(resolvedTenantId, fromUtc, toUtc);
         List<SeriesPoint> points = series.stream()
             .map(row -> new SeriesPoint(row.hourBucketUtc(), row.metricKey(), row.metricValue()))
             .toList();
@@ -105,7 +101,7 @@ public class AdminOpsDashboardController {
         UUID traceUuid = parseUuidOrNull(traceId);
         int safeLimit = Math.max(1, Math.min(200, limit));
         int safeOffset = Math.max(0, offset);
-        List<PersistentAuditLogEntry> entries = auditLogService.search(
+        List<AuditLogService.AuditLogView> entries = auditLogService.searchView(
             resolvedTenantId,
             fromUtc,
             toUtc,
@@ -140,7 +136,7 @@ public class AdminOpsDashboardController {
     public AuditLogDiffResponse auditDiff(@PathVariable("audit_id") String auditId) {
         UUID auditUuid = parseRequiredUuid(auditId, "invalid_audit_id");
         UUID contextTenantId = parseRequiredUuid(TenantContext.getTenantId(), "invalid_tenant_context");
-        PersistentAuditLogEntry entry = auditLogService.findById(auditUuid)
+        AuditLogService.AuditLogView entry = auditLogService.findViewById(auditUuid)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "API-004-404", "Audit log not found"));
         if (!contextTenantId.equals(entry.tenantId())) {
             throw new ApiException(HttpStatus.FORBIDDEN, "SEC-002-403", "Tenant scope mismatch");
@@ -173,7 +169,7 @@ public class AdminOpsDashboardController {
             );
         }
 
-        List<PersistentAuditLogEntry> entries = auditLogService.search(
+        List<AuditLogService.AuditLogView> entries = auditLogService.searchView(
             resolvedTenantId,
             fromUtc,
             toUtc,
@@ -199,7 +195,7 @@ public class AdminOpsDashboardController {
         }
         auditLogService.writeExportLog(
             resolvedTenantId,
-            AuditLogService.toUuidOrNull(com.aichatbot.contexts.identity.security.PrincipalUtils.currentPrincipal().userId()),
+            AuditLogService.toUuidOrNull(PrincipalUtils.currentPrincipal().userId()),
             normalizedFormat,
             fromUtc,
             toUtc,
@@ -216,7 +212,7 @@ public class AdminOpsDashboardController {
         @RequestBody(required = false) AuditExportJobCreateRequest request
     ) {
         UUID tenantId = parseRequiredUuid(TenantContext.getTenantId(), "invalid_tenant_context");
-        AuditExportJobRecord created = auditExportJobService.createJob(
+        AuditExportJobService.AuditExportJobView created = auditExportJobService.createJobView(
             tenantId,
             AuditLogService.toUuidOrNull(PrincipalUtils.currentPrincipal().userId()),
             request == null ? null : request.format(),
@@ -240,7 +236,7 @@ public class AdminOpsDashboardController {
     public AuditExportJobStatusResponse getAuditExportJob(@PathVariable("job_id") String jobId) {
         UUID tenantId = parseRequiredUuid(TenantContext.getTenantId(), "invalid_tenant_context");
         UUID exportJobId = parseRequiredUuid(jobId, "invalid_export_job_id");
-        AuditExportJobRecord job = auditExportJobService.findById(tenantId, exportJobId);
+        AuditExportJobService.AuditExportJobView job = auditExportJobService.findViewById(tenantId, exportJobId);
         return new AuditExportJobStatusResponse(
             job.id().toString(),
             job.status(),
@@ -260,7 +256,7 @@ public class AdminOpsDashboardController {
     public ResponseEntity<byte[]> downloadAuditExportJob(@PathVariable("job_id") String jobId) {
         UUID tenantId = parseRequiredUuid(TenantContext.getTenantId(), "invalid_tenant_context");
         UUID exportJobId = parseRequiredUuid(jobId, "invalid_export_job_id");
-        AuditExportJobService.DownloadPayload payload = auditExportJobService.download(
+        AuditExportJobService.DownloadPayloadView payload = auditExportJobService.downloadView(
             tenantId,
             exportJobId,
             AuditLogService.toUuidOrNull(PrincipalUtils.currentPrincipal().userId())
@@ -438,11 +434,11 @@ public class AdminOpsDashboardController {
     ) {
     }
 
-    private String toJson(List<PersistentAuditLogEntry> entries) {
+    private String toJson(List<AuditLogService.AuditLogView> entries) {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
         for (int index = 0; index < entries.size(); index++) {
-            PersistentAuditLogEntry entry = entries.get(index);
+            AuditLogService.AuditLogView entry = entries.get(index);
             if (index > 0) {
                 builder.append(",");
             }
@@ -460,10 +456,10 @@ public class AdminOpsDashboardController {
         return builder.toString();
     }
 
-    private String toCsv(List<PersistentAuditLogEntry> entries) {
+    private String toCsv(List<AuditLogService.AuditLogView> entries) {
         StringBuilder builder = new StringBuilder();
         builder.append("audit_id,action_type,actor_user_id,trace_id,created_at,target_type,target_id,chain_seq").append("\n");
-        for (PersistentAuditLogEntry entry : entries) {
+        for (AuditLogService.AuditLogView entry : entries) {
             builder.append(entry.id()).append(",")
                 .append(csv(entry.actionType())).append(",")
                 .append(entry.actorUserId() == null ? "" : entry.actorUserId()).append(",")

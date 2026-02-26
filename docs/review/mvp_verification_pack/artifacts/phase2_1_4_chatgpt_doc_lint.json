@@ -5,14 +5,14 @@
   "warning_count": 0,
   "warnings": [],
   "scanned_tables_count": 2,
-  "extracted_evidence_paths_count": 26,
+  "extracted_evidence_paths_count": 27,
   "missing_paths_count": 0,
   "missing_paths": [],
   "evidence_scan_by_file": [
     {
       "file": "chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md",
       "scanned_tables_count": 1,
-      "extracted_evidence_paths_count": 12,
+      "extracted_evidence_paths_count": 13,
       "missing_paths_count": 0,
       "missing_paths": []
     },

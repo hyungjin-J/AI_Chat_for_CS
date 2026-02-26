@@ -8,8 +8,8 @@ import com.aichatbot.platform.error.ApiException;
 import com.aichatbot.platform.error.ErrorCatalog;
 import com.aichatbot.platform.privacy.PiiMaskingService;
 import com.aichatbot.contexts.conversation.llm.application.LlmService;
-import com.aichatbot.contexts.knowledge.rag.infrastructure.CitationRepository;
-import com.aichatbot.contexts.knowledge.rag.infrastructure.RagSearchLogRepository;
+import com.aichatbot.contexts.knowledge.rag.domain.port.CitationStore;
+import com.aichatbot.contexts.knowledge.rag.domain.port.RagSearchLogStore;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +23,8 @@ import org.springframework.stereotype.Service;
 public class RagAnswerService {
 
     private final RetrievalService retrievalService;
-    private final RagSearchLogRepository ragSearchLogRepository;
-    private final CitationRepository citationRepository;
+    private final RagSearchLogStore ragSearchLogRepository;
+    private final CitationStore citationRepository;
     private final PiiMaskingService piiMaskingService;
     private final LlmService llmService;
     private final AnswerContractValidator answerContractValidator;
@@ -32,8 +32,8 @@ public class RagAnswerService {
 
     public RagAnswerService(
         RetrievalService retrievalService,
-        RagSearchLogRepository ragSearchLogRepository,
-        CitationRepository citationRepository,
+        RagSearchLogStore ragSearchLogRepository,
+        CitationStore citationRepository,
         PiiMaskingService piiMaskingService,
         LlmService llmService,
         AnswerContractValidator answerContractValidator,

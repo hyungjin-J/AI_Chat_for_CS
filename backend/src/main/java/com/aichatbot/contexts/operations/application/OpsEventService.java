@@ -1,7 +1,7 @@
 package com.aichatbot.contexts.operations.application;
 
 import com.aichatbot.platform.observability.TraceGuard;
-import com.aichatbot.contexts.operations.infrastructure.OpsRepository;
+import com.aichatbot.contexts.operations.domain.port.OpsEventStore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Clock;
@@ -40,14 +40,14 @@ public class OpsEventService {
         "scheduler_lock_recovery_failed"
     );
 
-    private final OpsRepository opsRepository;
+    private final OpsEventStore opsRepository;
     private final OpsDimensionsSanitizer dimensionsSanitizer;
     private final ObjectMapper objectMapper;
     private final Clock clock;
 
     @Autowired
     public OpsEventService(
-        OpsRepository opsRepository,
+        OpsEventStore opsRepository,
         OpsDimensionsSanitizer dimensionsSanitizer,
         ObjectMapper objectMapper
     ) {
@@ -55,7 +55,7 @@ public class OpsEventService {
     }
 
     OpsEventService(
-        OpsRepository opsRepository,
+        OpsEventStore opsRepository,
         OpsDimensionsSanitizer dimensionsSanitizer,
         ObjectMapper objectMapper,
         Clock clock

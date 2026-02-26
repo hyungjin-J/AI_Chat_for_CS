@@ -92,6 +92,14 @@ jobs:
             --output-txt docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.txt `
             --output-json docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.json
 
+      - name: Application port boundary ratchet gate
+        shell: pwsh
+        run: |
+          python scripts/assert_application_port_boundaries.py `
+            --git-base-ref "origin/main" `
+            --output-txt docs/review/mvp_verification_pack/artifacts/application_port_boundary_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/application_port_boundary_gate.json
+
       - name: Mapper namespace drift gate
         shell: pwsh
         run: |
@@ -209,6 +217,7 @@ jobs:
             docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.*
             docs/review/mvp_verification_pack/artifacts/continuation_trigger_consistency_gate.*
             docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.*
+            docs/review/mvp_verification_pack/artifacts/application_port_boundary_gate.*
             docs/review/mvp_verification_pack/artifacts/backoffice_acl_boundary_gate.*
             docs/review/mvp_verification_pack/artifacts/frontend_import_boundary_gate.*
             docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.*

@@ -1,12 +1,83 @@
 {
   "artifact_root": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts",
-  "indexed_file_count": 367,
+  "indexed_file_count": 343,
   "archive_keep_latest_per_extension": 1,
+  "archive_manifest_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json",
+  "pinned_paths_count": 51,
+  "archive_summary": {
+    "bundle_count": 12,
+    "archived_file_count": 29,
+    "recent_bundles": [
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip",
+        "family": "utf8_normalization_waveN_report",
+        "file_count": 16
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_utf8_check__20260226T134334Z.zip",
+        "family": "phase2_1_1_utf8_check",
+        "file_count": 1
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_spec_consistency__20260226T134334Z.zip",
+        "family": "phase2_1_1_spec_consistency",
+        "file_count": 1
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_runbook_onepager_check__20260226T134334Z.zip",
+        "family": "phase2_1_1_prc_runbook_onepager_check",
+        "file_count": 1
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_preflight__20260226T134334Z.zip",
+        "family": "phase2_1_1_prc_notion_preflight",
+        "file_count": 1
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_manual_gate__20260226T134334Z.zip",
+        "family": "phase2_1_1_prc_notion_manual_gate",
+        "file_count": 2
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_utf8__20260226T134334Z.zip",
+        "family": "phase2_1_1_prb_chatgpt_utf8",
+        "file_count": 1
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_pii_token_scan__20260226T134334Z.zip",
+        "family": "phase2_1_1_prb_chatgpt_pii_token_scan",
+        "file_count": 1
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_doc_lint__20260226T134334Z.zip",
+        "family": "phase2_1_1_prb_chatgpt_doc_lint",
+        "file_count": 2
+      },
+      {
+        "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_node_ssot_check__20260226T134334Z.zip",
+        "family": "phase2_1_1_pra_node_ssot_check",
+        "file_count": 1
+      }
+    ]
+  },
   "groups": [
     {
       "group": "gate",
-      "family_count": 22,
+      "family_count": 23,
       "families": [
+        {
+          "family": "application_port_boundary_gate",
+          "file_count": 2,
+          "files": [
+            "application_port_boundary_gate.json",
+            "application_port_boundary_gate.txt"
+          ],
+          "latest_by_extension": {
+            ".json": "application_port_boundary_gate.json",
+            ".txt": "application_port_boundary_gate.txt"
+          },
+          "archive_candidates": []
+        },
         {
           "family": "backoffice_acl_boundary_gate",
           "file_count": 2,
@@ -196,10 +267,8 @@
         },
         {
           "family": "phase2_1_1_prc_notion_manual_gate",
-          "file_count": 4,
+          "file_count": 2,
           "files": [
-            "phase2_1_1_prC_notion_manual_gate.json",
-            "phase2_1_1_prC_notion_manual_gate.txt",
             "phase2_1_1_prC_notion_manual_gate_202603XX.json",
             "phase2_1_1_prC_notion_manual_gate_202603XX.txt"
           ],
@@ -207,10 +276,7 @@
             ".json": "phase2_1_1_prC_notion_manual_gate_202603XX.json",
             ".txt": "phase2_1_1_prC_notion_manual_gate_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_prC_notion_manual_gate.json",
-            "phase2_1_1_prC_notion_manual_gate.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_2_notion_manual_gate",
@@ -288,8 +354,21 @@
     },
     {
       "group": "report",
-      "family_count": 7,
+      "family_count": 8,
       "families": [
+        {
+          "family": "artifact_archive_report",
+          "file_count": 2,
+          "files": [
+            "artifact_archive_report.json",
+            "artifact_archive_report.txt"
+          ],
+          "latest_by_extension": {
+            ".json": "artifact_archive_report.json",
+            ".txt": "artifact_archive_report.txt"
+          },
+          "archive_candidates": []
+        },
         {
           "family": "metrics_report",
           "file_count": 1,
@@ -360,49 +439,16 @@
         },
         {
           "family": "utf8_normalization_waveN_report",
-          "file_count": 18,
+          "file_count": 2,
           "files": [
             "utf8_normalization_wave10_report.json",
-            "utf8_normalization_wave10_report.md",
-            "utf8_normalization_wave2_report.json",
-            "utf8_normalization_wave2_report.md",
-            "utf8_normalization_wave3_report.json",
-            "utf8_normalization_wave3_report.md",
-            "utf8_normalization_wave4_report.json",
-            "utf8_normalization_wave4_report.md",
-            "utf8_normalization_wave5_report.json",
-            "utf8_normalization_wave5_report.md",
-            "utf8_normalization_wave6_report.json",
-            "utf8_normalization_wave6_report.md",
-            "utf8_normalization_wave7_report.json",
-            "utf8_normalization_wave7_report.md",
-            "utf8_normalization_wave8_report.json",
-            "utf8_normalization_wave8_report.md",
-            "utf8_normalization_wave9_report.json",
-            "utf8_normalization_wave9_report.md"
+            "utf8_normalization_wave10_report.md"
           ],
           "latest_by_extension": {
             ".json": "utf8_normalization_wave10_report.json",
             ".md": "utf8_normalization_wave10_report.md"
           },
-          "archive_candidates": [
-            "utf8_normalization_wave2_report.json",
-            "utf8_normalization_wave2_report.md",
-            "utf8_normalization_wave3_report.json",
-            "utf8_normalization_wave3_report.md",
-            "utf8_normalization_wave4_report.json",
-            "utf8_normalization_wave4_report.md",
-            "utf8_normalization_wave5_report.json",
-            "utf8_normalization_wave5_report.md",
-            "utf8_normalization_wave6_report.json",
-            "utf8_normalization_wave6_report.md",
-            "utf8_normalization_wave7_report.json",
-            "utf8_normalization_wave7_report.md",
-            "utf8_normalization_wave8_report.json",
-            "utf8_normalization_wave8_report.md",
-            "utf8_normalization_wave9_report.json",
-            "utf8_normalization_wave9_report.md"
-          ]
+          "archive_candidates": []
         }
       ]
     },
@@ -766,9 +812,7 @@
           "latest_by_extension": {
             ".txt": "frontend_build_output_20260221.txt"
           },
-          "archive_candidates": [
-            "frontend_build_output.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "frontend_npm_ci_output",
@@ -1117,38 +1161,30 @@
         },
         {
           "family": "phase2_1_1_pra_check_all_failfast",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_prA_check_all_failfast.txt",
             "phase2_1_1_prA_check_all_failfast_202603XX.txt"
           ],
           "latest_by_extension": {
             ".txt": "phase2_1_1_prA_check_all_failfast_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_prA_check_all_failfast.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_1_pra_node_ssot_check",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_prA_node_ssot_check.txt",
             "phase2_1_1_prA_node_ssot_check_202603XX.txt"
           ],
           "latest_by_extension": {
             ".txt": "phase2_1_1_prA_node_ssot_check_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_prA_node_ssot_check.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_1_prb_chatgpt_doc_lint",
-          "file_count": 4,
+          "file_count": 2,
           "files": [
-            "phase2_1_1_prB_chatgpt_doc_lint.json",
-            "phase2_1_1_prB_chatgpt_doc_lint.txt",
             "phase2_1_1_prB_chatgpt_doc_lint_202603XX.json",
             "phase2_1_1_prB_chatgpt_doc_lint_202603XX.txt"
           ],
@@ -1156,52 +1192,40 @@
             ".json": "phase2_1_1_prB_chatgpt_doc_lint_202603XX.json",
             ".txt": "phase2_1_1_prB_chatgpt_doc_lint_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_prB_chatgpt_doc_lint.json",
-            "phase2_1_1_prB_chatgpt_doc_lint.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_1_prb_chatgpt_pii_token_scan",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_prB_chatgpt_pii_token_scan.txt",
             "phase2_1_1_prB_chatgpt_pii_token_scan_202603XX.txt"
           ],
           "latest_by_extension": {
             ".txt": "phase2_1_1_prB_chatgpt_pii_token_scan_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_prB_chatgpt_pii_token_scan.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_1_prc_runbook_onepager_check",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_prC_runbook_onepager_check.txt",
             "phase2_1_1_prC_runbook_onepager_check_202603XX.txt"
           ],
           "latest_by_extension": {
             ".txt": "phase2_1_1_prC_runbook_onepager_check_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_prC_runbook_onepager_check.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_1_utf8_check",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_utf8_check.txt",
             "phase2_1_1_utf8_check_202603XX.txt"
           ],
           "latest_by_extension": {
             ".txt": "phase2_1_1_utf8_check_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_utf8_check.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_2_backend_test_output",
@@ -1830,7 +1854,7 @@
     },
     {
       "group": "misc",
-      "family_count": 140,
+      "family_count": 141,
       "families": [
         {
           "family": "analysis_llm_provider_001",
@@ -1840,6 +1864,17 @@
           ],
           "latest_by_extension": {
             ".md": "analysis_llm_provider_001.md"
+          },
+          "archive_candidates": []
+        },
+        {
+          "family": "application_port_boundary_baseline_violations",
+          "file_count": 1,
+          "files": [
+            "application_port_boundary_baseline_violations.json"
+          ],
+          "latest_by_extension": {
+            ".json": "application_port_boundary_baseline_violations.json"
           },
           "archive_candidates": []
         },
@@ -2616,17 +2651,14 @@
         },
         {
           "family": "phase2_1_1_pra_node_runtime",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_prA_node_runtime.txt",
             "phase2_1_1_prA_node_runtime_202603XX.txt"
           ],
           "latest_by_extension": {
             ".txt": "phase2_1_1_prA_node_runtime_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_prA_node_runtime.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_1_pra_node_ssot_sync",
@@ -2641,45 +2673,36 @@
         },
         {
           "family": "phase2_1_1_prb_chatgpt_utf8",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_prB_chatgpt_utf8.txt",
             "phase2_1_1_prB_chatgpt_utf8_202603XX.txt"
           ],
           "latest_by_extension": {
             ".txt": "phase2_1_1_prB_chatgpt_utf8_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_prB_chatgpt_utf8.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_1_prc_notion_preflight",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_prC_notion_preflight.json",
             "phase2_1_1_prC_notion_preflight_202603XX.json"
           ],
           "latest_by_extension": {
             ".json": "phase2_1_1_prC_notion_preflight_202603XX.json"
           },
-          "archive_candidates": [
-            "phase2_1_1_prC_notion_preflight.json"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_1_spec_consistency",
-          "file_count": 2,
+          "file_count": 1,
           "files": [
-            "phase2_1_1_spec_consistency.txt",
             "phase2_1_1_spec_consistency_202603XX.txt"
           ],
           "latest_by_extension": {
             ".txt": "phase2_1_1_spec_consistency_202603XX.txt"
           },
-          "archive_candidates": [
-            "phase2_1_1_spec_consistency.txt"
-          ]
+          "archive_candidates": []
         },
         {
           "family": "phase2_1_2_baseline",
@@ -3414,6 +3437,11 @@
     "agent_system_pr1_lint_output.txt",
     "agent_system_pr1_utf8_check.txt",
     "analysis_llm_provider_001.md",
+    "application_port_boundary_baseline_violations.json",
+    "application_port_boundary_gate.json",
+    "application_port_boundary_gate.txt",
+    "artifact_archive_report.json",
+    "artifact_archive_report.txt",
     "artifact_sanitization_scan.txt",
     "backend_auth_rbac_ops_test_output_20260221.txt",
     "backend_bootrun_postgres_output.txt",
@@ -3748,36 +3776,5 @@
     "workpack_agent_contract_v2.json",
     "workpack_agent_contract_v2.txt"
   ],
-  "archive_candidates": [
-    "frontend_build_output.txt",
-    "phase2_1_1_prA_check_all_failfast.txt",
-    "phase2_1_1_prA_node_runtime.txt",
-    "phase2_1_1_prA_node_ssot_check.txt",
-    "phase2_1_1_prB_chatgpt_doc_lint.json",
-    "phase2_1_1_prB_chatgpt_doc_lint.txt",
-    "phase2_1_1_prB_chatgpt_pii_token_scan.txt",
-    "phase2_1_1_prB_chatgpt_utf8.txt",
-    "phase2_1_1_prC_notion_manual_gate.json",
-    "phase2_1_1_prC_notion_manual_gate.txt",
-    "phase2_1_1_prC_notion_preflight.json",
-    "phase2_1_1_prC_runbook_onepager_check.txt",
-    "phase2_1_1_spec_consistency.txt",
-    "phase2_1_1_utf8_check.txt",
-    "utf8_normalization_wave2_report.json",
-    "utf8_normalization_wave2_report.md",
-    "utf8_normalization_wave3_report.json",
-    "utf8_normalization_wave3_report.md",
-    "utf8_normalization_wave4_report.json",
-    "utf8_normalization_wave4_report.md",
-    "utf8_normalization_wave5_report.json",
-    "utf8_normalization_wave5_report.md",
-    "utf8_normalization_wave6_report.json",
-    "utf8_normalization_wave6_report.md",
-    "utf8_normalization_wave7_report.json",
-    "utf8_normalization_wave7_report.md",
-    "utf8_normalization_wave8_report.json",
-    "utf8_normalization_wave8_report.md",
-    "utf8_normalization_wave9_report.json",
-    "utf8_normalization_wave9_report.md"
-  ]
+  "archive_candidates": []
 }

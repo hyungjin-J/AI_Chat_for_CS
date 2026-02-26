@@ -2,7 +2,7 @@ package com.aichatbot.contexts.knowledge.rag.application;
 
 import com.aichatbot.platform.privacy.PiiMaskingService;
 import com.aichatbot.contexts.knowledge.rag.domain.model.ChunkSearchRow;
-import com.aichatbot.contexts.knowledge.rag.infrastructure.KbSearchRepository;
+import com.aichatbot.contexts.knowledge.rag.domain.port.KbSearchStore;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RetrievalService {
 
-    private final KbSearchRepository kbSearchRepository;
+    private final KbSearchStore kbSearchRepository;
     private final RrfFusion rrfFusion;
     private final NoopReranker reranker;
     private final EvidenceSelector evidenceSelector;
@@ -25,7 +25,7 @@ public class RetrievalService {
     private final RagRetrievalMetrics ragRetrievalMetrics;
 
     public RetrievalService(
-        KbSearchRepository kbSearchRepository,
+        KbSearchStore kbSearchRepository,
         RrfFusion rrfFusion,
         NoopReranker reranker,
         EvidenceSelector evidenceSelector,

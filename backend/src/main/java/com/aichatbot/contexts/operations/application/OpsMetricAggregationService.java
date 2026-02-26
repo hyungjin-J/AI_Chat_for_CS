@@ -1,7 +1,7 @@
 package com.aichatbot.contexts.operations.application;
 
 import com.aichatbot.contexts.operations.domain.OpsEventAggregate;
-import com.aichatbot.contexts.operations.infrastructure.OpsRepository;
+import com.aichatbot.contexts.operations.domain.port.OpsMetricStore;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -12,16 +12,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpsMetricAggregationService {
 
-    private final OpsRepository opsRepository;
+    private final OpsMetricStore opsRepository;
     private final OpsEventService opsEventService;
     private final Clock clock;
 
     @Autowired
-    public OpsMetricAggregationService(OpsRepository opsRepository, OpsEventService opsEventService) {
+    public OpsMetricAggregationService(OpsMetricStore opsRepository, OpsEventService opsEventService) {
         this(opsRepository, opsEventService, Clock.systemUTC());
     }
 
-    OpsMetricAggregationService(OpsRepository opsRepository, OpsEventService opsEventService, Clock clock) {
+    OpsMetricAggregationService(OpsMetricStore opsRepository, OpsEventService opsEventService, Clock clock) {
         this.opsRepository = opsRepository;
         this.opsEventService = opsEventService;
         this.clock = clock;

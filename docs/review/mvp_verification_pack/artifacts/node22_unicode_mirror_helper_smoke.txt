@@ -10,3 +10,5 @@ node_bootstrap_ran=False
 npm_ci_ran=False
 npm_test_ran=False
 npm_build_ran=False
+package_manager=npm
+install_command=npm ci --prefer-offline --no-audit --fund=false

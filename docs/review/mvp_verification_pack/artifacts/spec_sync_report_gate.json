@@ -1,16 +1,155 @@
 {
-  "status": "PASS",
-  "changed_files_count": 148,
-  "spec_changed_count": 6,
+  "status": "FAIL",
+  "changed_files_count": 190,
+  "spec_changed_count": 5,
   "spec_changed_files": [
     "docs/references/CS AI Chatbot_Requirements Statement.csv",
     "docs/references/CS_AI_CHATBOT_DB.xlsx",
     "docs/references/Development environment.csv",
     "docs/references/Summary of key features.csv",
-    "docs/references/google_ready_api_spec_v0.3_20260216.xlsx",
-    "docs/uiux/CS_RAG_UI_UX_/354/204/244/352/263/204/354/204/234.xlsx"
+    "docs/references/google_ready_api_spec_v0.3_20260216.xlsx"
   ],
   "spec_sync_report_changed": true,
   "require_metadata": true,
-  "violations": []
+  "require_notion_evidence_format": true,
+  "head_commit": "3d56064664742d4990e015a7f25c14a882f5cc89",
+  "head_commit_short": "3d56064",
+  "evidence_section_count": 19,
+  "source_evidence_results": [
+    {
+      "source_file": "docs/references/CS AI Chatbot_Requirements Statement.csv",
+      "expected_notion_url": "https://www.notion.so/2ed405a3a720816594e4dc34972174ec",
+      "status": "FAIL",
+      "matched_section_count": 1,
+      "matched_sections": [
+        "18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458"
+      ],
+      "passed_sections": [],
+      "failed_check_codes": [
+        "SPEC_SYNC_VERSION_HEAD_MISMATCH"
+      ],
+      "section_checks": [
+        {
+          "section": "18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458",
+          "last_synced_valid": true,
+          "version_has_hash": true,
+          "version_head_match": false,
+          "notion_url_present": true,
+          "notion_url_match": true,
+          "change_summary_line_count": 5,
+          "change_summary_valid": true,
+          "version_hashes": [
+            "a83c840"
+          ]
+        }
+      ]
+    },
+    {
+      "source_file": "docs/references/CS_AI_CHATBOT_DB.xlsx",
+      "expected_notion_url": "https://www.notion.so/2ed405a3a720812180d9d508b77f31a4",
+      "status": "FAIL",
+      "matched_section_count": 0,
+      "matched_sections": [],
+      "passed_sections": [],
+      "failed_check_codes": [
+        "SPEC_SYNC_EVIDENCE_BLOCK_MISSING"
+      ],
+      "section_checks": []
+    },
+    {
+      "source_file": "docs/references/Development environment.csv",
+      "expected_notion_url": "https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7",
+      "status": "FAIL",
+      "matched_section_count": 1,
+      "matched_sections": [
+        "18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458"
+      ],
+      "passed_sections": [],
+      "failed_check_codes": [
+        "SPEC_SYNC_VERSION_HEAD_MISMATCH"
+      ],
+      "section_checks": [
+        {
+          "section": "18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458",
+          "last_synced_valid": true,
+          "version_has_hash": true,
+          "version_head_match": false,
+          "notion_url_present": true,
+          "notion_url_match": true,
+          "change_summary_line_count": 5,
+          "change_summary_valid": true,
+          "version_hashes": [
+            "a83c840"
+          ]
+        }
+      ]
+    },
+    {
+      "source_file": "docs/references/Summary of key features.csv",
+      "expected_notion_url": "https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149",
+      "status": "FAIL",
+      "matched_section_count": 1,
+      "matched_sections": [
+        "18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458"
+      ],
+      "passed_sections": [],
+      "failed_check_codes": [
+        "SPEC_SYNC_VERSION_HEAD_MISMATCH"
+      ],
+      "section_checks": [
+        {
+          "section": "18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458",
+          "last_synced_valid": true,
+          "version_has_hash": true,
+          "version_head_match": false,
+          "notion_url_present": true,
+          "notion_url_match": true,
+          "change_summary_line_count": 5,
+          "change_summary_valid": true,
+          "version_hashes": [
+            "a83c840"
+          ]
+        }
+      ]
+    },
+    {
+      "source_file": "docs/references/google_ready_api_spec_v0.3_20260216.xlsx",
+      "expected_notion_url": "https://www.notion.so/2ed405a3a720816594e4dc34972174ec",
+      "status": "FAIL",
+      "matched_section_count": 0,
+      "matched_sections": [],
+      "passed_sections": [],
+      "failed_check_codes": [
+        "SPEC_SYNC_EVIDENCE_BLOCK_MISSING"
+      ],
+      "section_checks": []
+    }
+  ],
+  "violations": [
+    {
+      "code": "SPEC_SYNC_VERSION_HEAD_MISMATCH",
+      "message": "Version/commit hash must include current HEAD commit hash",
+      "details": "source_file=docs/references/CS AI Chatbot_Requirements Statement.csv; expected_notion_url=https://www.notion.so/2ed405a3a720816594e4dc34972174ec; matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458"
+    },
+    {
+      "code": "SPEC_SYNC_EVIDENCE_BLOCK_MISSING",
+      "message": "spec_sync_report.md is missing source-specific evidence block",
+      "details": "source_file=docs/references/CS_AI_CHATBOT_DB.xlsx; expected_notion_url=https://www.notion.so/2ed405a3a720812180d9d508b77f31a4; matched_sections=none"
+    },
+    {
+      "code": "SPEC_SYNC_VERSION_HEAD_MISMATCH",
+      "message": "Version/commit hash must include current HEAD commit hash",
+      "details": "source_file=docs/references/Development environment.csv; expected_notion_url=https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7; matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458"
+    },
+    {
+      "code": "SPEC_SYNC_VERSION_HEAD_MISMATCH",
+      "message": "Version/commit hash must include current HEAD commit hash",
+      "details": "source_file=docs/references/Summary of key features.csv; expected_notion_url=https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149; matched_sections=18) Session (2026-02-25 Canonical UTF-8 Wave10)@L458"
+    },
+    {
+      "code": "SPEC_SYNC_EVIDENCE_BLOCK_MISSING",
+      "message": "spec_sync_report.md is missing source-specific evidence block",
+      "details": "source_file=docs/references/google_ready_api_spec_v0.3_20260216.xlsx; expected_notion_url=https://www.notion.so/2ed405a3a720816594e4dc34972174ec; matched_sections=none"
+    }
+  ]
 }

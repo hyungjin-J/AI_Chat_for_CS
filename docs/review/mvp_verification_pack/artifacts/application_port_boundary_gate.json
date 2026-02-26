@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "current_violation_count": 0,
+  "baseline_violation_count": 0,
+  "new_violation_count": 0,
+  "resolved_baseline_count": 0,
+  "baseline_growth_base_source": "head-fallback:missing-in-origin/main",
+  "baseline_growth_base_count": 0,
+  "baseline_growth_head_count": 0,
+  "baseline_growth_count": 0,
+  "baseline_growth_items": [],
+  "new_violations": [],
+  "resolved_baseline": [],
+  "all_current_violations": []
+}

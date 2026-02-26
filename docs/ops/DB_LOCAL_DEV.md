@@ -130,3 +130,78 @@ Get-Content docs/ops/sql/DB_OPS_DIAGNOSTICS.sql -Raw | `
   docker compose -f infra/docker-compose.yml exec -T postgres `
     psql -U aichatbot -d aichatbot | Tee-Object -FilePath $artifact
 ```
+
+## 7) PGVECTOR IVFFlat operations and benchmark
+- Operations guide:
+  - `docs/ops/PGVECTOR_OPERATIONS.md`
+- Local benchmark script:
+  - `scripts/vector_recall_latency_bench.py`
+
+Create a baseline artifact:
+
+```powershell
+python scripts/vector_recall_latency_bench.py `
+  --method docker-exec `
+  --compose-file infra/docker-compose.yml `
+  --compose-service postgres `
+  --database aichatbot `
+  --db-user aichatbot `
+  --tenant-id 00000000-0000-0000-0000-000000000001 `
+  --top-k 10 `
+  --query-count 30 `
+  --probe-values 1,2,4,8,16,32 `
+  --output-txt docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_20260226.txt `
+  --output-json docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_20260226.json
+```
+
+Compare current run against baseline delta policy:
+
+```powershell
+python scripts/vector_recall_latency_bench.py `
+  --method docker-exec `
+  --compose-file infra/docker-compose.yml `
+  --compose-service postgres `
+  --database aichatbot `
+  --db-user aichatbot `
+  --tenant-id 00000000-0000-0000-0000-000000000001 `
+  --top-k 10 `
+  --query-count 30 `
+  --probe-values 1,2,4,8,16,32 `
+  --baseline-json docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_baseline.json `
+  --max-recall-drop 0.03 `
+  --max-p95-regression-ratio 1.30 `
+  --output-txt docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_20260226.txt `
+  --output-json docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_20260226.json
+```
+
+## 8) CI Nightly reproducibility (`db-repro-nightly.yml`)
+The same clean-volume reproducibility path runs in GitHub Actions nightly and manual dispatch:
+- Workflow: `.github/workflows/db-repro-nightly.yml`
+- Triggers:
+  - `schedule`: `0 17 * * *` (KST 02:00)
+  - `workflow_dispatch`
+
+Execution order is fixed:
+1. `docker compose -f infra/docker-compose.yml down -v`
+2. `docker compose -f infra/docker-compose.yml up -d postgres redis`
+3. `docker compose -f infra/docker-compose.yml --profile db-tools run --rm flyway`
+4. `python scripts/db_smoke_test.py --method docker-exec ...`
+5. `docker compose -f infra/docker-compose.yml --profile demo-stack up -d backend`
+6. fail-closed health checks:
+  - without `X-Trace-Id` -> `409`
+  - with `X-Trace-Id` -> `200`
+
+Nightly artifacts (always uploaded, even on failure):
+- `docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.txt`
+- `docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.json`
+- `docs/review/mvp_verification_pack/artifacts/db_backend_health_without_trace_raw.txt`
+- `docs/review/mvp_verification_pack/artifacts/db_backend_health_with_trace_raw.txt`
+- `docs/review/mvp_verification_pack/artifacts/db_backend_health_trace_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/db_backend_health_trace_gate.json`
+- `docs/review/mvp_verification_pack/artifacts/db_readiness_compose_ps.txt`
+- `docs/review/mvp_verification_pack/artifacts/db_readiness_flyway_output.txt`
+- `docs/review/mvp_verification_pack/artifacts/db_readiness_compose_logs.txt`
+
+Operational note:
+- This nightly is monitoring-only and does not add PR merge-block enforcement.
+- Failures are still explicit at workflow level (red run state) and traceable by uploaded artifacts.

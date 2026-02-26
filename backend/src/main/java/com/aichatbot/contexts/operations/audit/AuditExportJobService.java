@@ -145,9 +145,29 @@ public class AuditExportJobService {
         return findById(tenantId, jobId);
     }
 
+    @Transactional
+    public AuditExportJobView createJobView(
+        UUID tenantId,
+        UUID requestedBy,
+        String format,
+        Instant fromUtc,
+        Instant toUtc,
+        Integer rowLimit,
+        Integer maxBytes,
+        Integer maxDurationSec
+    ) {
+        return AuditExportJobView.from(
+            createJob(tenantId, requestedBy, format, fromUtc, toUtc, rowLimit, maxBytes, maxDurationSec)
+        );
+    }
+
     public AuditExportJobRecord findById(UUID tenantId, UUID jobId) {
         return auditLogRepository.findExportJobById(tenantId, jobId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "API-004-404", "Audit export job not found"));
+    }
+
+    public AuditExportJobView findViewById(UUID tenantId, UUID jobId) {
+        return AuditExportJobView.from(findById(tenantId, jobId));
     }
 
     public DownloadPayload download(UUID tenantId, UUID jobId, UUID requestedBy) {
@@ -200,6 +220,11 @@ public class AuditExportJobService {
         );
 
         return new DownloadPayload(job, payload);
+    }
+
+    public DownloadPayloadView downloadView(UUID tenantId, UUID jobId, UUID requestedBy) {
+        DownloadPayload payload = download(tenantId, jobId, requestedBy);
+        return new DownloadPayloadView(AuditExportJobView.from(payload.job()), payload.payload());
     }
 
     @Transactional
@@ -493,6 +518,40 @@ public class AuditExportJobService {
 
     public record DownloadPayload(
         AuditExportJobRecord job,
+        byte[] payload
+    ) {
+    }
+
+    public record AuditExportJobView(
+        UUID id,
+        String status,
+        String exportFormat,
+        int rowCount,
+        int totalBytes,
+        String errorCode,
+        String errorMessage,
+        Instant createdAt,
+        Instant completedAt,
+        Instant expiresAt
+    ) {
+        static AuditExportJobView from(AuditExportJobRecord record) {
+            return new AuditExportJobView(
+                record.id(),
+                record.status(),
+                record.exportFormat(),
+                record.rowCount(),
+                record.totalBytes(),
+                record.errorCode(),
+                record.errorMessage(),
+                record.createdAt(),
+                record.completedAt(),
+                record.expiresAt()
+            );
+        }
+    }
+
+    public record DownloadPayloadView(
+        AuditExportJobView job,
         byte[] payload
     ) {
     }

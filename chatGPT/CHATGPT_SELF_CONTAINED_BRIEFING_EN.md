@@ -1,8 +1,8 @@
 # CHATGPT SELF-CONTAINED BRIEFING (EN)
 
-- updated_at_kst: 2026-02-25 23:39:05 +09:00
+- updated_at_kst: 2026-02-27 01:29:32 +09:00
 - base_commit_hash: 97f7502
-- current_head_short: a83c840
+- current_head_short: 3d56064
 - release_tag: 2026.03XX-quality-hardening-workpack
 - branch: main
 - preflight_audit_doc: docs/review/agent_reports/CONTINUATION_PREFLIGHT_AUDIT.md
@@ -23,6 +23,14 @@
 - Added: DB smoke script `scripts/db_smoke_test.py` and operator runbook `docs/ops/DB_LOCAL_DEV.md`.
 - Added: Runtime Docker verification from clean volumes (`down -v -> up -> flyway -> smoke`) with PASS evidence.
 - Added: Backend container boot evidence confirmed with fail-closed health behavior (`409 without X-Trace-Id`, `200 with X-Trace-Id`).
+- Added: Separate nightly workflow `.github/workflows/db-repro-nightly.yml` for DB reproducibility monitoring with clean-volume path.
+- Added: New boundary ratchet gate `assert_application_port_boundaries.py` with baseline `0`.
+- Changed: `operations` + `knowledge/rag` application services now consume domain ports instead of infrastructure imports.
+- Changed: `knowledge/rag/presentation/CitationController` now queries citations through application service (`CitationQueryService`).
+- Changed: Backoffice ACL boundary policy now blocks `.domain.` imports and emits `FORBIDDEN_DOMAIN_IMPORT`.
+- Added: `docs/ops/PGVECTOR_OPERATIONS.md` with IVFFlat `lists/probes`, `ANALYZE/REINDEX`, and bulk reload runbook.
+- Added: local delta benchmark CLI `scripts/vector_recall_latency_bench.py` (+ unit tests) to compare recall/latency against baseline.
+- Changed: `docs/ops/DB_LOCAL_DEV.md` now links PGVECTOR operations and benchmark commands.
 
 ## 1) Session Outcome
 - Quality-hardening workpack was implemented with no public API compare regression.
@@ -30,6 +38,8 @@
 - UTF-8 full-scan baseline is reduced from 118 to 0 in current evidence.
 - Spec consistency and spec sync enforcement gates are added and integrated in CI.
 - Node22 unicode workspace instability is documented with pragmatic local mitigation.
+- PGVECTOR IVFFlat operations are now documented with reproducible local delta benchmark flow.
+- DB reproducibility check is now connected to dedicated nightly scheduling (`db-repro-nightly`).
 
 ## 2) SSOT Priority
 Resolve conflicts in this order:
@@ -53,6 +63,7 @@ Resolve conflicts in this order:
 | Workpack/report v2 contract | PASS | `docs/review/mvp_verification_pack/artifacts/workpack_agent_contract_v2.txt` |
 | Workpack trigger consistency | PASS | `docs/review/mvp_verification_pack/artifacts/continuation_trigger_consistency_gate.txt` |
 | Domain purity ratchet | PASS | `docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.txt` |
+| Application port boundary ratchet | PASS | `docs/review/mvp_verification_pack/artifacts/application_port_boundary_gate.txt` |
 | Domain purity burn-down summary | PASS | `docs/review/mvp_verification_pack/artifacts/domain_layer_purity_burndown_summary.txt` |
 | UTF-8 strict diff-scope | PASS | `docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.txt` |
 | UTF-8 full-scan ratchet | PASS | `docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.txt` |
@@ -73,7 +84,7 @@ Resolve conflicts in this order:
 2. Spec terminology checks are curated and deterministic, but coverage is intentionally limited to approved token sets.
 3. Workpack evidence files are numerous; periodic archival strategy is needed to keep signal high.
 4. Notion sync remains process-critical and still depends on operator discipline for external system updates.
-5. Artifact freshness and gate outputs still need routine hygiene to avoid stale references.
+5. Nightly DB reproducibility depends on runner/docker stability; intermittent infra flakes can cause noisy failures.
 
 ## 7) Next PRs Top5
 1. Add curated terminology checks for additional contract headers/events as new SSOT entries are approved.
@@ -96,3 +107,5 @@ Resolve conflicts in this order:
 - `docs/review/mvp_verification_pack/artifacts/domain_layer_purity_baseline_violations.json`
 - `docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.txt`
 - `docs/review/mvp_verification_pack/artifacts/backend_bootrun_postgres_output.txt`
+- `docs/ops/PGVECTOR_OPERATIONS.md`
+- `scripts/vector_recall_latency_bench.py`

@@ -1,0 +1,33 @@
+{
+  "targets": [
+    {
+      "name": "operations_application",
+      "scan_root": "backend/src/main/java/com/aichatbot/contexts/operations/application",
+      "file_glob": "**/*.java",
+      "required_prefix": "com.aichatbot.contexts.",
+      "forbidden_import_tokens": [
+        ".infrastructure."
+      ]
+    },
+    {
+      "name": "rag_application",
+      "scan_root": "backend/src/main/java/com/aichatbot/contexts/knowledge/rag/application",
+      "file_glob": "**/*.java",
+      "required_prefix": "com.aichatbot.contexts.",
+      "forbidden_import_tokens": [
+        ".infrastructure."
+      ]
+    },
+    {
+      "name": "rag_presentation",
+      "scan_root": "backend/src/main/java/com/aichatbot/contexts/knowledge/rag/presentation",
+      "file_glob": "**/*.java",
+      "required_prefix": "com.aichatbot.contexts.",
+      "forbidden_import_tokens": [
+        ".infrastructure."
+      ]
+    }
+  ],
+  "baseline_file": "docs/review/mvp_verification_pack/artifacts/application_port_boundary_baseline_violations.json",
+  "baseline_growth_guard": true
+}

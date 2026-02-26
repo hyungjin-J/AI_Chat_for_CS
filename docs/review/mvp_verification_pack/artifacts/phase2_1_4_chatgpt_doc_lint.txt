@@ -3,5 +3,5 @@ status=PASS
 violation_count=0
 warning_count=0
 scanned_tables_count=2
-extracted_evidence_paths_count=26
+extracted_evidence_paths_count=27
 missing_paths_count=0

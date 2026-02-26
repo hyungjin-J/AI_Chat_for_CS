@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "archive_root": "docs/review/mvp_verification_pack/archive",
+  "bundle_count": 12,
+  "archived_file_count": 29,
+  "bundles": [
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_check_all_failfast__20260226T134334Z.zip",
+      "family": "phase2_1_1_pra_check_all_failfast",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_prA_check_all_failfast.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_node_runtime__20260226T134334Z.zip",
+      "family": "phase2_1_1_pra_node_runtime",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_prA_node_runtime.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_node_ssot_check__20260226T134334Z.zip",
+      "family": "phase2_1_1_pra_node_ssot_check",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_prA_node_ssot_check.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_doc_lint__20260226T134334Z.zip",
+      "family": "phase2_1_1_prb_chatgpt_doc_lint",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 2,
+      "members": [
+        "phase2_1_1_prB_chatgpt_doc_lint.json",
+        "phase2_1_1_prB_chatgpt_doc_lint.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_pii_token_scan__20260226T134334Z.zip",
+      "family": "phase2_1_1_prb_chatgpt_pii_token_scan",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_prB_chatgpt_pii_token_scan.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_utf8__20260226T134334Z.zip",
+      "family": "phase2_1_1_prb_chatgpt_utf8",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_prB_chatgpt_utf8.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_manual_gate__20260226T134334Z.zip",
+      "family": "phase2_1_1_prc_notion_manual_gate",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 2,
+      "members": [
+        "phase2_1_1_prC_notion_manual_gate.json",
+        "phase2_1_1_prC_notion_manual_gate.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_preflight__20260226T134334Z.zip",
+      "family": "phase2_1_1_prc_notion_preflight",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_prC_notion_preflight.json"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_runbook_onepager_check__20260226T134334Z.zip",
+      "family": "phase2_1_1_prc_runbook_onepager_check",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_prC_runbook_onepager_check.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_spec_consistency__20260226T134334Z.zip",
+      "family": "phase2_1_1_spec_consistency",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_spec_consistency.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_utf8_check__20260226T134334Z.zip",
+      "family": "phase2_1_1_utf8_check",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 1,
+      "members": [
+        "phase2_1_1_utf8_check.txt"
+      ]
+    },
+    {
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip",
+      "family": "utf8_normalization_waveN_report",
+      "created_at_utc": "2026-02-26T13:43:34Z",
+      "file_count": 16,
+      "members": [
+        "utf8_normalization_wave2_report.json",
+        "utf8_normalization_wave2_report.md",
+        "utf8_normalization_wave3_report.json",
+        "utf8_normalization_wave3_report.md",
+        "utf8_normalization_wave4_report.json",
+        "utf8_normalization_wave4_report.md",
+        "utf8_normalization_wave5_report.json",
+        "utf8_normalization_wave5_report.md",
+        "utf8_normalization_wave6_report.json",
+        "utf8_normalization_wave6_report.md",
+        "utf8_normalization_wave7_report.json",
+        "utf8_normalization_wave7_report.md",
+        "utf8_normalization_wave8_report.json",
+        "utf8_normalization_wave8_report.md",
+        "utf8_normalization_wave9_report.json",
+        "utf8_normalization_wave9_report.md"
+      ]
+    }
+  ],
+  "archived_files": [
+    {
+      "original_path": "phase2_1_1_prA_check_all_failfast.txt",
+      "family": "phase2_1_1_pra_check_all_failfast",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_check_all_failfast__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prA_node_runtime.txt",
+      "family": "phase2_1_1_pra_node_runtime",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_node_runtime__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prA_node_ssot_check.txt",
+      "family": "phase2_1_1_pra_node_ssot_check",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_node_ssot_check__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prB_chatgpt_doc_lint.json",
+      "family": "phase2_1_1_prb_chatgpt_doc_lint",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_doc_lint__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prB_chatgpt_doc_lint.txt",
+      "family": "phase2_1_1_prb_chatgpt_doc_lint",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_doc_lint__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prB_chatgpt_pii_token_scan.txt",
+      "family": "phase2_1_1_prb_chatgpt_pii_token_scan",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_pii_token_scan__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prB_chatgpt_utf8.txt",
+      "family": "phase2_1_1_prb_chatgpt_utf8",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_utf8__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prC_notion_manual_gate.json",
+      "family": "phase2_1_1_prc_notion_manual_gate",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_manual_gate__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prC_notion_manual_gate.txt",
+      "family": "phase2_1_1_prc_notion_manual_gate",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_manual_gate__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prC_notion_preflight.json",
+      "family": "phase2_1_1_prc_notion_preflight",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_preflight__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_prC_runbook_onepager_check.txt",
+      "family": "phase2_1_1_prc_runbook_onepager_check",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_runbook_onepager_check__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_spec_consistency.txt",
+      "family": "phase2_1_1_spec_consistency",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_spec_consistency__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "phase2_1_1_utf8_check.txt",
+      "family": "phase2_1_1_utf8_check",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_utf8_check__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave2_report.json",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave2_report.md",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave3_report.json",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave3_report.md",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave4_report.json",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave4_report.md",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave5_report.json",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave5_report.md",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave6_report.json",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave6_report.md",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave7_report.json",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave7_report.md",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave8_report.json",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave8_report.md",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave9_report.json",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    },
+    {
+      "original_path": "utf8_normalization_wave9_report.md",
+      "family": "utf8_normalization_waveN_report",
+      "bundle_path": "docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip"
+    }
+  ]
+}

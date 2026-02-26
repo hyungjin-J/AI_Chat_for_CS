@@ -23,6 +23,23 @@ bash scripts/bootstrap_node_from_nvmrc.sh
 python scripts/check_node_version.py --nvmrc .nvmrc --package-json frontend/package.json --check-runtime
 ```
 
+## Unicode Workspace Mirror Run (Cross-Platform)
+When Node 22 frontend commands are unstable under non-ASCII workspace paths, use the mirror runner:
+
+```bash
+python scripts/mirror_and_run_frontend.py --source-root .
+```
+
+Frontend npm scripts:
+```bash
+cd frontend
+npm run mirror:run
+npm run mirror:smoke
+```
+
+Smoke evidence path (fixed):
+- `docs/review/mvp_verification_pack/artifacts/node22_unicode_mirror_helper_smoke.txt`
+
 ## If nvm Is Not Installed
 Use one of the following paths and then rerun the bootstrap script:
 

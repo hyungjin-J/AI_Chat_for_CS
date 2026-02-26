@@ -19,11 +19,17 @@ def write_text(path: Path, content: str = "x\n") -> None:
 
 
 def run_script(artifact_root: Path, check: bool = False) -> subprocess.CompletedProcess[str]:
+    archive_root = artifact_root.parent / "archive"
+    archive_manifest = archive_root / "_ARCHIVE_MANIFEST.json"
     args = [
         "python",
         str(SCRIPT_PATH),
         "--artifact-root",
         str(artifact_root),
+        "--archive-root",
+        str(archive_root),
+        "--archive-manifest",
+        str(archive_manifest),
         "--index-md",
         str(artifact_root / "_INDEX.md"),
         "--index-json",
@@ -116,14 +122,17 @@ class BuildArtifactIndexTest(unittest.TestCase):
     def test_check_mode_fails_on_missing_and_stale_index(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             artifacts = Path(tmp) / "docs/review/mvp_verification_pack/artifacts"
+            archive_manifest = artifacts.parent / "archive" / "_ARCHIVE_MANIFEST.json"
             write_text(artifacts / "spec_consistency_check_report.json")
 
             missing = run_script(artifacts, check=True)
             self.assertNotEqual(missing.returncode, 0)
             self.assertIn("INDEX_MISSING", missing.stdout)
+            self.assertIn("ARCHIVE_MANIFEST_MISSING", missing.stdout)
 
             built = run_script(artifacts)
             self.assertEqual(built.returncode, 0, msg=built.stdout + built.stderr)
+            self.assertTrue(archive_manifest.exists())
 
             index_md = artifacts / "_INDEX.md"
             index_md.write_text(index_md.read_text(encoding="utf-8") + "\n# stale\n", encoding="utf-8")
@@ -131,6 +140,51 @@ class BuildArtifactIndexTest(unittest.TestCase):
             stale = run_script(artifacts, check=True)
             self.assertNotEqual(stale.returncode, 0)
             self.assertIn("INDEX_STALE", stale.stdout)
+
+    def test_check_mode_detects_archive_manifest_stale_and_missing_bundle(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifacts = Path(tmp) / "docs/review/mvp_verification_pack/artifacts"
+            archive_manifest = artifacts.parent / "archive" / "_ARCHIVE_MANIFEST.json"
+            write_text(artifacts / "utf8_normalization_wave2_report.json")
+
+            built = run_script(artifacts)
+            self.assertEqual(built.returncode, 0, msg=built.stdout + built.stderr)
+
+            archive_manifest.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "archive_root": "docs/review/mvp_verification_pack/archive",
+                        "bundle_count": 1,
+                        "archived_file_count": 1,
+                        "bundles": [
+                            {
+                                "bundle_path": "C:/nonexistent/archive/missing_bundle.zip",
+                                "family": "utf8_normalization_waveN_report",
+                                "created_at_utc": "2026-02-26T00:00:00Z",
+                                "file_count": 1,
+                                "members": ["utf8_normalization_wave2_report.json"],
+                            }
+                        ],
+                        "archived_files": [
+                            {
+                                "original_path": "utf8_normalization_wave2_report.json",
+                                "family": "utf8_normalization_waveN_report",
+                                "bundle_path": "C:/nonexistent/archive/missing_bundle.zip",
+                            }
+                        ],
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            stale = run_script(artifacts, check=True)
+            self.assertNotEqual(stale.returncode, 0)
+            self.assertIn("ARCHIVE_MANIFEST_STALE", stale.stdout)
+            self.assertIn("ARCHIVE_BUNDLE_MISSING", stale.stdout)
 
 
 if __name__ == "__main__":

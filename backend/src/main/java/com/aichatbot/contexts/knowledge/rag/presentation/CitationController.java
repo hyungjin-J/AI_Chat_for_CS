@@ -3,8 +3,8 @@ package com.aichatbot.contexts.knowledge.rag.presentation;
 import com.aichatbot.platform.observability.TraceGuard;
 import com.aichatbot.platform.tenancy.TenantContext;
 import com.aichatbot.sharedkernel.util.UuidParser;
-import com.aichatbot.contexts.knowledge.rag.application.CitationView;
-import com.aichatbot.contexts.knowledge.rag.infrastructure.CitationRepository;
+import com.aichatbot.contexts.knowledge.rag.application.CitationQueryService;
+import com.aichatbot.contexts.knowledge.rag.domain.readmodel.CitationView;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/rag/answers")
 public class CitationController {
 
-    private final CitationRepository citationRepository;
+    private final CitationQueryService citationQueryService;
 
-    public CitationController(CitationRepository citationRepository) {
-        this.citationRepository = citationRepository;
+    public CitationController(CitationQueryService citationQueryService) {
+        this.citationQueryService = citationQueryService;
     }
 
     @GetMapping("/{answer_id}/citations")
@@ -34,7 +34,7 @@ public class CitationController {
         UUID messageId = UuidParser.parseRequired(answerId, "answer_id");
         int safeLimit = limit == null ? 20 : Math.max(1, Math.min(limit, 100));
 
-        List<CitationView> citations = citationRepository.findByMessageId(tenantId, messageId, cursor, safeLimit);
+        List<CitationView> citations = citationQueryService.findByMessageId(tenantId, messageId, cursor, safeLimit);
         List<CitationListResponse.CitationItem> items = citations.stream()
             .map(citation -> new CitationListResponse.CitationItem(
                 citation.id().toString(),

@@ -1,8 +1,8 @@
 # IMPLEMENTATION GUIDE FOR CHATGPT
 
-- updated_at_kst: 2026-02-25 23:39:05 +09:00
+- updated_at_kst: 2026-02-27 01:29:32 +09:00
 - base_commit_hash: 97f7502
-- current_head_short: a83c840
+- current_head_short: 3d56064
 - release_tag: 2026.03XX-quality-hardening-workpack
 - branch: main
 
@@ -22,6 +22,14 @@
 - Added: `scripts/db_smoke_test.py` + `docs/ops/DB_LOCAL_DEV.md` + `docs/ops/sql/DB_QUERY_PLAN_SANITY.sql`.
 - Added: Runtime docker verification on clean volumes (`down -v` flow) with PASS smoke evidence artifact.
 - Changed: Health-check validation rule clarified for fail-closed trace header behavior (`X-Trace-Id` required).
+- Added: Separate nightly workflow `.github/workflows/db-repro-nightly.yml` for clean-volume DB reproducibility monitoring.
+- Added: `scripts/assert_application_port_boundaries.py` ratchet gate + contract + baseline artifact.
+- Changed: `operations/application` and `knowledge/rag/application` now depend on domain port interfaces.
+- Changed: `knowledge/rag/presentation` citation endpoint now uses `CitationQueryService` (no infra import).
+- Changed: backoffice ACL gate now blocks `.domain.` imports (`FORBIDDEN_DOMAIN_IMPORT`).
+- Added: `docs/ops/PGVECTOR_OPERATIONS.md` for IVFFlat operations baseline, probe tuning, and index maintenance runbook.
+- Added: `scripts/vector_recall_latency_bench.py` + `scripts/tests/test_vector_recall_latency_bench.py`.
+- Changed: `docs/ops/DB_LOCAL_DEV.md` with PGVECTOR benchmark execution examples and baseline delta comparison flow.
 
 ## 1) Scope Implemented
 This continuation covers:
@@ -31,6 +39,8 @@ This continuation covers:
 4. UTF-8 baseline debt burn-down
 5. Node22 unicode workspace reproducibility hardening
 6. CI integration and evidence refresh
+7. PGVECTOR IVFFlat operations and local recall-latency delta reproducibility
+8. Separate DB reproducibility nightly scheduling (non merge-block monitoring)
 
 Primary audit entry:
 - `docs/review/agent_reports/CONTINUATION_PREFLIGHT_AUDIT.md`
@@ -189,6 +199,53 @@ Results:
 - Fail-closed behavior remained intact: health endpoint returns `409` without trace header and `200` with `X-Trace-Id`.
 - Collation mismatch warning was reproduced on stale volume and resolved by clean volume reset (`down -v`).
 
+### 2.11 Separate Nightly DB Reproducibility Workflow
+Files:
+- `.github/workflows/db-repro-nightly.yml`
+- `docs/ops/DB_LOCAL_DEV.md`
+
+Behavior:
+- Dedicated nightly workflow (GitHub Actions) runs the fixed clean-volume order:
+  - `down -v -> up postgres/redis -> flyway -> db_smoke_test`.
+- Backend health trace fail-closed contract is validated in the same job:
+  - without `X-Trace-Id`: `409`
+  - with `X-Trace-Id`: `200`
+- Failure policy:
+  - monitoring-only (no PR merge-block coupling),
+  - explicit workflow failure (red run state),
+  - `if: always()` artifact upload for root-cause triage.
+
+Primary artifacts:
+- `docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.txt`
+- `docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.json`
+- `docs/review/mvp_verification_pack/artifacts/db_backend_health_trace_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/db_backend_health_trace_gate.json`
+
+### 2.12 PGVECTOR IVFFlat Operations and Local Delta Benchmark
+Files:
+- `docs/ops/PGVECTOR_OPERATIONS.md`
+- `scripts/vector_recall_latency_bench.py`
+- `scripts/tests/test_vector_recall_latency_bench.py`
+- `docs/ops/DB_LOCAL_DEV.md`
+
+Behavior:
+- V11 ivfflat baseline (`lists=100`, `vector(1536)`) is documented as SSOT.
+- Operations guide now defines:
+  - lists sizing rule by data scale (`clamp(round(sqrt(N)), 100, 4000)`),
+  - probes sweep (`1,2,4,8,16,32`),
+  - `ANALYZE` cadence,
+  - `REINDEX INDEX CONCURRENTLY` and rebuild conditions.
+- Local benchmark CLI measures:
+  - Exact TopK (index scan disabled) vs Approx TopK (`SET LOCAL ivfflat.probes = X`),
+  - `recall@k`, `p50/p95 latency`,
+  - baseline delta fail-closed checks (`max_recall_drop`, `max_p95_regression_ratio`).
+
+Output contract:
+- `docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_YYYYMMDD.txt`
+- `docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_YYYYMMDD.json`
+- optional baseline reference:
+  - `docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_baseline.json`
+
 ## 3) Validation Gates
 | Gate | Status | Evidence |
 |---|---|---|
@@ -217,7 +274,7 @@ Results:
 2. Terminology checks are curated and deterministic but still cover only approved contract token sets.
 3. Notion synchronization traceability still depends on explicit report discipline.
 4. Large artifact inventory can hide regressions without periodic curation.
-5. Gate output volume can reduce triage speed without summary rollups.
+5. PGVECTOR recall-latency benchmark is local-only today; CI/nightly automation is not yet wired.
 
 ## 6) Next PRs Top5
 1. Extend curated terminology set only when new SSOT contract terms are formally approved.

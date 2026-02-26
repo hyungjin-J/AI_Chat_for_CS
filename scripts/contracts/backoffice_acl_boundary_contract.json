@@ -3,7 +3,8 @@
   "file_glob": "**/*.java",
   "forbidden_import_tokens": [
     ".infrastructure.",
-    ".presentation."
+    ".presentation.",
+    ".domain."
   ],
   "required_prefix": "com.aichatbot.contexts.",
   "baseline_file": "docs/review/mvp_verification_pack/artifacts/backoffice_acl_boundary_baseline_violations.json",

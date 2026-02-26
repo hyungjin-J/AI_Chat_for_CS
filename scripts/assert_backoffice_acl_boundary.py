@@ -38,6 +38,8 @@ def classify_violation(import_target: str, forbidden_tokens: list[str]) -> str |
                 return "FORBIDDEN_INFRA_IMPORT"
             if token == ".presentation.":
                 return "FORBIDDEN_PRESENTATION_IMPORT"
+            if token == ".domain.":
+                return "FORBIDDEN_DOMAIN_IMPORT"
             return "FORBIDDEN_IMPORT"
     return None
 

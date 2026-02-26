@@ -1,2 +1,0 @@
-node_version=v24.11.1
-npm_version=11.6.2

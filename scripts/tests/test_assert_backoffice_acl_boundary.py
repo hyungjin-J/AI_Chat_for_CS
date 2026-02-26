@@ -15,7 +15,7 @@ def write_contract(path: Path, baseline_file: str, baseline_markdown: str) -> No
     payload = {
         "scan_root": "backend/src/main/java/com/aichatbot/channels/backoffice",
         "file_glob": "**/*.java",
-        "forbidden_import_tokens": [".infrastructure.", ".presentation."],
+        "forbidden_import_tokens": [".infrastructure.", ".presentation.", ".domain."],
         "required_prefix": "com.aichatbot.contexts.",
         "baseline_file": baseline_file,
         "baseline_markdown": baseline_markdown,
@@ -129,6 +129,26 @@ class BackofficeAclBoundaryRatchetTest(unittest.TestCase):
             self.assertNotEqual(proc.returncode, 0)
             self.assertIn("status=FAIL", proc.stdout)
             self.assertIn("new_violation_count=1", proc.stdout)
+
+    def test_fail_on_new_domain_import(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            baseline_json_rel = "docs/review/mvp_verification_pack/artifacts/baseline.json"
+            baseline_md_rel = "docs/review/mvp_verification_pack/artifacts/baseline.md"
+            write_baseline_json(root / baseline_json_rel, [])
+            write_baseline_markdown(root / baseline_md_rel)
+            contract_path = root / "scripts/contracts/backoffice_acl_boundary_contract.json"
+            write_contract(contract_path, baseline_json_rel, baseline_md_rel)
+
+            write_java(
+                root / "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/SampleController.java",
+                ["com.aichatbot.contexts.operations.domain.OpsMetricTotal"],
+            )
+            proc = self.run_script(root, contract_path)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("status=FAIL", proc.stdout)
+            self.assertIn("new_violation_count=1", proc.stdout)
+            self.assertIn("FORBIDDEN_DOMAIN_IMPORT", proc.stdout)
 
     def test_pass_for_application_import(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

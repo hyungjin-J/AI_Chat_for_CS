@@ -1,16 +1,38 @@
 # Artifact Index
 
 - artifact_root: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts`
-- indexed_file_count: 367
+- indexed_file_count: 343
 - archive_keep_latest_per_extension: 1
-- latest_files_count: 337
-- archive_candidates_count: 30
+- latest_files_count: 342
+- archive_candidates_count: 0
+- pinned_paths_count: 51
+- archive_manifest_path: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json`
+
+## Archive Summary
+- bundle_count: 12
+- archived_file_count: 29
+- recent_bundles:
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip` (family=utf8_normalization_waveN_report, file_count=16)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_utf8_check__20260226T134334Z.zip` (family=phase2_1_1_utf8_check, file_count=1)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_spec_consistency__20260226T134334Z.zip` (family=phase2_1_1_spec_consistency, file_count=1)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_runbook_onepager_check__20260226T134334Z.zip` (family=phase2_1_1_prc_runbook_onepager_check, file_count=1)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_preflight__20260226T134334Z.zip` (family=phase2_1_1_prc_notion_preflight, file_count=1)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prc_notion_manual_gate__20260226T134334Z.zip` (family=phase2_1_1_prc_notion_manual_gate, file_count=2)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_utf8__20260226T134334Z.zip` (family=phase2_1_1_prb_chatgpt_utf8, file_count=1)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_pii_token_scan__20260226T134334Z.zip` (family=phase2_1_1_prb_chatgpt_pii_token_scan, file_count=1)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_doc_lint__20260226T134334Z.zip` (family=phase2_1_1_prb_chatgpt_doc_lint, file_count=2)
+  - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_node_ssot_check__20260226T134334Z.zip` (family=phase2_1_1_pra_node_ssot_check, file_count=1)
 
 ## Latest Files
 - `agent_system_pr1_lint_output.json`
 - `agent_system_pr1_lint_output.txt`
 - `agent_system_pr1_utf8_check.txt`
 - `analysis_llm_provider_001.md`
+- `application_port_boundary_baseline_violations.json`
+- `application_port_boundary_gate.json`
+- `application_port_boundary_gate.txt`
+- `artifact_archive_report.json`
+- `artifact_archive_report.txt`
 - `artifact_sanitization_scan.txt`
 - `backend_auth_rbac_ops_test_output_20260221.txt`
 - `backend_bootrun_postgres_output.txt`
@@ -346,39 +368,21 @@
 - `workpack_agent_contract_v2.txt`
 
 ## Archive Candidates (Optional)
-- `frontend_build_output.txt`
-- `phase2_1_1_prA_check_all_failfast.txt`
-- `phase2_1_1_prA_node_runtime.txt`
-- `phase2_1_1_prA_node_ssot_check.txt`
-- `phase2_1_1_prB_chatgpt_doc_lint.json`
-- `phase2_1_1_prB_chatgpt_doc_lint.txt`
-- `phase2_1_1_prB_chatgpt_pii_token_scan.txt`
-- `phase2_1_1_prB_chatgpt_utf8.txt`
-- `phase2_1_1_prC_notion_manual_gate.json`
-- `phase2_1_1_prC_notion_manual_gate.txt`
-- `phase2_1_1_prC_notion_preflight.json`
-- `phase2_1_1_prC_runbook_onepager_check.txt`
-- `phase2_1_1_spec_consistency.txt`
-- `phase2_1_1_utf8_check.txt`
-- `utf8_normalization_wave2_report.json`
-- `utf8_normalization_wave2_report.md`
-- `utf8_normalization_wave3_report.json`
-- `utf8_normalization_wave3_report.md`
-- `utf8_normalization_wave4_report.json`
-- `utf8_normalization_wave4_report.md`
-- `utf8_normalization_wave5_report.json`
-- `utf8_normalization_wave5_report.md`
-- `utf8_normalization_wave6_report.json`
-- `utf8_normalization_wave6_report.md`
-- `utf8_normalization_wave7_report.json`
-- `utf8_normalization_wave7_report.md`
-- `utf8_normalization_wave8_report.json`
-- `utf8_normalization_wave8_report.md`
-- `utf8_normalization_wave9_report.json`
-- `utf8_normalization_wave9_report.md`
+- (none)
 
 ## Group: gate
-- family_count: 22
+- family_count: 23
+
+### application_port_boundary_gate
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `application_port_boundary_gate.json`
+  - `.txt`: `application_port_boundary_gate.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `application_port_boundary_gate.json`
+  - `application_port_boundary_gate.txt`
 
 ### backoffice_acl_boundary_gate
 - file_count: 2
@@ -386,6 +390,7 @@
   - `.json`: `backoffice_acl_boundary_gate.json`
   - `.txt`: `backoffice_acl_boundary_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `backoffice_acl_boundary_gate.json`
   - `backoffice_acl_boundary_gate.txt`
@@ -396,6 +401,7 @@
   - `.json`: `chatgpt_handoff_update_gate.json`
   - `.txt`: `chatgpt_handoff_update_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `chatgpt_handoff_update_gate.json`
   - `chatgpt_handoff_update_gate.txt`
@@ -406,6 +412,7 @@
   - `.json`: `continuation_trigger_consistency_gate.json`
   - `.txt`: `continuation_trigger_consistency_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_trigger_consistency_gate.json`
   - `continuation_trigger_consistency_gate.txt`
@@ -416,6 +423,7 @@
   - `.json`: `continuation_utf8_strict_gate.json`
   - `.txt`: `continuation_utf8_strict_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_utf8_strict_gate.json`
   - `continuation_utf8_strict_gate.txt`
@@ -426,6 +434,7 @@
   - `.json`: `ddd_refactor_docs_validation_gate_lint.json`
   - `.txt`: `ddd_refactor_docs_validation_gate_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_docs_validation_gate_lint.json`
   - `ddd_refactor_docs_validation_gate_lint.txt`
@@ -435,6 +444,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_gate_summary.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_gate_summary.txt`
 
@@ -444,6 +454,7 @@
   - `.json`: `domain_layer_boundary_gate.json`
   - `.txt`: `domain_layer_boundary_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `domain_layer_boundary_gate.json`
   - `domain_layer_boundary_gate.txt`
@@ -454,6 +465,7 @@
   - `.json`: `frontend_import_boundary_gate.json`
   - `.txt`: `frontend_import_boundary_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `frontend_import_boundary_gate.json`
   - `frontend_import_boundary_gate.txt`
@@ -463,6 +475,7 @@
 - latest_by_extension:
   - `.txt`: `golive_ci_gate_status.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_ci_gate_status.txt`
 
@@ -472,6 +485,7 @@
   - `.json`: `handoff_update_gate.json`
   - `.txt`: `handoff_update_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `handoff_update_gate.json`
   - `handoff_update_gate.txt`
@@ -482,6 +496,7 @@
   - `.json`: `mapper_namespace_gate.json`
   - `.txt`: `mapper_namespace_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `mapper_namespace_gate.json`
   - `mapper_namespace_gate.txt`
@@ -492,6 +507,7 @@
   - `.json`: `orchestrator_control_docs_validation_gate_lint.json`
   - `.txt`: `orchestrator_control_docs_validation_gate_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_docs_validation_gate_lint.json`
   - `orchestrator_control_docs_validation_gate_lint.txt`
@@ -501,6 +517,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_gate_summary.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_gate_summary.txt`
 
@@ -510,6 +527,7 @@
   - `.json`: `orchestrator_control_notion_manual_gate.json`
   - `.txt`: `orchestrator_control_notion_manual_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_notion_manual_gate.json`
   - `orchestrator_control_notion_manual_gate.txt`
@@ -519,20 +537,18 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_ci_gate_summary_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_ci_gate_summary_202603XX.txt`
 
 ### phase2_1_1_prc_notion_manual_gate
-- file_count: 4
+- file_count: 2
 - latest_by_extension:
   - `.json`: `phase2_1_1_prC_notion_manual_gate_202603XX.json`
   - `.txt`: `phase2_1_1_prC_notion_manual_gate_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_prC_notion_manual_gate.json`
-  - `phase2_1_1_prC_notion_manual_gate.txt`
+  - (none)
 - files:
-  - `phase2_1_1_prC_notion_manual_gate.json`
-  - `phase2_1_1_prC_notion_manual_gate.txt`
   - `phase2_1_1_prC_notion_manual_gate_202603XX.json`
   - `phase2_1_1_prC_notion_manual_gate_202603XX.txt`
 
@@ -542,6 +558,7 @@
   - `.json`: `phase2_1_2_notion_manual_gate.json`
   - `.txt`: `phase2_1_2_notion_manual_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_notion_manual_gate.json`
   - `phase2_1_2_notion_manual_gate.txt`
@@ -551,6 +568,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_pr2_notion_gate_error_message.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_pr2_notion_gate_error_message.txt`
 
@@ -559,6 +577,7 @@
 - latest_by_extension:
   - `.json`: `phase2_1_notion_gate_202603XX.json`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_notion_gate_202603XX.json`
 
@@ -567,6 +586,7 @@
 - latest_by_extension:
   - `.json`: `phase2_1_pr1_notion_gate_context_202603XX.json`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr1_notion_gate_context_202603XX.json`
 
@@ -576,6 +596,7 @@
   - `.json`: `spec_sync_report_gate.json`
   - `.txt`: `spec_sync_report_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `spec_sync_report_gate.json`
   - `spec_sync_report_gate.txt`
@@ -586,18 +607,31 @@
   - `.json`: `utf8_full_scan_ratchet_gate.json`
   - `.txt`: `utf8_full_scan_ratchet_gate.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `utf8_full_scan_ratchet_gate.json`
   - `utf8_full_scan_ratchet_gate.txt`
 
 ## Group: report
-- family_count: 7
+- family_count: 8
+
+### artifact_archive_report
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `artifact_archive_report.json`
+  - `.txt`: `artifact_archive_report.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `artifact_archive_report.json`
+  - `artifact_archive_report.txt`
 
 ### metrics_report
 - file_count: 1
 - latest_by_extension:
   - `.md`: `metrics_report.md`
 - archive_candidates:
+  - (none)
 - files:
   - `metrics_report.md`
 
@@ -606,6 +640,7 @@
 - latest_by_extension:
   - `.txt`: `project_full_report_utf8_check_20260221.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `project_full_report_utf8_check_20260221.txt`
 
@@ -614,6 +649,7 @@
 - latest_by_extension:
   - `.json`: `release_check_report.json`
 - archive_candidates:
+  - (none)
 - files:
   - `release_check_report.json`
 
@@ -623,6 +659,7 @@
   - `.json`: `spec_consistency_check_report.json`
   - `.txt`: `spec_consistency_check_report.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `spec_consistency_check_report.json`
   - `spec_consistency_check_report.txt`
@@ -632,6 +669,7 @@
 - latest_by_extension:
   - `.md`: `utf16_normalization_report.md`
 - archive_candidates:
+  - (none)
 - files:
   - `utf16_normalization_report.md`
 
@@ -640,50 +678,20 @@
 - latest_by_extension:
   - `.md`: `utf8_bom_normalization_report.md`
 - archive_candidates:
+  - (none)
 - files:
   - `utf8_bom_normalization_report.md`
 
 ### utf8_normalization_waveN_report
-- file_count: 18
+- file_count: 2
 - latest_by_extension:
   - `.json`: `utf8_normalization_wave10_report.json`
   - `.md`: `utf8_normalization_wave10_report.md`
 - archive_candidates:
-  - `utf8_normalization_wave2_report.json`
-  - `utf8_normalization_wave2_report.md`
-  - `utf8_normalization_wave3_report.json`
-  - `utf8_normalization_wave3_report.md`
-  - `utf8_normalization_wave4_report.json`
-  - `utf8_normalization_wave4_report.md`
-  - `utf8_normalization_wave5_report.json`
-  - `utf8_normalization_wave5_report.md`
-  - `utf8_normalization_wave6_report.json`
-  - `utf8_normalization_wave6_report.md`
-  - `utf8_normalization_wave7_report.json`
-  - `utf8_normalization_wave7_report.md`
-  - `utf8_normalization_wave8_report.json`
-  - `utf8_normalization_wave8_report.md`
-  - `utf8_normalization_wave9_report.json`
-  - `utf8_normalization_wave9_report.md`
+  - (none)
 - files:
   - `utf8_normalization_wave10_report.json`
   - `utf8_normalization_wave10_report.md`
-  - `utf8_normalization_wave2_report.json`
-  - `utf8_normalization_wave2_report.md`
-  - `utf8_normalization_wave3_report.json`
-  - `utf8_normalization_wave3_report.md`
-  - `utf8_normalization_wave4_report.json`
-  - `utf8_normalization_wave4_report.md`
-  - `utf8_normalization_wave5_report.json`
-  - `utf8_normalization_wave5_report.md`
-  - `utf8_normalization_wave6_report.json`
-  - `utf8_normalization_wave6_report.md`
-  - `utf8_normalization_wave7_report.json`
-  - `utf8_normalization_wave7_report.md`
-  - `utf8_normalization_wave8_report.json`
-  - `utf8_normalization_wave8_report.md`
-  - `utf8_normalization_wave9_report.json`
-  - `utf8_normalization_wave9_report.md`
 
 ## Group: summary
 - family_count: 7
@@ -693,6 +701,7 @@
 - latest_by_extension:
   - `.txt`: `billing_parity_summary.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `billing_parity_summary.txt`
 
@@ -701,6 +710,7 @@
 - latest_by_extension:
   - `.txt`: `chatgpt_handoff_remediation_summary.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `chatgpt_handoff_remediation_summary.txt`
 
@@ -709,6 +719,7 @@
 - latest_by_extension:
   - `.txt`: `domain_layer_purity_burndown_summary.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `domain_layer_purity_burndown_summary.txt`
 
@@ -717,6 +728,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_backend_impl_summary.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_backend_impl_summary.txt`
 
@@ -725,6 +737,7 @@
 - latest_by_extension:
   - `.md`: `orchestrator_control_manual_chapter_summary.md`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_manual_chapter_summary.md`
 
@@ -733,6 +746,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr1_ci_step_summary_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr1_ci_step_summary_202603XX.txt`
 
@@ -741,6 +755,7 @@
 - latest_by_extension:
   - `.txt`: `quality_workpack_validation_summary.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `quality_workpack_validation_summary.txt`
 
@@ -753,6 +768,7 @@
   - `.json`: `agent_system_pr1_lint_output.json`
   - `.txt`: `agent_system_pr1_lint_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `agent_system_pr1_lint_output.json`
   - `agent_system_pr1_lint_output.txt`
@@ -762,6 +778,7 @@
 - latest_by_extension:
   - `.txt`: `agent_system_pr1_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `agent_system_pr1_utf8_check.txt`
 
@@ -770,6 +787,7 @@
 - latest_by_extension:
   - `.txt`: `artifact_sanitization_scan.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `artifact_sanitization_scan.txt`
 
@@ -778,6 +796,7 @@
 - latest_by_extension:
   - `.txt`: `backend_auth_rbac_ops_test_output_20260221.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `backend_auth_rbac_ops_test_output_20260221.txt`
 
@@ -786,6 +805,7 @@
 - latest_by_extension:
   - `.txt`: `backend_bootrun_postgres_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `backend_bootrun_postgres_output.txt`
 
@@ -794,6 +814,7 @@
 - latest_by_extension:
   - `.txt`: `backend_gradle_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `backend_gradle_test_output.txt`
 
@@ -802,6 +823,7 @@
 - latest_by_extension:
   - `.txt`: `branch_protection_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `branch_protection_check.txt`
 
@@ -810,6 +832,7 @@
 - latest_by_extension:
   - `.txt`: `budget_429_checks.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `budget_429_checks.txt`
 
@@ -819,6 +842,7 @@
   - `.json`: `chatgpt_doc_lint_manual.json`
   - `.txt`: `chatgpt_doc_lint_manual.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `chatgpt_doc_lint_manual.json`
   - `chatgpt_doc_lint_manual.txt`
@@ -829,6 +853,7 @@
   - `.json`: `db_local_readiness_smoke.json`
   - `.txt`: `db_local_readiness_smoke.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `db_local_readiness_smoke.json`
   - `db_local_readiness_smoke.txt`
@@ -838,6 +863,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_backend_build_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_backend_build_output.txt`
 
@@ -846,6 +872,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_backend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_backend_test_output.txt`
 
@@ -855,6 +882,7 @@
   - `.json`: `ddd_refactor_chatgpt_doc_lint.json`
   - `.txt`: `ddd_refactor_chatgpt_doc_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_chatgpt_doc_lint.json`
   - `ddd_refactor_chatgpt_doc_lint.txt`
@@ -864,6 +892,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_fixed_artifact_contract_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_fixed_artifact_contract_check.txt`
 
@@ -872,6 +901,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_frontend_build_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_frontend_build_output.txt`
 
@@ -880,6 +910,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_frontend_npm_ci_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_frontend_npm_ci_output.txt`
 
@@ -888,6 +919,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_frontend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_frontend_test_output.txt`
 
@@ -896,6 +928,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_git_status_start.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_git_status_start.txt`
 
@@ -904,6 +937,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_node_ssot_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_node_ssot_check.txt`
 
@@ -913,6 +947,7 @@
   - `.json`: `ddd_refactor_platform_boundary_lint.json`
   - `.txt`: `ddd_refactor_platform_boundary_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_platform_boundary_lint.json`
   - `ddd_refactor_platform_boundary_lint.txt`
@@ -922,6 +957,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_unittest_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_unittest_output.txt`
 
@@ -930,6 +966,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_utf8_check.txt`
 
@@ -938,6 +975,7 @@
 - latest_by_extension:
   - `.txt`: `frontend_auth_console_test_output_20260221.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `frontend_auth_console_test_output_20260221.txt`
 
@@ -946,7 +984,7 @@
 - latest_by_extension:
   - `.txt`: `frontend_build_output_20260221.txt`
 - archive_candidates:
-  - `frontend_build_output.txt`
+  - (none)
 - files:
   - `frontend_build_output.txt`
   - `frontend_build_output_20260221.txt`
@@ -956,6 +994,7 @@
 - latest_by_extension:
   - `.txt`: `frontend_npm_ci_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `frontend_npm_ci_output.txt`
 
@@ -964,6 +1003,7 @@
 - latest_by_extension:
   - `.txt`: `frontend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `frontend_test_output.txt`
 
@@ -972,6 +1012,7 @@
 - latest_by_extension:
   - `.txt`: `gap_closure_consistency_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `gap_closure_consistency_output.txt`
 
@@ -980,6 +1021,7 @@
 - latest_by_extension:
   - `.txt`: `github_record_and_notion_check_20260222.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `github_record_and_notion_check_20260222.txt`
 
@@ -988,6 +1030,7 @@
 - latest_by_extension:
   - `.txt`: `glossary_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `glossary_utf8_check.txt`
 
@@ -996,6 +1039,7 @@
 - latest_by_extension:
   - `.txt`: `golive_backend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_backend_test_output.txt`
 
@@ -1004,6 +1048,7 @@
 - latest_by_extension:
   - `.txt`: `golive_frontend_build_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_frontend_build_output.txt`
 
@@ -1012,6 +1057,7 @@
 - latest_by_extension:
   - `.txt`: `golive_frontend_npm_ci_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_frontend_npm_ci_output.txt`
 
@@ -1020,6 +1066,7 @@
 - latest_by_extension:
   - `.txt`: `golive_frontend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_frontend_test_output.txt`
 
@@ -1028,6 +1075,7 @@
 - latest_by_extension:
   - `.txt`: `golive_git_status_start.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_git_status_start.txt`
 
@@ -1036,6 +1084,7 @@
 - latest_by_extension:
   - `.txt`: `golive_notion_sync_status.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_notion_sync_status.txt`
 
@@ -1044,6 +1093,7 @@
 - latest_by_extension:
   - `.txt`: `golive_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_utf8_check.txt`
 
@@ -1052,6 +1102,7 @@
 - latest_by_extension:
   - `.txt`: `mybatis_dollar_scan_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `mybatis_dollar_scan_output.txt`
 
@@ -1060,6 +1111,7 @@
 - latest_by_extension:
   - `.txt`: `node22_unicode_mirror_helper_smoke.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `node22_unicode_mirror_helper_smoke.txt`
 
@@ -1068,6 +1120,7 @@
 - latest_by_extension:
   - `.txt`: `node_runtime_discipline_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `node_runtime_discipline_check.txt`
 
@@ -1076,6 +1129,7 @@
 - latest_by_extension:
   - `.txt`: `node_version_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `node_version_check.txt`
 
@@ -1084,6 +1138,7 @@
 - latest_by_extension:
   - `.json`: `notion_blocked_status.json`
 - archive_candidates:
+  - (none)
 - files:
   - `notion_blocked_status.json`
 
@@ -1092,6 +1147,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_backend_impl_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_backend_impl_test_output.txt`
 
@@ -1100,6 +1156,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_backend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_backend_test_output.txt`
 
@@ -1109,6 +1166,7 @@
   - `.json`: `orchestrator_control_chatgpt_doc_lint.json`
   - `.txt`: `orchestrator_control_chatgpt_doc_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_chatgpt_doc_lint.json`
   - `orchestrator_control_chatgpt_doc_lint.txt`
@@ -1118,6 +1176,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_frontend_build_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_frontend_build_output.txt`
 
@@ -1126,6 +1185,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_frontend_npm_ci_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_frontend_npm_ci_output.txt`
 
@@ -1134,6 +1194,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_frontend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_frontend_test_output.txt`
 
@@ -1143,6 +1204,7 @@
   - `.json`: `orchestrator_control_manual_hook_output.json`
   - `.txt`: `orchestrator_control_manual_hook_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_manual_hook_output.json`
   - `orchestrator_control_manual_hook_output.txt`
@@ -1152,6 +1214,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_unittest_all_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_unittest_all_output.txt`
 
@@ -1160,6 +1223,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_utf8_check.txt`
 
@@ -1168,6 +1232,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_utf8_check_current.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_utf8_check_current.txt`
 
@@ -1176,6 +1241,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_backend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_backend_test_output.txt`
 
@@ -1184,6 +1250,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_frontend_build_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_frontend_build_output.txt`
 
@@ -1192,6 +1259,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_frontend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_frontend_test_output.txt`
 
@@ -1200,71 +1268,64 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_git_status_start.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_git_status_start.txt`
 
 ### phase2_1_1_pra_check_all_failfast
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.txt`: `phase2_1_1_prA_check_all_failfast_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_prA_check_all_failfast.txt`
+  - (none)
 - files:
-  - `phase2_1_1_prA_check_all_failfast.txt`
   - `phase2_1_1_prA_check_all_failfast_202603XX.txt`
 
 ### phase2_1_1_pra_node_ssot_check
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.txt`: `phase2_1_1_prA_node_ssot_check_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_prA_node_ssot_check.txt`
+  - (none)
 - files:
-  - `phase2_1_1_prA_node_ssot_check.txt`
   - `phase2_1_1_prA_node_ssot_check_202603XX.txt`
 
 ### phase2_1_1_prb_chatgpt_doc_lint
-- file_count: 4
+- file_count: 2
 - latest_by_extension:
   - `.json`: `phase2_1_1_prB_chatgpt_doc_lint_202603XX.json`
   - `.txt`: `phase2_1_1_prB_chatgpt_doc_lint_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_prB_chatgpt_doc_lint.json`
-  - `phase2_1_1_prB_chatgpt_doc_lint.txt`
+  - (none)
 - files:
-  - `phase2_1_1_prB_chatgpt_doc_lint.json`
-  - `phase2_1_1_prB_chatgpt_doc_lint.txt`
   - `phase2_1_1_prB_chatgpt_doc_lint_202603XX.json`
   - `phase2_1_1_prB_chatgpt_doc_lint_202603XX.txt`
 
 ### phase2_1_1_prb_chatgpt_pii_token_scan
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.txt`: `phase2_1_1_prB_chatgpt_pii_token_scan_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_prB_chatgpt_pii_token_scan.txt`
+  - (none)
 - files:
-  - `phase2_1_1_prB_chatgpt_pii_token_scan.txt`
   - `phase2_1_1_prB_chatgpt_pii_token_scan_202603XX.txt`
 
 ### phase2_1_1_prc_runbook_onepager_check
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.txt`: `phase2_1_1_prC_runbook_onepager_check_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_prC_runbook_onepager_check.txt`
+  - (none)
 - files:
-  - `phase2_1_1_prC_runbook_onepager_check.txt`
   - `phase2_1_1_prC_runbook_onepager_check_202603XX.txt`
 
 ### phase2_1_1_utf8_check
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.txt`: `phase2_1_1_utf8_check_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_utf8_check.txt`
+  - (none)
 - files:
-  - `phase2_1_1_utf8_check.txt`
   - `phase2_1_1_utf8_check_202603XX.txt`
 
 ### phase2_1_2_backend_test_output
@@ -1272,6 +1333,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_backend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_backend_test_output.txt`
 
@@ -1281,6 +1343,7 @@
   - `.json`: `phase2_1_2_chatgpt_doc_lint.json`
   - `.txt`: `phase2_1_2_chatgpt_doc_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_chatgpt_doc_lint.json`
   - `phase2_1_2_chatgpt_doc_lint.txt`
@@ -1290,6 +1353,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_frontend_build_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_frontend_build_output.txt`
 
@@ -1298,6 +1362,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_frontend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_frontend_test_output.txt`
 
@@ -1306,6 +1371,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_git_status_start.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_git_status_start.txt`
 
@@ -1314,6 +1380,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_node_ssot_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_node_ssot_check.txt`
 
@@ -1322,6 +1389,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_pr1_node_bootstrap_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_pr1_node_bootstrap_output.txt`
 
@@ -1330,6 +1398,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_utf8_check.txt`
 
@@ -1338,6 +1407,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_backend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_backend_test_output.txt`
 
@@ -1347,6 +1417,7 @@
   - `.json`: `phase2_1_3_chatgpt_doc_lint.json`
   - `.txt`: `phase2_1_3_chatgpt_doc_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_chatgpt_doc_lint.json`
   - `phase2_1_3_chatgpt_doc_lint.txt`
@@ -1356,6 +1427,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_fixed_artifact_contract_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_fixed_artifact_contract_check.txt`
 
@@ -1364,6 +1436,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_frontend_build_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_frontend_build_output.txt`
 
@@ -1372,6 +1445,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_frontend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_frontend_test_output.txt`
 
@@ -1380,6 +1454,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_git_status_start.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_git_status_start.txt`
 
@@ -1388,6 +1463,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_unittest_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_unittest_output.txt`
 
@@ -1396,6 +1472,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_utf8_check.txt`
 
@@ -1404,6 +1481,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_backend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_backend_test_output.txt`
 
@@ -1413,6 +1491,7 @@
   - `.json`: `phase2_1_4_chatgpt_doc_lint.json`
   - `.txt`: `phase2_1_4_chatgpt_doc_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_chatgpt_doc_lint.json`
   - `phase2_1_4_chatgpt_doc_lint.txt`
@@ -1422,6 +1501,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_fixed_artifact_contract_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_fixed_artifact_contract_check.txt`
 
@@ -1430,6 +1510,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_frontend_build_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_frontend_build_output.txt`
 
@@ -1438,6 +1519,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_frontend_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_frontend_test_output.txt`
 
@@ -1446,6 +1528,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_git_status_start.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_git_status_start.txt`
 
@@ -1455,6 +1538,7 @@
   - `.json`: `phase2_1_4_platform_boundary_lint.json`
   - `.txt`: `phase2_1_4_platform_boundary_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_platform_boundary_lint.json`
   - `phase2_1_4_platform_boundary_lint.txt`
@@ -1464,6 +1548,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_pr2_contract_safety_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_pr2_contract_safety_test_output.txt`
 
@@ -1472,6 +1557,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_pr3_windows_diag_smoke.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_pr3_windows_diag_smoke.txt`
 
@@ -1480,6 +1566,7 @@
 - latest_by_extension:
   - `.json`: `phase2_1_4_pr3_windows_diag_validate.json`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_pr3_windows_diag_validate.json`
 
@@ -1489,6 +1576,7 @@
   - `.json`: `phase2_1_4_pr4_docs_evidence_lint.json`
   - `.txt`: `phase2_1_4_pr4_docs_evidence_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_pr4_docs_evidence_lint.json`
   - `phase2_1_4_pr4_docs_evidence_lint.txt`
@@ -1498,6 +1586,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_unittest_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_unittest_output.txt`
 
@@ -1506,6 +1595,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_utf8_check.txt`
 
@@ -1514,6 +1604,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr1_utf8_check_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr1_utf8_check_202603XX.txt`
 
@@ -1522,6 +1613,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_notion_sync_status_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_notion_sync_status_202603XX.txt`
 
@@ -1530,6 +1622,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_utf8_check_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_utf8_check_202603XX.txt`
 
@@ -1538,6 +1631,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr3_utf8_check_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr3_utf8_check_202603XX.txt`
 
@@ -1546,6 +1640,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_utf8_check_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_utf8_check_202603XX.txt`
 
@@ -1555,6 +1650,7 @@
   - `.json`: `phase2_2_3_chatgpt_doc_lint.json`
   - `.txt`: `phase2_2_3_chatgpt_doc_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_chatgpt_doc_lint.json`
   - `phase2_2_3_chatgpt_doc_lint.txt`
@@ -1565,6 +1661,7 @@
   - `.json`: `phase2_2_3_docs_evidence_lint.json`
   - `.txt`: `phase2_2_3_docs_evidence_lint.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_docs_evidence_lint.json`
   - `phase2_2_3_docs_evidence_lint.txt`
@@ -1574,6 +1671,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_utf8_check.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_utf8_check.txt`
 
@@ -1582,6 +1680,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_backend_gradle_test_output_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_backend_gradle_test_output_202603XX.txt`
 
@@ -1590,6 +1689,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_frontend_build_output_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_frontend_build_output_202603XX.txt`
 
@@ -1598,6 +1698,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_frontend_test_output_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_frontend_test_output_202603XX.txt`
 
@@ -1606,6 +1707,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_spec_consistency_output_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_spec_consistency_output_202603XX.txt`
 
@@ -1614,6 +1716,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_utf8_check_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_utf8_check_202603XX.txt`
 
@@ -1622,6 +1725,7 @@
 - latest_by_extension:
   - `.txt`: `pii_masking_checks.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `pii_masking_checks.txt`
 
@@ -1630,6 +1734,7 @@
 - latest_by_extension:
   - `.txt`: `provider_evidence_consistency_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `provider_evidence_consistency_output.txt`
 
@@ -1638,6 +1743,7 @@
 - latest_by_extension:
   - `.txt`: `provider_regression_gap_closure_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `provider_regression_gap_closure_output.txt`
 
@@ -1646,6 +1752,7 @@
 - latest_by_extension:
   - `.txt`: `python_sse_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `python_sse_test_output.txt`
 
@@ -1654,6 +1761,7 @@
 - latest_by_extension:
   - `.txt`: `rbac_401_403_checks.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `rbac_401_403_checks.txt`
 
@@ -1663,6 +1771,7 @@
   - `.json`: `scaffold_contract_smoke.json`
   - `.txt`: `scaffold_contract_smoke.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `scaffold_contract_smoke.json`
   - `scaffold_contract_smoke.txt`
@@ -1672,6 +1781,7 @@
 - latest_by_extension:
   - `.txt`: `spec_consistency_check_pass.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `spec_consistency_check_pass.txt`
 
@@ -1680,6 +1790,7 @@
 - latest_by_extension:
   - `.txt`: `sse_concurrency_contract_test_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `sse_concurrency_contract_test_output.txt`
 
@@ -1688,6 +1799,7 @@
 - latest_by_extension:
   - `.txt`: `tenant_isolation_403_checks.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `tenant_isolation_403_checks.txt`
 
@@ -1696,6 +1808,7 @@
 - latest_by_extension:
   - `.txt`: `trace_id_checks.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `trace_id_checks.txt`
 
@@ -1704,6 +1817,7 @@
 - latest_by_extension:
   - `.json`: `utf8_full_scan_baseline_violations.json`
 - archive_candidates:
+  - (none)
 - files:
   - `utf8_full_scan_baseline_violations.json`
 
@@ -1713,6 +1827,7 @@
   - `.json`: `utf8_full_scan_current.json`
   - `.txt`: `utf8_full_scan_current.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `utf8_full_scan_current.json`
   - `utf8_full_scan_current.txt`
@@ -1722,25 +1837,37 @@
 - latest_by_extension:
   - `.txt`: `uuid_cast_scan_output.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `uuid_cast_scan_output.txt`
 
 ## Group: misc
-- family_count: 140
+- family_count: 141
 
 ### analysis_llm_provider_001
 - file_count: 1
 - latest_by_extension:
   - `.md`: `analysis_llm_provider_001.md`
 - archive_candidates:
+  - (none)
 - files:
   - `analysis_llm_provider_001.md`
+
+### application_port_boundary_baseline_violations
+- file_count: 1
+- latest_by_extension:
+  - `.json`: `application_port_boundary_baseline_violations.json`
+- archive_candidates:
+  - (none)
+- files:
+  - `application_port_boundary_baseline_violations.json`
 
 ### backoffice_acl_boundary_baseline
 - file_count: 1
 - latest_by_extension:
   - `.md`: `backoffice_acl_boundary_baseline.md`
 - archive_candidates:
+  - (none)
 - files:
   - `backoffice_acl_boundary_baseline.md`
 
@@ -1749,6 +1876,7 @@
 - latest_by_extension:
   - `.json`: `backoffice_acl_boundary_baseline_violations.json`
 - archive_candidates:
+  - (none)
 - files:
   - `backoffice_acl_boundary_baseline_violations.json`
 
@@ -1757,6 +1885,7 @@
 - latest_by_extension:
   - `.txt`: `billing_parity_memory_mode.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `billing_parity_memory_mode.txt`
 
@@ -1765,6 +1894,7 @@
 - latest_by_extension:
   - `.txt`: `billing_parity_mybatis_mode.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `billing_parity_mybatis_mode.txt`
 
@@ -1773,6 +1903,7 @@
 - latest_by_extension:
   - `.txt`: `billing_persistence_itest.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `billing_persistence_itest.txt`
 
@@ -1781,6 +1912,7 @@
 - latest_by_extension:
   - `.json`: `citations_api_response.json`
 - archive_candidates:
+  - (none)
 - files:
   - `citations_api_response.json`
 
@@ -1789,6 +1921,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_chatgpt_ssot_listing.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_chatgpt_ssot_listing.txt`
 
@@ -1797,6 +1930,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_backend_build.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_backend_build.txt`
 
@@ -1805,6 +1939,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_backend_test.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_backend_test.txt`
 
@@ -1813,6 +1948,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_frontend_build.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_frontend_build.txt`
 
@@ -1821,6 +1957,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_frontend_npm_ci.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_frontend_npm_ci.txt`
 
@@ -1829,6 +1966,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_frontend_override_npm_ci.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_frontend_override_npm_ci.txt`
 
@@ -1837,6 +1975,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_frontend_test.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_frontend_test.txt`
 
@@ -1845,6 +1984,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_frontend_test_build.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_frontend_test_build.txt`
 
@@ -1854,6 +1994,7 @@
   - `.json`: `continuation_preflight_legacy_blocker.json`
   - `.txt`: `continuation_preflight_legacy_blocker.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_legacy_blocker.json`
   - `continuation_preflight_legacy_blocker.txt`
@@ -1864,6 +2005,7 @@
   - `.json`: `continuation_preflight_mapper_namespace.json`
   - `.txt`: `continuation_preflight_mapper_namespace.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_mapper_namespace.json`
   - `continuation_preflight_mapper_namespace.txt`
@@ -1873,6 +2015,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_node_ssot.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_node_ssot.txt`
 
@@ -1882,6 +2025,7 @@
   - `.json`: `continuation_preflight_platform_boundary.json`
   - `.txt`: `continuation_preflight_platform_boundary.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_platform_boundary.json`
   - `continuation_preflight_platform_boundary.txt`
@@ -1891,6 +2035,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_public_api_compare.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_public_api_compare.txt`
 
@@ -1899,6 +2044,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_scripts_unittest.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_scripts_unittest.txt`
 
@@ -1907,6 +2053,7 @@
 - latest_by_extension:
   - `.txt`: `continuation_preflight_spec_consistency.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_spec_consistency.txt`
 
@@ -1916,6 +2063,7 @@
   - `.json`: `continuation_preflight_utf8_strict.json`
   - `.txt`: `continuation_preflight_utf8_strict.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `continuation_preflight_utf8_strict.json`
   - `continuation_preflight_utf8_strict.txt`
@@ -1926,6 +2074,7 @@
   - `.json`: `db_backup_restore_rehearsal_20260225.json`
   - `.txt`: `db_backup_restore_rehearsal_20260225.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `db_backup_restore_rehearsal_20260225.json`
   - `db_backup_restore_rehearsal_20260225.txt`
@@ -1935,6 +2084,7 @@
 - latest_by_extension:
   - `.patch`: `ddd_refactor_baseline.patch`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_baseline.patch`
 
@@ -1943,6 +2093,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_changed_files.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_changed_files.txt`
 
@@ -1951,6 +2102,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_changed_files_full.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_changed_files_full.txt`
 
@@ -1959,6 +2111,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_public_api_after.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_public_api_after.txt`
 
@@ -1967,6 +2120,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_public_api_after_normalized.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_public_api_after_normalized.txt`
 
@@ -1975,6 +2129,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_public_api_before.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_public_api_before.txt`
 
@@ -1983,6 +2138,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_public_api_before_normalized.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_public_api_before_normalized.txt`
 
@@ -1991,6 +2147,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_public_api_compare.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_public_api_compare.txt`
 
@@ -1999,6 +2156,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_scaffold_backend_example.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_scaffold_backend_example.txt`
 
@@ -2007,6 +2165,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_scaffold_frontend_example.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_scaffold_frontend_example.txt`
 
@@ -2015,6 +2174,7 @@
 - latest_by_extension:
   - `.txt`: `ddd_refactor_spec_consistency.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `ddd_refactor_spec_consistency.txt`
 
@@ -2023,6 +2183,7 @@
 - latest_by_extension:
   - `.txt`: `dirty_baseline_diff_20260221.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `dirty_baseline_diff_20260221.txt`
 
@@ -2031,6 +2192,7 @@
 - latest_by_extension:
   - `.md`: `domain_layer_purity_backlog.md`
 - archive_candidates:
+  - (none)
 - files:
   - `domain_layer_purity_backlog.md`
 
@@ -2039,6 +2201,7 @@
 - latest_by_extension:
   - `.json`: `domain_layer_purity_baseline_violations.json`
 - archive_candidates:
+  - (none)
 - files:
   - `domain_layer_purity_baseline_violations.json`
 
@@ -2047,6 +2210,7 @@
 - latest_by_extension:
   - `.txt`: `e2e_curl_transcripts.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `e2e_curl_transcripts.txt`
 
@@ -2055,6 +2219,7 @@
 - latest_by_extension:
   - `.txt`: `e2e_runner_stdout.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `e2e_runner_stdout.txt`
 
@@ -2063,6 +2228,7 @@
 - latest_by_extension:
   - `.txt`: `frontend_npm_ci_pass_on_22120.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `frontend_npm_ci_pass_on_22120.txt`
 
@@ -2071,6 +2237,7 @@
 - latest_by_extension:
   - `.patch`: `golive_baseline.patch`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_baseline.patch`
 
@@ -2079,6 +2246,7 @@
 - latest_by_extension:
   - `.txt`: `golive_dirty_delta.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_dirty_delta.txt`
 
@@ -2087,6 +2255,7 @@
 - latest_by_extension:
   - `.txt`: `golive_node_version.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_node_version.txt`
 
@@ -2095,6 +2264,7 @@
 - latest_by_extension:
   - `.md`: `golive_notion_manual_sync_patch.md`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_notion_manual_sync_patch.md`
 
@@ -2103,6 +2273,7 @@
 - latest_by_extension:
   - `.txt`: `golive_phase2_api_coverage.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_phase2_api_coverage.txt`
 
@@ -2111,6 +2282,7 @@
 - latest_by_extension:
   - `.txt`: `golive_spec_consistency_after.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_spec_consistency_after.txt`
 
@@ -2119,6 +2291,7 @@
 - latest_by_extension:
   - `.txt`: `golive_spec_consistency_before.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `golive_spec_consistency_before.txt`
 
@@ -2127,6 +2300,7 @@
 - latest_by_extension:
   - `.txt`: `idempotency_409_proof.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `idempotency_409_proof.txt`
 
@@ -2135,6 +2309,7 @@
 - latest_by_extension:
   - `.txt`: `idempotency_negative_422.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `idempotency_negative_422.txt`
 
@@ -2143,6 +2318,7 @@
 - latest_by_extension:
   - `.txt`: `idempotency_redis_e2e.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `idempotency_redis_e2e.txt`
 
@@ -2152,6 +2328,7 @@
   - `.json`: `legacy_package_blocker.json`
   - `.txt`: `legacy_package_blocker.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `legacy_package_blocker.json`
   - `legacy_package_blocker.txt`
@@ -2161,6 +2338,7 @@
 - latest_by_extension:
   - `.txt`: `metrics_raw.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `metrics_raw.txt`
 
@@ -2169,6 +2347,7 @@
 - latest_by_extension:
   - `.txt`: `node22_unicode_workspace_repro.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `node22_unicode_workspace_repro.txt`
 
@@ -2177,6 +2356,7 @@
 - latest_by_extension:
   - `.txt`: `node_ssot_pass_on_22120.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `node_ssot_pass_on_22120.txt`
 
@@ -2185,6 +2365,7 @@
 - latest_by_extension:
   - `.md`: `notion_manual_patch.md`
 - archive_candidates:
+  - (none)
 - files:
   - `notion_manual_patch.md`
 
@@ -2193,6 +2374,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_changed_files_current.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_changed_files_current.txt`
 
@@ -2201,6 +2383,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_changed_files_current_count.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_changed_files_current_count.txt`
 
@@ -2209,6 +2392,7 @@
 - latest_by_extension:
   - `.patch`: `orchestrator_control_preflight_baseline.patch`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_preflight_baseline.patch`
 
@@ -2217,6 +2401,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_preflight_changed_files.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_preflight_changed_files.txt`
 
@@ -2225,6 +2410,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_spec_consistency.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_spec_consistency.txt`
 
@@ -2233,6 +2419,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_text_hygiene.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_text_hygiene.txt`
 
@@ -2241,6 +2428,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_text_hygiene_current.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_text_hygiene_current.txt`
 
@@ -2249,6 +2437,7 @@
 - latest_by_extension:
   - `.txt`: `orchestrator_control_unittest_manual_hook.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `orchestrator_control_unittest_manual_hook.txt`
 
@@ -2257,6 +2446,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_backend_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_backend_test_202603XX.txt`
 
@@ -2265,6 +2455,7 @@
 - latest_by_extension:
   - `.patch`: `phase2_1_1_baseline.patch`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_baseline.patch`
 
@@ -2273,6 +2464,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_frontend_build_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_frontend_build_202603XX.txt`
 
@@ -2281,6 +2473,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_frontend_npm_ci_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_frontend_npm_ci_202603XX.txt`
 
@@ -2289,6 +2482,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_frontend_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_frontend_test_202603XX.txt`
 
@@ -2297,17 +2491,17 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_prA_ci_workflow_node_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_prA_ci_workflow_node_202603XX.txt`
 
 ### phase2_1_1_pra_node_runtime
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.txt`: `phase2_1_1_prA_node_runtime_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_prA_node_runtime.txt`
+  - (none)
 - files:
-  - `phase2_1_1_prA_node_runtime.txt`
   - `phase2_1_1_prA_node_runtime_202603XX.txt`
 
 ### phase2_1_1_pra_node_ssot_sync
@@ -2315,37 +2509,35 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_1_prA_node_ssot_sync_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_1_prA_node_ssot_sync_202603XX.txt`
 
 ### phase2_1_1_prb_chatgpt_utf8
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.txt`: `phase2_1_1_prB_chatgpt_utf8_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_prB_chatgpt_utf8.txt`
+  - (none)
 - files:
-  - `phase2_1_1_prB_chatgpt_utf8.txt`
   - `phase2_1_1_prB_chatgpt_utf8_202603XX.txt`
 
 ### phase2_1_1_prc_notion_preflight
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.json`: `phase2_1_1_prC_notion_preflight_202603XX.json`
 - archive_candidates:
-  - `phase2_1_1_prC_notion_preflight.json`
+  - (none)
 - files:
-  - `phase2_1_1_prC_notion_preflight.json`
   - `phase2_1_1_prC_notion_preflight_202603XX.json`
 
 ### phase2_1_1_spec_consistency
-- file_count: 2
+- file_count: 1
 - latest_by_extension:
   - `.txt`: `phase2_1_1_spec_consistency_202603XX.txt`
 - archive_candidates:
-  - `phase2_1_1_spec_consistency.txt`
+  - (none)
 - files:
-  - `phase2_1_1_spec_consistency.txt`
   - `phase2_1_1_spec_consistency_202603XX.txt`
 
 ### phase2_1_2_baseline
@@ -2353,6 +2545,7 @@
 - latest_by_extension:
   - `.patch`: `phase2_1_2_baseline.patch`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_baseline.patch`
 
@@ -2361,6 +2554,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_node_bootstrap_windows.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_node_bootstrap_windows.txt`
 
@@ -2369,6 +2563,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_node_ssot_runtime_probe.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_node_ssot_runtime_probe.txt`
 
@@ -2377,6 +2572,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_notion_template_generator.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_notion_template_generator.txt`
 
@@ -2385,6 +2581,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_pr1_windows_runbook_exists.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_pr1_windows_runbook_exists.txt`
 
@@ -2393,6 +2590,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_pr2_notion_exports_readme_exists.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_pr2_notion_exports_readme_exists.txt`
 
@@ -2401,6 +2599,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_pr2_notion_template_gen.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_pr2_notion_template_gen.txt`
 
@@ -2409,6 +2608,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_2_spec_consistency.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_2_spec_consistency.txt`
 
@@ -2417,6 +2617,7 @@
 - latest_by_extension:
   - `.patch`: `phase2_1_3_baseline.patch`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_baseline.patch`
 
@@ -2425,6 +2626,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_spec_consistency.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_spec_consistency.txt`
 
@@ -2433,6 +2635,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_3_windows_diag_script_exists.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_3_windows_diag_script_exists.txt`
 
@@ -2441,6 +2644,7 @@
 - latest_by_extension:
   - `.patch`: `phase2_1_4_baseline.patch`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_baseline.patch`
 
@@ -2449,6 +2653,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_pr1_ci_artifact_upload_policy.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_pr1_ci_artifact_upload_policy.txt`
 
@@ -2457,6 +2662,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_4_spec_consistency.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_4_spec_consistency.txt`
 
@@ -2465,6 +2671,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_backend_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_backend_test_202603XX.txt`
 
@@ -2473,6 +2680,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_dirty_delta_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_dirty_delta_202603XX.txt`
 
@@ -2481,6 +2689,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_frontend_build_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_frontend_build_202603XX.txt`
 
@@ -2489,6 +2698,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_frontend_npm_ci_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_frontend_npm_ci_202603XX.txt`
 
@@ -2497,6 +2707,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_frontend_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_frontend_test_202603XX.txt`
 
@@ -2505,6 +2716,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_node_versions_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_node_versions_202603XX.txt`
 
@@ -2513,6 +2725,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr1_notion_auth_preflight_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr1_notion_auth_preflight_202603XX.txt`
 
@@ -2521,6 +2734,7 @@
 - latest_by_extension:
   - `.json`: `phase2_1_pr1_notion_auth_preflight_result_202603XX.json`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr1_notion_auth_preflight_result_202603XX.json`
 
@@ -2529,6 +2743,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_backend_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_backend_test_202603XX.txt`
 
@@ -2537,6 +2752,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_export_contract_debug_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_export_contract_debug_202603XX.txt`
 
@@ -2545,6 +2761,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_export_download_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_export_download_test_202603XX.txt`
 
@@ -2553,6 +2770,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_export_job_api_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_export_job_api_202603XX.txt`
 
@@ -2561,6 +2779,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_export_worker_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_export_worker_test_202603XX.txt`
 
@@ -2569,6 +2788,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_frontend_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_frontend_test_202603XX.txt`
 
@@ -2577,6 +2797,7 @@
 - latest_by_extension:
   - `.md`: `phase2_1_pr2_notion_manual_sync_patch_202603XX.md`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_notion_manual_sync_patch_202603XX.md`
 
@@ -2585,6 +2806,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr2_spec_consistency_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr2_spec_consistency_202603XX.txt`
 
@@ -2593,6 +2815,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr3_backend_test_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr3_backend_test_202603XX.txt`
 
@@ -2601,6 +2824,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr3_scheduler_lock_competition_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr3_scheduler_lock_competition_202603XX.txt`
 
@@ -2609,6 +2833,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr3_scheduler_observability_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr3_scheduler_observability_202603XX.txt`
 
@@ -2617,6 +2842,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr3_scheduler_self_heal_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr3_scheduler_self_heal_202603XX.txt`
 
@@ -2625,6 +2851,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_pr3_scheduler_tests_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_pr3_scheduler_tests_202603XX.txt`
 
@@ -2633,6 +2860,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_1_spec_consistency_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_1_spec_consistency_202603XX.txt`
 
@@ -2642,6 +2870,7 @@
   - `.json`: `phase2_2_1_workpack_agent_contract.json`
   - `.txt`: `phase2_2_1_workpack_agent_contract.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_1_workpack_agent_contract.json`
   - `phase2_2_1_workpack_agent_contract.txt`
@@ -2652,6 +2881,7 @@
   - `.json`: `phase2_2_2_mapper_namespace_drift.json`
   - `.txt`: `phase2_2_2_mapper_namespace_drift.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_2_mapper_namespace_drift.json`
   - `phase2_2_2_mapper_namespace_drift.txt`
@@ -2661,6 +2891,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_2_mapper_namespace_drift_unittest.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_2_mapper_namespace_drift_unittest.txt`
 
@@ -2669,6 +2900,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_billing_http_regression.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_billing_http_regression.txt`
 
@@ -2677,6 +2909,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_billing_mapper_tests.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_billing_mapper_tests.txt`
 
@@ -2685,6 +2918,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_billing_rollup_regression.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_billing_rollup_regression.txt`
 
@@ -2693,6 +2927,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_debug_contextloads.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_debug_contextloads.txt`
 
@@ -2701,6 +2936,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_flyway_v9_apply.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_flyway_v9_apply.txt`
 
@@ -2709,6 +2945,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_frontend_build.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_frontend_build.txt`
 
@@ -2717,6 +2954,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_frontend_npm_ci.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_frontend_npm_ci.txt`
 
@@ -2725,6 +2963,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_frontend_test.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_frontend_test.txt`
 
@@ -2733,6 +2972,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_public_api_compare.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_public_api_compare.txt`
 
@@ -2741,6 +2981,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_2_3_spec_consistency.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_2_3_spec_consistency.txt`
 
@@ -2749,6 +2990,7 @@
 - latest_by_extension:
   - `.txt`: `phase2_dirty_delta_202603XX.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `phase2_dirty_delta_202603XX.txt`
 
@@ -2757,6 +2999,7 @@
 - latest_by_extension:
   - `.log`: `provider_regression_backend.log`
 - archive_candidates:
+  - (none)
 - files:
   - `provider_regression_backend.log`
 
@@ -2765,6 +3008,7 @@
 - latest_by_extension:
   - `.txt`: `provider_regression_exit_code.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `provider_regression_exit_code.txt`
 
@@ -2773,6 +3017,7 @@
 - latest_by_extension:
   - `.log`: `provider_regression_ollama.log`
 - archive_candidates:
+  - (none)
 - files:
   - `provider_regression_ollama.log`
 
@@ -2781,6 +3026,7 @@
 - latest_by_extension:
   - `.txt`: `provider_regression_ollama_PASS_20260219_003600Z.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `provider_regression_ollama_PASS_20260219_003600Z.txt`
 
@@ -2790,6 +3036,7 @@
   - `.json`: `remaining_non_utf8_files.json`
   - `.txt`: `remaining_non_utf8_files.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `remaining_non_utf8_files.json`
   - `remaining_non_utf8_files.txt`
@@ -2799,6 +3046,7 @@
 - latest_by_extension:
   - `.txt`: `spec_only_notion_exception_e2e_simulation.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `spec_only_notion_exception_e2e_simulation.txt`
 
@@ -2807,6 +3055,7 @@
 - latest_by_extension:
   - `.txt`: `sse_concurrency_attempts.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `sse_concurrency_attempts.txt`
 
@@ -2815,6 +3064,7 @@
 - latest_by_extension:
   - `.txt`: `sse_concurrency_real_limit_proof.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `sse_concurrency_real_limit_proof.txt`
 
@@ -2823,6 +3073,7 @@
 - latest_by_extension:
   - `.log`: `sse_resume_fault_injection.log`
 - archive_candidates:
+  - (none)
 - files:
   - `sse_resume_fault_injection.log`
 
@@ -2831,6 +3082,7 @@
 - latest_by_extension:
   - `.log`: `sse_resume_proof.log`
 - archive_candidates:
+  - (none)
 - files:
   - `sse_resume_proof.log`
 
@@ -2839,6 +3091,7 @@
 - latest_by_extension:
   - `.log`: `sse_stream_fail_closed.log`
 - archive_candidates:
+  - (none)
 - files:
   - `sse_stream_fail_closed.log`
 
@@ -2847,6 +3100,7 @@
 - latest_by_extension:
   - `.log`: `sse_stream_normal.log`
 - archive_candidates:
+  - (none)
 - files:
   - `sse_stream_normal.log`
 
@@ -2855,6 +3109,7 @@
 - latest_by_extension:
   - `.md`: `utf8_burndown_blocked_residuals.md`
 - archive_candidates:
+  - (none)
 - files:
   - `utf8_burndown_blocked_residuals.md`
 
@@ -2864,6 +3119,7 @@
   - `.json`: `utf8_normalization_wave10_dryrun.json`
   - `.md`: `utf8_normalization_wave10_dryrun.md`
 - archive_candidates:
+  - (none)
 - files:
   - `utf8_normalization_wave10_dryrun.json`
   - `utf8_normalization_wave10_dryrun.md`
@@ -2874,6 +3130,7 @@
   - `.json`: `workpack_agent_contract_v2.json`
   - `.txt`: `workpack_agent_contract_v2.txt`
 - archive_candidates:
+  - (none)
 - files:
   - `workpack_agent_contract_v2.json`
   - `workpack_agent_contract_v2.txt`
