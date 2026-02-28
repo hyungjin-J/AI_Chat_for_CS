@@ -141,3 +141,17 @@ python ../scripts/spec_consistency_check.py
 - 민감정보/토큰/시크릿/PII 평문 커밋 금지
 - `X-Trace-Id`, `X-Tenant-Key` 전파 강제
 - Answer Contract 실패 시 자유 텍스트 우회 금지(safe response 또는 차단)
+
+## Ops Trend Summary (Weekly Monitoring)
+- Build script: `python scripts/build_ops_trend_report.py --artifacts-dir docs/review/mvp_verification_pack/artifacts --limit 8`
+- Output artifacts:
+  - `docs/review/mvp_verification_pack/artifacts/ops_trend_report.txt`
+  - `docs/review/mvp_verification_pack/artifacts/ops_trend_report.json`
+- Scope covered:
+  - DB backup/restore rehearsal artifacts
+  - DB reproducibility/nightly artifacts
+  - Vector bench monitoring artifacts (if present)
+- Missing artifact families are reported as `MISSING` (no crash, monitoring-only).
+- The report is indexed in:
+  - `docs/review/mvp_verification_pack/artifacts/_INDEX.md`
+  - `docs/review/mvp_verification_pack/artifacts/_INDEX.json`

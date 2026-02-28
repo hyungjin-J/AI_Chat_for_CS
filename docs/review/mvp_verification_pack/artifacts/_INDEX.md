@@ -1,12 +1,12 @@
 # Artifact Index
 
-- artifact_root: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts`
-- indexed_file_count: 343
+- artifact_root: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot_ops_trend/docs/review/mvp_verification_pack/artifacts`
+- indexed_file_count: 339
 - archive_keep_latest_per_extension: 1
-- latest_files_count: 342
+- latest_files_count: 338
 - archive_candidates_count: 0
 - pinned_paths_count: 51
-- archive_manifest_path: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json`
+- archive_manifest_path: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot_ops_trend/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json`
 
 ## Archive Summary
 - bundle_count: 12
@@ -161,6 +161,8 @@
 - `node_version_check.txt`
 - `notion_blocked_status.json`
 - `notion_manual_patch.md`
+- `ops_trend_report.json`
+- `ops_trend_report.txt`
 - `orchestrator_control_backend_impl_summary.txt`
 - `orchestrator_control_backend_impl_test_output.txt`
 - `orchestrator_control_backend_test_output.txt`
@@ -323,10 +325,8 @@
 - `pii_masking_checks.txt`
 - `project_full_report_utf8_check_20260221.txt`
 - `provider_evidence_consistency_output.txt`
-- `provider_regression_backend.log`
 - `provider_regression_exit_code.txt`
 - `provider_regression_gap_closure_output.txt`
-- `provider_regression_ollama.log`
 - `provider_regression_ollama_PASS_20260219_003600Z.txt`
 - `python_sse_test_output.txt`
 - `quality_workpack_validation_summary.txt`
@@ -345,10 +345,6 @@
 - `sse_concurrency_attempts.txt`
 - `sse_concurrency_contract_test_output.txt`
 - `sse_concurrency_real_limit_proof.txt`
-- `sse_resume_fault_injection.log`
-- `sse_resume_proof.log`
-- `sse_stream_fail_closed.log`
-- `sse_stream_normal.log`
 - `tenant_isolation_403_checks.txt`
 - `trace_id_checks.txt`
 - `utf16_normalization_report.md`
@@ -613,7 +609,7 @@
   - `utf8_full_scan_ratchet_gate.txt`
 
 ## Group: report
-- family_count: 8
+- family_count: 9
 
 ### artifact_archive_report
 - file_count: 2
@@ -634,6 +630,17 @@
   - (none)
 - files:
   - `metrics_report.md`
+
+### ops_trend_report
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `ops_trend_report.json`
+  - `.txt`: `ops_trend_report.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `ops_trend_report.json`
+  - `ops_trend_report.txt`
 
 ### project_full_report_utf8_check
 - file_count: 1
@@ -1842,7 +1849,7 @@
   - `uuid_cast_scan_output.txt`
 
 ## Group: misc
-- family_count: 141
+- family_count: 135
 
 ### analysis_llm_provider_001
 - file_count: 1
@@ -2994,15 +3001,6 @@
 - files:
   - `phase2_dirty_delta_202603XX.txt`
 
-### provider_regression_backend
-- file_count: 1
-- latest_by_extension:
-  - `.log`: `provider_regression_backend.log`
-- archive_candidates:
-  - (none)
-- files:
-  - `provider_regression_backend.log`
-
 ### provider_regression_exit_code
 - file_count: 1
 - latest_by_extension:
@@ -3011,15 +3009,6 @@
   - (none)
 - files:
   - `provider_regression_exit_code.txt`
-
-### provider_regression_ollama
-- file_count: 1
-- latest_by_extension:
-  - `.log`: `provider_regression_ollama.log`
-- archive_candidates:
-  - (none)
-- files:
-  - `provider_regression_ollama.log`
 
 ### provider_regression_ollama_pass_DATE_003600z
 - file_count: 1
@@ -3067,42 +3056,6 @@
   - (none)
 - files:
   - `sse_concurrency_real_limit_proof.txt`
-
-### sse_resume_fault_injection
-- file_count: 1
-- latest_by_extension:
-  - `.log`: `sse_resume_fault_injection.log`
-- archive_candidates:
-  - (none)
-- files:
-  - `sse_resume_fault_injection.log`
-
-### sse_resume_proof
-- file_count: 1
-- latest_by_extension:
-  - `.log`: `sse_resume_proof.log`
-- archive_candidates:
-  - (none)
-- files:
-  - `sse_resume_proof.log`
-
-### sse_stream_fail_closed
-- file_count: 1
-- latest_by_extension:
-  - `.log`: `sse_stream_fail_closed.log`
-- archive_candidates:
-  - (none)
-- files:
-  - `sse_stream_fail_closed.log`
-
-### sse_stream_normal
-- file_count: 1
-- latest_by_extension:
-  - `.log`: `sse_stream_normal.log`
-- archive_candidates:
-  - (none)
-- files:
-  - `sse_stream_normal.log`
 
 ### utf8_burndown_blocked_residuals
 - file_count: 1

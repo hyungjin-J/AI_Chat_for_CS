@@ -204,6 +204,16 @@ jobs:
             --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint.json `
             --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_1_prB_chatgpt_doc_lint.txt
 
+      - name: Build Ops trend report (monitoring-only)
+        if: always()
+        shell: pwsh
+        run: |
+          python scripts/build_ops_trend_report.py `
+            --artifacts-dir docs/review/mvp_verification_pack/artifacts `
+            --limit 8 `
+            --output-txt docs/review/mvp_verification_pack/artifacts/ops_trend_report.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/ops_trend_report.json
+
       - name: Upload gate evidence artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -233,6 +243,7 @@ jobs:
             docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_remediation_summary.txt
             docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.*
             docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt
+            docs/review/mvp_verification_pack/artifacts/ops_trend_report.*
             docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip
             scripts/contracts/fixed_artifact_paths.json
 

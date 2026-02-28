@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "artifacts_dir": "docs/review/mvp_verification_pack/artifacts",
+  "limit_per_family": 8,
+  "overall": {
+    "status": "FAIL",
+    "selected_count": 2,
+    "pass_count": 1,
+    "fail_count": 1,
+    "error_count": 0
+  },
+  "families": [
+    {
+      "key": "db_backup_restore_rehearsal",
+      "label": "DB backup/restore rehearsal",
+      "pattern": "^db_backup_restore_rehearsal(?:[_-].*)?\\.json$",
+      "limit": 8,
+      "status": "FAIL",
+      "selected_count": 1,
+      "pass_count": 0,
+      "fail_count": 1,
+      "error_count": 0,
+      "failure_code_histogram": {
+        "CHECK_compose_down_final": 1,
+        "CHECK_compose_down_source": 1,
+        "COMPOSE_DOWN_FINAL_FAILED": 1,
+        "COMPOSE_DOWN_SOURCE_FAILED": 1
+      },
+      "slo": {
+        "rto_minutes": null,
+        "rpo_hours": null,
+        "p95_latency_ms": null
+      },
+      "artifacts": [
+        {
+          "path": "db_backup_restore_rehearsal_20260225.json",
+          "date_score": [
+            2026,
+            2,
+            25
+          ],
+          "status": "FAIL",
+          "failure_codes": [
+            "CHECK_compose_down_final",
+            "CHECK_compose_down_source",
+            "COMPOSE_DOWN_FINAL_FAILED",
+            "COMPOSE_DOWN_SOURCE_FAILED"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "db_repro_nightly",
+      "label": "DB reproducibility nightly",
+      "pattern": "^db_(?:local_readiness_smoke|backend_health_trace_gate)(?:[_-].*)?\\.json$",
+      "limit": 8,
+      "status": "PASS",
+      "selected_count": 1,
+      "pass_count": 1,
+      "fail_count": 0,
+      "error_count": 0,
+      "failure_code_histogram": {},
+      "slo": {
+        "rto_minutes": null,
+        "rpo_hours": null,
+        "p95_latency_ms": null
+      },
+      "artifacts": [
+        {
+          "path": "db_local_readiness_smoke.json",
+          "date_score": [
+            -1,
+            -1,
+            -1
+          ],
+          "status": "PASS",
+          "failure_codes": []
+        }
+      ]
+    },
+    {
+      "key": "vector_bench_monitoring",
+      "label": "Vector bench monitoring",
+      "pattern": "^(?:vector_recall_latency_bench|vector_bench(?:_[a-z0-9_]+)?)(?:[_-].*)?\\.json$",
+      "limit": 8,
+      "status": "MISSING",
+      "selected_count": 0,
+      "pass_count": 0,
+      "fail_count": 0,
+      "error_count": 0,
+      "failure_code_histogram": {},
+      "slo": {
+        "rto_minutes": null,
+        "rpo_hours": null,
+        "p95_latency_ms": null
+      },
+      "artifacts": []
+    }
+  ],
+  "generated_from_commit": "e45bb78"
+}

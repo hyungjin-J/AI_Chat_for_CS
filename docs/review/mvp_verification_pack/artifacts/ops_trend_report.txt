@@ -1,0 +1,50 @@
+ops_trend_report
+status=FAIL
+selected_count=2
+pass_count=1
+fail_count=1
+error_count=0
+limit_per_family=8
+generated_from_commit=e45bb78
+
+[db_backup_restore_rehearsal] DB backup/restore rehearsal
+status=FAIL
+selected_count=1
+pass_count=0
+fail_count=1
+error_count=0
+failure_code_histogram:
+- CHECK_compose_down_final: 1
+- CHECK_compose_down_source: 1
+- COMPOSE_DOWN_FINAL_FAILED: 1
+- COMPOSE_DOWN_SOURCE_FAILED: 1
+rto_minutes=null
+rpo_hours=null
+p95_latency_ms=null
+artifacts:
+- db_backup_restore_rehearsal_20260225.json status=FAIL date_score=[2026, 2, 25] failure_codes=['CHECK_compose_down_final', 'CHECK_compose_down_source', 'COMPOSE_DOWN_FINAL_FAILED', 'COMPOSE_DOWN_SOURCE_FAILED']
+
+[db_repro_nightly] DB reproducibility nightly
+status=PASS
+selected_count=1
+pass_count=1
+fail_count=0
+error_count=0
+failure_code_histogram: (none)
+rto_minutes=null
+rpo_hours=null
+p95_latency_ms=null
+artifacts:
+- db_local_readiness_smoke.json status=PASS date_score=[-1, -1, -1] failure_codes=[]
+
+[vector_bench_monitoring] Vector bench monitoring
+status=MISSING
+selected_count=0
+pass_count=0
+fail_count=0
+error_count=0
+failure_code_histogram: (none)
+rto_minutes=null
+rpo_hours=null
+p95_latency_ms=null
+artifacts: (missing)

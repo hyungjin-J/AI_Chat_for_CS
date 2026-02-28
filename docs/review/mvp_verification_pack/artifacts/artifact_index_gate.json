@@ -1,13 +1,13 @@
 {
   "status": "PASS",
   "check_mode": true,
-  "artifact_root": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts",
-  "indexed_file_count": 343,
-  "archive_manifest_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json",
+  "artifact_root": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot_ops_trend/docs/review/mvp_verification_pack/artifacts",
+  "indexed_file_count": 339,
+  "archive_manifest_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot_ops_trend/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json",
   "archive_bundle_count": 12,
   "archived_file_count": 29,
-  "index_md_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.md",
-  "index_json_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.json",
+  "index_md_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot_ops_trend/docs/review/mvp_verification_pack/artifacts/_INDEX.md",
+  "index_json_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot_ops_trend/docs/review/mvp_verification_pack/artifacts/_INDEX.json",
   "violation_count": 0,
   "violations": []
 }
