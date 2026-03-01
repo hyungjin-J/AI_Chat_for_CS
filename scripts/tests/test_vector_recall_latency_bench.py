@@ -211,6 +211,71 @@ class VectorRecallLatencyBenchTest(unittest.TestCase):
                     ]
                 )
 
+    def test_ci_mode_applies_bounded_defaults(self) -> None:
+        args = self.module.parse_args(["--ci"])
+        self.assertTrue(args.ci)
+        self.assertEqual(args.top_k, self.module.DEFAULT_CI_TOP_K)
+        self.assertEqual(args.query_count, self.module.DEFAULT_CI_QUERY_COUNT)
+        self.assertEqual(args.probe_values, list(self.module.DEFAULT_CI_PROBES))
+        self.assertEqual(args.seed, self.module.DEFAULT_CI_SEED)
+
+    def test_ci_mode_respects_explicit_overrides(self) -> None:
+        args = self.module.parse_args(
+            [
+                "--ci",
+                "--top-k",
+                "5",
+                "--query-count",
+                "7",
+                "--probe-values",
+                "2,4",
+                "--seed",
+                "99",
+            ]
+        )
+        self.assertEqual(args.top_k, 5)
+        self.assertEqual(args.query_count, 7)
+        self.assertEqual(args.probe_values, [2, 4])
+        self.assertEqual(args.seed, 99)
+
+    def test_main_writes_fail_artifacts_on_unhandled_exception(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            artifacts = root / "artifacts"
+            compose_file = root / "compose.yml"
+            compose_file.write_text("services:\n  postgres: {}\n", encoding="utf-8")
+
+            with mock.patch.object(
+                self.module,
+                "run_benchmark",
+                side_effect=RuntimeError("boom local-dev-only-password"),
+            ):
+                exit_code = self.module.main(
+                    [
+                        "--compose-file",
+                        str(compose_file),
+                        "--artifact-dir",
+                        str(artifacts),
+                        "--artifact-date",
+                        "20260226",
+                    ]
+                )
+
+            self.assertNotEqual(exit_code, 0)
+            txt_path = artifacts / "vector_recall_latency_bench_20260226.txt"
+            json_path = artifacts / "vector_recall_latency_bench_20260226.json"
+            self.assertTrue(txt_path.exists())
+            self.assertTrue(json_path.exists())
+
+            txt_content = txt_path.read_text(encoding="utf-8")
+            payload = json.loads(json_path.read_text(encoding="utf-8"))
+            self.assertIn("status=FAIL", txt_content)
+            self.assertNotIn("local-dev-only-password", txt_content)
+            self.assertEqual(payload["status"], "FAIL")
+            self.assertEqual(payload["violation_count"], 1)
+            self.assertEqual(payload["violations"][0]["code"], "BENCH_UNHANDLED_EXCEPTION")
+            self.assertNotIn("local-dev-only-password", payload["violations"][0]["details"])
+
 
 if __name__ == "__main__":
     unittest.main()
