@@ -1,0 +1,316 @@
+name: vector-bench-nightly
+
+on:
+  schedule:
+    # UTC cron is used by GitHub Actions.
+    # 18:00 UTC daily == 03:00 KST next day (quiet monitoring window).
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: vector-bench-nightly
+  cancel-in-progress: false
+
+jobs:
+  vector-bench:
+    # Monitoring-only workflow:
+    # - Triggered by schedule/manual only (not PR-triggered).
+    # - Can go red on regression, but does not participate in PR required checks.
+    runs-on: windows-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    env:
+      COMPOSE_FILE: infra/docker-compose.yml
+      ARTIFACT_ROOT: docs/review/mvp_verification_pack/artifacts
+      FLYWAY_OUT_TXT: docs/review/mvp_verification_pack/artifacts/vector_bench_flyway_output.txt
+      DB_SMOKE_TXT: docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.txt
+      DB_SMOKE_JSON: docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.json
+      COMPOSE_LOGS_TXT: docs/review/mvp_verification_pack/artifacts/vector_bench_compose_logs.txt
+      VECTOR_BENCH_MONITORING_TXT: docs/review/mvp_verification_pack/artifacts/vector_bench_monitoring_gate.txt
+      VECTOR_BENCH_MONITORING_JSON: docs/review/mvp_verification_pack/artifacts/vector_bench_monitoring_gate.json
+      VECTOR_BENCH_BASELINE_JSON: docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_baseline.json
+      VECTOR_BENCH_MAX_RECALL_DROP: "0.03"
+      VECTOR_BENCH_MAX_P95_REGRESSION_RATIO: "1.30"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Ensure artifact directory
+        shell: pwsh
+        run: New-Item -ItemType Directory -Path "${env:ARTIFACT_ROOT}" -Force | Out-Null
+
+      - name: Compose down clean volume
+        shell: pwsh
+        run: docker compose -f "${env:COMPOSE_FILE}" down -v
+
+      - name: Compose up postgres and redis
+        shell: pwsh
+        run: docker compose -f "${env:COMPOSE_FILE}" up -d postgres redis
+
+      - name: Run flyway migration
+        shell: pwsh
+        run: |
+          docker compose -f "${env:COMPOSE_FILE}" --profile db-tools run --rm flyway *>&1 `
+            | Tee-Object -FilePath "${env:FLYWAY_OUT_TXT}"
+
+      - name: Run DB smoke and assert PASS
+        shell: pwsh
+        run: |
+          python scripts/db_smoke_test.py `
+            --method docker-exec `
+            --compose-file "${env:COMPOSE_FILE}" `
+            --compose-service postgres `
+            --output-txt "${env:DB_SMOKE_TXT}" `
+            --output-json "${env:DB_SMOKE_JSON}"
+
+          $smoke = Get-Content "${env:DB_SMOKE_JSON}" -Raw -Encoding utf8 | ConvertFrom-Json
+          if ($smoke.status -ne "PASS") {
+            throw "db_smoke_test failed: status=$($smoke.status)"
+          }
+
+      - name: Resolve benchmark artifact date (UTC YYYYMMDD)
+        shell: pwsh
+        run: |
+          $benchDate = (Get-Date).ToUniversalTime().ToString("yyyyMMdd")
+          "BENCH_DATE=$benchDate" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "BENCH_TXT_PATH=${env:ARTIFACT_ROOT}/vector_recall_latency_bench_$benchDate.txt" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "BENCH_JSON_PATH=${env:ARTIFACT_ROOT}/vector_recall_latency_bench_$benchDate.json" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Run vector recall/latency benchmark (bounded CI profile)
+        shell: pwsh
+        run: |
+          $baselinePath = "${env:VECTOR_BENCH_BASELINE_JSON}"
+          $benchArgs = @(
+            "--ci",
+            "--method", "docker-exec",
+            "--compose-file", "${env:COMPOSE_FILE}",
+            "--compose-service", "postgres",
+            "--ci-row-count", "3000",
+            "--ci-dimensions", "256",
+            "--top-k", "8",
+            "--query-count", "12",
+            "--probe-values", "1,2,4,8",
+            "--seed", "20260227",
+            "--max-recall-drop", "${env:VECTOR_BENCH_MAX_RECALL_DROP}",
+            "--max-p95-regression-ratio", "${env:VECTOR_BENCH_MAX_P95_REGRESSION_RATIO}",
+            "--output-txt", "${env:BENCH_TXT_PATH}",
+            "--output-json", "${env:BENCH_JSON_PATH}"
+          )
+          if (Test-Path $baselinePath) {
+            $benchArgs += @("--baseline-json", $baselinePath)
+          }
+
+          & python scripts/vector_recall_latency_bench.py @benchArgs
+          $benchExit = $LASTEXITCODE
+          "VECTOR_BENCH_EXIT_CODE=$benchExit" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          if (-not (Test-Path "${env:BENCH_JSON_PATH}")) {
+            $fallbackPayload = @{
+              status = "FAIL"
+              started_at_utc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+              finished_at_utc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+              duration_ms = 0
+              method = "docker-exec"
+              tenant_id = "00000000-0000-0000-0000-000000000001"
+              top_k = 8
+              query_count = 12
+              probe_values = @(1, 2, 4, 8)
+              thresholds = @{
+                max_recall_drop = [double]$env:VECTOR_BENCH_MAX_RECALL_DROP
+                max_p95_regression_ratio = [double]$env:VECTOR_BENCH_MAX_P95_REGRESSION_RATIO
+              }
+              row_count_non_null_embedding = 0
+              ci_dataset = @{
+                enabled = $true
+                row_count = 3000
+                dimensions = 256
+                table = "tb_vector_bench_ci"
+              }
+              query_ids = @()
+              probe_results = @()
+              best_probe = $null
+              baseline_comparison = @{
+                enabled = (Test-Path $baselinePath)
+                baseline_path = $baselinePath
+                max_recall_drop = [double]$env:VECTOR_BENCH_MAX_RECALL_DROP
+                max_p95_regression_ratio = [double]$env:VECTOR_BENCH_MAX_P95_REGRESSION_RATIO
+                status = "SKIPPED"
+              }
+              violation_count = 1
+              violations = @(
+                @{
+                  code = "BENCH_WORKFLOW_EXECUTION_FAILED"
+                  message = "benchmark runner terminated before writing artifact"
+                  details = "python_exit_code=$benchExit"
+                }
+              )
+            }
+            $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+            [System.IO.File]::WriteAllText(
+              [System.IO.Path]::GetFullPath("${env:BENCH_JSON_PATH}"),
+              (($fallbackPayload | ConvertTo-Json -Depth 8) + "`n"),
+              $utf8NoBom
+            )
+          }
+
+          if (-not (Test-Path "${env:BENCH_TXT_PATH}")) {
+            $txtLines = @(
+              "vector_recall_latency_bench",
+              "status=FAIL",
+              "detail=benchmark runner terminated before writing txt artifact",
+              "python_exit_code=$benchExit",
+              "json_fallback_path=${env:BENCH_JSON_PATH}"
+            )
+            $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+            [System.IO.File]::WriteAllText(
+              [System.IO.Path]::GetFullPath("${env:BENCH_TXT_PATH}"),
+              ($txtLines -join "`n") + "`n",
+              $utf8NoBom
+            )
+          }
+
+          if ($benchExit -ne 0) {
+            exit $benchExit
+          }
+
+      - name: Build vector bench monitoring gate artifact
+        if: always()
+        shell: pwsh
+        run: |
+          $jsonPath = "${env:BENCH_JSON_PATH}"
+          $benchmarkExitCode = -1
+          if ($env:VECTOR_BENCH_EXIT_CODE) {
+            $benchmarkExitCode = [int]$env:VECTOR_BENCH_EXIT_CODE
+          }
+          $baselinePath = "${env:VECTOR_BENCH_BASELINE_JSON}"
+
+          $benchmarkStatus = "NOT_FOUND"
+          $benchmarkViolationCount = -1
+          $gateStatus = "FAIL"
+          $detail = "benchmark json missing"
+          if ($jsonPath -and (Test-Path $jsonPath)) {
+            $bench = Get-Content $jsonPath -Raw -Encoding utf8 | ConvertFrom-Json
+            $benchmarkStatus = [string]$bench.status
+            $benchmarkViolationCount = [int]$bench.violation_count
+            if ($benchmarkStatus -eq "PASS") {
+              $gateStatus = "PASS"
+              $detail = "benchmark status PASS"
+            } else {
+              $detail = "benchmark status=$benchmarkStatus violation_count=$benchmarkViolationCount"
+            }
+          }
+          if ($benchmarkExitCode -ne 0) {
+            $gateStatus = "FAIL"
+            $detail = "$detail; benchmark_exit_code=$benchmarkExitCode"
+          }
+
+          $payload = @{
+            gate_name = "vector_bench_monitoring_gate"
+            status = $gateStatus
+            monitoring_only = $true
+            workflow = ".github/workflows/vector-bench-nightly.yml"
+            trigger = "schedule|workflow_dispatch"
+            benchmark_json_path = $jsonPath
+            benchmark_txt_path = "${env:BENCH_TXT_PATH}"
+            benchmark_exit_code = $benchmarkExitCode
+            benchmark_status = $benchmarkStatus
+            benchmark_violation_count = $benchmarkViolationCount
+            baseline_json_path = $baselinePath
+            baseline_present = (Test-Path $baselinePath)
+            max_recall_drop = [double]$env:VECTOR_BENCH_MAX_RECALL_DROP
+            max_p95_regression_ratio = [double]$env:VECTOR_BENCH_MAX_P95_REGRESSION_RATIO
+            detail = $detail
+            generated_at_utc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+          }
+
+          $lines = @(
+            "vector_bench_monitoring_gate",
+            "status=$($payload.status)",
+            "monitoring_only=$($payload.monitoring_only)",
+            "trigger=$($payload.trigger)",
+            "workflow=$($payload.workflow)",
+            "benchmark_json_path=$($payload.benchmark_json_path)",
+            "benchmark_txt_path=$($payload.benchmark_txt_path)",
+            "benchmark_exit_code=$($payload.benchmark_exit_code)",
+            "benchmark_status=$($payload.benchmark_status)",
+            "benchmark_violation_count=$($payload.benchmark_violation_count)",
+            "baseline_json_path=$($payload.baseline_json_path)",
+            "baseline_present=$($payload.baseline_present)",
+            "max_recall_drop=$($payload.max_recall_drop)",
+            "max_p95_regression_ratio=$($payload.max_p95_regression_ratio)",
+            "detail=$($payload.detail)"
+          )
+          $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+          [System.IO.File]::WriteAllText(
+            [System.IO.Path]::GetFullPath("${env:VECTOR_BENCH_MONITORING_TXT}"),
+            ($lines -join "`n") + "`n",
+            $utf8NoBom
+          )
+          [System.IO.File]::WriteAllText(
+            [System.IO.Path]::GetFullPath("${env:VECTOR_BENCH_MONITORING_JSON}"),
+            (($payload | ConvertTo-Json -Depth 8) + "`n"),
+            $utf8NoBom
+          )
+
+          if (Test-Path $env:GITHUB_STEP_SUMMARY) {
+            @(
+              "### Vector Bench Monitoring Gate",
+              "- status: **$($payload.status)**",
+              "- monitoring_only: `$($payload.monitoring_only)`",
+              "- benchmark_status: `$($payload.benchmark_status)`",
+              "- detail: $($payload.detail)"
+            ) -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+          exit 0
+
+      - name: Collect compose logs
+        if: always()
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Continue"
+          $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+          $sb = New-Object System.Text.StringBuilder
+          $services = @("postgres", "redis")
+          foreach ($service in $services) {
+            [void]$sb.AppendLine("=== $service ===")
+            $output = docker compose -f "${env:COMPOSE_FILE}" logs --no-color $service 2>&1
+            if ($output) {
+              foreach ($line in $output) {
+                [void]$sb.AppendLine($line.ToString())
+              }
+            }
+            [void]$sb.AppendLine("")
+          }
+          [System.IO.File]::WriteAllText([System.IO.Path]::GetFullPath("${env:COMPOSE_LOGS_TXT}"), $sb.ToString(), $utf8NoBom)
+          exit 0
+
+      - name: Upload vector benchmark artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vector-bench-nightly-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_*.txt
+            docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_*.json
+            docs/review/mvp_verification_pack/artifacts/vector_bench_flyway_output.txt
+            docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.txt
+            docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.json
+            docs/review/mvp_verification_pack/artifacts/vector_bench_compose_logs.txt
+            docs/review/mvp_verification_pack/artifacts/vector_bench_monitoring_gate.txt
+            docs/review/mvp_verification_pack/artifacts/vector_bench_monitoring_gate.json
+
+      - name: Compose down clean volume
+        if: always()
+        shell: pwsh
+        run: |
+          docker compose -f "${env:COMPOSE_FILE}" down -v
+          exit 0

@@ -6,7 +6,9 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import math
 import os
+import re
 import statistics
 import subprocess
 import sys
@@ -31,6 +33,16 @@ DEFAULT_SEED = 42
 DEFAULT_MAX_RECALL_DROP = 0.03
 DEFAULT_MAX_P95_REGRESSION_RATIO = 1.30
 DEFAULT_ARTIFACT_DIR = "docs/review/mvp_verification_pack/artifacts"
+CI_BENCH_TABLE = "tb_vector_bench_ci"
+DEFAULT_CI_ROW_COUNT = 3000
+DEFAULT_CI_DIMENSIONS = 256
+DEFAULT_CI_TOP_K = 8
+DEFAULT_CI_QUERY_COUNT = 12
+DEFAULT_CI_PROBES = (1, 2, 4, 8)
+DEFAULT_CI_SEED = 20260227
+
+PGPASSWORD_INLINE_PATTERN = re.compile(r"PGPASSWORD=[^\s]+")
+DSN_PASSWORD_PATTERN = re.compile(r"(?i)(postgres(?:ql)?://[^:\s]+:)[^@/\s]+(@)")
 
 
 @dataclass
@@ -77,7 +89,12 @@ def parse_probe_values(raw: str) -> list[int]:
     return unique
 
 
+def option_provided(argv_tokens: list[str], option: str) -> bool:
+    return any(token == option or token.startswith(option + "=") for token in argv_tokens)
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    argv_tokens = list(argv) if argv is not None else list(sys.argv[1:])
     parser = argparse.ArgumentParser(description="Benchmark pgvector IVFFlat recall and latency deltas")
     parser.add_argument("--method", choices=("docker-exec", "local"), default=DEFAULT_METHOD)
     parser.add_argument("--compose-file", default=DEFAULT_COMPOSE_FILE)
@@ -99,7 +116,26 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--artifact-date", default=default_artifact_date())
     parser.add_argument("--output-txt")
     parser.add_argument("--output-json")
-    return parser.parse_args(argv)
+    parser.add_argument(
+        "--ci",
+        action="store_true",
+        help="Enable bounded deterministic synthetic benchmark dataset for CI monitoring",
+    )
+    parser.add_argument("--ci-row-count", type=int, default=DEFAULT_CI_ROW_COUNT)
+    parser.add_argument("--ci-dimensions", type=int, default=DEFAULT_CI_DIMENSIONS)
+    args = parser.parse_args(argv_tokens)
+
+    if args.ci:
+        if not option_provided(argv_tokens, "--probe-values"):
+            args.probe_values = list(DEFAULT_CI_PROBES)
+        if not option_provided(argv_tokens, "--top-k"):
+            args.top_k = DEFAULT_CI_TOP_K
+        if not option_provided(argv_tokens, "--query-count"):
+            args.query_count = DEFAULT_CI_QUERY_COUNT
+        if not option_provided(argv_tokens, "--seed"):
+            args.seed = DEFAULT_CI_SEED
+
+    return args
 
 
 def run_command(command: list[str], env: dict[str, str] | None = None) -> CommandResult:
@@ -115,10 +151,20 @@ def run_command(command: list[str], env: dict[str, str] | None = None) -> Comman
     return CommandResult(returncode=proc.returncode, stdout=proc.stdout or "", stderr=proc.stderr or "")
 
 
-def summarize_output(result: CommandResult, limit: int = 1400) -> str:
+def redact_sensitive(text: str, secrets: list[str] | None = None) -> str:
+    redacted = PGPASSWORD_INLINE_PATTERN.sub("PGPASSWORD=***", text)
+    redacted = DSN_PASSWORD_PATTERN.sub(r"\1***\2", redacted)
+    for secret in secrets or []:
+        if secret:
+            redacted = redacted.replace(secret, "***")
+    return redacted
+
+
+def summarize_output(result: CommandResult, limit: int = 1400, secrets: list[str] | None = None) -> str:
     merged = (result.stdout.strip() + "\n" + result.stderr.strip()).strip()
     if not merged:
         return "(no output)"
+    merged = redact_sensitive(merged, secrets)
     if len(merged) <= limit:
         return merged
     return merged[: limit - 3] + "..."
@@ -187,7 +233,8 @@ def run_sql(args: argparse.Namespace, sql: str) -> tuple[bool, str]:
     command, env = build_psql_command(args, sql)
     result = run_command(command, env=env)
     if result.returncode != 0:
-        details = f"command={' '.join(command)}\n{summarize_output(result)}"
+        command_text = redact_sensitive(" ".join(command), secrets=[args.db_password])
+        details = f"command={command_text}\n{summarize_output(result, secrets=[args.db_password])}"
         return False, details
     return True, result.stdout.strip()
 
@@ -218,14 +265,18 @@ def percentile(values: list[float], pct: float) -> float:
 
 
 def render_text(payload: dict) -> str:
+    thresholds = payload.get("thresholds", {})
     lines = [
         "vector_recall_latency_bench",
         f"status={payload['status']}",
         f"method={payload['method']}",
+        f"ci_mode={payload.get('ci_dataset', {}).get('enabled', False)}",
         f"tenant_id={payload['tenant_id']}",
         f"row_count={payload['row_count_non_null_embedding']}",
         f"top_k={payload['top_k']}",
         f"query_count={payload['query_count']}",
+        f"max_recall_drop={thresholds.get('max_recall_drop', DEFAULT_MAX_RECALL_DROP)}",
+        f"max_p95_regression_ratio={thresholds.get('max_p95_regression_ratio', DEFAULT_MAX_P95_REGRESSION_RATIO)}",
         f"probe_values={','.join(str(item) for item in payload['probe_values'])}",
         f"probe_results={len(payload['probe_results'])}",
         f"violation_count={payload['violation_count']}",
@@ -276,6 +327,47 @@ def check_positive(name: str, value: int, violations: list[Violation]) -> None:
                 code="BENCH_ARGUMENT_INVALID",
                 message=f"{name} must be > 0",
                 details=f"{name}={value}",
+            )
+        )
+
+
+def ci_index_lists(row_count: int) -> int:
+    return max(10, min(400, int(round(math.sqrt(float(row_count))))))
+
+
+def prepare_ci_dataset(args: argparse.Namespace, violations: list[Violation]) -> None:
+    check_positive("ci_row_count", args.ci_row_count, violations)
+    check_positive("ci_dimensions", args.ci_dimensions, violations)
+    if violations:
+        return
+
+    lists = ci_index_lists(args.ci_row_count)
+    sql = (
+        f"DROP TABLE IF EXISTS {CI_BENCH_TABLE}; "
+        f"CREATE UNLOGGED TABLE {CI_BENCH_TABLE} ("
+        "  id BIGINT PRIMARY KEY,"
+        f"  embedding vector({args.ci_dimensions}) NOT NULL"
+        "); "
+        f"INSERT INTO {CI_BENCH_TABLE} (id, embedding) "
+        "SELECT g, "
+        "       ('[' || string_agg("
+        f"           to_char(((sin((g * 0.013) + (d * 0.017) + ({args.seed} * 0.001)) + 1.0) / 2.0)::numeric, 'FM0.000000'), "
+        "           ',' ORDER BY d"
+        f"       ) || ']')::vector({args.ci_dimensions}) "
+        f"FROM generate_series(1, {args.ci_row_count}) AS g "
+        f"CROSS JOIN generate_series(1, {args.ci_dimensions}) AS d "
+        "GROUP BY g; "
+        f"CREATE INDEX {CI_BENCH_TABLE}_embedding_ivfflat "
+        f"ON {CI_BENCH_TABLE} USING ivfflat (embedding vector_cosine_ops) WITH (lists = {lists}); "
+        f"ANALYZE {CI_BENCH_TABLE};"
+    )
+    ok, output = run_sql(args, sql)
+    if not ok:
+        violations.append(
+            Violation(
+                code="BENCH_CI_DATASET_SETUP_FAILED",
+                message="failed to prepare deterministic CI vector benchmark dataset",
+                details=output,
             )
         )
 
@@ -407,6 +499,7 @@ def run_benchmark(args: argparse.Namespace) -> dict:
 
     tenant_literal = quote_sql_literal(args.tenant_id)
     seed_literal = quote_sql_literal(str(args.seed))
+    vector_column = "embedding_vector_1536"
     dataset_filter = (
         "FROM tb_kb_chunk_embedding e "
         "JOIN tb_kb_chunk c ON c.id = e.chunk_id AND c.tenant_id = e.tenant_id "
@@ -415,15 +508,37 @@ def run_benchmark(args: argparse.Namespace) -> dict:
         "AND e.embedding_vector_1536 IS NOT NULL "
         "AND dv.status = 'approved'"
     )
+    row_count_sql = f"SELECT COUNT(*) {dataset_filter};"
+    sample_sql = (
+        "SELECT e.id::text "
+        f"{dataset_filter} "
+        f"ORDER BY md5(e.id::text || {seed_literal}) "
+        f"LIMIT {args.query_count};"
+    )
 
     row_count = 0
     query_ids: list[str] = []
+    ci_dataset_info = {
+        "enabled": args.ci,
+        "row_count": args.ci_row_count if args.ci else 0,
+        "dimensions": args.ci_dimensions if args.ci else 0,
+        "table": CI_BENCH_TABLE if args.ci else "",
+    }
+
+    if args.ci and not violations:
+        prepare_ci_dataset(args, violations)
+        vector_column = "embedding"
+        dataset_filter = f"FROM {CI_BENCH_TABLE} e"
+        row_count_sql = f"SELECT COUNT(*) {dataset_filter};"
+        sample_sql = (
+            "SELECT e.id::text "
+            f"{dataset_filter} "
+            f"ORDER BY md5(e.id::text || {seed_literal}) "
+            f"LIMIT {args.query_count};"
+        )
 
     if not violations:
-        ok, row_count, details = run_scalar_int(
-            args,
-            f"SELECT COUNT(*) {dataset_filter};",
-        )
+        ok, row_count, details = run_scalar_int(args, row_count_sql)
         if not ok:
             violations.append(
                 Violation(
@@ -445,12 +560,6 @@ def run_benchmark(args: argparse.Namespace) -> dict:
             )
 
     if not violations:
-        sample_sql = (
-            "SELECT e.id::text "
-            f"{dataset_filter} "
-            f"ORDER BY md5(e.id::text || {seed_literal}) "
-            f"LIMIT {args.query_count};"
-        )
         ok, output_full = run_sql(args, sample_sql)
         if not ok:
             violations.append(
@@ -478,21 +587,30 @@ def run_benchmark(args: argparse.Namespace) -> dict:
         per_query_latency_ms: list[float] = []
         for query_id in query_ids:
             query_id_literal = quote_sql_literal(query_id)
+            if args.ci:
+                probe_source_sql = (
+                    f"FROM {CI_BENCH_TABLE} "
+                    f"WHERE id = {query_id_literal}"
+                )
+            else:
+                probe_source_sql = (
+                    "FROM tb_kb_chunk_embedding "
+                    f"WHERE tenant_id = {tenant_literal} "
+                    f"  AND id = {query_id_literal} "
+                    "  AND embedding_vector_1536 IS NOT NULL"
+                )
 
             exact_sql = (
                 "BEGIN; "
                 "SET LOCAL enable_indexscan = off; "
                 "SET LOCAL enable_bitmapscan = off; "
                 "WITH probe AS ("
-                "  SELECT embedding_vector_1536 AS qv "
-                "  FROM tb_kb_chunk_embedding "
-                f"  WHERE tenant_id = {tenant_literal} "
-                f"    AND id = {query_id_literal} "
-                "    AND embedding_vector_1536 IS NOT NULL"
+                f"  SELECT {vector_column} AS qv "
+                f"  {probe_source_sql} "
                 "), ranked AS ("
                 "  SELECT e.id::text AS id "
                 f"  {dataset_filter} "
-                "  ORDER BY e.embedding_vector_1536 <=> (SELECT qv FROM probe) "
+                f"  ORDER BY e.{vector_column} <=> (SELECT qv FROM probe) "
                 f"  LIMIT {args.top_k}"
                 ") "
                 "SELECT COALESCE(string_agg(id, ',' ORDER BY id), '') FROM ranked; "
@@ -514,17 +632,14 @@ def run_benchmark(args: argparse.Namespace) -> dict:
                 "BEGIN; "
                 f"SET LOCAL ivfflat.probes = {probe}; "
                 "WITH probe AS ("
-                "  SELECT embedding_vector_1536 AS qv "
-                "  FROM tb_kb_chunk_embedding "
-                f"  WHERE tenant_id = {tenant_literal} "
-                f"    AND id = {query_id_literal} "
-                "    AND embedding_vector_1536 IS NOT NULL"
+                f"  SELECT {vector_column} AS qv "
+                f"  {probe_source_sql} "
                 "), started AS ("
                 "  SELECT clock_timestamp() AS t0"
                 "), ranked AS ("
                 "  SELECT e.id::text AS id "
                 f"  {dataset_filter} "
-                "  ORDER BY e.embedding_vector_1536 <=> (SELECT qv FROM probe) "
+                f"  ORDER BY e.{vector_column} <=> (SELECT qv FROM probe) "
                 f"  LIMIT {args.top_k}"
                 "), elapsed AS ("
                 "  SELECT EXTRACT(EPOCH FROM (clock_timestamp() - (SELECT t0 FROM started))) * 1000.0 AS latency_ms "
@@ -624,7 +739,12 @@ def run_benchmark(args: argparse.Namespace) -> dict:
         "query_count": args.query_count,
         "probe_values": args.probe_values,
         "seed": args.seed,
+        "thresholds": {
+            "max_recall_drop": args.max_recall_drop,
+            "max_p95_regression_ratio": args.max_p95_regression_ratio,
+        },
         "row_count_non_null_embedding": row_count,
+        "ci_dataset": ci_dataset_info,
         "query_ids": query_ids,
         "probe_results": probe_results,
         "best_probe": best_probe,
@@ -633,6 +753,58 @@ def run_benchmark(args: argparse.Namespace) -> dict:
         "violations": [asdict(item) for item in violations],
     }
     return payload
+
+
+def build_unhandled_failure_payload(args: argparse.Namespace, exc: Exception, started_at: dt.datetime) -> dict:
+    finished_at = utc_now()
+    elapsed_ms = int(max(0.0, (finished_at - started_at).total_seconds() * 1000.0))
+    details = redact_sensitive(f"{type(exc).__name__}: {exc}", secrets=[args.db_password])
+    baseline_path = Path(args.baseline_json) if args.baseline_json else None
+    baseline = {
+        "enabled": baseline_path is not None,
+        "baseline_path": baseline_path.as_posix() if baseline_path else "",
+        "max_recall_drop": args.max_recall_drop,
+        "max_p95_regression_ratio": args.max_p95_regression_ratio,
+        "status": "SKIPPED",
+    }
+    violation = Violation(
+        code="BENCH_UNHANDLED_EXCEPTION",
+        message="unhandled exception during benchmark execution",
+        details=details,
+    )
+    return {
+        "status": "FAIL",
+        "started_at_utc": started_at.isoformat().replace("+00:00", "Z"),
+        "finished_at_utc": finished_at.isoformat().replace("+00:00", "Z"),
+        "duration_ms": elapsed_ms,
+        "method": args.method,
+        "compose_file": args.compose_file,
+        "compose_service": args.compose_service,
+        "database": args.database,
+        "db_user": args.db_user,
+        "tenant_id": args.tenant_id,
+        "top_k": args.top_k,
+        "query_count": args.query_count,
+        "probe_values": args.probe_values,
+        "seed": args.seed,
+        "thresholds": {
+            "max_recall_drop": args.max_recall_drop,
+            "max_p95_regression_ratio": args.max_p95_regression_ratio,
+        },
+        "row_count_non_null_embedding": 0,
+        "ci_dataset": {
+            "enabled": args.ci,
+            "row_count": args.ci_row_count if args.ci else 0,
+            "dimensions": args.ci_dimensions if args.ci else 0,
+            "table": CI_BENCH_TABLE if args.ci else "",
+        },
+        "query_ids": [],
+        "probe_results": [],
+        "best_probe": None,
+        "baseline_comparison": baseline,
+        "violation_count": 1,
+        "violations": [asdict(violation)],
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -650,7 +822,11 @@ def main(argv: list[str] | None = None) -> int:
         else artifact_dir / f"vector_recall_latency_bench_{args.artifact_date}.json"
     )
 
-    payload = run_benchmark(args)
+    started_at = utc_now()
+    try:
+        payload = run_benchmark(args)
+    except Exception as exc:  # pragma: no cover - defensive runtime fallback
+        payload = build_unhandled_failure_payload(args, exc, started_at)
     text_report = render_text(payload)
     json_report = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 

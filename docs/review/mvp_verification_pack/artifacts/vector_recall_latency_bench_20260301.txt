@@ -1,0 +1,16 @@
+vector_recall_latency_bench
+status=FAIL
+method=docker-exec
+ci_mode=True
+tenant_id=00000000-0000-0000-0000-000000000001
+row_count=0
+top_k=8
+query_count=12
+max_recall_drop=0.03
+max_p95_regression_ratio=1.3
+probe_values=1,2,4,8
+probe_results=0
+violation_count=1
+baseline.enabled=False
+- [BENCH_CI_DATASET_SETUP_FAILED] failed to prepare deterministic CI vector benchmark dataset :: command=docker compose -f infra/docker-compose.yml exec -T -e PGPASSWORD=*** postgres psql -U aichatbot -d aichatbot -X -q -v ON_ERROR_STOP=1 -At -F 	 -c DROP TABLE IF EXISTS tb_vector_bench_ci; CREATE UNLOGGED TABLE tb_vector_bench_ci (  id BIGINT PRIMARY KEY,  embedding vector(256) NOT NULL); INSERT INTO tb_vector_bench_ci (id, embedding) SELECT g,        ('[' || string_agg(           to_char(((sin((g * 0.013) + (d * 0.017) + (20260227 * 0.001)) + 1.0) / 2.0)::numeric, 'FM0.000000'),            ',' ORDER BY d       ) || ']')::vector(256) FROM generate_series(1, 3000) AS g CROSS JOIN generate_series(1, 256) AS d GROUP BY g; CREATE INDEX tb_vector_bench_ci_embedding_ivfflat ON tb_vector_bench_ci USING ivfflat (embedding vector_cosine_ops) WITH (lists = 55); ANALYZE tb_vector_bench_ci;
+error during connect: Get "http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.51/containers/json?filters=%7B%22label%22%3A%7B%22com.docker.compose.config-hash%22%3Atrue%2C%22com.docker.compose.project%3Dinfra%22%3Atrue%2C%22com.docker.compose.service%3Dpostgres%22%3Atrue%7D%7D": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.
