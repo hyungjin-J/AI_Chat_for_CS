@@ -1,0 +1,27 @@
+﻿timestamp=2026-03-02T15:58:34.7887448+09:00
+repo_root=C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot
+
+exists=YES path=docs/ops/runbook/README.md bytes=2192
+exists=YES path=docs/ops/runbook/playbooks/scheduler_lock_incident.md bytes=2863
+exists=YES path=docs/ops/runbook/playbooks/audit_chain_integrity_incident.md bytes=2263
+exists=YES path=scripts/verify_audit_chain_integrity.py bytes=16373
+exists=YES path=.github/workflows/release-nightly-full.yml bytes=14427
+exists=YES path=.github/workflows/provider-regression-nightly.yml bytes=4126
+
+## runbook_links
+17:| P0 | [scheduler_lock_incident.md](./playbooks/scheduler_lock_incident.md) | Scheduler lock stuck, lock starvation, janitor recovery failures |
+18:| P0 | [audit_chain_integrity_incident.md](./playbooks/audit_chain_integrity_incident.md) | Audit chain mismatch, chain sequence gaps, tamper suspicion |
+
+## workflow_refs
+.github/workflows/provider-regression-nightly.yml:57:                  python scripts/verify_audit_chain_integrity.py `
+.github/workflows/provider-regression-nightly.yml:64:                    --output-txt docs/review/mvp_verification_pack/artifacts/audit_chain_verify_provider_nightly.txt `
+.github/workflows/provider-regression-nightly.yml:65:                    --output-json docs/review/mvp_verification_pack/artifacts/audit_chain_verify_provider_nightly.json
+.github/workflows/provider-regression-nightly.yml:67:                    Write-Error "Audit chain integrity verifier failed. Follow runbook: docs/ops/runbook/playbooks/audit_chain_integrity_incident.md"
+.github/workflows/provider-regression-nightly.yml:93:                      docs/review/mvp_verification_pack/artifacts/audit_chain_verify_provider_nightly.txt
+.github/workflows/provider-regression-nightly.yml:94:                      docs/review/mvp_verification_pack/artifacts/audit_chain_verify_provider_nightly.json
+.github/workflows/release-nightly-full.yml:180:          python scripts/verify_audit_chain_integrity.py `
+.github/workflows/release-nightly-full.yml:187:            --output-txt docs/review/mvp_verification_pack/artifacts/audit_chain_verify_release_nightly.txt `
+.github/workflows/release-nightly-full.yml:188:            --output-json docs/review/mvp_verification_pack/artifacts/audit_chain_verify_release_nightly.json
+.github/workflows/release-nightly-full.yml:190:            Write-Error "Audit chain integrity verifier failed. Follow runbook: docs/ops/runbook/playbooks/audit_chain_integrity_incident.md"
+.github/workflows/release-nightly-full.yml:295:            docs/review/mvp_verification_pack/artifacts/audit_chain_verify_*.txt
+.github/workflows/release-nightly-full.yml:296:            docs/review/mvp_verification_pack/artifacts/audit_chain_verify_*.json

@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
 import tempfile
 import time
 import unittest
+import zipfile
 from pathlib import Path
 
 
@@ -62,6 +64,46 @@ def find_family(payload: dict, family_name: str) -> dict:
             if family["family"] == family_name:
                 return family
     raise AssertionError(f"family not found: {family_name}")
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        while True:
+            chunk = handle.read(65536)
+            if not chunk:
+                break
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def create_sidecar_archive(
+    archive_root: Path,
+    family_name: str,
+    members: list[str],
+    created_at_kst: str = "2026-02-27 09:00:00 +09:00",
+) -> tuple[Path, Path]:
+    safe_family = family_name.replace("/", "__")
+    family_dir = archive_root / safe_family
+    family_dir.mkdir(parents=True, exist_ok=True)
+    zip_path = family_dir / f"20260227_{safe_family}.zip"
+    manifest_path = family_dir / f"20260227_{safe_family}.manifest.json"
+
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for member in members:
+            zf.writestr(member, "sidecar\n")
+
+    manifest_payload = {
+        "schema_version": 1,
+        "family_name": family_name,
+        "created_at_kst": created_at_kst,
+        "source_commit": "0123456789abcdef0123456789abcdef01234567",
+        "zip_sha256": sha256_file(zip_path),
+        "included_files": [{"path": member, "sha256": "dummy"} for member in members],
+        "excluded_files": [],
+    }
+    manifest_path.write_text(json.dumps(manifest_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return zip_path, manifest_path
 
 
 class BuildArtifactIndexTest(unittest.TestCase):
@@ -185,6 +227,100 @@ class BuildArtifactIndexTest(unittest.TestCase):
             self.assertNotEqual(stale.returncode, 0)
             self.assertIn("ARCHIVE_MANIFEST_STALE", stale.stdout)
             self.assertIn("ARCHIVE_BUNDLE_MISSING", stale.stdout)
+
+    def test_check_mode_detects_sidecar_manifest_missing_for_zip(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifacts = Path(tmp) / "docs/review/mvp_verification_pack/artifacts"
+            archive_root = artifacts.parent / "archive"
+            write_text(artifacts / "utf8_normalization_wave2_report.json")
+
+            built = run_script(artifacts)
+            self.assertEqual(built.returncode, 0, msg=built.stdout + built.stderr)
+
+            family_dir = archive_root / "utf8_normalization_waveN_report"
+            family_dir.mkdir(parents=True, exist_ok=True)
+            zip_path = family_dir / "20260227_utf8_normalization_waveN_report.zip"
+            with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+                zf.writestr("utf8_normalization_wave2_report.json", "x\n")
+
+            checked = run_script(artifacts, check=True)
+            self.assertNotEqual(checked.returncode, 0)
+            self.assertIn("ARCHIVE_SIDECAR_MANIFEST_MISSING", checked.stdout)
+
+    def test_check_mode_detects_sidecar_sha_and_membership_mismatch_and_missing_zip(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifacts = Path(tmp) / "docs/review/mvp_verification_pack/artifacts"
+            write_text(artifacts / "utf8_normalization_wave2_report.json")
+            write_text(artifacts / "utf8_normalization_wave3_report.json")
+
+            built = run_script(artifacts)
+            self.assertEqual(built.returncode, 0, msg=built.stdout + built.stderr)
+
+            archive_root = artifacts.parent / "archive"
+            zip_path, manifest_path = create_sidecar_archive(
+                archive_root=archive_root,
+                family_name="utf8_normalization_waveN_report",
+                members=["utf8_normalization_wave2_report.json"],
+            )
+
+            rebuilt = run_script(artifacts)
+            self.assertEqual(rebuilt.returncode, 0, msg=rebuilt.stdout + rebuilt.stderr)
+
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload["zip_sha256"] = "0" * 64
+            manifest_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            sha_check = run_script(artifacts, check=True)
+            self.assertNotEqual(sha_check.returncode, 0)
+            self.assertIn("ARCHIVE_ZIP_SHA256_MISMATCH", sha_check.stdout)
+
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload["zip_sha256"] = sha256_file(zip_path)
+            payload["included_files"] = [{"path": "utf8_normalization_wave3_report.json", "sha256": "dummy"}]
+            manifest_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            member_check = run_script(artifacts, check=True)
+            self.assertNotEqual(member_check.returncode, 0)
+            self.assertIn("ARCHIVE_INCLUDED_LIST_MISMATCH", member_check.stdout)
+
+            zip_path.unlink()
+            missing_zip_check = run_script(artifacts, check=True)
+            self.assertNotEqual(missing_zip_check.returncode, 0)
+            self.assertIn("ARCHIVE_ZIP_MISSING", missing_zip_check.stdout)
+
+    def test_index_surfaces_release_dashboard_in_start_here(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifacts = Path(tmp) / "docs/review/mvp_verification_pack/artifacts"
+            write_text(artifacts / "release_gate_dashboard.md", "# Release Gate Dashboard\n")
+            write_text(artifacts / "release_gate_dashboard.json", "{}\n")
+            write_text(artifacts / "spec_impl_coverage_report.md", "# Spec Coverage\n")
+            write_text(artifacts / "spec_impl_coverage_report.json", "{}\n")
+            write_text(artifacts / "spec_impl_coverage_report.txt", "spec_impl_coverage_report\n")
+            write_text(artifacts / "spec_impl_coverage_gate.json", "{}\n")
+            write_text(artifacts / "spec_impl_coverage_gate.txt", "assert_spec_impl_coverage\n")
+            write_text(artifacts / "spec_consistency_check_report.json")
+
+            proc = run_script(artifacts)
+            self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+
+            payload = load_index(artifacts)
+            self.assertIn("start_here", payload)
+            self.assertIn("release_gate_dashboard", payload)
+            self.assertIn("spec_impl_coverage", payload)
+            self.assertEqual(payload["release_gate_dashboard"]["markdown_path"], "release_gate_dashboard.md")
+            self.assertEqual(payload["release_gate_dashboard"]["json_path"], "release_gate_dashboard.json")
+            self.assertTrue(payload["release_gate_dashboard"]["markdown_present"])
+            self.assertTrue(payload["release_gate_dashboard"]["json_present"])
+            self.assertTrue(payload["spec_impl_coverage"]["report_markdown_present"])
+            self.assertTrue(payload["spec_impl_coverage"]["gate_json_present"])
+
+            start_here_keys = [item["key"] for item in payload["start_here"]]
+            self.assertIn("release_gate_dashboard_md", start_here_keys)
+            self.assertIn("release_gate_dashboard_json", start_here_keys)
+            self.assertIn("spec_impl_coverage_report_md", start_here_keys)
+            self.assertIn("spec_impl_coverage_gate_json", start_here_keys)
+
+            index_md = (artifacts / "_INDEX.md").read_text(encoding="utf-8")
+            self.assertIn("## Start Here", index_md)
+            self.assertIn("release_gate_dashboard.md", index_md)
 
 
 if __name__ == "__main__":

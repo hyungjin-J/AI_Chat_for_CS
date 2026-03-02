@@ -1,0 +1,15 @@
+db_backend_health_trace_gate
+status=SKIPPED
+reason_code=DOCKER_ENGINE_DOWN
+remediation_hint=Start Docker Desktop/Engine and verify `docker info` succeeds.
+endpoint=http://localhost:8080/actuator/health
+docker_preflight_status=FAIL
+without_trace_status=None
+without_trace_expected=409
+with_trace_status=None
+with_trace_expected=200
+with_trace_attempts=0
+violation_count=1
+- [DOCKER_ENGINE_DOWN] docker preflight failed :: null
+
+failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.

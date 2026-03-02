@@ -120,7 +120,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return uri.equals("/v1/auth/login")
             || uri.equals("/v1/auth/refresh")
             || uri.equals("/health")
-            || uri.equals("/actuator/health")
+            || uri.startsWith("/actuator/health")
             || uri.equals("/actuator/prometheus")
             || uri.startsWith("/error");
     }

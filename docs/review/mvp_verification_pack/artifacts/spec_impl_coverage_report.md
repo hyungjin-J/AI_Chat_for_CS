@@ -1,0 +1,51 @@
+# Spec -> Implementation Coverage
+
+- generated_at_utc: `2026-03-01T15:28:41+09:00`
+- git_head_short: `2eced8e`
+- git_branch: `utf8-wave8-to-29`
+- total_api_rows: `90`
+- must_api_rows: `86`
+
+## Summary
+| Scope | Backend | Frontend | Tests | Fully Covered |
+| --- | --- | --- | --- | --- |
+| Overall | 87 (96.67%) | 90 (100.0%) | 57 (63.33%) | 57 (63.33%) |
+| Must only | 86 (100.0%) | 86 (100.0%) | 56 (65.12%) | 56 (65.12%) |
+
+## Missing Must APIs
+| ProgramID | Method | Endpoint | Required ReqIDs | Missing signals |
+| --- | --- | --- | --- | --- |
+| API-AUTH-LOGOUT | POST | /v1/auth/logout | OPS-001,SEC-001,SEC-002 | tests_present |
+| API-CSAT-POST | POST | /v1/sessions/{session_id}/csat | API-005,INT-003,UI-007 | tests_present |
+| API-HANDOFF-REQUEST | POST | /v1/sessions/{session_id}/handoff | API-006,INT-003,SEC-002,UI-007 | tests_present |
+| API-ATTACHMENT-PRESIGN | POST | /v1/attachments/presign | API-007,SEC-003,UI-003 | tests_present |
+| API-ATTACHMENT-COMPLETE | POST | /v1/attachments/{attachment_id}/complete | API-007,KB-001,UI-003 | tests_present |
+| API-RAG-QUERY-CLASSIFY | POST | /v1/rag/query/classify | LLM-002,RAG-002 | tests_present |
+| API-RAG-CLARIFY-SUGGEST | POST | /v1/rag/clarify/suggest | RAG-002,UI-006 | tests_present |
+| TMP-RECOMMEND-BUTTON | POST | /v1/sessions/{session_id}/template-recommendations | TMP-001,TMP-005,TOOL-003 | tests_present |
+| TOOL-CALL-EXECUTE | POST | /v1/internal/tools/execute | TOOL-001,TOOL-002,TOOL-003 | tests_present |
+| TOOL-CALL-VALIDATE | POST | /v1/internal/tools/validate | TOOL-002,TOOL-003 | tests_present |
+| TOOL-ALLOWLIST-UPDATE | PUT | /v1/admin/tools/allowlist/{tool_name} | SEC-002,TOOL-001,TOOL-003 | tests_present |
+| OPS-ERROR-CATALOG-UPSERT | PUT | /v1/admin/errors/catalog/{error_code} | ADM-003,SYS-003,UI-006 | tests_present |
+| OPS-DEPLOY-APPROVAL-CREATE | POST | /v1/admin/deploy-approvals | ADM-006,INT-001 | tests_present |
+| OPS-DEPLOY-APPROVAL-ACT | POST | /v1/admin/deploy-approvals/{approval_id}/actions/{action} | ADM-006,INT-001 | tests_present |
+| OPS-CHANGE-NOTICE-PUBLISH | POST | /v1/admin/change-notices/{notice_id}/publish | ADM-006,INT-001,UI-007 | tests_present |
+| INT-HANDOFF-SYNC | POST | /v1/integrations/crm/handoffs | API-006,INT-002,INT-003 | tests_present |
+| OPS-BLOCK-UPSERT | PUT | /v1/ops/blocks/{block_id} | OPS-003,SEC-002 | tests_present |
+| OPS-ADMIN-DASHBOARD-SERIES | GET | /v1/admin/dashboard/series | OPS-100 | tests_present |
+| OPS-AUDIT-LOG-QUERY | GET | /v1/admin/audit-logs | OPS-103 | tests_present |
+| OPS-AUDIT-CHANGE-DIFF | GET | /v1/admin/audit-logs/{audit_id}/diff | OPS-103 | tests_present |
+| API-AUTH-MFA-TOTP-ENROLL | POST | /v1/auth/mfa/totp/enroll | OPS-001,SEC-001,SEC-002 | tests_present |
+| API-AUTH-MFA-TOTP-ACTIVATE | POST | /v1/auth/mfa/totp/activate | OPS-001,SEC-001,SEC-002 | tests_present |
+| API-AUTH-MFA-VERIFY | POST | /v1/auth/mfa/verify | OPS-001,SEC-001,SEC-002 | tests_present |
+| API-AUTH-MFA-RECOVERY-REGENERATE | POST | /v1/auth/mfa/recovery-codes/regenerate | OPS-001,SEC-001,SEC-002 | tests_present |
+| API-AUTH-SESSIONS-LIST | GET | /v1/auth/sessions | SEC-001,SEC-002 | tests_present |
+| API-AUTH-SESSIONS-REVOKE | DELETE | /v1/auth/sessions/{session_id} | OPS-001,SEC-001,SEC-002 | tests_present |
+| API-AUTH-SESSIONS-REVOKE-OTHERS | POST | /v1/auth/sessions/revoke-others | OPS-001,SEC-001,SEC-002 | tests_present |
+| ADM-RBAC-APPROVAL-REQUEST-REJECT | POST | /v1/admin/rbac/approval-requests/{request_id}/reject | ADM-100,SEC-002 | tests_present |
+| OPS-AUDIT-LOG-EXPORT | GET | /v1/admin/audit-logs/export | OPS-001,SEC-002 | tests_present |
+| OPS-AUDIT-CHAIN-VERIFY | GET | /v1/admin/audit-logs/chain-verify | OPS-001,SEC-002 | tests_present |
+
+## Must Red/Green
+- must_green_program_ids: `ADM-MODEL-ACTIVATE,ADM-MODEL-CREATE,ADM-MODEL-LIST,ADM-MODEL-ROLLBACK,ADM-POLICY-UPDATE,ADM-PROVIDER-KEY-ROTATE,ADM-PROVIDER-KEY-UPSERT,ADM-PROVIDER-SECRETREF-BIND,ADM-RBAC-APPROVAL-REQUEST-APPROVE,ADM-RBAC-APPROVAL-REQUEST-LIST,ADM-RBAC-MATRIX-UPSERT,ADM-ROUTING-RULE-TEST,ADM-ROUTING-RULE-UPSERT,ADM-TENANT-QUOTA-UPSERT,ADM-VERSION-BUNDLE-ACTIVATE,ADM-VERSION-BUNDLE-LIST,ADM-VERSION-BUNDLE-ROLLBACK,API-AUTH-LOGIN,API-AUTH-REFRESH,API-MESSAGE-LIST,API-MESSAGE-POST,API-MESSAGE-RETRY,API-QUICKREPLY-POST,API-RAG-ANSWER,API-RAG-CITATIONS-GET,API-RAG-RETRIEVE,API-SESSION-BOOTSTRAP,API-SESSION-CLOSE,API-SESSION-CREATE,API-SESSION-GET,API-STREAM-RESUME,API-STREAM-SSE,INT-WORKFLOW-REPORT,KB-DOC-APPROVE,KB-DOC-LIST,KB-DOC-ROLLBACK,KB-DOC-UPLOAD,KB-REINDEX-REQUEST,LLM-PROVIDER-HEALTH,MCP-SERVER-HEALTH,OPS-ADMIN-DASHBOARD-SUMMARY,OPS-AUDIT-EXPORT-JOB-CREATE,OPS-AUDIT-EXPORT-JOB-DOWNLOAD,OPS-AUDIT-EXPORT-JOB-STATUS,OPS-EVENT-INGEST,OPS-KB-INDEX-STATUS,OPS-METRIC-SUMMARY,OPS-PROVIDER-KILLSWITCH,OPS-ROLLBACK-TRIGGER,OPS-TENANT-BILLING-REPORT,OPS-TRACE-QUERY,TMP-TEMPLATE-APPROVE,TMP-TEMPLATE-CREATE,TMP-TEMPLATE-DEPLOY,TMP-TEMPLATE-LIST,TMP-TEMPLATE-ROLLBACK`
+- must_red_program_ids: `ADM-RBAC-APPROVAL-REQUEST-REJECT,API-ATTACHMENT-COMPLETE,API-ATTACHMENT-PRESIGN,API-AUTH-LOGOUT,API-AUTH-MFA-RECOVERY-REGENERATE,API-AUTH-MFA-TOTP-ACTIVATE,API-AUTH-MFA-TOTP-ENROLL,API-AUTH-MFA-VERIFY,API-AUTH-SESSIONS-LIST,API-AUTH-SESSIONS-REVOKE,API-AUTH-SESSIONS-REVOKE-OTHERS,API-CSAT-POST,API-HANDOFF-REQUEST,API-RAG-CLARIFY-SUGGEST,API-RAG-QUERY-CLASSIFY,INT-HANDOFF-SYNC,OPS-ADMIN-DASHBOARD-SERIES,OPS-AUDIT-CHAIN-VERIFY,OPS-AUDIT-CHANGE-DIFF,OPS-AUDIT-LOG-EXPORT,OPS-AUDIT-LOG-QUERY,OPS-BLOCK-UPSERT,OPS-CHANGE-NOTICE-PUBLISH,OPS-DEPLOY-APPROVAL-ACT,OPS-DEPLOY-APPROVAL-CREATE,OPS-ERROR-CATALOG-UPSERT,TMP-RECOMMEND-BUTTON,TOOL-ALLOWLIST-UPDATE,TOOL-CALL-EXECUTE,TOOL-CALL-VALIDATE`

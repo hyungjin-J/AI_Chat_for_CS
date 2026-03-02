@@ -1,0 +1,15 @@
+verify_audit_chain_integrity
+status=PASS
+tenant_key=demo-tenant
+tenant_id=00000000-0000-0000-0000-000000000001
+from_utc=2026-01-01T00:00:00Z
+to_utc=2026-12-31T23:59:59Z
+method=docker-exec
+database=aichatbot
+checked_rows=8
+failure_count=0
+violation_count=0
+verified_at_utc=2026-03-02T13:24:58.693571Z
+check.tenant_lookup=PASS
+check.audit_query=PASS
+check.chain_verify=PASS

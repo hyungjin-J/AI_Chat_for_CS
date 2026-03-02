@@ -1,0 +1,125 @@
+name: rag-regression-nightly
+
+on:
+  schedule:
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: rag-regression-nightly
+  cancel-in-progress: false
+
+jobs:
+  rag-regression:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    env:
+      COMPOSE_FILE: infra/docker-compose.yml
+      EVAL_OUT_DIR: eval/out/latest
+      EVAL_DATASET: eval/datasets/rag_regression_cases.csv
+      EVAL_THRESHOLDS: eval/thresholds.yaml
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Ensure directories
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path "docs/review/mvp_verification_pack/artifacts" -Force | Out-Null
+          New-Item -ItemType Directory -Path "${env:EVAL_OUT_DIR}" -Force | Out-Null
+
+      - name: Compose down clean volume
+        shell: pwsh
+        run: docker compose -f "${env:COMPOSE_FILE}" down -v
+
+      - name: Compose up postgres and redis
+        shell: pwsh
+        run: docker compose -f "${env:COMPOSE_FILE}" up -d postgres redis
+
+      - name: Flyway migrate
+        shell: pwsh
+        run: docker compose -f "${env:COMPOSE_FILE}" --profile db-tools run --rm flyway
+
+      - name: Compose up backend (mock provider)
+        shell: pwsh
+        run: docker compose -f "${env:COMPOSE_FILE}" --profile demo-stack up -d backend
+
+      - name: Wait backend health
+        shell: pwsh
+        run: |
+          $ready = $false
+          for ($i = 0; $i -lt 180; $i++) {
+            try {
+              Invoke-RestMethod -Uri "http://localhost:8080/health" -Method GET `
+                -Headers @{
+                  "X-Tenant-Key" = "demo-tenant"
+                  "X-Trace-Id" = [guid]::NewGuid().ToString()
+                } -TimeoutSec 2 | Out-Null
+              $ready = $true
+              break
+            } catch {
+              Start-Sleep -Seconds 1
+            }
+          }
+          if (-not $ready) {
+            throw "backend_not_ready_for_rag_regression"
+          }
+
+      - name: Run RAG regression harness
+        shell: pwsh
+        run: |
+          python eval/run_rag_regression.py `
+            --base-url "http://localhost:8080" `
+            --dataset "${env:EVAL_DATASET}" `
+            --out "${env:EVAL_OUT_DIR}"
+
+      - name: Assert RAG quality gate
+        shell: pwsh
+        run: |
+          $dateTag = (Get-Date).ToUniversalTime().ToString("yyyyMMdd")
+          $gateTxt = "docs/review/mvp_verification_pack/artifacts/rag_regression_gate_$dateTag.txt"
+          $gateJson = "docs/review/mvp_verification_pack/artifacts/rag_regression_gate_$dateTag.json"
+          "RAG_GATE_TXT=$gateTxt" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "RAG_GATE_JSON=$gateJson" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          python eval/assert_rag_quality_gate.py `
+            --report "${env:EVAL_OUT_DIR}/report.json" `
+            --thresholds "${env:EVAL_THRESHOLDS}" `
+            --output-txt "$gateTxt" `
+            --output-json "$gateJson"
+
+      - name: Compose logs
+        if: always()
+        shell: pwsh
+        run: |
+          docker compose -f "${env:COMPOSE_FILE}" logs --no-color postgres redis backend `
+            | Out-File -FilePath "docs/review/mvp_verification_pack/artifacts/rag_regression_compose_logs.txt" -Encoding utf8
+
+      - name: Upload RAG regression artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rag-regression-nightly-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            eval/out/latest/report.json
+            eval/out/latest/summary.csv
+            docs/review/mvp_verification_pack/artifacts/rag_regression_gate_*.txt
+            docs/review/mvp_verification_pack/artifacts/rag_regression_gate_*.json
+            docs/review/mvp_verification_pack/artifacts/rag_regression_compose_logs.txt
+
+      - name: Compose down clean volume
+        if: always()
+        shell: pwsh
+        run: |
+          docker compose -f "${env:COMPOSE_FILE}" down -v
+          exit 0

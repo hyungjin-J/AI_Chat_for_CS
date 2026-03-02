@@ -1,11 +1,11 @@
 assert_utf8_strict
 status=PASS
-scanned_file_count=1087
+scanned_file_count=1169
 violation_count=0
 baseline_violation_count=0
 new_violation_count=0
 resolved_baseline_count=0
-baseline_growth_base_source=git:origin/main
-baseline_growth_base_count=78
+baseline_growth_base_source=git:HEAD~1
+baseline_growth_base_count=0
 baseline_growth_head_count=0
 baseline_growth_count=0

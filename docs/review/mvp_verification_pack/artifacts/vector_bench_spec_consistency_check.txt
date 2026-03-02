@@ -1,0 +1,8 @@
+PASS spec_consistency_check
+total_reqids_in_requirements=78
+total_reqid_tokens_found_in_each_spec={"api_note": 262, "db": 0, "development": 0, "requirements": 78, "summary": 52, "uiux": 409}
+invalid_tokens_count=0
+placeholder_hits=0
+placeholder_scan_targets=[{"columns": [{"column": "F", "header": "���δ�� screen id"}, {"column": "G", "header": "���δ�� ��Ʈ��"}, {"column": "B", "header": "�׸�Ű"}], "header_row": 3, "sheet": "94_�̸���ó��"}]
+uiux_error_contract={"assumptions": {"ASSUME-001": {"col_b": "Resolved (�ٰ� Ȯ��)", "col_d": "SEC-003-409-PII�� PII ���� ����(HTTP 409)���� Ȯ��", "col_e": "Resolved (SEC-003 �䱸���� + ȭ�� ���ܻ��� + � PII ���� �Ծ� �ݿ�)", "col_g": "�ļ� ���� (01_�����޽����ڵ� SEC-003-409-PII Ȯ��)", "exists": true, "row": 14}, "ASSUME-002": {"col_b": "Resolved (�ٰ� Ȯ��)", "col_d": "SYS-001-404�� Ȱ�� ���� ������(HTTP 404)�� Ȯ��", "col_e": "Resolved (SYS-001 ���� ����/���� �䱸���� + ȭ�� session_id ���� ��Ģ �ݿ�)", "col_g": "�ļ� ���� (01_�����޽����ڵ� SYS-001-404 Ȯ��)", "exists": true, "row": 15}}, "error_sheet": "01_�����޽����ڵ�", "inconsistency_sheet": "90_����ġ���", "target_codes": {"SEC-003-409-PII": {"exists": true, "expected_http": "409", "http": "409", "message": "�ΰ�����(PII)�� �����Ǿ� ��û�� ���ܵǾ����ϴ�. �ΰ������� ������ �� �ٽ� �õ��� �ּ���.", "row": 28}, "SYS-001-404": {"exists": true, "expected_http": "404", "http": "404", "message": "��û�� ������ ã�� �� �����ϴ�. �� ������ ������ �� �ٽ� �õ��� �ּ���.", "row": 29}}}
+violation_count=0

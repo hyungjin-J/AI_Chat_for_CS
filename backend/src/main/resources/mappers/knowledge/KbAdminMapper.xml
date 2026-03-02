@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.contexts.knowledge.rag.domain.mapper.KbAdminMapper">
+
+    <resultMap id="KbDocumentAdminRowMap" type="com.aichatbot.contexts.knowledge.rag.domain.model.KbDocumentAdminRow">
+        <constructor>
+            <arg column="document_id" javaType="java.util.UUID"/>
+            <arg column="document_version_id" javaType="java.util.UUID"/>
+            <arg column="title" javaType="java.lang.String"/>
+            <arg column="source_type" javaType="java.lang.String"/>
+            <arg column="category" javaType="java.lang.String"/>
+            <arg column="effective_date" javaType="java.time.LocalDate"/>
+            <arg column="owner" javaType="java.lang.String"/>
+            <arg column="version_no" javaType="java.lang.Integer"/>
+            <arg column="status" javaType="java.lang.String"/>
+            <arg column="pipeline_status" javaType="java.lang.String"/>
+            <arg column="pipeline_error_code" javaType="java.lang.String"/>
+            <arg column="pipeline_error_excerpt" javaType="java.lang.String"/>
+            <arg column="approved_at" javaType="java.time.Instant"/>
+            <arg column="updated_at" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="KbDocumentVersionSourceRowMap" type="com.aichatbot.contexts.knowledge.rag.domain.model.KbDocumentVersionSourceRow">
+        <constructor>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="document_id" javaType="java.util.UUID"/>
+            <arg column="document_version_id" javaType="java.util.UUID"/>
+            <arg column="version_no" javaType="java.lang.Integer"/>
+            <arg column="title" javaType="java.lang.String"/>
+            <arg column="source_type" javaType="java.lang.String"/>
+            <arg column="category" javaType="java.lang.String"/>
+            <arg column="effective_date" javaType="java.time.LocalDate"/>
+            <arg column="owner" javaType="java.lang.String"/>
+            <arg column="raw_content_masked" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="KbReindexJobRowMap" type="com.aichatbot.contexts.knowledge.rag.domain.model.KbReindexJobRow">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="job_type" javaType="java.lang.String"/>
+            <arg column="document_version_id" javaType="java.util.UUID"/>
+            <arg column="idempotency_key" javaType="java.lang.String"/>
+            <arg column="status" javaType="java.lang.String"/>
+            <arg column="attempt_count" javaType="java.lang.Integer"/>
+            <arg column="max_attempts" javaType="java.lang.Integer"/>
+            <arg column="next_retry_at" javaType="java.time.Instant"/>
+            <arg column="error_code" javaType="java.lang.String"/>
+            <arg column="error_excerpt" javaType="java.lang.String"/>
+            <arg column="requested_by" javaType="java.util.UUID"/>
+            <arg column="requested_at" javaType="java.time.Instant"/>
+            <arg column="started_at" javaType="java.time.Instant"/>
+            <arg column="completed_at" javaType="java.time.Instant"/>
+            <arg column="result_message" javaType="java.lang.String"/>
+            <arg column="last_trace_id" javaType="java.util.UUID"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insertDocument">
+        INSERT INTO tb_kb_document(
+            id,
+            tenant_id,
+            title,
+            source_type,
+            category,
+            effective_date,
+            owner,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{title},
+            #{sourceType},
+            #{category},
+            #{effectiveDate},
+            #{owner},
+            #{createdAt},
+            #{createdAt}
+        )
+    </insert>
+
+    <insert id="insertDocumentVersion">
+        INSERT INTO tb_kb_document_version(
+            id,
+            tenant_id,
+            document_id,
+            version_no,
+            status,
+            approved_at,
+            raw_content_masked,
+            pipeline_status,
+            pipeline_error_code,
+            pipeline_error_excerpt,
+            pipeline_updated_at,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{documentId},
+            #{versionNo},
+            #{status},
+            #{approvedAt},
+            #{rawContentMasked},
+            #{pipelineStatus},
+            NULL,
+            NULL,
+            #{pipelineUpdatedAt},
+            #{createdAt},
+            #{createdAt}
+        )
+    </insert>
+
+    <select id="findLatestVersionNo" resultType="java.lang.Integer">
+        SELECT MAX(version_no)
+        FROM tb_kb_document_version
+        WHERE tenant_id = #{tenantId}
+          AND document_id = #{documentId}
+    </select>
+
+    <select id="findLatestDocumentVersionId" resultType="java.util.UUID">
+        SELECT id
+        FROM tb_kb_document_version
+        WHERE tenant_id = #{tenantId}
+          AND document_id = #{documentId}
+        ORDER BY version_no DESC
+        LIMIT 1
+    </select>
+
+    <select id="findLatestDocuments" resultMap="KbDocumentAdminRowMap">
+        SELECT d.id AS document_id,
+               dv.id AS document_version_id,
+               d.title,
+               d.source_type,
+               d.category,
+               d.effective_date,
+               d.owner,
+               dv.version_no,
+               dv.status,
+               dv.pipeline_status,
+               dv.pipeline_error_code,
+               dv.pipeline_error_excerpt,
+               dv.approved_at,
+               dv.updated_at
+        FROM tb_kb_document d
+        JOIN tb_kb_document_version dv
+          ON dv.document_id = d.id
+         AND dv.tenant_id = d.tenant_id
+        JOIN (
+            SELECT document_id, MAX(version_no) AS version_no
+            FROM tb_kb_document_version
+            WHERE tenant_id = #{tenantId}
+            GROUP BY document_id
+        ) latest
+          ON latest.document_id = dv.document_id
+         AND latest.version_no = dv.version_no
+        WHERE d.tenant_id = #{tenantId}
+          <if test="status != null and status != ''">
+              AND dv.status = #{status}
+          </if>
+        ORDER BY dv.updated_at DESC, d.id ASC
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
+    <select id="findDocumentById" resultMap="KbDocumentAdminRowMap">
+        SELECT d.id AS document_id,
+               dv.id AS document_version_id,
+               d.title,
+               d.source_type,
+               d.category,
+               d.effective_date,
+               d.owner,
+               dv.version_no,
+               dv.status,
+               dv.pipeline_status,
+               dv.pipeline_error_code,
+               dv.pipeline_error_excerpt,
+               dv.approved_at,
+               dv.updated_at
+        FROM tb_kb_document d
+        JOIN tb_kb_document_version dv
+          ON dv.document_id = d.id
+         AND dv.tenant_id = d.tenant_id
+        WHERE d.tenant_id = #{tenantId}
+          AND d.id = #{documentId}
+        ORDER BY dv.version_no DESC
+        LIMIT 1
+    </select>
+
+    <select id="findDocumentVersionByNo" resultMap="KbDocumentAdminRowMap">
+        SELECT d.id AS document_id,
+               dv.id AS document_version_id,
+               d.title,
+               d.source_type,
+               d.category,
+               d.effective_date,
+               d.owner,
+               dv.version_no,
+               dv.status,
+               dv.pipeline_status,
+               dv.pipeline_error_code,
+               dv.pipeline_error_excerpt,
+               dv.approved_at,
+               dv.updated_at
+        FROM tb_kb_document d
+        JOIN tb_kb_document_version dv
+          ON dv.document_id = d.id
+         AND dv.tenant_id = d.tenant_id
+        WHERE d.tenant_id = #{tenantId}
+          AND d.id = #{documentId}
+          AND dv.version_no = #{versionNo}
+        LIMIT 1
+    </select>
+
+    <select id="findDocumentVersionSourceForIndexing" resultMap="KbDocumentVersionSourceRowMap">
+        SELECT d.tenant_id,
+               d.id AS document_id,
+               dv.id AS document_version_id,
+               dv.version_no,
+               d.title,
+               d.source_type,
+               d.category,
+               d.effective_date,
+               d.owner,
+               dv.raw_content_masked
+        FROM tb_kb_document d
+        JOIN tb_kb_document_version dv
+          ON dv.document_id = d.id
+         AND dv.tenant_id = d.tenant_id
+        WHERE d.tenant_id = #{tenantId}
+          AND dv.id = #{documentVersionId}
+        LIMIT 1
+    </select>
+
+    <select id="findApprovedDocumentVersionIds" resultType="java.util.UUID">
+        SELECT id
+        FROM tb_kb_document_version
+        WHERE tenant_id = #{tenantId}
+          AND status = 'approved'
+        ORDER BY updated_at DESC, id ASC
+    </select>
+
+    <update id="updateDocumentVersionStatus">
+        UPDATE tb_kb_document_version
+        SET status = #{status},
+            approved_at = #{approvedAt},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND document_id = #{documentId}
+          AND version_no = #{versionNo}
+    </update>
+
+    <update id="updateDocumentVersionPipelineState">
+        UPDATE tb_kb_document_version
+        SET pipeline_status = #{pipelineStatus},
+            pipeline_error_code = #{pipelineErrorCode},
+            pipeline_error_excerpt = #{pipelineErrorExcerpt},
+            pipeline_updated_at = #{updatedAt},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{documentVersionId}
+    </update>
+
+    <update id="archiveApprovedVersionsExcept">
+        UPDATE tb_kb_document_version
+        SET status = 'archived',
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND document_id = #{documentId}
+          AND version_no != #{versionNo}
+          AND status = 'approved'
+    </update>
+
+    <delete id="deleteChunkEmbeddingsByDocumentVersion">
+        DELETE FROM tb_kb_chunk_embedding
+        WHERE tenant_id = #{tenantId}
+          AND chunk_id IN (
+              SELECT id
+              FROM tb_kb_chunk
+              WHERE tenant_id = #{tenantId}
+                AND document_version_id = #{documentVersionId}
+          )
+    </delete>
+
+    <delete id="deleteChunksByDocumentVersion">
+        DELETE FROM tb_kb_chunk
+        WHERE tenant_id = #{tenantId}
+          AND document_version_id = #{documentVersionId}
+    </delete>
+
+    <insert id="insertChunk">
+        INSERT INTO tb_kb_chunk(
+            id,
+            tenant_id,
+            document_version_id,
+            chunk_no,
+            chunk_hash,
+            chunk_text,
+            token_count,
+            context_header,
+            summary_text,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{documentVersionId},
+            #{chunkNo},
+            #{chunkHash},
+            #{chunkText},
+            #{tokenCount},
+            #{contextHeader},
+            #{summaryText},
+            #{createdAt},
+            #{createdAt}
+        )
+    </insert>
+
+    <insert id="insertChunkEmbedding">
+        INSERT INTO tb_kb_chunk_embedding(
+            id,
+            tenant_id,
+            chunk_id,
+            embedding_vector,
+            embedding_dim,
+            model,
+            embedding_input_text,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{chunkId},
+            #{embeddingVector},
+            #{embeddingDim},
+            #{model},
+            #{embeddingInputText},
+            #{createdAt},
+            #{createdAt}
+        )
+    </insert>
+
+    <select id="countChunksByDocumentVersion" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM tb_kb_chunk
+        WHERE tenant_id = #{tenantId}
+          AND document_version_id = #{documentVersionId}
+    </select>
+
+    <insert id="insertReindexJob">
+        INSERT INTO tb_kb_reindex_job(
+            id,
+            tenant_id,
+            job_type,
+            document_version_id,
+            idempotency_key,
+            status,
+            attempt_count,
+            max_attempts,
+            next_retry_at,
+            error_code,
+            error_excerpt,
+            requested_by,
+            requested_at,
+            started_at,
+            completed_at,
+            result_message,
+            last_trace_id,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{jobType},
+            #{documentVersionId},
+            #{idempotencyKey},
+            #{status},
+            #{attemptCount},
+            #{maxAttempts},
+            #{nextRetryAt},
+            #{errorCode},
+            #{errorExcerpt},
+            #{requestedBy},
+            #{requestedAt},
+            #{startedAt},
+            #{completedAt},
+            #{resultMessage},
+            #{lastTraceId},
+            #{requestedAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <sql id="SelectReindexJobColumns">
+        id,
+        tenant_id,
+        job_type,
+        document_version_id,
+        idempotency_key,
+        status,
+        attempt_count,
+        max_attempts,
+        next_retry_at,
+        error_code,
+        error_excerpt,
+        requested_by,
+        requested_at,
+        started_at,
+        completed_at,
+        result_message,
+        last_trace_id
+    </sql>
+
+    <select id="findReindexJobById" resultMap="KbReindexJobRowMap">
+        SELECT <include refid="SelectReindexJobColumns"/>
+        FROM tb_kb_reindex_job
+        WHERE tenant_id = #{tenantId}
+          AND id = #{jobId}
+    </select>
+
+    <select id="findReindexJobByIdempotencyKey" resultMap="KbReindexJobRowMap">
+        SELECT <include refid="SelectReindexJobColumns"/>
+        FROM tb_kb_reindex_job
+        WHERE tenant_id = #{tenantId}
+          AND idempotency_key = #{idempotencyKey}
+        ORDER BY requested_at DESC
+        LIMIT 1
+    </select>
+
+    <select id="findRecentReindexJobs" resultMap="KbReindexJobRowMap">
+        SELECT <include refid="SelectReindexJobColumns"/>
+        FROM tb_kb_reindex_job
+        WHERE tenant_id = #{tenantId}
+        ORDER BY requested_at DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="findPendingIndexJobs" resultMap="KbReindexJobRowMap">
+        SELECT <include refid="SelectReindexJobColumns"/>
+        FROM tb_kb_reindex_job
+        WHERE status IN ('PENDING', 'RETRY_WAIT')
+          AND (next_retry_at IS NULL OR next_retry_at &lt;= #{nowUtc})
+          AND attempt_count &lt; max_attempts
+        ORDER BY requested_at ASC
+        LIMIT #{limit}
+    </select>
+
+    <update id="claimIndexJob">
+        UPDATE tb_kb_reindex_job
+        SET status = 'RUNNING',
+            started_at = #{startedAt},
+            attempt_count = attempt_count + 1,
+            error_code = NULL,
+            error_excerpt = NULL,
+            last_trace_id = #{traceId},
+            updated_at = #{startedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{jobId}
+          AND status IN ('PENDING', 'RETRY_WAIT')
+          AND (next_retry_at IS NULL OR next_retry_at &lt;= #{startedAt})
+          AND attempt_count &lt; max_attempts
+    </update>
+
+    <update id="markIndexJobDone">
+        UPDATE tb_kb_reindex_job
+        SET status = 'DONE',
+            completed_at = #{completedAt},
+            result_message = #{resultMessage},
+            next_retry_at = NULL,
+            error_code = NULL,
+            error_excerpt = NULL,
+            updated_at = #{completedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{jobId}
+    </update>
+
+    <update id="markIndexJobRetry">
+        UPDATE tb_kb_reindex_job
+        SET status = 'RETRY_WAIT',
+            next_retry_at = #{nextRetryAt},
+            completed_at = #{completedAt},
+            error_code = #{errorCode},
+            error_excerpt = #{errorExcerpt},
+            last_trace_id = #{traceId},
+            updated_at = #{completedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{jobId}
+    </update>
+
+    <update id="markIndexJobDeadLetter">
+        UPDATE tb_kb_reindex_job
+        SET status = 'DEAD_LETTER',
+            completed_at = #{completedAt},
+            next_retry_at = NULL,
+            error_code = #{errorCode},
+            error_excerpt = #{errorExcerpt},
+            last_trace_id = #{traceId},
+            updated_at = #{completedAt}
+        WHERE tenant_id = #{tenantId}
+          AND id = #{jobId}
+    </update>
+
+</mapper>

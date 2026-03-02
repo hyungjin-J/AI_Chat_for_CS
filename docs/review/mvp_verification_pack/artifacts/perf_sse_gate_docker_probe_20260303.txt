@@ -1,0 +1,16 @@
+perf_gate
+status=FAIL
+reason_code=DOCKER_UNAVAILABLE
+reason_detail=stage=docker_preflight detail=failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.
+remediation_hint=Start Docker engine and retry.
+generated_at_utc=2026-03-02T15:30:24.120071Z
+result_file=perf/out/result_docker_probe.json
+thresholds_file=perf/thresholds.yaml
+point_count=0
+metric_count=0
+assertion_count=0
+violation_count=1
+metrics:
+assertions:
+violations:
+- DOCKER_UNAVAILABLE: stage=docker_preflight detail=failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.

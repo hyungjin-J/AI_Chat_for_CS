@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "env_example": ".env.example",
+  "required_keys": [
+    "POSTGRES_DB",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+    "DB_URL",
+    "DB_USERNAME",
+    "DB_PASSWORD",
+    "REDIS_HOST",
+    "REDIS_PORT",
+    "SPRING_PROFILES_ACTIVE",
+    "APP_LLM_PROVIDER",
+    "APP_IDEMPOTENCY_STORE",
+    "APP_IDEMPOTENCY_REDIS_FAIL_STRATEGY",
+    "APP_TRACE_REQUIRE_HEADER",
+    "APP_OLLAMA_BASE_URL",
+    "APP_OLLAMA_MODEL",
+    "LLM_PROVIDER_KEY_REF",
+    "VITE_API_BASE_URL",
+    "APP_JWT_SECRET",
+    "APP_JWT_SECRET_REF"
+  ],
+  "violation_count": 0,
+  "violations": []
+}

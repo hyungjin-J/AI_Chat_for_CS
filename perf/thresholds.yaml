@@ -1,0 +1,30 @@
+{
+  "metrics": {
+    "first_token_ms": {
+      "p95_max": 2000,
+      "sample_count_min": 5
+    },
+    "sse_done_success_rate": {
+      "min": 0.95
+    },
+    "sse_error_rate": {
+      "max": 0.10
+    },
+    "sse_safe_response_rate": {
+      "max": 0.20
+    },
+    "message_accepted_202_rate": {
+      "min": 0.98
+    },
+    "rate_limit_429_rate": {
+      "min": 0.95
+    },
+    "rate_limit_headers_ok_rate": {
+      "min": 0.95
+    },
+    "rate_limit_contract_ok_rate": {
+      "min": 0.95
+    }
+  }
+}
+

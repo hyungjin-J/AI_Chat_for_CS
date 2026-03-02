@@ -1,0 +1,231 @@
+﻿# Worktree Preflight Snapshot
+
+timestamp_kst: 2026-03-01 18:20:22 +09:00
+
+## git rev-parse --short HEAD
+2eced8e
+
+## git status --porcelain=v2
+1 .M N... 100644 100644 100644 87f4c55be18855c2ae2d4cb666b0a45c97026a01 87f4c55be18855c2ae2d4cb666b0a45c97026a01 .github/workflows/db-backup-restore-nightly.yml
+1 .M N... 100644 100644 100644 7db26ba771f634d8f4ea9fce0c2718a58321dbbf 7db26ba771f634d8f4ea9fce0c2718a58321dbbf .github/workflows/pr-smoke-contract.yml
+1 .M N... 100644 100644 100644 f344a3e19283e5e01924090393f82e2a48475d86 f344a3e19283e5e01924090393f82e2a48475d86 .github/workflows/release-nightly-full.yml
+1 .M N... 100644 100644 100644 dc49c6d75ce84f8c58084e179e6d08ea33f97fb2 dc49c6d75ce84f8c58084e179e6d08ea33f97fb2 chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
+1 .M N... 100644 100644 100644 79fee7b6bb16a6c65a07e43c82345b96d02c5c9a 79fee7b6bb16a6c65a07e43c82345b96d02c5c9a chatGPT/DB_READINESS_EXECUTION_AND_PROCESS_PLAN_KO.md
+1 .M N... 100644 100644 100644 5febc7995e28d2f4dfc6107d819d7699b5230ed1 5febc7995e28d2f4dfc6107d819d7699b5230ed1 chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
+1 .M N... 100644 100644 100644 4ed248834f586c38b634fbca8ffaf79aace70dad 4ed248834f586c38b634fbca8ffaf79aace70dad docs/agent_manual/04_gates_notion_and_evidence.md
+1 .M N... 100644 100644 100644 ac64f386e5c9e029c8b34d5a58ab4b7963c33935 ac64f386e5c9e029c8b34d5a58ab4b7963c33935 docs/dev/DEV_ENVIRONMENT.md
+1 .M N... 100644 100644 100644 1aeef734bca9c9c29299fd57f9abdf8115e48802 1aeef734bca9c9c29299fd57f9abdf8115e48802 docs/ops/DB_BACKUP_RESTORE_RUNBOOK.md
+1 .M N... 100644 100644 100644 60877c470ef8716ef042e75d386923c1068ec4b8 60877c470ef8716ef042e75d386923c1068ec4b8 docs/ops/DB_LOCAL_DEV.md
+1 .M N... 100644 100644 100644 60d819a782193522f8922fff899eaf337c8d4246 60d819a782193522f8922fff899eaf337c8d4246 docs/ops/NODE22_UNICODE_WORKSPACE_GUIDE.md
+1 .M N... 100644 100644 100644 3024ecdff97bf1946ab18111b5fba697bbf83fae 3024ecdff97bf1946ab18111b5fba697bbf83fae docs/review/mvp_verification_pack/ARTIFACTS_HYGIENE.md
+1 .M N... 100644 100644 100644 c2ddb70925292b03d7e6d8c5ced3c0647830e4bf c2ddb70925292b03d7e6d8c5ced3c0647830e4bf docs/review/mvp_verification_pack/artifacts/_INDEX.json
+1 .M N... 100644 100644 100644 d66d901b4621b502847d28c2637020f7de712022 d66d901b4621b502847d28c2637020f7de712022 docs/review/mvp_verification_pack/artifacts/_INDEX.md
+1 .M N... 100644 100644 100644 57d003c12a0768931eddf005514320c8267dd169 57d003c12a0768931eddf005514320c8267dd169 docs/review/mvp_verification_pack/artifacts/application_port_boundary_gate.json
+1 .M N... 100644 100644 100644 9a645a4f026a3749fc17b1f9cf5e334bc6771064 9a645a4f026a3749fc17b1f9cf5e334bc6771064 docs/review/mvp_verification_pack/artifacts/application_port_boundary_gate.txt
+1 .M N... 100644 100644 100644 d5fd26133da0452741a74df2f40d95d07e29e182 d5fd26133da0452741a74df2f40d95d07e29e182 docs/review/mvp_verification_pack/artifacts/artifact_archive_report.json
+1 .M N... 100644 100644 100644 dbcf931bb79b2af2b24293a8ca58e74a81a15ca0 dbcf931bb79b2af2b24293a8ca58e74a81a15ca0 docs/review/mvp_verification_pack/artifacts/artifact_archive_report.txt
+1 .M N... 100644 100644 100644 01d592d9a332a1b42583deb9797d63c2ec5cc4cb 01d592d9a332a1b42583deb9797d63c2ec5cc4cb docs/review/mvp_verification_pack/artifacts/artifact_index_gate.json
+1 .M N... 100644 100644 100644 ee2387b4001f668d68b2c67a328bdf44c216252f ee2387b4001f668d68b2c67a328bdf44c216252f docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt
+1 .M N... 100644 100644 100644 ae7016d363c06204ec4d691ce5085094225dd6e7 ae7016d363c06204ec4d691ce5085094225dd6e7 docs/review/mvp_verification_pack/artifacts/artifact_sanitization_scan.txt
+1 .M N... 100644 100644 100644 33511bf7e669f45056558f5b78937b3ebc11d79c 33511bf7e669f45056558f5b78937b3ebc11d79c docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.json
+1 .M N... 100644 100644 100644 defa07c681f2827399a5aacee1739b1e1a56057b defa07c681f2827399a5aacee1739b1e1a56057b docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.txt
+1 .M N... 100644 100644 100644 5954e8689308e6180f37a4de6216d9fe32a018c5 5954e8689308e6180f37a4de6216d9fe32a018c5 docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.json
+1 .M N... 100644 100644 100644 769c0df8e972ddba9b48eb42824d7d9a87c785fc 769c0df8e972ddba9b48eb42824d7d9a87c785fc docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.txt
+1 .M N... 100644 100644 100644 a3d3d21c59642225aa6a2b125a406c4d7bb84dfe a3d3d21c59642225aa6a2b125a406c4d7bb84dfe docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.json
+1 .M N... 100644 100644 100644 46fca9943a475381e01e13957a44e7260159c422 46fca9943a475381e01e13957a44e7260159c422 docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.txt
+1 .M N... 100644 100644 100644 3f98fb563b7425418761b632636ebb9d032b543d 3f98fb563b7425418761b632636ebb9d032b543d docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.json
+1 .M N... 100644 100644 100644 ee0750fe85d58067acdc4b43fb04623400c18f2c ee0750fe85d58067acdc4b43fb04623400c18f2c docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.txt
+1 .M N... 100644 100644 100644 8308670f8f1ca69e220f5f377f958a4ce7106a4f 8308670f8f1ca69e220f5f377f958a4ce7106a4f docs/review/mvp_verification_pack/artifacts/node22_unicode_mirror_helper_smoke.txt
+1 .M N... 100644 100644 100644 6233cd600cb1bad3f4daa36cb42dea88a43dccce 6233cd600cb1bad3f4daa36cb42dea88a43dccce docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.json
+1 .M N... 100644 100644 100644 aed4bd1790a205c5afa641f02c4bc1fe2a8e7e1d aed4bd1790a205c5afa641f02c4bc1fe2a8e7e1d docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.txt
+1 .M N... 100644 100644 100644 ae784e3a9caf21da7bae182c1734e92daa02e256 ae784e3a9caf21da7bae182c1734e92daa02e256 docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt
+1 .M N... 100644 100644 100644 eb776ea8f75d5fc62b34504693ca75324fd1fdd9 eb776ea8f75d5fc62b34504693ca75324fd1fdd9 docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.json
+1 .M N... 100644 100644 100644 59715de838fd704ec2514e31d9b1bc650f2721ab 59715de838fd704ec2514e31d9b1bc650f2721ab docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.json
+1 .M N... 100644 100644 100644 93175ccc8259fca4459b2ee11d7c2a60f85cf1ef 93175ccc8259fca4459b2ee11d7c2a60f85cf1ef docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt
+1 .M N... 100644 100644 100644 645e2c5247a38f64c4a236480cb5b6f11022ee8a 645e2c5247a38f64c4a236480cb5b6f11022ee8a docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.json
+1 .M N... 100644 100644 100644 01209cf9271562a65f7e1038116293bc988f1f90 01209cf9271562a65f7e1038116293bc988f1f90 docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.txt
+1 .M N... 100644 100644 100644 d4280f3777ef6ddbd5908eeb0829fd9b42605472 d4280f3777ef6ddbd5908eeb0829fd9b42605472 docs/uiux/reports/spec_consistency_check_report.json
+1 .M N... 100644 100644 100644 070c96e7e59746115c3fcbf1f9dfce7c51ae5b39 070c96e7e59746115c3fcbf1f9dfce7c51ae5b39 frontend/README.md
+1 .M N... 100644 100644 100644 7ea07972bd0b99c6ca2efd3454237aa2d0180e69 7ea07972bd0b99c6ca2efd3454237aa2d0180e69 frontend/package.json
+1 .M N... 100644 100644 100644 c22864c26d57724240207cfbadb8db120c42170d c22864c26d57724240207cfbadb8db120c42170d scripts/archive_artifacts.py
+1 .M N... 100644 100644 100644 cee71266c1448d563cef8d03675d06e782e5cbb6 cee71266c1448d563cef8d03675d06e782e5cbb6 scripts/assert_spec_sync_report_updated.py
+1 .M N... 100644 100644 100644 1cbb4f55f06f329a887f42e980e0be0440959afa 1cbb4f55f06f329a887f42e980e0be0440959afa scripts/build_artifact_index.py
+1 .M N... 100644 100644 100644 1c9ed2c0add4cc6a4157c34d5029124e4a94b1f5 1c9ed2c0add4cc6a4157c34d5029124e4a94b1f5 scripts/db_backup_restore_rehearsal.py
+1 .M N... 100644 100644 100644 ad7f39be6b2b0b2219119428d393fb9669d977f1 ad7f39be6b2b0b2219119428d393fb9669d977f1 scripts/mirror_and_run_frontend.ps1
+1 .M N... 100644 100644 100644 43e8c2bfaae800f7ee274524fe7f7fe06afd5e98 43e8c2bfaae800f7ee274524fe7f7fe06afd5e98 scripts/mirror_and_run_frontend.py
+1 .M N... 100644 100644 100644 71ca625fae9cae5fc98be348e32c5ddb198647a1 71ca625fae9cae5fc98be348e32c5ddb198647a1 scripts/spec_consistency_check.py
+1 .M N... 100644 100644 100644 e6cf84e26adbf4aaffa4b67717f32505e501a68e e6cf84e26adbf4aaffa4b67717f32505e501a68e scripts/tests/test_archive_artifacts.py
+1 .M N... 100644 100644 100644 fa39f66361c92a326658968d57e568eda92e6563 fa39f66361c92a326658968d57e568eda92e6563 scripts/tests/test_assert_spec_sync_report_updated.py
+1 .M N... 100644 100644 100644 2bb98deccd3b38a5d6e7efe1e2c6863260bea877 2bb98deccd3b38a5d6e7efe1e2c6863260bea877 scripts/tests/test_build_artifact_index.py
+1 .M N... 100644 100644 100644 47e7670d7d97bdc508a8c7e26d03b59e89ec6277 47e7670d7d97bdc508a8c7e26d03b59e89ec6277 scripts/tests/test_db_backup_restore_rehearsal.py
+1 .M N... 100644 100644 100644 ef68ba26c9797cd51e2675ee59e028b13493d239 ef68ba26c9797cd51e2675ee59e028b13493d239 scripts/tests/test_mirror_and_run_frontend.py
+1 .M N... 100644 100644 100644 58a845a62db257c1ac2a610f432011e5b91279d4 58a845a62db257c1ac2a610f432011e5b91279d4 scripts/tests/test_spec_consistency_check.py
+1 .M N... 100644 100644 100644 fdff74f8958d2743b5d26497fd72dd59266d73b0 fdff74f8958d2743b5d26497fd72dd59266d73b0 spec_sync_report.md
+? .github/workflows/db-backup-restore-weekly.yml
+? buyer_architecture_diagram.png
+? docs/ops/sql/DB_OPERATIONS_QUERIES.sql
+? docs/reports/BUYER_READY_PRODUCT_GUIDE_KR.md
+? docs/reports/BUYER_READY_PRODUCT_GUIDE_KR_20260227.pdf
+? docs/reports/NON_DEV_PROJECT_BLUEPRINT.md
+? docs/reports/NON_DEV_PROJECT_BLUEPRINT_20260227.pdf
+? docs/reports/assets/
+? docs/review/mvp_verification_pack/ARTIFACTS_ARCHIVE_POLICY.md
+? docs/review/mvp_verification_pack/TERMINOLOGY_SSOT.json
+? docs/review/mvp_verification_pack/TERMINOLOGY_SSOT.md
+? docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/
+? docs/review/mvp_verification_pack/artifacts/archive_policy_rollout_report_20260220.txt
+? docs/review/mvp_verification_pack/artifacts/archive_policy_rollout_report_20260227.txt
+? docs/review/mvp_verification_pack/artifacts/notion_sync_evidence_20260228.md
+? docs/review/mvp_verification_pack/artifacts/notion_sync_evidence_20260301.md
+? docs/review/mvp_verification_pack/artifacts/quality_snapshot_20260227.md
+? docs/review/mvp_verification_pack/artifacts/release_gate_dashboard.json
+? docs/review/mvp_verification_pack/artifacts/release_gate_dashboard.md
+? docs/review/mvp_verification_pack/artifacts/release_gate_dashboard_rollout_report_20260228.txt
+? docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.json
+? docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.txt
+? docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.json
+? docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.md
+? docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.txt
+? docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_rollout_report_20260301.txt
+? docs/review/mvp_verification_pack/artifacts/utf8_normalization_quality_snapshot_report.json
+? docs/review/mvp_verification_pack/artifacts/utf8_normalization_quality_snapshot_report.md
+? docs/review/mvp_verification_pack/artifacts/vector_bench_application_port_boundary_gate.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_artifact_index_check.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_artifact_index_refresh.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_chatgpt_doc_lint.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_chatgpt_handoff_gate.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_domain_boundary_gate.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_node22_mirror_smoke.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_spec_consistency_check.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_spec_sync_gate.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_utf8_strict_gate.txt
+? docs/review/mvp_verification_pack/artifacts/vector_bench_workflow_tests.txt
+? docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_20260227.json
+? docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_20260227.txt
+? scripts/assert_spec_impl_coverage.py
+? scripts/build_release_gate_dashboard.py
+? scripts/generate_buyer_explainer_images.py
+? scripts/generate_nondev_blueprint_pdf.py
+? scripts/lint_sql_readonly_pack.py
+? scripts/spec_impl_coverage_report.py
+? scripts/tests/fixtures/
+? scripts/tests/test_assert_spec_impl_coverage.py
+? scripts/tests/test_build_release_gate_dashboard.py
+? scripts/tests/test_db_backup_restore_workflows.py
+? scripts/tests/test_lint_sql_readonly_pack.py
+? scripts/tests/test_spec_impl_coverage_report.py
+
+## git diff --name-only
+.github/workflows/db-backup-restore-nightly.yml
+.github/workflows/pr-smoke-contract.yml
+.github/workflows/release-nightly-full.yml
+chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md
+chatGPT/DB_READINESS_EXECUTION_AND_PROCESS_PLAN_KO.md
+chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md
+docs/agent_manual/04_gates_notion_and_evidence.md
+docs/dev/DEV_ENVIRONMENT.md
+docs/ops/DB_BACKUP_RESTORE_RUNBOOK.md
+docs/ops/DB_LOCAL_DEV.md
+docs/ops/NODE22_UNICODE_WORKSPACE_GUIDE.md
+docs/review/mvp_verification_pack/ARTIFACTS_HYGIENE.md
+docs/review/mvp_verification_pack/artifacts/_INDEX.json
+docs/review/mvp_verification_pack/artifacts/_INDEX.md
+docs/review/mvp_verification_pack/artifacts/application_port_boundary_gate.json
+docs/review/mvp_verification_pack/artifacts/application_port_boundary_gate.txt
+docs/review/mvp_verification_pack/artifacts/artifact_archive_report.json
+docs/review/mvp_verification_pack/artifacts/artifact_archive_report.txt
+docs/review/mvp_verification_pack/artifacts/artifact_index_gate.json
+docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt
+docs/review/mvp_verification_pack/artifacts/artifact_sanitization_scan.txt
+docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.json
+docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.txt
+docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.json
+docs/review/mvp_verification_pack/artifacts/continuation_utf8_strict_gate.txt
+docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.json
+docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.txt
+docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.json
+docs/review/mvp_verification_pack/artifacts/domain_layer_boundary_gate.txt
+docs/review/mvp_verification_pack/artifacts/node22_unicode_mirror_helper_smoke.txt
+docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.json
+docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.txt
+docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt
+docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.json
+docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.json
+docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt
+docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.json
+docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.txt
+docs/uiux/reports/spec_consistency_check_report.json
+frontend/README.md
+frontend/package.json
+scripts/archive_artifacts.py
+scripts/assert_spec_sync_report_updated.py
+scripts/build_artifact_index.py
+scripts/db_backup_restore_rehearsal.py
+scripts/mirror_and_run_frontend.ps1
+scripts/mirror_and_run_frontend.py
+scripts/spec_consistency_check.py
+scripts/tests/test_archive_artifacts.py
+scripts/tests/test_assert_spec_sync_report_updated.py
+scripts/tests/test_build_artifact_index.py
+scripts/tests/test_db_backup_restore_rehearsal.py
+scripts/tests/test_mirror_and_run_frontend.py
+scripts/tests/test_spec_consistency_check.py
+spec_sync_report.md
+
+## git diff --stat
+ .github/workflows/db-backup-restore-nightly.yml    |   3 -
+ .github/workflows/pr-smoke-contract.yml            |  41 +-
+ .github/workflows/release-nightly-full.yml         |  41 +-
+ chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md      |  85 ++-
+ .../DB_READINESS_EXECUTION_AND_PROCESS_PLAN_KO.md  | 233 ++++----
+ chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md        | 142 ++++-
+ docs/agent_manual/04_gates_notion_and_evidence.md  |   6 +
+ docs/dev/DEV_ENVIRONMENT.md                        |   4 +-
+ docs/ops/DB_BACKUP_RESTORE_RUNBOOK.md              |  66 ++-
+ docs/ops/DB_LOCAL_DEV.md                           |  55 +-
+ docs/ops/NODE22_UNICODE_WORKSPACE_GUIDE.md         | 118 +++--
+ .../mvp_verification_pack/ARTIFACTS_HYGIENE.md     |  85 ++-
+ .../mvp_verification_pack/artifacts/_INDEX.json    | 402 +++++++++++++-
+ .../mvp_verification_pack/artifacts/_INDEX.md      | 281 +++++++++-
+ .../artifacts/application_port_boundary_gate.json  |   2 +-
+ .../artifacts/application_port_boundary_gate.txt   |   2 +-
+ .../artifacts/artifact_archive_report.json         |  30 +-
+ .../artifacts/artifact_archive_report.txt          |  19 +-
+ .../artifacts/artifact_index_gate.json             |   7 +-
+ .../artifacts/artifact_index_gate.txt              |   7 +-
+ .../artifacts/artifact_sanitization_scan.txt       |   2 +-
+ .../artifacts/chatgpt_handoff_update_gate.json     | 321 ++++++------
+ .../artifacts/chatgpt_handoff_update_gate.txt      |  18 +-
+ .../artifacts/continuation_utf8_strict_gate.json   |   2 +-
+ .../artifacts/continuation_utf8_strict_gate.txt    |   2 +-
+ .../artifacts/db_local_readiness_smoke.json        |  19 +-
+ .../artifacts/db_local_readiness_smoke.txt         |  13 +-
+ .../artifacts/domain_layer_boundary_gate.json      |   2 +-
+ .../artifacts/domain_layer_boundary_gate.txt       |   2 +-
+ .../node22_unicode_mirror_helper_smoke.txt         |   9 +
+ .../artifacts/phase2_1_4_chatgpt_doc_lint.json     |   6 +-
+ .../artifacts/phase2_1_4_chatgpt_doc_lint.txt      |   2 +-
+ .../artifacts/spec_consistency_check_pass.txt      |   4 +-
+ .../artifacts/spec_consistency_check_report.json   |   4 +-
+ .../artifacts/spec_sync_report_gate.json           | 169 +-----
+ .../artifacts/spec_sync_report_gate.txt            |  42 +-
+ .../artifacts/utf8_full_scan_ratchet_gate.json     |   6 +-
+ .../artifacts/utf8_full_scan_ratchet_gate.txt      |   6 +-
+ .../reports/spec_consistency_check_report.json     | 183 +++++--
+ frontend/README.md                                 |   5 +-
+ frontend/package.json                              |   4 +-
+ scripts/archive_artifacts.py                       | 304 ++++++++---
+ scripts/assert_spec_sync_report_updated.py         | 570 +++++++++++++++++---
+ scripts/build_artifact_index.py                    | 434 ++++++++++++++-
+ scripts/db_backup_restore_rehearsal.py             | 583 ++++++++++++++++++++-
+ scripts/mirror_and_run_frontend.ps1                |  21 +-
+ scripts/mirror_and_run_frontend.py                 | 306 ++++++++---
+ scripts/spec_consistency_check.py                  | 195 +++++--
+ scripts/tests/test_archive_artifacts.py            | 119 ++++-
+ .../tests/test_assert_spec_sync_report_updated.py  | 286 +++++-----
+ scripts/tests/test_build_artifact_index.py         | 136 +++++
+ scripts/tests/test_db_backup_restore_rehearsal.py  | 122 ++++-
+ scripts/tests/test_mirror_and_run_frontend.py      | 201 ++++---
+ scripts/tests/test_spec_consistency_check.py       |  53 ++
+ spec_sync_report.md                                | 105 ++++
+ 55 files changed, 4697 insertions(+), 1188 deletions(-)

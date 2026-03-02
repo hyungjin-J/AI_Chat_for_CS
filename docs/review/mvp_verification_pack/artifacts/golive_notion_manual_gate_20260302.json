@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "violation_count": 0,
+  "violations": [],
+  "checked_files": {
+    "context": "tmp/ci_notion_sync_context.json",
+    "preflight": "tmp/ci_notion_auth_preflight.json",
+    "status_file": "docs/review/mvp_verification_pack/artifacts/notion_blocked_status.json",
+    "manual_patch": "docs/review/mvp_verification_pack/artifacts/notion_manual_patch.md",
+    "spec_sync_report": "spec_sync_report.md"
+  },
+  "spec_sync_expectations": {
+    "required_tokens": [
+      "notion_blocked_status.json",
+      "notion_manual_patch.md",
+      "BLOCKED_AUTOMATION"
+    ],
+    "phase_pattern": "Phase2\\.1(?:\\.\\d+)?|phase2_1(?:_\\d+)?"
+  }
+}

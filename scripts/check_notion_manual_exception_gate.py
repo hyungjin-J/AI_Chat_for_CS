@@ -93,7 +93,7 @@ def main() -> int:
     parser.add_argument("--context")
     parser.add_argument("--preflight")
     parser.add_argument("--status-file")
-    parser.add_argument("--status-json")
+    parser.add_argument("--status-json", help="deprecated alias of --status-file")
     parser.add_argument("--manual-patch", required=True)
     parser.add_argument("--spec-sync", required=True)
     parser.add_argument("--output-json")
@@ -104,9 +104,9 @@ def main() -> int:
 
     context_path = Path(args.context) if args.context else None
     preflight_path = Path(args.preflight) if args.preflight else None
-    status_arg = args.status_json or args.status_file
+    status_arg = args.status_file or args.status_json
     if not status_arg:
-        parser.error("one of --status-json or --status-file is required")
+        parser.error("one of --status-file or --status-json is required")
     status_path = Path(status_arg)
     patch_path = Path(args.manual_patch)
     spec_sync_path = Path(args.spec_sync)

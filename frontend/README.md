@@ -46,7 +46,10 @@ If frontend commands are unstable in non-ASCII workspace paths, run:
 npm run mirror:run
 ```
 
-Fast smoke-only check (writes fixed artifact):
+`mirror:run` is smoke-fixed and writes:
+- `docs/review/mvp_verification_pack/artifacts/node22_unicode_mirror_helper_smoke.txt`
+
+Smoke alias:
 
 ```bash
 npm run mirror:smoke

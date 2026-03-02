@@ -46,6 +46,28 @@ jobs:
               shell: pwsh
               run: docker compose -f infra/docker-compose.ollama.yml up -d
 
+            - name: Flyway migrate (audit verifier precondition)
+              shell: pwsh
+              run: |
+                  docker compose -f infra/docker-compose.yml --profile db-tools run --rm flyway
+
+            - name: Audit chain integrity verifier (fail-closed)
+              shell: pwsh
+              run: |
+                  python scripts/verify_audit_chain_integrity.py `
+                    --tenant-key demo-tenant `
+                    --from-utc 2000-01-01T00:00:00Z `
+                    --to-utc 2100-01-01T00:00:00Z `
+                    --method docker-exec `
+                    --compose-file infra/docker-compose.yml `
+                    --compose-service postgres `
+                    --output-txt docs/review/mvp_verification_pack/artifacts/audit_chain_verify_provider_nightly.txt `
+                    --output-json docs/review/mvp_verification_pack/artifacts/audit_chain_verify_provider_nightly.json
+                  if ($LASTEXITCODE -ne 0) {
+                    Write-Error "Audit chain integrity verifier failed. Follow runbook: docs/ops/runbook/playbooks/audit_chain_integrity_incident.md"
+                    exit 1
+                  }
+
             - name: Run provider regression (SKIPPED allowed)
               shell: pwsh
               env:
@@ -68,6 +90,8 @@ jobs:
                   path: |
                       docs/review/mvp_verification_pack/artifacts/provider_regression_ollama.log
                       docs/review/mvp_verification_pack/artifacts/provider_regression_backend.log
+                      docs/review/mvp_verification_pack/artifacts/audit_chain_verify_provider_nightly.txt
+                      docs/review/mvp_verification_pack/artifacts/audit_chain_verify_provider_nightly.json
 
             - name: Docker compose down
               if: always()

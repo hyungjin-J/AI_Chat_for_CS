@@ -1,5 +1,8 @@
 assert_frontend_import_boundaries
-status=PASS
-scanned_file_count=42
-violation_count=0
-cycle_count=0
+status=FAIL
+scanned_file_count=47
+violation_count=3
+cycle_count=3
+- [FRONTEND_MODULE_CYCLE_DETECTED] (graph) -> feature:backoffice -> shared -> other -> feature:backoffice :: lightweight cycle check failed
+- [FRONTEND_MODULE_CYCLE_DETECTED] (graph) -> shared -> other -> feature:identity -> shared :: lightweight cycle check failed
+- [FRONTEND_MODULE_CYCLE_DETECTED] (graph) -> shared -> other -> shared :: lightweight cycle check failed

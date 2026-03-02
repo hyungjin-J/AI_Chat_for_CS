@@ -1,7 +1,26 @@
 {
-  "status": "PASS",
-  "scanned_file_count": 42,
-  "violation_count": 0,
-  "cycle_count": 0,
-  "violations": []
+  "status": "FAIL",
+  "scanned_file_count": 47,
+  "violation_count": 3,
+  "cycle_count": 3,
+  "violations": [
+    {
+      "code": "FRONTEND_MODULE_CYCLE_DETECTED",
+      "file": "(graph)",
+      "import_path": "feature:backoffice -> shared -> other -> feature:backoffice",
+      "details": "lightweight cycle check failed"
+    },
+    {
+      "code": "FRONTEND_MODULE_CYCLE_DETECTED",
+      "file": "(graph)",
+      "import_path": "shared -> other -> feature:identity -> shared",
+      "details": "lightweight cycle check failed"
+    },
+    {
+      "code": "FRONTEND_MODULE_CYCLE_DETECTED",
+      "file": "(graph)",
+      "import_path": "shared -> other -> shared",
+      "details": "lightweight cycle check failed"
+    }
+  ]
 }

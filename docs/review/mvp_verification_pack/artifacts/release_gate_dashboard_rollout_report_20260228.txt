@@ -1,0 +1,17 @@
+release_gate_dashboard_rollout_report
+date=20260228
+
+what_changed
+- Added scripts/build_release_gate_dashboard.py to generate release_gate_dashboard.md/.json.
+- Updated scripts/build_artifact_index.py to surface dashboard paths under a Start Here section and stable release_gate_dashboard key in _INDEX.json.
+- Added tests for dashboard generation and artifact index dashboard surfacing.
+- Updated CI workflows to always regenerate dashboard + artifact index before artifact upload.
+- Updated ARTIFACTS_HYGIENE.md with dashboard-first reading order.
+
+how_to_run_locally
+- python scripts/build_release_gate_dashboard.py --artifacts-dir docs/review/mvp_verification_pack/artifacts
+- python scripts/build_artifact_index.py --artifact-root docs/review/mvp_verification_pack/artifacts --index-md docs/review/mvp_verification_pack/artifacts/_INDEX.md --index-json docs/review/mvp_verification_pack/artifacts/_INDEX.json --gate-output-txt docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt --gate-output-json docs/review/mvp_verification_pack/artifacts/artifact_index_gate.json
+
+updated_workflows
+- .github/workflows/pr-smoke-contract.yml
+- .github/workflows/release-nightly-full.yml

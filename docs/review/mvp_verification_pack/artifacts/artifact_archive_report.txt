@@ -5,24 +5,33 @@ archive_root=C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_ve
 manifest_path=C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json
 manifest_bundle_count=12
 manifest_archived_file_count=29
-candidate_count=0
-eligible_count=0
-archived_file_count=0
-created_bundle_count=0
+sidecar_manifest_count=1
+sidecar_archive_count=1
+sidecar_archived_file_count=1
+candidate_count=1
+eligible_count=1
+retention_excluded_count=0
+archived_file_count=1
+created_bundle_count=1
 skipped_pinned_count=0
 skipped_already_archived_count=0
 skipped_missing_count=0
 refresh_index=True
 refresh_index_exit_code=0
 violation_count=0
+created_bundles:
+- C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.zip family=archive_policy_rollout_report file_count=1 manifest=C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.manifest.json
 refresh_index_stdout:
 artifact_index_gate
 status=PASS
 check_mode=False
-indexed_file_count=340
+indexed_file_count=345
 archive_manifest_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json
 archive_bundle_count=12
 archived_file_count=29
+archive_sidecar_manifest_count=1
+archive_sidecar_count=1
+archive_sidecar_archived_file_count=1
 index_md_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.md
 index_json_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.json
 violation_count=0

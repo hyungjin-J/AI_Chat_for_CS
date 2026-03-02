@@ -1,0 +1,40 @@
+perf_gate
+status=FAIL
+reason_code=THRESHOLD_UNDERSHOOT
+reason_detail=one or more metric thresholds were not met
+remediation_hint=Tune service/perf settings and rerun the load test.
+generated_at_utc=2026-03-02T12:49:04.335824Z
+result_file=perf/out/result_20260302_actual.json
+thresholds_file=perf/thresholds.yaml
+point_count=6721
+metric_count=8
+assertion_count=9
+violation_count=8
+metrics:
+- first_token_ms: sample_count=0 avg=None p95=None min=None max=None
+- message_accepted_202_rate: sample_count=169 avg=1.0 p95=1.0 min=1.0 max=1.0
+- rate_limit_429_rate: sample_count=6 avg=0.0 p95=0.0 min=0.0 max=0.0
+- rate_limit_contract_ok_rate: sample_count=6 avg=0.0 p95=0.0 min=0.0 max=0.0
+- rate_limit_headers_ok_rate: sample_count=6 avg=0.0 p95=0.0 min=0.0 max=0.0
+- sse_done_success_rate: sample_count=162 avg=0.0 p95=0.0 min=0.0 max=0.0
+- sse_error_rate: sample_count=162 avg=1.0 p95=1.0 min=1.0 max=1.0
+- sse_safe_response_rate: sample_count=162 avg=0.0 p95=0.0 min=0.0 max=0.0
+assertions:
+- FAIL first_token_ms.p95_max actual=None expected=2000.0 message=threshold_not_met
+- FAIL first_token_ms.sample_count_min actual=0.0 expected=5.0 message=threshold_not_met
+- FAIL sse_done_success_rate.min actual=0.0 expected=0.95 message=threshold_not_met
+- FAIL sse_error_rate.max actual=1.0 expected=0.1 message=threshold_not_met
+- PASS sse_safe_response_rate.max actual=0.0 expected=0.2 message=ok
+- PASS message_accepted_202_rate.min actual=1.0 expected=0.98 message=ok
+- FAIL rate_limit_429_rate.min actual=0.0 expected=0.95 message=threshold_not_met
+- FAIL rate_limit_headers_ok_rate.min actual=0.0 expected=0.95 message=threshold_not_met
+- FAIL rate_limit_contract_ok_rate.min actual=0.0 expected=0.95 message=threshold_not_met
+violations:
+- missing metric points: first_token_ms
+- first_token_ms.p95_max failed: actual=None expected=2000.0
+- first_token_ms.sample_count_min failed: actual=0.0 expected=5.0
+- sse_done_success_rate.min failed: actual=0.0 expected=0.95
+- sse_error_rate.max failed: actual=1.0 expected=0.1
+- rate_limit_429_rate.min failed: actual=0.0 expected=0.95
+- rate_limit_headers_ok_rate.min failed: actual=0.0 expected=0.95
+- rate_limit_contract_ok_rate.min failed: actual=0.0 expected=0.95

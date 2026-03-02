@@ -1,0 +1,191 @@
+preflight_date=20260302
+python scripts/validate_env_contract.py --env-example .env.example
+exit_code=0
+env_contract_validation
+status=PASS
+env_example=.env.example
+required_keys=19
+violation_count=0
+
+node -v
+exit_code=0
+v24.11.1
+
+npm -v
+exit_code=0
+11.6.2
+
+docker compose version
+exit_code=0
+Docker Compose version v5.0.2
+
+docker compose -f infra/compose/production/docker-compose.prod.yml config
+exit_code=0
+name: aichatbot-prod
+services:
+  backend:
+    command:
+      - bash
+      - -lc
+      - ./gradlew bootRun --no-daemon
+    container_name: aichatbot-prod-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: true
+      redis:
+        condition: service_healthy
+        required: true
+    environment:
+      APP_IDEMPOTENCY_REDIS_FAIL_STRATEGY: fail_closed
+      APP_IDEMPOTENCY_STORE: redis
+      APP_JWT_SECRET: local-dev-jwt-secret-not-for-prod
+      APP_JWT_SECRET_REF: secret://<REDACTED>
+      APP_LLM_PROVIDER: mock
+      APP_OLLAMA_BASE_URL: http://ollama:11434
+      APP_OLLAMA_MODEL: qwen2.5:3b-instruct
+      APP_TRACE_REQUIRE_HEADER: "true"
+      DB_PASSWORD: local-dev-only-password
+      DB_URL: jdbc:postgresql://postgres:5432/aichatbot
+      DB_USERNAME: aichatbot
+      LLM_PROVIDER_KEY_REF: secret://<REDACTED>
+      OPENSEARCH_URL: http://opensearch:9200
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      SPRING_PROFILES_ACTIVE: postgres
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'bash -lc ''exec 3<>/dev/tcp/127.0.0.1/8080 && printf "GET /actuator/health/readiness HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n" >&3 && grep -q "\"status\":\"UP\"" <&3'''
+      timeout: 5s
+      interval: 15s
+      retries: 15
+      start_period: 1m30s
+    image: eclipse-temurin:17-jdk
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "8080"
+        protocol: tcp
+    restart: unless-stopped
+    stop_grace_period: 40s
+    volumes:
+      - type: bind
+        source: C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend
+        target: /workspace/backend
+        bind: {}
+      - type: volume
+        source: prod_gradle_cache
+        target: /root/.gradle
+        volume: {}
+    working_dir: /workspace/backend
+  frontend:
+    command:
+      - bash
+      - -lc
+      - npm ci && npm run build:web && npm run preview -- --host 0.0.0.0 --port 4173
+    container_name: aichatbot-prod-frontend
+    depends_on:
+      backend:
+        condition: service_started
+        required: true
+    environment:
+      VITE_API_BASE_URL: http://backend:8080
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - bash -lc 'exec 3<>/dev/tcp/127.0.0.1/4173'
+      timeout: 5s
+      interval: 15s
+      retries: 15
+      start_period: 1m0s
+    image: node:22.12.0
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 4173
+        published: "4173"
+        protocol: tcp
+    restart: unless-stopped
+    stop_grace_period: 25s
+    volumes:
+      - type: bind
+        source: C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend
+        target: /workspace/frontend
+        bind: {}
+      - type: volume
+        source: prod_frontend_node_modules
+        target: /workspace/frontend/node_modules
+        volume: {}
+    working_dir: /workspace/frontend
+  postgres:
+    container_name: aichatbot-prod-postgres
+    environment:
+      POSTGRES_DB: aichatbot
+      POSTGRES_PASSWORD: local-dev-only-password
+      POSTGRES_USER: aichatbot
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U aichatbot -d aichatbot
+      timeout: 5s
+      interval: 10s
+      retries: 10
+    image: pgvector/pgvector:pg16
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: prod_pg_data
+        target: /var/lib/postgresql/data
+        volume: {}
+  redis:
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+    container_name: aichatbot-prod-redis
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      timeout: 5s
+      interval: 10s
+      retries: 10
+    image: redis:7
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 6379
+        published: "6379"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: prod_redis_data
+        target: /data
+        volume: {}
+networks:
+  default:
+    name: aichatbot-prod_default
+volumes:
+  prod_frontend_node_modules:
+    name: aichatbot-prod_prod_frontend_node_modules
+  prod_gradle_cache:
+    name: aichatbot-prod_prod_gradle_cache
+  prod_pg_data:
+    name: aichatbot-prod_prod_pg_data
+  prod_redis_data:
+    name: aichatbot-prod_prod_redis_data
+

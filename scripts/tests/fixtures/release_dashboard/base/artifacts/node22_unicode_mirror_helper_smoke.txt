@@ -1,0 +1,5 @@
+mirror_and_run_frontend
+status=PASS
+path_mode=mirrored
+node_check_status=WARNING
+mirror_performed=True

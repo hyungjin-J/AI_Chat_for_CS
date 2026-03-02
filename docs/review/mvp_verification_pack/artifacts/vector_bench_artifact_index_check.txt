@@ -1,0 +1,13 @@
+artifact_index_gate
+status=PASS
+check_mode=True
+indexed_file_count=361
+archive_manifest_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json
+archive_bundle_count=12
+archived_file_count=29
+archive_sidecar_manifest_count=1
+archive_sidecar_count=1
+archive_sidecar_archived_file_count=1
+index_md_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.md
+index_json_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.json
+violation_count=0

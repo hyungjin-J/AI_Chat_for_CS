@@ -1,0 +1,23 @@
+mirror_and_run_frontend
+status=PASS
+task=smoke
+source_root=C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot
+run_root=C:\Users\hjjmj\AppData\Local\Temp\AI_Chatbot_ascii_workspace
+path_mode=mirrored
+mirror_requested=True
+mirror_performed=True
+smoke_mode=True
+dry_run=False
+git_clean=false
+node_required_version=22.12.0
+node_runtime_version=24.11.1
+node_check_status=WARNING
+node_bootstrap_ran=False
+npm_ci_ran=False
+npm_test_ran=False
+npm_build_ran=False
+npm_dev_ran=False
+package_manager=npm
+package_manager_source=lockfile:package-lock.json
+install_command=npm ci --prefer-offline --no-audit --fund=false
+artifact_path=C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\docs\review\mvp_verification_pack\artifacts\tmp_mirror_smoke.txt

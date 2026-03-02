@@ -11,6 +11,7 @@ from openpyxl import Workbook
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "scripts" / "spec_consistency_check.py"
+TERMINOLOGY_SSOT_PATH = REPO_ROOT / "docs/review/mvp_verification_pack/TERMINOLOGY_SSOT.json"
 
 KOR_REQ_ID = "\uc694\uad6c\uc0ac\ud56dID"      # 요구사항ID
 KOR_API_LIST = "\uc804\uccb4API\ubaa9\ub85d"   # 전체API목록
@@ -25,7 +26,18 @@ def write_csv(path: Path, headers: list[str], rows: list[list[str]]) -> None:
         writer.writerows(rows)
 
 
-def write_api_workbook(path: Path, note_rows: list[str]) -> None:
+def write_terminology_ssot(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = TERMINOLOGY_SSOT_PATH.read_text(encoding="utf-8")
+    path.write_text(payload, encoding="utf-8")
+
+
+def write_api_workbook(
+    path: Path,
+    note_rows: list[str],
+    roles: list[str] | None = None,
+    endpoints: list[str] | None = None,
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     workbook = Workbook()
     worksheet = workbook.active
@@ -45,8 +57,17 @@ def write_api_workbook(path: Path, note_rows: list[str]) -> None:
     ]
     worksheet.append(headers)
 
-    roles = ["AGENT", "CUSTOMER", "ADMIN", "OPS", "SYSTEM"]
-    for index, role in enumerate(roles, start=1):
+    role_values = roles if roles is not None else ["AGENT", "CUSTOMER", "ADMIN", "OPS", "SYSTEM"]
+    endpoint_values = (
+        endpoints
+        if endpoints is not None
+        else [f"/v1/test/{index}" for index in range(1, max(len(role_values), len(note_rows), 5) + 1)]
+    )
+    row_count = max(len(role_values), len(endpoint_values), len(note_rows), 5)
+
+    for index in range(1, row_count + 1):
+        role = role_values[index - 1] if index - 1 < len(role_values) else ""
+        endpoint = endpoint_values[index - 1] if index - 1 < len(endpoint_values) else f"/v1/test/{index}"
         note = note_rows[index - 1] if index - 1 < len(note_rows) else ""
         worksheet.append(
             [
@@ -55,7 +76,7 @@ def write_api_workbook(path: Path, note_rows: list[str]) -> None:
                 f"API-{index:03d}",
                 f"Test API {index}",
                 "GET",
-                f"/v1/test/{index}",
+                endpoint,
                 "Bearer",
                 "{}",
                 "{}",
@@ -178,7 +199,9 @@ class SpecConsistencyCheckTest(unittest.TestCase):
         api_workbook: Path,
         db_workbook: Path,
         uiux_workbook: Path,
+        terminology_ssot: Path | None = None,
     ) -> subprocess.CompletedProcess[str]:
+        ssot_path = terminology_ssot if terminology_ssot is not None else (root / "docs/review/mvp_verification_pack/TERMINOLOGY_SSOT.json")
         return subprocess.run(
             [
                 "python",
@@ -197,6 +220,8 @@ class SpecConsistencyCheckTest(unittest.TestCase):
                 str(db_workbook),
                 "--uiux-workbook",
                 str(uiux_workbook),
+                "--terminology-ssot",
+                str(ssot_path),
                 "--report-json",
                 str(root / "report.json"),
             ],
@@ -215,6 +240,8 @@ class SpecConsistencyCheckTest(unittest.TestCase):
         api_workbook = root / "docs/references/google_ready_api_spec_v0.3_20260216.xlsx"
         db_workbook = root / "docs/references/CS_AI_CHATBOT_DB.xlsx"
         uiux_workbook = root / "docs/uiux/CS_RAG_UI_UX_\uc124\uacc4\uc11c.xlsx"
+        terminology_ssot = root / "docs/review/mvp_verification_pack/TERMINOLOGY_SSOT.json"
+        write_terminology_ssot(terminology_ssot)
 
         write_csv(
             requirements,
@@ -264,6 +291,7 @@ class SpecConsistencyCheckTest(unittest.TestCase):
             "api_workbook": api_workbook,
             "db_workbook": db_workbook,
             "uiux_workbook": uiux_workbook,
+            "terminology_ssot": terminology_ssot,
         }
 
     def test_pass_case(self) -> None:
@@ -307,6 +335,84 @@ class SpecConsistencyCheckTest(unittest.TestCase):
             self.assertNotEqual(proc.returncode, 0)
             self.assertIn("REQID_API_MALFORMED", proc.stdout)
             self.assertIn("SEC-01X", proc.stdout)
+
+    def test_fail_when_access_level_value_is_used_in_role_column(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture = self.create_base_fixture(root)
+            write_api_workbook(
+                fixture["api_workbook"],
+                [
+                    "ReqID: AI-001; access_level=PUBLIC",
+                    "ReqID+: SEC-001",
+                    "secret_ref",
+                    "token tool citation done error heartbeat safe_response",
+                    "ReqID: AI-001",
+                ],
+                roles=["PUBLIC", "CUSTOMER", "ADMIN", "OPS", "SYSTEM"],
+            )
+            proc = self.run_script(root=root, **fixture)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("ACCESS_LEVEL_ROLE_COLUMN_FORBIDDEN", proc.stdout)
+
+    def test_fail_when_access_level_value_is_not_standard(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture = self.create_base_fixture(root)
+            write_api_workbook(
+                fixture["api_workbook"],
+                [
+                    "ReqID: AI-001; access_level=ANONYMOUS",
+                    "ReqID+: SEC-001",
+                    "secret_ref",
+                    "token tool citation done error heartbeat safe_response",
+                    "ReqID: AI-001",
+                ],
+            )
+            proc = self.run_script(root=root, **fixture)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("ACCESS_LEVEL_STANDARD_INVALID", proc.stdout)
+            self.assertIn("access_level=ANONYMOUS", proc.stdout)
+
+    def test_fail_when_refresh_endpoint_access_level_contract_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture = self.create_base_fixture(root)
+            write_api_workbook(
+                fixture["api_workbook"],
+                [
+                    "ReqID: AI-001; auth_mechanism=refresh_cookie",
+                    "ReqID+: SEC-001",
+                    "secret_ref",
+                    "token tool citation done error heartbeat safe_response",
+                    "ReqID: AI-001",
+                ],
+                endpoints=["/v1/auth/refresh"],
+            )
+            proc = self.run_script(root=root, **fixture)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("ACCESS_LEVEL_REFRESH_RULE_MISSING", proc.stdout)
+            self.assertIn("access_level=PUBLIC", proc.stdout)
+
+    def test_fail_when_refresh_endpoint_auth_mechanism_contract_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture = self.create_base_fixture(root)
+            write_api_workbook(
+                fixture["api_workbook"],
+                [
+                    "ReqID: AI-001; access_level=PUBLIC",
+                    "ReqID+: SEC-001",
+                    "secret_ref",
+                    "token tool citation done error heartbeat safe_response",
+                    "ReqID: AI-001",
+                ],
+                endpoints=["/v1/auth/refresh"],
+            )
+            proc = self.run_script(root=root, **fixture)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("ACCESS_LEVEL_REFRESH_RULE_MISSING", proc.stdout)
+            self.assertIn("auth_mechanism=refresh_cookie", proc.stdout)
 
     def test_fail_when_terminology_variant_exists(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -375,6 +481,45 @@ class SpecConsistencyCheckTest(unittest.TestCase):
             proc = self.run_script(root=root, **fixture)
             self.assertNotEqual(proc.returncode, 0)
             self.assertIn("UIUX_ASSUME_UNRESOLVED", proc.stdout)
+
+    def test_same_inputs_same_pass_fail_with_explicit_ssot(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture = self.create_base_fixture(root)
+            write_csv(
+                fixture["development"],
+                ["name", "description"],
+                [["dev", "ReqID: AI-001, SEC-001 safeResponse"]],
+            )
+            fixture_without_ssot = {k: v for k, v in fixture.items() if k != "terminology_ssot"}
+
+            proc_default = self.run_script(root=root, **fixture_without_ssot)
+            proc_explicit = self.run_script(
+                root=root,
+                **fixture_without_ssot,
+                terminology_ssot=fixture["terminology_ssot"],
+            )
+            self.assertEqual(proc_default.returncode, proc_explicit.returncode)
+            self.assertIn("TERMINOLOGY_SSE_EVENT_VARIANT", proc_default.stdout)
+            self.assertIn("TERMINOLOGY_SSE_EVENT_VARIANT", proc_explicit.stdout)
+
+    def test_output_order_is_deterministic_for_same_input(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture = self.create_base_fixture(root)
+            write_csv(
+                fixture["development"],
+                ["name", "description"],
+                [[
+                    "dev",
+                    "ReqID: AI-001, SEC-001 safeResponse traceId tenantKey errorCode",
+                ]],
+            )
+
+            proc_a = self.run_script(root=root, **fixture)
+            proc_b = self.run_script(root=root, **fixture)
+            self.assertEqual(proc_a.returncode, proc_b.returncode)
+            self.assertEqual(proc_a.stdout, proc_b.stdout)
 
 
 if __name__ == "__main__":

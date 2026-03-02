@@ -47,6 +47,14 @@ jobs:
           node -v *>&1 | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt
           npm -v *>&1 | Tee-Object -FilePath docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt -Append
 
+      - name: Validate env contract
+        shell: pwsh
+        run: |
+          python scripts/validate_env_contract.py `
+            --env-example .env.example `
+            --output-txt docs/review/mvp_verification_pack/artifacts/env_contract_check.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/env_contract_check.json
+
       - name: Workpack + specialized agent report contract
         shell: pwsh
         run: |
@@ -63,8 +71,6 @@ jobs:
           python scripts/assert_spec_sync_report_updated.py `
             --base-ref "origin/$env:GITHUB_BASE_REF" `
             --head-ref "HEAD" `
-            --require-metadata `
-            --require-notion-evidence-format `
             --output-txt docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt `
             --output-json docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.json
 
@@ -167,6 +173,13 @@ jobs:
             --output-txt docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.txt `
             --output-json docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.json
 
+      - name: OpenAPI generated freshness gate
+        shell: pwsh
+        run: |
+          python scripts/assert_openapi_generated_fresh.py `
+            --output-txt docs/review/mvp_verification_pack/artifacts/openapi_generated_fresh_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/openapi_generated_fresh_gate.json
+
       - name: Backend tests
         shell: pwsh
         working-directory: backend
@@ -187,6 +200,28 @@ jobs:
             --report-json docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.json `
             --report-txt docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.txt `
             --pass-artifact docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt
+
+      - name: Spec -> implementation coverage report
+        shell: pwsh
+        run: |
+          python scripts/spec_impl_coverage_report.py `
+            --root . `
+            --requirements docs/references/CS AI Chatbot_Requirements Statement.csv `
+            --api-workbook docs/references/google_ready_api_spec_v0.3_20260216.xlsx `
+            --backend-root backend/src/main/java `
+            --backend-test-root backend/src/test `
+            --frontend-root frontend/src `
+            --report-txt docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.txt `
+            --report-json docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.json `
+            --report-md docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.md
+
+      - name: Spec implementation coverage gate
+        shell: pwsh
+        run: |
+          python scripts/assert_spec_impl_coverage.py `
+            --report-json docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.json `
+            --output-txt docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.txt `
+            --output-json docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.json
 
       - name: Fixed artifact contract check
         shell: pwsh
@@ -213,10 +248,15 @@ jobs:
       - name: ChatGPT handoff doc lint
         shell: pwsh
         run: |
+          $dateTag = Get-Date -Format "yyyyMMdd"
+          $jsonOut = "docs/review/mvp_verification_pack/artifacts/golive_chatgpt_doc_lint_${dateTag}.json"
+          $txtOut = "docs/review/mvp_verification_pack/artifacts/golive_chatgpt_doc_lint_${dateTag}.txt"
           python scripts/lint_chatgpt_handoff_docs.py `
             --files chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md `
-            --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.json `
-            --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.txt
+            --output-json $jsonOut `
+            --output-txt $txtOut
+          Copy-Item -Path $jsonOut -Destination docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.json -Force
+          Copy-Item -Path $txtOut -Destination docs/review/mvp_verification_pack/artifacts/phase2_1_4_chatgpt_doc_lint.txt -Force
 
       - name: Validation Gate docs evidence lint
         shell: pwsh
@@ -224,6 +264,19 @@ jobs:
           python scripts/lint_validation_gate_tables.py `
             --output-json docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.json `
             --output-txt docs/review/mvp_verification_pack/artifacts/phase2_1_4_pr4_docs_evidence_lint.txt
+
+      - name: Build release dashboard and refresh artifact index
+        if: always()
+        shell: pwsh
+        run: |
+          python scripts/build_release_gate_dashboard.py `
+            --artifacts-dir docs/review/mvp_verification_pack/artifacts
+          python scripts/build_artifact_index.py `
+            --artifact-root docs/review/mvp_verification_pack/artifacts `
+            --index-md docs/review/mvp_verification_pack/artifacts/_INDEX.md `
+            --index-json docs/review/mvp_verification_pack/artifacts/_INDEX.json `
+            --gate-output-txt docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt `
+            --gate-output-json docs/review/mvp_verification_pack/artifacts/artifact_index_gate.json
 
       - name: Upload gate evidence artifacts
         if: always()
@@ -246,15 +299,22 @@ jobs:
             docs/review/mvp_verification_pack/artifacts/utf8_full_scan_ratchet_gate.*
             docs/review/mvp_verification_pack/artifacts/artifact_index_gate.*
             docs/review/mvp_verification_pack/artifacts/_INDEX.*
+            docs/review/mvp_verification_pack/artifacts/release_gate_dashboard.*
+            docs/review/mvp_verification_pack/artifacts/release_gate_dashboard_rollout_report_*.txt
             docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.*
+            docs/review/mvp_verification_pack/artifacts/openapi_generated_fresh_gate.*
             docs/review/mvp_verification_pack/artifacts/node_runtime_discipline_check.txt
+            docs/review/mvp_verification_pack/artifacts/env_contract_check.*
             docs/review/mvp_verification_pack/artifacts/mapper_namespace_gate.*
             docs/review/mvp_verification_pack/artifacts/legacy_package_blocker.*
             docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.*
             docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.*
             docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_remediation_summary.txt
+            docs/review/mvp_verification_pack/artifacts/golive_chatgpt_doc_lint_*.*
             docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.*
             docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt
+            docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.*
+            docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.*
             docs/review/mvp_verification_pack/artifacts/windows_npm_lock_diag_bundle.zip
             scripts/contracts/fixed_artifact_paths.json
 

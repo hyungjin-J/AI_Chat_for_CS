@@ -114,10 +114,10 @@ docker compose -f infra/docker-compose.yml exec -T postgres `
 4. (선택) backend health + query plan sanity
 
 ## 6) Operational diagnostics SQL queries
-Run the standard diagnostics set:
+Run the standard PostgreSQL operations query pack:
 
 ```powershell
-Get-Content docs/ops/sql/DB_OPS_DIAGNOSTICS.sql -Raw | `
+Get-Content docs/ops/sql/DB_OPERATIONS_QUERIES.sql -Raw | `
   docker compose -f infra/docker-compose.yml exec -T postgres `
     psql -U aichatbot -d aichatbot
 ```
@@ -125,11 +125,16 @@ Get-Content docs/ops/sql/DB_OPS_DIAGNOSTICS.sql -Raw | `
 Save output to an artifact file:
 
 ```powershell
-$artifact = "docs/review/mvp_verification_pack/artifacts/db_ops_diagnostics_$(Get-Date -Format yyyyMMdd_HHmmss).txt"
-Get-Content docs/ops/sql/DB_OPS_DIAGNOSTICS.sql -Raw | `
+$artifact = "docs/review/mvp_verification_pack/artifacts/db_operations_queries_$(Get-Date -Format yyyyMMdd_HHmmss).txt"
+Get-Content docs/ops/sql/DB_OPERATIONS_QUERIES.sql -Raw | `
   docker compose -f infra/docker-compose.yml exec -T postgres `
     psql -U aichatbot -d aichatbot | Tee-Object -FilePath $artifact
 ```
+
+Notes:
+- Query pack path: `docs/ops/sql/DB_OPERATIONS_QUERIES.sql`
+- This pack is read-only (SELECT-only) and safe for routine triage.
+- For legacy comparisons, `docs/ops/sql/DB_OPS_DIAGNOSTICS.sql` remains available.
 
 ## 7) PGVECTOR IVFFlat operations and benchmark
 - Operations guide:
@@ -174,6 +179,24 @@ python scripts/vector_recall_latency_bench.py `
   --output-json docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_20260226.json
 ```
 
+CI-friendly bounded local run (deterministic synthetic dataset):
+
+```powershell
+python scripts/vector_recall_latency_bench.py `
+  --ci `
+  --method docker-exec `
+  --compose-file infra/docker-compose.yml `
+  --compose-service postgres `
+  --ci-row-count 3000 `
+  --ci-dimensions 256 `
+  --top-k 8 `
+  --query-count 12 `
+  --probe-values 1,2,4,8 `
+  --seed 20260227 `
+  --output-txt docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_$(Get-Date -Format yyyyMMdd).txt `
+  --output-json docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_$(Get-Date -Format yyyyMMdd).json
+```
+
 ## 8) CI Nightly reproducibility (`db-repro-nightly.yml`)
 The same clean-volume reproducibility path runs in GitHub Actions nightly and manual dispatch:
 - Workflow: `.github/workflows/db-repro-nightly.yml`
@@ -205,3 +228,27 @@ Nightly artifacts (always uploaded, even on failure):
 Operational note:
 - This nightly is monitoring-only and does not add PR merge-block enforcement.
 - Failures are still explicit at workflow level (red run state) and traceable by uploaded artifacts.
+
+## 9) CI Monitoring Workflow (`vector-bench-nightly.yml`)
+- Workflow: `.github/workflows/vector-bench-nightly.yml`
+- Trigger:
+  - `schedule`: `0 18 * * *` (UTC), intended KST window `03:00` next day
+  - `workflow_dispatch`
+- Fixed clean-volume order:
+  1. `docker compose -f infra/docker-compose.yml down -v`
+  2. `docker compose -f infra/docker-compose.yml up -d postgres redis`
+  3. `docker compose -f infra/docker-compose.yml --profile db-tools run --rm flyway`
+  4. `python scripts/db_smoke_test.py --method docker-exec ...`
+  5. `python scripts/vector_recall_latency_bench.py --ci ...`
+- Artifacts (always uploaded, success/failure regardless):
+  - `docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_YYYYMMDD.txt`
+  - `docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_YYYYMMDD.json`
+  - `docs/review/mvp_verification_pack/artifacts/vector_bench_flyway_output.txt`
+  - `docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.txt`
+  - `docs/review/mvp_verification_pack/artifacts/db_local_readiness_smoke.json`
+  - `docs/review/mvp_verification_pack/artifacts/vector_bench_compose_logs.txt`
+  - `docs/review/mvp_verification_pack/artifacts/vector_bench_monitoring_gate.txt`
+  - `docs/review/mvp_verification_pack/artifacts/vector_bench_monitoring_gate.json`
+- Monitoring-only gate interpretation:
+  - `vector_bench_monitoring_gate` is informational for scheduled/manual operations and is not wired to PR required checks.
+  - `status=FAIL` means benchmark regression/noise needs operator triage, not automatic merge blocking.

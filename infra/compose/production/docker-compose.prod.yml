@@ -1,0 +1,152 @@
+name: aichatbot-prod
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: aichatbot-prod-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    ports:
+      - "5432:5432"
+    volumes:
+      - prod_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    container_name: aichatbot-prod-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - prod_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  opensearch:
+    image: opensearchproject/opensearch:2.15.0
+    container_name: aichatbot-prod-opensearch
+    restart: unless-stopped
+    profiles: ["search"]
+    environment:
+      discovery.type: single-node
+      plugins.security.disabled: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    volumes:
+      - prod_opensearch_data:/usr/share/opensearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "bash -lc 'exec 3<>/dev/tcp/127.0.0.1/9200'"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: aichatbot-prod-ollama
+    restart: unless-stopped
+    profiles: ["llm-local"]
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+    ports:
+      - "11434:11434"
+    volumes:
+      - prod_ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  backend:
+    image: eclipse-temurin:17-jdk
+    container_name: aichatbot-prod-backend
+    restart: unless-stopped
+    working_dir: /workspace/backend
+    command: ["bash", "-lc", "./gradlew bootRun --no-daemon"]
+    stop_grace_period: 40s
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-postgres}
+      DB_URL: ${DB_URL:?DB_URL is required}
+      DB_USERNAME: ${DB_USERNAME:?DB_USERNAME is required}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      APP_LLM_PROVIDER: ${APP_LLM_PROVIDER:-ollama}
+      APP_OLLAMA_BASE_URL: ${APP_OLLAMA_BASE_URL:-http://ollama:11434}
+      APP_OLLAMA_MODEL: ${APP_OLLAMA_MODEL:-qwen2.5:3b-instruct}
+      APP_IDEMPOTENCY_STORE: ${APP_IDEMPOTENCY_STORE:-redis}
+      APP_IDEMPOTENCY_REDIS_FAIL_STRATEGY: ${APP_IDEMPOTENCY_REDIS_FAIL_STRATEGY:-fail_closed}
+      APP_TRACE_REQUIRE_HEADER: ${APP_TRACE_REQUIRE_HEADER:-true}
+      APP_BUDGET_SSE_CONCURRENCY_MAX_PER_USER: ${APP_BUDGET_SSE_CONCURRENCY_MAX_PER_USER:-2}
+      APP_BUDGET_SSE_HOLD_MS: ${APP_BUDGET_SSE_HOLD_MS:-0}
+      APP_JWT_SECRET: ${APP_JWT_SECRET:?APP_JWT_SECRET is required}
+      APP_JWT_SECRET_REF: ${APP_JWT_SECRET_REF:?APP_JWT_SECRET_REF is required}
+      LLM_PROVIDER_KEY_REF: ${LLM_PROVIDER_KEY_REF:?LLM_PROVIDER_KEY_REF is required}
+      OPENSEARCH_URL: ${OPENSEARCH_URL:-http://opensearch:9200}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../../../backend:/workspace/backend
+      - prod_gradle_cache:/root/.gradle
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "bash -lc 'exec 3<>/dev/tcp/127.0.0.1/8080 && printf \"GET /actuator/health/readiness HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n\" >&3 && grep -q \"\\\"status\\\":\\\"UP\\\"\" <&3'",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 15
+      start_period: 90s
+
+  frontend:
+    image: node:22.12.0
+    container_name: aichatbot-prod-frontend
+    restart: unless-stopped
+    working_dir: /workspace/frontend
+    command: ["bash", "-lc", "npm ci && npm run build:web && npm run preview -- --host 0.0.0.0 --port 4173"]
+    stop_grace_period: 25s
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://backend:8080}
+    ports:
+      - "4173:4173"
+    volumes:
+      - ../../../frontend:/workspace/frontend
+      - prod_frontend_node_modules:/workspace/frontend/node_modules
+    depends_on:
+      backend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "bash -lc 'exec 3<>/dev/tcp/127.0.0.1/4173'"]
+      interval: 15s
+      timeout: 5s
+      retries: 15
+      start_period: 60s
+
+volumes:
+  prod_pg_data:
+  prod_redis_data:
+  prod_opensearch_data:
+  prod_ollama_data:
+  prod_gradle_cache:
+  prod_frontend_node_modules:

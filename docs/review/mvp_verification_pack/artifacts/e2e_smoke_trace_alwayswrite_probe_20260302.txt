@@ -1,0 +1,8 @@
+e2e_smoke_trace_samples
+status=FAIL
+generated_at_utc=2026-03-02T12:03:02.282343Z
+base_url=http://127.0.0.1:18080
+target_tenant_key=demo-tenant
+effective_auth_tenant_key=demo-tenant
+failure=BOOTSTRAP stage=http_connect error_code= message=http request failed runbook=docs/ops/runbook/README.md
+runbook_on_failure=docs/ops/runbook/README.md

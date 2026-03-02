@@ -14,6 +14,7 @@ public class AppProperties {
     private final Auth auth = new Auth();
     private final Idempotency idempotency = new Idempotency();
     private final Llm llm = new Llm();
+    private final E2e e2e = new E2e();
 
     public Jwt getJwt() {
         return jwt;
@@ -49,6 +50,10 @@ public class AppProperties {
 
     public Llm getLlm() {
         return llm;
+    }
+
+    public E2e getE2e() {
+        return e2e;
     }
 
     public static class Jwt {
@@ -442,6 +447,36 @@ public class AppProperties {
 
         public void setRedisFailStrategy(String redisFailStrategy) {
             this.redisFailStrategy = redisFailStrategy;
+        }
+    }
+
+    public static class E2e {
+        private boolean forceFailClosedEnabled = false;
+        private String forceFailClosedTrigger = "__E2E_FORCE_FAIL_CLOSED__";
+        private String forceFailClosedErrorCode = "AI-009-409-EVIDENCE";
+
+        public boolean isForceFailClosedEnabled() {
+            return forceFailClosedEnabled;
+        }
+
+        public void setForceFailClosedEnabled(boolean forceFailClosedEnabled) {
+            this.forceFailClosedEnabled = forceFailClosedEnabled;
+        }
+
+        public String getForceFailClosedTrigger() {
+            return forceFailClosedTrigger;
+        }
+
+        public void setForceFailClosedTrigger(String forceFailClosedTrigger) {
+            this.forceFailClosedTrigger = forceFailClosedTrigger;
+        }
+
+        public String getForceFailClosedErrorCode() {
+            return forceFailClosedErrorCode;
+        }
+
+        public void setForceFailClosedErrorCode(String forceFailClosedErrorCode) {
+            this.forceFailClosedErrorCode = forceFailClosedErrorCode;
         }
     }
 

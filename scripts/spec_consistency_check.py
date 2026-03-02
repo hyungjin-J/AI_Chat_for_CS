@@ -20,17 +20,15 @@ from openpyxl.utils import get_column_letter
 REQ_ID_STRICT_RE = re.compile(r"\b[A-Z]{2,5}-\d{3}\b")
 REQ_ID_LAX_RE = re.compile(r"\b[A-Z]{2,5}-[A-Za-z0-9]{3}\b")
 REQID_TAG_RE = re.compile(r"ReqID\+?\s*:\s*([^\n\r;]+)", re.IGNORECASE)
-SSE_EVENT_RE = re.compile(r"\b(token|tool|citation|done|error|heartbeat|safe_response)\b", re.IGNORECASE)
+DEFAULT_TERMINOLOGY_SSOT = "docs/review/mvp_verification_pack/TERMINOLOGY_SSOT.json"
 
 ROLE_TAXONOMY = {"AGENT", "CUSTOMER", "ADMIN", "OPS", "SYSTEM"}
-SSE_EVENT_SET = {"token", "tool", "citation", "done", "error", "heartbeat", "safe_response"}
+ACCESS_LEVEL_TAXONOMY = {"PUBLIC", "AUTHENTICATED"}
+NOTE_KEY_VALUE_RE = re.compile(r"\b([a-z_][a-z0-9_]*)\s*=\s*([a-z0-9_./:-]+)", re.IGNORECASE)
+AUTH_REFRESH_ENDPOINT = "/v1/auth/refresh"
 PLACEHOLDER_VALUES = {"", "-", "N/A", "NA", "NONE", "NULL"}
 UIUX_PLACEHOLDER_VALUES = {"", "-", "—", "TBD", "TODO", "TEMP", "PLACEHOLDER", "N/A", "NA"}
 
-ERROR_PAYLOAD_FIELDS = ("error_code", "message", "trace_id", "details")
-TRACE_TENANT_HEADERS = ("X-Trace-Id", "X-Tenant-Key")
-OPTIONAL_HEADERS = ("Idempotency-Key", "Last-Event-ID")
-SNAKE_CASE_CONTRACT_FIELDS = ("trace_id", "tenant_key")
 
 # Keep Korean labels as escapes to avoid shell/codepage drift on Windows.
 KOR_REQ_ID = "\uc694\uad6c\uc0ac\ud56dID"      # 요구사항ID
@@ -58,32 +56,155 @@ class TerminologyCheckSpec:
     forbidden_variants: tuple[tuple[str, str], ...] = ()
 
 
-TERMINOLOGY_CHECK_SPECS: tuple[TerminologyCheckSpec, ...] = (
-    TerminologyCheckSpec(
-        code_suffix="SECRET_REF",
-        required_tokens=("secret_ref",),
-    ),
-    TerminologyCheckSpec(
-        code_suffix="ERROR_PAYLOAD",
-        required_tokens=ERROR_PAYLOAD_FIELDS,
-        forbidden_variants=(("errorCode", "error_code"),),
-    ),
-    TerminologyCheckSpec(
-        code_suffix="SSE_EVENT",
-        required_tokens=tuple(sorted(SSE_EVENT_SET)),
-        forbidden_variants=(("safeResponse", "safe_response"), ("safe-response", "safe_response")),
-    ),
-    TerminologyCheckSpec(
-        code_suffix="TRACE_TENANT_HEADER",
-        required_tokens=TRACE_TENANT_HEADERS,
-        optional_tokens=OPTIONAL_HEADERS,
-    ),
-    TerminologyCheckSpec(
-        code_suffix="SNAKE_CASE",
-        required_tokens=SNAKE_CASE_CONTRACT_FIELDS,
-        forbidden_variants=(("traceId", "trace_id"), ("traceID", "trace_id"), ("tenantKey", "tenant_key")),
-    ),
-)
+@dataclass(frozen=True)
+class TerminologySsot:
+    required_exact_tokens: dict[str, tuple[str, ...]]
+    forbidden_variants: dict[str, tuple[tuple[str, str], ...]]
+    required_headers_required: tuple[str, ...]
+    required_headers_optional: tuple[str, ...]
+    sse_event_types: tuple[str, ...]
+    error_payload_fields: tuple[str, ...]
+
+
+def _as_token_tuple(values: object, field_name: str) -> tuple[str, ...]:
+    if not isinstance(values, list):
+        raise ValueError(f"{field_name} must be a list of tokens")
+
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for item in values:
+        if not isinstance(item, str):
+            raise ValueError(f"{field_name} must contain only strings")
+        token = item.strip()
+        if not token:
+            raise ValueError(f"{field_name} must not contain empty tokens")
+        if token in seen:
+            continue
+        normalized.append(token)
+        seen.add(token)
+    return tuple(normalized)
+
+
+def _as_forbidden_variant_pairs(values: object, field_name: str) -> tuple[tuple[str, str], ...]:
+    if not isinstance(values, list):
+        raise ValueError(f"{field_name} must be a list of [variant, canonical] pairs")
+
+    normalized: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for item in values:
+        if not isinstance(item, list) or len(item) != 2:
+            raise ValueError(f"{field_name} entries must be [variant, canonical]")
+        variant_raw, canonical_raw = item
+        if not isinstance(variant_raw, str) or not isinstance(canonical_raw, str):
+            raise ValueError(f"{field_name} entries must contain strings")
+        variant = variant_raw.strip()
+        canonical = canonical_raw.strip()
+        if not variant or not canonical:
+            raise ValueError(f"{field_name} entries must not contain empty strings")
+        pair = (variant, canonical)
+        if pair in seen:
+            continue
+        normalized.append(pair)
+        seen.add(pair)
+    return tuple(normalized)
+
+
+def resolve_terminology_ssot_path(root: Path, value: str) -> Path:
+    candidate = resolve_path(root, value)
+    if candidate.exists():
+        return candidate
+
+    repo_root = Path(__file__).resolve().parent.parent
+    fallback = resolve_path(repo_root, value)
+    if fallback.exists():
+        return fallback
+
+    raise FileNotFoundError(f"terminology SSOT not found: {value}")
+
+
+def load_terminology_ssot(path: Path) -> TerminologySsot:
+    payload = json.loads(path.read_text(encoding="utf-8-sig"))
+    if not isinstance(payload, dict):
+        raise ValueError("terminology SSOT root must be a JSON object")
+
+    required_exact_raw = payload.get("required_exact_tokens")
+    forbidden_raw = payload.get("forbidden_variants")
+    headers_raw = payload.get("required_headers")
+    sse_raw = payload.get("sse_event_types")
+    error_payload_raw = payload.get("error_payload_fields")
+
+    if not isinstance(required_exact_raw, dict):
+        raise ValueError("required_exact_tokens must be an object")
+    if not isinstance(forbidden_raw, dict):
+        raise ValueError("forbidden_variants must be an object")
+    if not isinstance(headers_raw, dict):
+        raise ValueError("required_headers must be an object")
+
+    required_exact_tokens = {
+        key: _as_token_tuple(required_exact_raw.get(key), f"required_exact_tokens.{key}")
+        for key in sorted(required_exact_raw)
+    }
+    forbidden_variants = {
+        key: _as_forbidden_variant_pairs(forbidden_raw.get(key), f"forbidden_variants.{key}")
+        for key in sorted(forbidden_raw)
+    }
+    required_headers_required = _as_token_tuple(headers_raw.get("required"), "required_headers.required")
+    required_headers_optional = _as_token_tuple(headers_raw.get("optional"), "required_headers.optional")
+    sse_event_types = _as_token_tuple(sse_raw, "sse_event_types")
+    error_payload_fields = _as_token_tuple(error_payload_raw, "error_payload_fields")
+
+    for required_key in ("secret_ref", "snake_case_contract_fields"):
+        if required_key not in required_exact_tokens:
+            raise ValueError(f"required_exact_tokens.{required_key} is required")
+
+    for required_key in ("error_payload", "sse_event_types", "snake_case_contract_fields"):
+        if required_key not in forbidden_variants:
+            raise ValueError(f"forbidden_variants.{required_key} is required")
+
+    return TerminologySsot(
+        required_exact_tokens=required_exact_tokens,
+        forbidden_variants=forbidden_variants,
+        required_headers_required=required_headers_required,
+        required_headers_optional=required_headers_optional,
+        sse_event_types=sse_event_types,
+        error_payload_fields=error_payload_fields,
+    )
+
+
+def compile_sse_event_regex(event_types: tuple[str, ...]) -> re.Pattern[str]:
+    escaped = "|".join(re.escape(item) for item in sorted(event_types))
+    if not escaped:
+        raise ValueError("sse_event_types must not be empty")
+    return re.compile(rf"\b({escaped})\b", re.IGNORECASE)
+
+
+def build_terminology_specs(config: TerminologySsot) -> tuple[TerminologyCheckSpec, ...]:
+    return (
+        TerminologyCheckSpec(
+            code_suffix="SECRET_REF",
+            required_tokens=config.required_exact_tokens["secret_ref"],
+        ),
+        TerminologyCheckSpec(
+            code_suffix="ERROR_PAYLOAD",
+            required_tokens=config.error_payload_fields,
+            forbidden_variants=config.forbidden_variants["error_payload"],
+        ),
+        TerminologyCheckSpec(
+            code_suffix="SSE_EVENT",
+            required_tokens=tuple(sorted(config.sse_event_types)),
+            forbidden_variants=config.forbidden_variants["sse_event_types"],
+        ),
+        TerminologyCheckSpec(
+            code_suffix="TRACE_TENANT_HEADER",
+            required_tokens=config.required_headers_required,
+            optional_tokens=config.required_headers_optional,
+        ),
+        TerminologyCheckSpec(
+            code_suffix="SNAKE_CASE",
+            required_tokens=config.required_exact_tokens["snake_case_contract_fields"],
+            forbidden_variants=config.forbidden_variants["snake_case_contract_fields"],
+        ),
+    )
 
 
 @dataclass
@@ -120,6 +241,7 @@ def parse_args() -> argparse.Namespace:
         help="Optional explicit UI/UX workbook path. If omitted, the first docs/uiux/CS_RAG_UI_UX_*.xlsx is used.",
     )
     parser.add_argument("--uiux-glob", default="docs/uiux/CS_RAG_UI_UX_*.xlsx")
+    parser.add_argument("--terminology-ssot", default=DEFAULT_TERMINOLOGY_SSOT)
     parser.add_argument("--report-json", default="docs/uiux/reports/spec_consistency_check_report.json")
     parser.add_argument("--report-txt")
     parser.add_argument("--pass-artifact", help="Optional path for concise PASS summary text artifact.")
@@ -163,6 +285,18 @@ def extract_reqid_tokens(value: str) -> tuple[list[str], list[str]]:
 
 def extract_prefix(token: str) -> str:
     return token.split("-", 1)[0] if "-" in token else ""
+
+
+def parse_note_key_values(note_value: str) -> dict[str, set[str]]:
+    pairs: dict[str, set[str]] = {}
+    for key_raw, value_raw in NOTE_KEY_VALUE_RE.findall(note_value):
+        key = key_raw.strip().lower()
+        value = value_raw.strip().upper()
+        if not key or not value:
+            continue
+        values = pairs.setdefault(key, set())
+        values.add(value)
+    return pairs
 
 
 def git_head(root: Path) -> str:
@@ -352,6 +486,7 @@ def validate_api_notes_and_roles(
     headers = [str(value).strip() if value is not None else "" for value in header_row]
     note_col = find_column(headers, [KOR_NOTE, "remark", "note"])
     role_col = find_column(headers, ["role", KOR_ROLE])
+    endpoint_col = find_column(headers, ["endpoint", "path", "uri"])
     if note_col is None:
         add_violation(
             violations,
@@ -365,7 +500,13 @@ def validate_api_notes_and_roles(
         workbook.close()
         return 0, set(), []
 
-    scan_max_col = max(note_col, role_col if role_col is not None else 0) + 1
+    scan_targets = [note_col]
+    if role_col is not None:
+        scan_targets.append(role_col)
+    if endpoint_col is not None:
+        scan_targets.append(endpoint_col)
+    scan_max_col = max(scan_targets) + 1
+
     token_count = 0
     role_tokens: set[str] = set()
     corpus: list[tuple[str, str, str]] = []
@@ -385,23 +526,94 @@ def validate_api_notes_and_roles(
                 cell_ref = f"{get_column_letter(col_index)}{row_number}"
                 corpus.append((to_rel(api_workbook, root), f"{worksheet.title}!{cell_ref}", cell_value))
 
+        endpoint_value = ""
+        if endpoint_col is not None and endpoint_col < len(row_values):
+            endpoint_cell = row_values[endpoint_col]
+            if isinstance(endpoint_cell, str):
+                endpoint_value = endpoint_cell.strip()
+
+        role_cell_text = ""
+        role_cell_ref = ""
         if role_col is not None and role_col < len(row_values):
             raw_role = row_values[role_col]
             if isinstance(raw_role, str) and raw_role.strip():
-                normalized_roles = re.split(r"[,/| ]+", raw_role.strip().upper())
+                role_cell_text = raw_role.strip()
+                role_cell_ref = f"{get_column_letter(role_col + 1)}{row_number}"
+                normalized_roles = re.split(r"[,/| ]+", role_cell_text.upper())
                 for token in normalized_roles:
                     if token:
                         role_tokens.add(token)
+                        if token in ACCESS_LEVEL_TAXONOMY:
+                            add_violation(
+                                violations,
+                                "ACCESS_LEVEL_ROLE_COLUMN_FORBIDDEN",
+                                api_workbook,
+                                root,
+                                f"sheet={worksheet.title} cell={role_cell_ref}",
+                                token,
+                                "PUBLIC/AUTHENTICATED must be declared in 비고 as access_level=...",
+                            )
 
         note_cell = row_values[note_col] if note_col < len(row_values) else None
-        if not isinstance(note_cell, str):
+        note_value = note_cell.strip() if isinstance(note_cell, str) else ""
+        note_cell_ref = f"{get_column_letter(note_col + 1)}{row_number}"
+        note_key_values = parse_note_key_values(note_value)
+
+        access_level_values = note_key_values.get("access_level", set())
+        invalid_access_levels = sorted(
+            token for token in access_level_values if token not in ACCESS_LEVEL_TAXONOMY
+        )
+        for token in invalid_access_levels:
+            add_violation(
+                violations,
+                "ACCESS_LEVEL_STANDARD_INVALID",
+                api_workbook,
+                root,
+                f"sheet={worksheet.title} cell={note_cell_ref}",
+                f"access_level={token}",
+                "access_level must be one of PUBLIC/AUTHENTICATED",
+            )
+
+        if endpoint_value.lower() == AUTH_REFRESH_ENDPOINT:
+            if "PUBLIC" not in access_level_values:
+                add_violation(
+                    violations,
+                    "ACCESS_LEVEL_REFRESH_RULE_MISSING",
+                    api_workbook,
+                    root,
+                    f"sheet={worksheet.title} cell={note_cell_ref}",
+                    "access_level=PUBLIC",
+                    "/v1/auth/refresh must include access_level=PUBLIC in 비고",
+                )
+
+            auth_mechanisms = note_key_values.get("auth_mechanism", set())
+            if "REFRESH_COOKIE" not in auth_mechanisms:
+                add_violation(
+                    violations,
+                    "ACCESS_LEVEL_REFRESH_RULE_MISSING",
+                    api_workbook,
+                    root,
+                    f"sheet={worksheet.title} cell={note_cell_ref}",
+                    "auth_mechanism=refresh_cookie",
+                    "/v1/auth/refresh must include auth_mechanism=refresh_cookie in 비고",
+                )
+
+            if role_cell_text:
+                location = role_cell_ref or f"row={row_number}"
+                add_violation(
+                    violations,
+                    "ACCESS_LEVEL_REFRESH_ROLE_NOT_EMPTY",
+                    api_workbook,
+                    root,
+                    f"sheet={worksheet.title} cell={location}",
+                    role_cell_text,
+                    "/v1/auth/refresh role column must be blank when access_level=PUBLIC is used",
+                )
+
+        if "reqid" not in note_value.lower():
             continue
 
-        note_value = note_cell.strip()
-        if not note_value or "reqid" not in note_value.lower():
-            continue
-
-        cell_ref = f"{get_column_letter(note_col + 1)}{row_number}"
+        cell_ref = note_cell_ref
         segments = REQID_TAG_RE.findall(note_value)
         segments_to_scan = segments if segments else [note_value]
         found_in_cell = 0
@@ -943,6 +1155,8 @@ def validate_terminology(
     corpus: list[tuple[str, str, str]],
     role_tokens: set[str],
     violations: list[Violation],
+    terminology_specs: tuple[TerminologyCheckSpec, ...],
+    sse_event_re: re.Pattern[str],
 ) -> dict[str, object]:
     required_token_hits: dict[str, int] = {}
     optional_token_hits: dict[str, int] = {}
@@ -956,10 +1170,10 @@ def validate_terminology(
         if "key_ref" in lowered or "api_key_ref" in lowered:
             secret_alias_hits += 1
 
-        for token in SSE_EVENT_RE.findall(text):
+        for token in sse_event_re.findall(text):
             sse_found.add(token.lower())
 
-    for spec in TERMINOLOGY_CHECK_SPECS:
+    for spec in terminology_specs:
         for token in spec.required_tokens:
             occurrences = find_token_occurrences(corpus, token)
             required_token_hits[token] = len(occurrences)
@@ -1080,6 +1294,10 @@ def main() -> int:
     report_json_path = resolve_path(root, args.report_json) if args.report_json else None
     report_txt_path = resolve_path(root, args.report_txt) if args.report_txt else None
     pass_artifact_path = resolve_path(root, args.pass_artifact) if args.pass_artifact else None
+    terminology_ssot_path = resolve_terminology_ssot_path(root, args.terminology_ssot)
+    terminology_ssot = load_terminology_ssot(terminology_ssot_path)
+    terminology_specs = build_terminology_specs(terminology_ssot)
+    sse_event_re = compile_sse_event_regex(terminology_ssot.sse_event_types)
 
     violations: list[Violation] = []
     req_master = load_requirements(root, requirements_path, violations)
@@ -1124,6 +1342,8 @@ def main() -> int:
         corpus=corpus,
         role_tokens=api_role_tokens,
         violations=violations,
+        terminology_specs=terminology_specs,
+        sse_event_re=sse_event_re,
     )
     placeholder_summary = detect_uiux_mapping_placeholders(
         root=root,

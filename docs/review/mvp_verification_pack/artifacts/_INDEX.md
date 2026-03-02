@@ -1,16 +1,28 @@
 # Artifact Index
 
-- artifact_root: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot_ops_trend/docs/review/mvp_verification_pack/artifacts`
-- indexed_file_count: 339
+- artifact_root: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts`
+- archive_layout_version: 2
+- indexed_file_count: 499
 - archive_keep_latest_per_extension: 1
-- latest_files_count: 338
-- archive_candidates_count: 0
+- latest_files_count: 473
+- archive_candidates_count: 23
 - pinned_paths_count: 51
-- archive_manifest_path: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot_ops_trend/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json`
+- archive_manifest_path: `C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json`
+
+## Start Here
+- release_gate_dashboard_md: `release_gate_dashboard.md` (present)
+- release_gate_dashboard_json: `release_gate_dashboard.json` (present)
+- spec_impl_coverage_report_md: `spec_impl_coverage_report.md` (present)
+- spec_impl_coverage_gate_json: `spec_impl_coverage_gate.json` (present)
+- index_md: `_INDEX.md` (present)
+- index_json: `_INDEX.json` (present)
 
 ## Archive Summary
 - bundle_count: 12
 - archived_file_count: 29
+- sidecar_manifest_count: 1
+- sidecar_archive_count: 1
+- sidecar_archived_file_count: 1
 - recent_bundles:
   - `docs/review/mvp_verification_pack/archive/bundles/20260226/utf8_normalization_waveN_report__20260226T134334Z.zip` (family=utf8_normalization_waveN_report, file_count=16)
   - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_utf8_check__20260226T134334Z.zip` (family=phase2_1_1_utf8_check, file_count=1)
@@ -22,6 +34,11 @@
   - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_pii_token_scan__20260226T134334Z.zip` (family=phase2_1_1_prb_chatgpt_pii_token_scan, file_count=1)
   - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_prb_chatgpt_doc_lint__20260226T134334Z.zip` (family=phase2_1_1_prb_chatgpt_doc_lint, file_count=2)
   - `docs/review/mvp_verification_pack/archive/bundles/20260226/phase2_1_1_pra_node_ssot_check__20260226T134334Z.zip` (family=phase2_1_1_pra_node_ssot_check, file_count=1)
+- recent_sidecar_archives:
+  - `docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.zip` (family=archive_policy_rollout_report, manifest=`docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.manifest.json`, file_count=1)
+
+## Latest Archives By Family
+- archive_policy_rollout_report: zip=`docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.zip`, manifest=`docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.manifest.json`, created_at_kst=2026-02-27 13:52:03 +09:00, file_count=1
 
 ## Latest Files
 - `agent_system_pr1_lint_output.json`
@@ -29,14 +46,18 @@
 - `agent_system_pr1_utf8_check.txt`
 - `analysis_llm_provider_001.md`
 - `application_port_boundary_baseline_violations.json`
-- `application_port_boundary_gate.json`
-- `application_port_boundary_gate.txt`
+- `application_port_boundary_gate_20260302.json`
+- `application_port_boundary_gate_20260302.txt`
+- `archive_policy_rollout_report_20260227.txt`
 - `artifact_archive_report.json`
 - `artifact_archive_report.txt`
 - `artifact_sanitization_scan.txt`
 - `backend_auth_rbac_ops_test_output_20260221.txt`
 - `backend_bootrun_postgres_output.txt`
 - `backend_gradle_test_output.txt`
+- `backend_runtime_e2e_output.txt`
+- `backend_runtime_negative_output.txt`
+- `backend_test_full_20260302.txt`
 - `backoffice_acl_boundary_baseline.md`
 - `backoffice_acl_boundary_baseline_violations.json`
 - `backoffice_acl_boundary_gate.json`
@@ -52,6 +73,8 @@
 - `chatgpt_handoff_remediation_summary.txt`
 - `chatgpt_handoff_update_gate.json`
 - `chatgpt_handoff_update_gate.txt`
+- `check_all_20260303.txt`
+- `check_all_rerun_20260302.txt`
 - `citations_api_response.json`
 - `continuation_chatgpt_ssot_listing.txt`
 - `continuation_preflight_backend_build.txt`
@@ -77,10 +100,14 @@
 - `continuation_trigger_consistency_gate.txt`
 - `continuation_utf8_strict_gate.json`
 - `continuation_utf8_strict_gate.txt`
+- `db_backend_health_trace_gate_20260302.json`
+- `db_backend_health_trace_gate_20260302.txt`
+- `db_backend_health_with_trace_raw.txt`
+- `db_backend_health_without_trace_raw.txt`
 - `db_backup_restore_rehearsal_20260225.json`
 - `db_backup_restore_rehearsal_20260225.txt`
-- `db_local_readiness_smoke.json`
-- `db_local_readiness_smoke.txt`
+- `db_local_readiness_smoke_20260302.json`
+- `db_local_readiness_smoke_20260302.txt`
 - `ddd_refactor_backend_build_output.txt`
 - `ddd_refactor_backend_test_output.txt`
 - `ddd_refactor_baseline.patch`
@@ -117,42 +144,80 @@
 - `domain_layer_purity_burndown_summary.txt`
 - `e2e_curl_transcripts.txt`
 - `e2e_runner_stdout.txt`
+- `e2e_smoke_report_20260302_run1.json`
+- `e2e_smoke_report_20260302_run2.json`
+- `e2e_smoke_report_20260302_run3.json`
+- `e2e_smoke_report_20260303.json`
+- `e2e_smoke_report_alwayswrite_probe_20260302.json`
+- `e2e_smoke_stability_20260302.txt`
+- `e2e_smoke_trace_alwayswrite_probe_20260302.txt`
+- `e2e_smoke_trace_samples_20260302_run1.txt`
+- `e2e_smoke_trace_samples_20260302_run2.txt`
+- `e2e_smoke_trace_samples_20260302_run3.txt`
+- `e2e_smoke_trace_samples_20260303.txt`
+- `e2e_smoke_triage_20260302.md`
+- `e2e_smoke_utf8_strict_20260302.json`
+- `e2e_smoke_utf8_strict_20260302.txt`
+- `env_contract_check.json`
+- `env_contract_check.txt`
 - `frontend_auth_console_test_output_20260221.txt`
 - `frontend_build_output_20260221.txt`
 - `frontend_import_boundary_gate.json`
 - `frontend_import_boundary_gate.txt`
+- `frontend_npm_ci_20260302.txt`
 - `frontend_npm_ci_output.txt`
 - `frontend_npm_ci_pass_on_22120.txt`
 - `frontend_test_output.txt`
+- `frontend_test_run_20260302.txt`
 - `gap_closure_consistency_output.txt`
 - `github_record_and_notion_check_20260222.txt`
 - `glossary_utf8_check.txt`
+- `golive_audit_chain_verify_20260303.json`
+- `golive_audit_chain_verify_20260303.txt`
+- `golive_backend_test_20260302.txt`
 - `golive_backend_test_output.txt`
 - `golive_baseline.patch`
-- `golive_ci_gate_status.txt`
+- `golive_chatgpt_doc_lint_20260302.json`
+- `golive_chatgpt_doc_lint_20260302.txt`
+- `golive_ci_gate_status_20260302.txt`
 - `golive_dirty_delta.txt`
+- `golive_fixed_artifact_paths_20260302.json`
+- `golive_fixed_artifact_paths_20260302.txt`
+- `golive_frontend_build_20260302.txt`
 - `golive_frontend_build_output.txt`
+- `golive_frontend_npm_ci_20260302.txt`
 - `golive_frontend_npm_ci_output.txt`
+- `golive_frontend_test_20260302.txt`
 - `golive_frontend_test_output.txt`
 - `golive_git_status_start.txt`
 - `golive_node_version.txt`
+- `golive_node_versions_20260302.txt`
+- `golive_notion_manual_gate_20260302.json`
+- `golive_notion_manual_gate_20260302.txt`
 - `golive_notion_manual_sync_patch.md`
 - `golive_notion_sync_status.txt`
 - `golive_phase2_api_coverage.txt`
+- `golive_runbook_dryrun_20260302.txt`
+- `golive_spec_consistency_20260302.txt`
 - `golive_spec_consistency_after.txt`
 - `golive_spec_consistency_before.txt`
 - `golive_utf8_check.txt`
+- `golive_utf8_strict_20260302.json`
+- `golive_utf8_strict_20260302.txt`
+- `golive_verification_pack_consistency_20260302.txt`
 - `handoff_update_gate.json`
 - `handoff_update_gate.txt`
 - `idempotency_409_proof.txt`
 - `idempotency_negative_422.txt`
 - `idempotency_redis_e2e.txt`
+- `kb_pipeline_integration_20260302.txt`
 - `legacy_package_blocker.json`
 - `legacy_package_blocker.txt`
 - `mapper_namespace_gate.json`
 - `mapper_namespace_gate.txt`
 - `metrics_raw.txt`
 - `metrics_report.md`
+- `mvp_verification_pack_consistency_20260302.txt`
 - `mybatis_dollar_scan_output.txt`
 - `node22_unicode_mirror_helper_smoke.txt`
 - `node22_unicode_workspace_repro.txt`
@@ -161,8 +226,7 @@
 - `node_version_check.txt`
 - `notion_blocked_status.json`
 - `notion_manual_patch.md`
-- `ops_trend_report.json`
-- `ops_trend_report.txt`
+- `notion_sync_evidence_20260303.md`
 - `orchestrator_control_backend_impl_summary.txt`
 - `orchestrator_control_backend_impl_test_output.txt`
 - `orchestrator_control_backend_test_output.txt`
@@ -190,6 +254,21 @@
 - `orchestrator_control_unittest_manual_hook.txt`
 - `orchestrator_control_utf8_check.txt`
 - `orchestrator_control_utf8_check_current.txt`
+- `perf_sse_gate_20260302_actual.txt`
+- `perf_sse_gate_20260303.json`
+- `perf_sse_gate_20260303.txt`
+- `perf_sse_gate_20260303_actual.json`
+- `perf_sse_gate_alias_guard_probe_20260303.json`
+- `perf_sse_gate_alias_guard_probe_20260303.txt`
+- `perf_sse_gate_docker_probe_20260303.json`
+- `perf_sse_gate_docker_probe_20260303.txt`
+- `perf_sse_gate_missing_probe_20260302.txt`
+- `perf_sse_gate_preflight_order_probe_20260303.json`
+- `perf_sse_gate_preflight_order_probe_20260303.txt`
+- `perf_sse_gate_repro_20260302.txt`
+- `perf_sse_gate_target_probe_20260303.json`
+- `perf_sse_gate_target_probe_20260303.txt`
+- `perf_sse_gate_target_unreachable_20260302.txt`
 - `phase2_1_1_backend_test_202603XX.txt`
 - `phase2_1_1_backend_test_output.txt`
 - `phase2_1_1_baseline.patch`
@@ -323,29 +402,81 @@
 - `phase2_spec_consistency_output_202603XX.txt`
 - `phase2_utf8_check_202603XX.txt`
 - `pii_masking_checks.txt`
+- `prod_deploy_preflight_20260302.txt`
+- `prod_deploy_smoke_20260303.json`
+- `prod_deploy_smoke_20260303.txt`
+- `prod_deploy_utf8_gate_20260302.json`
+- `prod_deploy_utf8_gate_20260302.txt`
 - `project_full_report_utf8_check_20260221.txt`
 - `provider_evidence_consistency_output.txt`
+- `provider_regression_backend.log`
 - `provider_regression_exit_code.txt`
 - `provider_regression_gap_closure_output.txt`
+- `provider_regression_ollama.log`
 - `provider_regression_ollama_PASS_20260219_003600Z.txt`
 - `python_sse_test_output.txt`
+- `quality_snapshot_20260227.md`
 - `quality_workpack_validation_summary.txt`
+- `rag_regression_analysis_20260303.md`
+- `rag_regression_determinism_20260302.txt`
+- `rag_regression_gate_20260302_run1.json`
+- `rag_regression_gate_20260302_run1.txt`
+- `rag_regression_gate_20260302_run2.json`
+- `rag_regression_gate_20260302_run2.txt`
+- `rag_regression_gate_20260302_run3.json`
+- `rag_regression_gate_20260302_run3.txt`
+- `rag_regression_gate_20260303.json`
+- `rag_regression_gate_20260303.txt`
+- `rag_regression_utf8_strict_20260302.json`
+- `rag_regression_utf8_strict_20260302.txt`
 - `rbac_401_403_checks.txt`
 - `release_check_report.json`
+- `release_gate_dashboard.json`
+- `release_gate_dashboard.md`
+- `release_gate_dashboard_rollout_report_20260228.txt`
 - `remaining_non_utf8_files.json`
 - `remaining_non_utf8_files.txt`
 - `scaffold_contract_smoke.json`
 - `scaffold_contract_smoke.txt`
+- `spec_consistency_check_20260303.json`
+- `spec_consistency_check_20260303.txt`
 - `spec_consistency_check_pass.txt`
 - `spec_consistency_check_report.json`
 - `spec_consistency_check_report.txt`
+- `spec_cov_backend_gradle_test_20260302.txt`
+- `spec_cov_frontend_build_20260302.txt`
+- `spec_cov_frontend_mirror_build_20260302.txt`
+- `spec_cov_frontend_mirror_test_20260302.txt`
+- `spec_cov_frontend_mirror_test_run_20260302.txt`
+- `spec_cov_frontend_npm_ci_20260302.txt`
+- `spec_cov_frontend_npm_ci_engine_relaxed_20260302.txt`
+- `spec_cov_frontend_test_run_20260302.txt`
+- `spec_cov_negative_tests_20260302.txt`
+- `spec_cov_sse_concurrency_20260302.txt`
+- `spec_impl_coverage_gate.json`
+- `spec_impl_coverage_gate.txt`
+- `spec_impl_coverage_gate_rerun_20260302.txt`
+- `spec_impl_coverage_report.json`
+- `spec_impl_coverage_report.md`
+- `spec_impl_coverage_report.txt`
+- `spec_impl_coverage_report_rerun_20260302.txt`
+- `spec_impl_coverage_rollout_report_20260301.txt`
 - `spec_only_notion_exception_e2e_simulation.txt`
+- `spec_sync_gate_20260303.json`
+- `spec_sync_gate_20260303.txt`
 - `spec_sync_report_gate.json`
 - `spec_sync_report_gate.txt`
 - `sse_concurrency_attempts.txt`
 - `sse_concurrency_contract_test_output.txt`
+- `sse_concurrency_real_limit_backend.log`
 - `sse_concurrency_real_limit_proof.txt`
+- `sse_resume_fault_injection.log`
+- `sse_resume_proof.log`
+- `sse_stream_fail_closed.log`
+- `sse_stream_normal.log`
+- `status_onepager.md`
 - `tenant_isolation_403_checks.txt`
+- `tmp_mirror_smoke.txt`
 - `trace_id_checks.txt`
 - `utf16_normalization_report.md`
 - `utf8_bom_normalization_report.md`
@@ -355,30 +486,76 @@
 - `utf8_full_scan_current.txt`
 - `utf8_full_scan_ratchet_gate.json`
 - `utf8_full_scan_ratchet_gate.txt`
+- `utf8_normalization_quality_snapshot_report.json`
+- `utf8_normalization_quality_snapshot_report.md`
 - `utf8_normalization_wave10_dryrun.json`
 - `utf8_normalization_wave10_dryrun.md`
 - `utf8_normalization_wave10_report.json`
 - `utf8_normalization_wave10_report.md`
 - `uuid_cast_scan_output.txt`
+- `vector_bench_application_port_boundary_gate.txt`
+- `vector_bench_artifact_index_check.txt`
+- `vector_bench_artifact_index_refresh.txt`
+- `vector_bench_chatgpt_doc_lint.txt`
+- `vector_bench_chatgpt_handoff_gate.txt`
+- `vector_bench_domain_boundary_gate.txt`
+- `vector_bench_monitoring_gate.json`
+- `vector_bench_monitoring_gate.txt`
+- `vector_bench_node22_mirror_smoke.txt`
+- `vector_bench_spec_consistency_check.txt`
+- `vector_bench_spec_sync_gate.txt`
+- `vector_bench_utf8_strict_gate.txt`
+- `vector_bench_workflow_tests.txt`
+- `vector_recall_latency_bench_20260301.json`
+- `vector_recall_latency_bench_20260301.txt`
+- `verify_all_20260303.txt`
+- `verify_all_rerun_20260302.txt`
 - `workpack_agent_contract_v2.json`
 - `workpack_agent_contract_v2.txt`
+- `worktree_cleanup_report_20260302.md`
+- `worktree_preflight_snapshot_20260301.txt`
 
 ## Archive Candidates (Optional)
-- (none)
+- `application_port_boundary_gate.json`
+- `application_port_boundary_gate.txt`
+- `db_backend_health_trace_gate.json`
+- `db_backend_health_trace_gate.txt`
+- `db_local_readiness_smoke.json`
+- `db_local_readiness_smoke.txt`
+- `e2e_smoke_report_20260302.json`
+- `e2e_smoke_trace_samples_20260302.txt`
+- `golive_audit_chain_verify_20260302.json`
+- `golive_audit_chain_verify_20260302.txt`
+- `golive_ci_gate_status.txt`
+- `notion_sync_evidence_20260228.md`
+- `notion_sync_evidence_20260301.md`
+- `notion_sync_evidence_20260302.md`
+- `perf_sse_gate_20260302.txt`
+- `perf_sse_gate_20260302_actual.json`
+- `prod_deploy_smoke_20260302.json`
+- `prod_deploy_smoke_20260302.txt`
+- `rag_regression_analysis_20260302.md`
+- `rag_regression_gate_20260302.json`
+- `rag_regression_gate_20260302.txt`
+- `vector_recall_latency_bench_20260227.json`
+- `vector_recall_latency_bench_20260227.txt`
 
 ## Group: gate
-- family_count: 23
+- family_count: 50
 
 ### application_port_boundary_gate
-- file_count: 2
+- file_count: 4
 - latest_by_extension:
-  - `.json`: `application_port_boundary_gate.json`
-  - `.txt`: `application_port_boundary_gate.txt`
+  - `.json`: `application_port_boundary_gate_20260302.json`
+  - `.txt`: `application_port_boundary_gate_20260302.txt`
 - archive_candidates:
-  - (none)
+  - `application_port_boundary_gate.json`
+  - `application_port_boundary_gate.txt`
 - files:
   - `application_port_boundary_gate.json`
   - `application_port_boundary_gate.txt`
+  - `application_port_boundary_gate_20260302.json`
+  - `application_port_boundary_gate_20260302.txt`
 
 ### backoffice_acl_boundary_gate
 - file_count: 2
@@ -424,6 +601,20 @@
   - `continuation_utf8_strict_gate.json`
   - `continuation_utf8_strict_gate.txt`
 
+### db_backend_health_trace_gate
+- file_count: 4
+- latest_by_extension:
+  - `.json`: `db_backend_health_trace_gate_20260302.json`
+  - `.txt`: `db_backend_health_trace_gate_20260302.txt`
+- archive_candidates:
+  - `db_backend_health_trace_gate.json`
+  - `db_backend_health_trace_gate.txt`
+- files:
+  - `db_backend_health_trace_gate.json`
+  - `db_backend_health_trace_gate.txt`
+  - `db_backend_health_trace_gate_20260302.json`
+  - `db_backend_health_trace_gate_20260302.txt`
+
 ### ddd_refactor_docs_validation_gate_lint
 - file_count: 2
 - latest_by_extension:
@@ -467,13 +658,25 @@
   - `frontend_import_boundary_gate.txt`
 
 ### golive_ci_gate_status
-- file_count: 1
+- file_count: 2
 - latest_by_extension:
-  - `.txt`: `golive_ci_gate_status.txt`
+  - `.txt`: `golive_ci_gate_status_20260302.txt`
+- archive_candidates:
+  - `golive_ci_gate_status.txt`
+- files:
+  - `golive_ci_gate_status.txt`
+  - `golive_ci_gate_status_20260302.txt`
+
+### golive_notion_manual_gate
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `golive_notion_manual_gate_20260302.json`
+  - `.txt`: `golive_notion_manual_gate_20260302.txt`
 - archive_candidates:
   - (none)
 - files:
-  - `golive_ci_gate_status.txt`
+  - `golive_notion_manual_gate_20260302.json`
+  - `golive_notion_manual_gate_20260302.txt`
 
 ### handoff_update_gate
 - file_count: 2
@@ -527,6 +730,101 @@
 - files:
   - `orchestrator_control_notion_manual_gate.json`
   - `orchestrator_control_notion_manual_gate.txt`
+
+### perf_sse_gate
+- file_count: 3
+- latest_by_extension:
+  - `.json`: `perf_sse_gate_20260303.json`
+  - `.txt`: `perf_sse_gate_20260303.txt`
+- archive_candidates:
+  - `perf_sse_gate_20260302.txt`
+- files:
+  - `perf_sse_gate_20260302.txt`
+  - `perf_sse_gate_20260303.json`
+  - `perf_sse_gate_20260303.txt`
+
+### perf_sse_gate_DATE_actual
+- file_count: 3
+- latest_by_extension:
+  - `.json`: `perf_sse_gate_20260303_actual.json`
+  - `.txt`: `perf_sse_gate_20260302_actual.txt`
+- archive_candidates:
+  - `perf_sse_gate_20260302_actual.json`
+- files:
+  - `perf_sse_gate_20260302_actual.json`
+  - `perf_sse_gate_20260302_actual.txt`
+  - `perf_sse_gate_20260303_actual.json`
+
+### perf_sse_gate_alias_guard_probe
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `perf_sse_gate_alias_guard_probe_20260303.json`
+  - `.txt`: `perf_sse_gate_alias_guard_probe_20260303.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `perf_sse_gate_alias_guard_probe_20260303.json`
+  - `perf_sse_gate_alias_guard_probe_20260303.txt`
+
+### perf_sse_gate_docker_probe
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `perf_sse_gate_docker_probe_20260303.json`
+  - `.txt`: `perf_sse_gate_docker_probe_20260303.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `perf_sse_gate_docker_probe_20260303.json`
+  - `perf_sse_gate_docker_probe_20260303.txt`
+
+### perf_sse_gate_missing_probe
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `perf_sse_gate_missing_probe_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `perf_sse_gate_missing_probe_20260302.txt`
+
+### perf_sse_gate_preflight_order_probe
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `perf_sse_gate_preflight_order_probe_20260303.json`
+  - `.txt`: `perf_sse_gate_preflight_order_probe_20260303.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `perf_sse_gate_preflight_order_probe_20260303.json`
+  - `perf_sse_gate_preflight_order_probe_20260303.txt`
+
+### perf_sse_gate_repro
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `perf_sse_gate_repro_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `perf_sse_gate_repro_20260302.txt`
+
+### perf_sse_gate_target_probe
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `perf_sse_gate_target_probe_20260303.json`
+  - `.txt`: `perf_sse_gate_target_probe_20260303.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `perf_sse_gate_target_probe_20260303.json`
+  - `perf_sse_gate_target_probe_20260303.txt`
+
+### perf_sse_gate_target_unreachable
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `perf_sse_gate_target_unreachable_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `perf_sse_gate_target_unreachable_20260302.txt`
 
 ### phase2_1_1_ci_gate_summary
 - file_count: 1
@@ -586,6 +884,115 @@
 - files:
   - `phase2_1_pr1_notion_gate_context_202603XX.json`
 
+### prod_deploy_utf8_gate
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `prod_deploy_utf8_gate_20260302.json`
+  - `.txt`: `prod_deploy_utf8_gate_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `prod_deploy_utf8_gate_20260302.json`
+  - `prod_deploy_utf8_gate_20260302.txt`
+
+### rag_regression_gate
+- file_count: 4
+- latest_by_extension:
+  - `.json`: `rag_regression_gate_20260303.json`
+  - `.txt`: `rag_regression_gate_20260303.txt`
+- archive_candidates:
+  - `rag_regression_gate_20260302.json`
+  - `rag_regression_gate_20260302.txt`
+- files:
+  - `rag_regression_gate_20260302.json`
+  - `rag_regression_gate_20260302.txt`
+  - `rag_regression_gate_20260303.json`
+  - `rag_regression_gate_20260303.txt`
+
+### rag_regression_gate_DATE_run1
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `rag_regression_gate_20260302_run1.json`
+  - `.txt`: `rag_regression_gate_20260302_run1.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `rag_regression_gate_20260302_run1.json`
+  - `rag_regression_gate_20260302_run1.txt`
+
+### rag_regression_gate_DATE_run2
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `rag_regression_gate_20260302_run2.json`
+  - `.txt`: `rag_regression_gate_20260302_run2.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `rag_regression_gate_20260302_run2.json`
+  - `rag_regression_gate_20260302_run2.txt`
+
+### rag_regression_gate_DATE_run3
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `rag_regression_gate_20260302_run3.json`
+  - `.txt`: `rag_regression_gate_20260302_run3.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `rag_regression_gate_20260302_run3.json`
+  - `rag_regression_gate_20260302_run3.txt`
+
+### release_gate_dashboard
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `release_gate_dashboard.json`
+  - `.md`: `release_gate_dashboard.md`
+- archive_candidates:
+  - (none)
+- files:
+  - `release_gate_dashboard.json`
+  - `release_gate_dashboard.md`
+
+### release_gate_dashboard_rollout_report
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `release_gate_dashboard_rollout_report_20260228.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `release_gate_dashboard_rollout_report_20260228.txt`
+
+### spec_impl_coverage_gate
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `spec_impl_coverage_gate.json`
+  - `.txt`: `spec_impl_coverage_gate.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_impl_coverage_gate.json`
+  - `spec_impl_coverage_gate.txt`
+
+### spec_impl_coverage_gate_rerun
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_impl_coverage_gate_rerun_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_impl_coverage_gate_rerun_20260302.txt`
+
+### spec_sync_gate
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `spec_sync_gate_20260303.json`
+  - `.txt`: `spec_sync_gate_20260303.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_sync_gate_20260303.json`
+  - `spec_sync_gate_20260303.txt`
+
 ### spec_sync_report_gate
 - file_count: 2
 - latest_by_extension:
@@ -608,8 +1015,74 @@
   - `utf8_full_scan_ratchet_gate.json`
   - `utf8_full_scan_ratchet_gate.txt`
 
+### vector_bench_application_port_boundary_gate
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_application_port_boundary_gate.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_application_port_boundary_gate.txt`
+
+### vector_bench_chatgpt_handoff_gate
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_chatgpt_handoff_gate.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_chatgpt_handoff_gate.txt`
+
+### vector_bench_domain_boundary_gate
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_domain_boundary_gate.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_domain_boundary_gate.txt`
+
+### vector_bench_monitoring_gate
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `vector_bench_monitoring_gate.json`
+  - `.txt`: `vector_bench_monitoring_gate.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_monitoring_gate.json`
+  - `vector_bench_monitoring_gate.txt`
+
+### vector_bench_spec_sync_gate
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_spec_sync_gate.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_spec_sync_gate.txt`
+
+### vector_bench_utf8_strict_gate
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_utf8_strict_gate.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_utf8_strict_gate.txt`
+
 ## Group: report
-- family_count: 9
+- family_count: 19
+
+### archive_policy_rollout_report
+- file_count: 2
+- latest_by_extension:
+  - `.txt`: `archive_policy_rollout_report_20260227.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `archive_policy_rollout_report_20260220.txt`
+  - `archive_policy_rollout_report_20260227.txt`
 
 ### artifact_archive_report
 - file_count: 2
@@ -622,6 +1095,52 @@
   - `artifact_archive_report.json`
   - `artifact_archive_report.txt`
 
+### e2e_smoke_report
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `e2e_smoke_report_20260303.json`
+- archive_candidates:
+  - `e2e_smoke_report_20260302.json`
+- files:
+  - `e2e_smoke_report_20260302.json`
+  - `e2e_smoke_report_20260303.json`
+
+### e2e_smoke_report_DATE_run1
+- file_count: 1
+- latest_by_extension:
+  - `.json`: `e2e_smoke_report_20260302_run1.json`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_report_20260302_run1.json`
+
+### e2e_smoke_report_DATE_run2
+- file_count: 1
+- latest_by_extension:
+  - `.json`: `e2e_smoke_report_20260302_run2.json`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_report_20260302_run2.json`
+
+### e2e_smoke_report_DATE_run3
+- file_count: 1
+- latest_by_extension:
+  - `.json`: `e2e_smoke_report_20260302_run3.json`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_report_20260302_run3.json`
+
+### e2e_smoke_report_alwayswrite_probe
+- file_count: 1
+- latest_by_extension:
+  - `.json`: `e2e_smoke_report_alwayswrite_probe_20260302.json`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_report_alwayswrite_probe_20260302.json`
+
 ### metrics_report
 - file_count: 1
 - latest_by_extension:
@@ -630,17 +1149,6 @@
   - (none)
 - files:
   - `metrics_report.md`
-
-### ops_trend_report
-- file_count: 2
-- latest_by_extension:
-  - `.json`: `ops_trend_report.json`
-  - `.txt`: `ops_trend_report.txt`
-- archive_candidates:
-  - (none)
-- files:
-  - `ops_trend_report.json`
-  - `ops_trend_report.txt`
 
 ### project_full_report_utf8_check
 - file_count: 1
@@ -671,6 +1179,37 @@
   - `spec_consistency_check_report.json`
   - `spec_consistency_check_report.txt`
 
+### spec_impl_coverage_report
+- file_count: 3
+- latest_by_extension:
+  - `.json`: `spec_impl_coverage_report.json`
+  - `.md`: `spec_impl_coverage_report.md`
+  - `.txt`: `spec_impl_coverage_report.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_impl_coverage_report.json`
+  - `spec_impl_coverage_report.md`
+  - `spec_impl_coverage_report.txt`
+
+### spec_impl_coverage_report_rerun
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_impl_coverage_report_rerun_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_impl_coverage_report_rerun_20260302.txt`
+
+### spec_impl_coverage_rollout_report
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_impl_coverage_rollout_report_20260301.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_impl_coverage_rollout_report_20260301.txt`
+
 ### utf16_normalization_report
 - file_count: 1
 - latest_by_extension:
@@ -689,6 +1228,17 @@
 - files:
   - `utf8_bom_normalization_report.md`
 
+### utf8_normalization_quality_snapshot_report
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `utf8_normalization_quality_snapshot_report.json`
+  - `.md`: `utf8_normalization_quality_snapshot_report.md`
+- archive_candidates:
+  - (none)
+- files:
+  - `utf8_normalization_quality_snapshot_report.json`
+  - `utf8_normalization_quality_snapshot_report.md`
+
 ### utf8_normalization_waveN_report
 - file_count: 2
 - latest_by_extension:
@@ -699,6 +1249,15 @@
 - files:
   - `utf8_normalization_wave10_report.json`
   - `utf8_normalization_wave10_report.md`
+
+### worktree_cleanup_report
+- file_count: 1
+- latest_by_extension:
+  - `.md`: `worktree_cleanup_report_20260302.md`
+- archive_candidates:
+  - (none)
+- files:
+  - `worktree_cleanup_report_20260302.md`
 
 ## Group: summary
 - family_count: 7
@@ -767,7 +1326,7 @@
   - `quality_workpack_validation_summary.txt`
 
 ## Group: evidence
-- family_count: 116
+- family_count: 138
 
 ### agent_system_pr1_lint_output
 - file_count: 2
@@ -825,6 +1384,24 @@
 - files:
   - `backend_gradle_test_output.txt`
 
+### backend_runtime_e2e_output
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `backend_runtime_e2e_output.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `backend_runtime_e2e_output.txt`
+
+### backend_runtime_negative_output
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `backend_runtime_negative_output.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `backend_runtime_negative_output.txt`
+
 ### branch_protection_check
 - file_count: 1
 - latest_by_extension:
@@ -854,16 +1431,37 @@
   - `chatgpt_doc_lint_manual.json`
   - `chatgpt_doc_lint_manual.txt`
 
-### db_local_readiness_smoke
-- file_count: 2
+### check_all
+- file_count: 1
 - latest_by_extension:
-  - `.json`: `db_local_readiness_smoke.json`
-  - `.txt`: `db_local_readiness_smoke.txt`
+  - `.txt`: `check_all_20260303.txt`
 - archive_candidates:
   - (none)
 - files:
+  - `check_all_20260303.txt`
+
+### check_all_rerun
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `check_all_rerun_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `check_all_rerun_20260302.txt`
+
+### db_local_readiness_smoke
+- file_count: 4
+- latest_by_extension:
+  - `.json`: `db_local_readiness_smoke_20260302.json`
+  - `.txt`: `db_local_readiness_smoke_20260302.txt`
+- archive_candidates:
   - `db_local_readiness_smoke.json`
   - `db_local_readiness_smoke.txt`
+- files:
+  - `db_local_readiness_smoke.json`
+  - `db_local_readiness_smoke.txt`
+  - `db_local_readiness_smoke_20260302.json`
+  - `db_local_readiness_smoke_20260302.txt`
 
 ### ddd_refactor_backend_build_output
 - file_count: 1
@@ -977,6 +1575,92 @@
 - files:
   - `ddd_refactor_utf8_check.txt`
 
+### e2e_smoke_stability
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `e2e_smoke_stability_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_stability_20260302.txt`
+
+### e2e_smoke_trace_alwayswrite_probe
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `e2e_smoke_trace_alwayswrite_probe_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_trace_alwayswrite_probe_20260302.txt`
+
+### e2e_smoke_trace_samples
+- file_count: 2
+- latest_by_extension:
+  - `.txt`: `e2e_smoke_trace_samples_20260303.txt`
+- archive_candidates:
+  - `e2e_smoke_trace_samples_20260302.txt`
+- files:
+  - `e2e_smoke_trace_samples_20260302.txt`
+  - `e2e_smoke_trace_samples_20260303.txt`
+
+### e2e_smoke_trace_samples_DATE_run1
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `e2e_smoke_trace_samples_20260302_run1.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_trace_samples_20260302_run1.txt`
+
+### e2e_smoke_trace_samples_DATE_run2
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `e2e_smoke_trace_samples_20260302_run2.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_trace_samples_20260302_run2.txt`
+
+### e2e_smoke_trace_samples_DATE_run3
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `e2e_smoke_trace_samples_20260302_run3.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_trace_samples_20260302_run3.txt`
+
+### e2e_smoke_triage
+- file_count: 1
+- latest_by_extension:
+  - `.md`: `e2e_smoke_triage_20260302.md`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_triage_20260302.md`
+
+### e2e_smoke_utf8_strict
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `e2e_smoke_utf8_strict_20260302.json`
+  - `.txt`: `e2e_smoke_utf8_strict_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `e2e_smoke_utf8_strict_20260302.json`
+  - `e2e_smoke_utf8_strict_20260302.txt`
+
+### env_contract_check
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `env_contract_check.json`
+  - `.txt`: `env_contract_check.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `env_contract_check.json`
+  - `env_contract_check.txt`
+
 ### frontend_auth_console_test_output
 - file_count: 1
 - latest_by_extension:
@@ -1049,6 +1733,17 @@
   - (none)
 - files:
   - `golive_backend_test_output.txt`
+
+### golive_chatgpt_doc_lint
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `golive_chatgpt_doc_lint_20260302.json`
+  - `.txt`: `golive_chatgpt_doc_lint_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_chatgpt_doc_lint_20260302.json`
+  - `golive_chatgpt_doc_lint_20260302.txt`
 
 ### golive_frontend_build_output
 - file_count: 1
@@ -1736,6 +2431,20 @@
 - files:
   - `pii_masking_checks.txt`
 
+### prod_deploy_smoke
+- file_count: 4
+- latest_by_extension:
+  - `.json`: `prod_deploy_smoke_20260303.json`
+  - `.txt`: `prod_deploy_smoke_20260303.txt`
+- archive_candidates:
+  - `prod_deploy_smoke_20260302.json`
+  - `prod_deploy_smoke_20260302.txt`
+- files:
+  - `prod_deploy_smoke_20260302.json`
+  - `prod_deploy_smoke_20260302.txt`
+  - `prod_deploy_smoke_20260303.json`
+  - `prod_deploy_smoke_20260303.txt`
+
 ### provider_evidence_consistency_output
 - file_count: 1
 - latest_by_extension:
@@ -1783,6 +2492,17 @@
   - `scaffold_contract_smoke.json`
   - `scaffold_contract_smoke.txt`
 
+### spec_consistency_check
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `spec_consistency_check_20260303.json`
+  - `.txt`: `spec_consistency_check_20260303.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_consistency_check_20260303.json`
+  - `spec_consistency_check_20260303.txt`
+
 ### spec_consistency_check_pass
 - file_count: 1
 - latest_by_extension:
@@ -1801,6 +2521,15 @@
 - files:
   - `sse_concurrency_contract_test_output.txt`
 
+### status_onepager
+- file_count: 1
+- latest_by_extension:
+  - `.md`: `status_onepager.md`
+- archive_candidates:
+  - (none)
+- files:
+  - `status_onepager.md`
+
 ### tenant_isolation_403_checks
 - file_count: 1
 - latest_by_extension:
@@ -1809,6 +2538,15 @@
   - (none)
 - files:
   - `tenant_isolation_403_checks.txt`
+
+### tmp_mirror_smoke
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `tmp_mirror_smoke.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `tmp_mirror_smoke.txt`
 
 ### trace_id_checks
 - file_count: 1
@@ -1848,8 +2586,44 @@
 - files:
   - `uuid_cast_scan_output.txt`
 
+### vector_bench_artifact_index_check
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_artifact_index_check.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_artifact_index_check.txt`
+
+### vector_bench_chatgpt_doc_lint
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_chatgpt_doc_lint.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_chatgpt_doc_lint.txt`
+
+### vector_bench_node22_mirror_smoke
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_node22_mirror_smoke.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_node22_mirror_smoke.txt`
+
+### vector_bench_spec_consistency_check
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_spec_consistency_check.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_spec_consistency_check.txt`
+
 ## Group: misc
-- family_count: 135
+- family_count: 182
 
 ### analysis_llm_provider_001
 - file_count: 1
@@ -1868,6 +2642,15 @@
   - (none)
 - files:
   - `application_port_boundary_baseline_violations.json`
+
+### backend_test_full
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `backend_test_full_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `backend_test_full_20260302.txt`
 
 ### backoffice_acl_boundary_baseline
 - file_count: 1
@@ -2075,6 +2858,24 @@
   - `continuation_preflight_utf8_strict.json`
   - `continuation_preflight_utf8_strict.txt`
 
+### db_backend_health_with_trace_raw
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `db_backend_health_with_trace_raw.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `db_backend_health_with_trace_raw.txt`
+
+### db_backend_health_without_trace_raw
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `db_backend_health_without_trace_raw.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `db_backend_health_without_trace_raw.txt`
+
 ### db_backup_restore_rehearsal
 - file_count: 2
 - latest_by_extension:
@@ -2230,6 +3031,15 @@
 - files:
   - `e2e_runner_stdout.txt`
 
+### frontend_npm_ci
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `frontend_npm_ci_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `frontend_npm_ci_20260302.txt`
+
 ### frontend_npm_ci_pass_on_22120
 - file_count: 1
 - latest_by_extension:
@@ -2238,6 +3048,38 @@
   - (none)
 - files:
   - `frontend_npm_ci_pass_on_22120.txt`
+
+### frontend_test_run
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `frontend_test_run_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `frontend_test_run_20260302.txt`
+
+### golive_audit_chain_verify
+- file_count: 4
+- latest_by_extension:
+  - `.json`: `golive_audit_chain_verify_20260303.json`
+  - `.txt`: `golive_audit_chain_verify_20260303.txt`
+- archive_candidates:
+  - `golive_audit_chain_verify_20260302.json`
+  - `golive_audit_chain_verify_20260302.txt`
+- files:
+  - `golive_audit_chain_verify_20260302.json`
+  - `golive_audit_chain_verify_20260302.txt`
+  - `golive_audit_chain_verify_20260303.json`
+  - `golive_audit_chain_verify_20260303.txt`
+
+### golive_backend_test
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `golive_backend_test_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_backend_test_20260302.txt`
 
 ### golive_baseline
 - file_count: 1
@@ -2257,6 +3099,44 @@
 - files:
   - `golive_dirty_delta.txt`
 
+### golive_fixed_artifact_paths
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `golive_fixed_artifact_paths_20260302.json`
+  - `.txt`: `golive_fixed_artifact_paths_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_fixed_artifact_paths_20260302.json`
+  - `golive_fixed_artifact_paths_20260302.txt`
+
+### golive_frontend_build
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `golive_frontend_build_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_frontend_build_20260302.txt`
+
+### golive_frontend_npm_ci
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `golive_frontend_npm_ci_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_frontend_npm_ci_20260302.txt`
+
+### golive_frontend_test
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `golive_frontend_test_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_frontend_test_20260302.txt`
+
 ### golive_node_version
 - file_count: 1
 - latest_by_extension:
@@ -2265,6 +3145,15 @@
   - (none)
 - files:
   - `golive_node_version.txt`
+
+### golive_node_versions
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `golive_node_versions_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_node_versions_20260302.txt`
 
 ### golive_notion_manual_sync_patch
 - file_count: 1
@@ -2284,6 +3173,24 @@
 - files:
   - `golive_phase2_api_coverage.txt`
 
+### golive_runbook_dryrun
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `golive_runbook_dryrun_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_runbook_dryrun_20260302.txt`
+
+### golive_spec_consistency
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `golive_spec_consistency_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_spec_consistency_20260302.txt`
+
 ### golive_spec_consistency_after
 - file_count: 1
 - latest_by_extension:
@@ -2301,6 +3208,26 @@
   - (none)
 - files:
   - `golive_spec_consistency_before.txt`
+
+### golive_utf8_strict
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `golive_utf8_strict_20260302.json`
+  - `.txt`: `golive_utf8_strict_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_utf8_strict_20260302.json`
+  - `golive_utf8_strict_20260302.txt`
+
+### golive_verification_pack_consistency
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `golive_verification_pack_consistency_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `golive_verification_pack_consistency_20260302.txt`
 
 ### idempotency_409_proof
 - file_count: 1
@@ -2329,6 +3256,15 @@
 - files:
   - `idempotency_redis_e2e.txt`
 
+### kb_pipeline_integration
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `kb_pipeline_integration_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `kb_pipeline_integration_20260302.txt`
+
 ### legacy_package_blocker
 - file_count: 2
 - latest_by_extension:
@@ -2348,6 +3284,15 @@
   - (none)
 - files:
   - `metrics_raw.txt`
+
+### mvp_verification_pack_consistency
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `mvp_verification_pack_consistency_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `mvp_verification_pack_consistency_20260302.txt`
 
 ### node22_unicode_workspace_repro
 - file_count: 1
@@ -2375,6 +3320,20 @@
   - (none)
 - files:
   - `notion_manual_patch.md`
+
+### notion_sync_evidence
+- file_count: 4
+- latest_by_extension:
+  - `.md`: `notion_sync_evidence_20260303.md`
+- archive_candidates:
+  - `notion_sync_evidence_20260228.md`
+  - `notion_sync_evidence_20260301.md`
+  - `notion_sync_evidence_20260302.md`
+- files:
+  - `notion_sync_evidence_20260228.md`
+  - `notion_sync_evidence_20260301.md`
+  - `notion_sync_evidence_20260302.md`
+  - `notion_sync_evidence_20260303.md`
 
 ### orchestrator_control_changed_files_current
 - file_count: 1
@@ -2530,12 +3489,13 @@
   - `phase2_1_1_prB_chatgpt_utf8_202603XX.txt`
 
 ### phase2_1_1_prc_notion_preflight
-- file_count: 1
+- file_count: 2
 - latest_by_extension:
   - `.json`: `phase2_1_1_prC_notion_preflight_202603XX.json`
 - archive_candidates:
   - (none)
 - files:
+  - `phase2_1_1_prC_notion_preflight.json`
   - `phase2_1_1_prC_notion_preflight_202603XX.json`
 
 ### phase2_1_1_spec_consistency
@@ -3001,6 +3961,24 @@
 - files:
   - `phase2_dirty_delta_202603XX.txt`
 
+### prod_deploy_preflight
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `prod_deploy_preflight_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `prod_deploy_preflight_20260302.txt`
+
+### provider_regression_backend
+- file_count: 1
+- latest_by_extension:
+  - `.log`: `provider_regression_backend.log`
+- archive_candidates:
+  - (none)
+- files:
+  - `provider_regression_backend.log`
+
 ### provider_regression_exit_code
 - file_count: 1
 - latest_by_extension:
@@ -3010,6 +3988,15 @@
 - files:
   - `provider_regression_exit_code.txt`
 
+### provider_regression_ollama
+- file_count: 1
+- latest_by_extension:
+  - `.log`: `provider_regression_ollama.log`
+- archive_candidates:
+  - (none)
+- files:
+  - `provider_regression_ollama.log`
+
 ### provider_regression_ollama_pass_DATE_003600z
 - file_count: 1
 - latest_by_extension:
@@ -3018,6 +4005,45 @@
   - (none)
 - files:
   - `provider_regression_ollama_PASS_20260219_003600Z.txt`
+
+### quality_snapshot
+- file_count: 1
+- latest_by_extension:
+  - `.md`: `quality_snapshot_20260227.md`
+- archive_candidates:
+  - (none)
+- files:
+  - `quality_snapshot_20260227.md`
+
+### rag_regression_analysis
+- file_count: 2
+- latest_by_extension:
+  - `.md`: `rag_regression_analysis_20260303.md`
+- archive_candidates:
+  - `rag_regression_analysis_20260302.md`
+- files:
+  - `rag_regression_analysis_20260302.md`
+  - `rag_regression_analysis_20260303.md`
+
+### rag_regression_determinism
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `rag_regression_determinism_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `rag_regression_determinism_20260302.txt`
+
+### rag_regression_utf8_strict
+- file_count: 2
+- latest_by_extension:
+  - `.json`: `rag_regression_utf8_strict_20260302.json`
+  - `.txt`: `rag_regression_utf8_strict_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `rag_regression_utf8_strict_20260302.json`
+  - `rag_regression_utf8_strict_20260302.txt`
 
 ### remaining_non_utf8_files
 - file_count: 2
@@ -3029,6 +4055,96 @@
 - files:
   - `remaining_non_utf8_files.json`
   - `remaining_non_utf8_files.txt`
+
+### spec_cov_backend_gradle_test
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_backend_gradle_test_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_backend_gradle_test_20260302.txt`
+
+### spec_cov_frontend_build
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_frontend_build_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_frontend_build_20260302.txt`
+
+### spec_cov_frontend_mirror_build
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_frontend_mirror_build_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_frontend_mirror_build_20260302.txt`
+
+### spec_cov_frontend_mirror_test
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_frontend_mirror_test_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_frontend_mirror_test_20260302.txt`
+
+### spec_cov_frontend_mirror_test_run
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_frontend_mirror_test_run_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_frontend_mirror_test_run_20260302.txt`
+
+### spec_cov_frontend_npm_ci
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_frontend_npm_ci_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_frontend_npm_ci_20260302.txt`
+
+### spec_cov_frontend_npm_ci_engine_relaxed
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_frontend_npm_ci_engine_relaxed_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_frontend_npm_ci_engine_relaxed_20260302.txt`
+
+### spec_cov_frontend_test_run
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_frontend_test_run_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_frontend_test_run_20260302.txt`
+
+### spec_cov_negative_tests
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_negative_tests_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_negative_tests_20260302.txt`
+
+### spec_cov_sse_concurrency
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `spec_cov_sse_concurrency_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `spec_cov_sse_concurrency_20260302.txt`
 
 ### spec_only_notion_exception_e2e_simulation
 - file_count: 1
@@ -3048,6 +4164,15 @@
 - files:
   - `sse_concurrency_attempts.txt`
 
+### sse_concurrency_real_limit_backend
+- file_count: 1
+- latest_by_extension:
+  - `.log`: `sse_concurrency_real_limit_backend.log`
+- archive_candidates:
+  - (none)
+- files:
+  - `sse_concurrency_real_limit_backend.log`
+
 ### sse_concurrency_real_limit_proof
 - file_count: 1
 - latest_by_extension:
@@ -3056,6 +4181,42 @@
   - (none)
 - files:
   - `sse_concurrency_real_limit_proof.txt`
+
+### sse_resume_fault_injection
+- file_count: 1
+- latest_by_extension:
+  - `.log`: `sse_resume_fault_injection.log`
+- archive_candidates:
+  - (none)
+- files:
+  - `sse_resume_fault_injection.log`
+
+### sse_resume_proof
+- file_count: 1
+- latest_by_extension:
+  - `.log`: `sse_resume_proof.log`
+- archive_candidates:
+  - (none)
+- files:
+  - `sse_resume_proof.log`
+
+### sse_stream_fail_closed
+- file_count: 1
+- latest_by_extension:
+  - `.log`: `sse_stream_fail_closed.log`
+- archive_candidates:
+  - (none)
+- files:
+  - `sse_stream_fail_closed.log`
+
+### sse_stream_normal
+- file_count: 1
+- latest_by_extension:
+  - `.log`: `sse_stream_normal.log`
+- archive_candidates:
+  - (none)
+- files:
+  - `sse_stream_normal.log`
 
 ### utf8_burndown_blocked_residuals
 - file_count: 1
@@ -3077,6 +4238,56 @@
   - `utf8_normalization_wave10_dryrun.json`
   - `utf8_normalization_wave10_dryrun.md`
 
+### vector_bench_artifact_index_refresh
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_artifact_index_refresh.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_artifact_index_refresh.txt`
+
+### vector_bench_workflow_tests
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `vector_bench_workflow_tests.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `vector_bench_workflow_tests.txt`
+
+### vector_recall_latency_bench
+- file_count: 4
+- latest_by_extension:
+  - `.json`: `vector_recall_latency_bench_20260301.json`
+  - `.txt`: `vector_recall_latency_bench_20260301.txt`
+- archive_candidates:
+  - `vector_recall_latency_bench_20260227.json`
+  - `vector_recall_latency_bench_20260227.txt`
+- files:
+  - `vector_recall_latency_bench_20260227.json`
+  - `vector_recall_latency_bench_20260227.txt`
+  - `vector_recall_latency_bench_20260301.json`
+  - `vector_recall_latency_bench_20260301.txt`
+
+### verify_all
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `verify_all_20260303.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `verify_all_20260303.txt`
+
+### verify_all_rerun
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `verify_all_rerun_20260302.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `verify_all_rerun_20260302.txt`
+
 ### workpack_agent_contract_v2
 - file_count: 2
 - latest_by_extension:
@@ -3087,3 +4298,12 @@
 - files:
   - `workpack_agent_contract_v2.json`
   - `workpack_agent_contract_v2.txt`
+
+### worktree_preflight_snapshot
+- file_count: 1
+- latest_by_extension:
+  - `.txt`: `worktree_preflight_snapshot_20260301.txt`
+- archive_candidates:
+  - (none)
+- files:
+  - `worktree_preflight_snapshot_20260301.txt`

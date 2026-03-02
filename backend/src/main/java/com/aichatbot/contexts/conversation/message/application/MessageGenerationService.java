@@ -153,6 +153,10 @@ public class MessageGenerationService {
 
         boolean safeResponse = !validation.valid() || retrievalResult.zeroEvidence();
         String validationErrorCode = validation.errorCode();
+        if (shouldForceFailClosed(questionMasked)) {
+            safeResponse = true;
+            validationErrorCode = resolveForceFailClosedErrorCode();
+        }
         String finalAnswerText;
         double threshold = appProperties.getAnswer().getEvidenceThreshold();
 
@@ -331,6 +335,27 @@ public class MessageGenerationService {
             safeResponse,
             validationErrorCode
         );
+    }
+
+    private boolean shouldForceFailClosed(String questionMasked) {
+        AppProperties.E2e e2eProperties = appProperties.getE2e();
+        if (e2eProperties == null || !e2eProperties.isForceFailClosedEnabled()) {
+            return false;
+        }
+        String trigger = e2eProperties.getForceFailClosedTrigger();
+        if (trigger == null || trigger.isBlank()) {
+            return false;
+        }
+        return questionMasked != null && questionMasked.contains(trigger);
+    }
+
+    private String resolveForceFailClosedErrorCode() {
+        AppProperties.E2e e2eProperties = appProperties.getE2e();
+        String configured = e2eProperties == null ? "" : e2eProperties.getForceFailClosedErrorCode();
+        if (configured == null || configured.isBlank()) {
+            return "AI-009-409-EVIDENCE";
+        }
+        return configured;
     }
 
     private int resolveTopK(Integer requestedTopK) {

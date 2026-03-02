@@ -1,0 +1,16 @@
+golive_ci_gate_status
+status=PARTIAL
+
+[gates]
+- verification_pack_consistency=PASS
+- fixed_artifact_paths=PASS
+- utf8_strict_changed_files=PASS
+- spec_consistency_check=PASS
+- backend_gradle_test=PASS
+- frontend_test_build=PASS (executed in ASCII mirror workspace with Node 22.12.0 runtime via npx)
+- prod_compose_smoke=FAIL (Docker daemon unavailable on local machine)
+- node_runtime_local=FAIL (host runtime v24.11.1, .nvmrc requires v22.12.0)
+
+[notes]
+- Full-repo utf8 strict gate is currently red from pre-existing artifact BOM/non-UTF8 files outside this PR-D scope.
+- Deployment compose syntax/config validation passed.

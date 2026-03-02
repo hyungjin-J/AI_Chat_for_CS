@@ -64,7 +64,7 @@
             #{eventType},
             #{metricKey},
             #{metricValue},
-            #{dimensionsJson, jdbcType=VARCHAR},
+            CAST(#{dimensionsJson, jdbcType=VARCHAR} AS JSON),
             CURRENT_TIMESTAMP
         )
     </insert>

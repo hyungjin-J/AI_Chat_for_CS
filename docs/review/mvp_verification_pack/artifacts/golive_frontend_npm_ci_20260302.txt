@@ -1,0 +1,10 @@
+뿯붿node.exe : npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster i
+mplementation
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm warn deprec... implementation:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+added 294 packages in 5s

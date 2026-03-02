@@ -1,0 +1,23 @@
+{
+  "status": "SKIPPED",
+  "reason_code": "DOCKER_ENGINE_DOWN",
+  "remediation_hint": "Start Docker Desktop/Engine and verify `docker info` succeeds.",
+  "endpoint": "http://localhost:8080/actuator/health",
+  "trace_header": "X-Trace-Id",
+  "without_trace_expected": 409,
+  "without_trace_status": null,
+  "without_trace_error": "",
+  "with_trace_expected": 200,
+  "with_trace_status": null,
+  "with_trace_error": "",
+  "with_trace_attempts": 0,
+  "docker_preflight_status": "FAIL",
+  "violation_count": 1,
+  "violations": [
+    {
+      "code": "DOCKER_ENGINE_DOWN",
+      "message": "docker preflight failed",
+      "details": "null\n\nfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+    }
+  ]
+}

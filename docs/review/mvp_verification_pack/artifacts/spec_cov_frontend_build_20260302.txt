@@ -1,0 +1,25 @@
+
+> frontend@0.0.0 build
+> tsc -b
+
+error TS2688: Cannot find type definition file for '@testing-library/jest-dom'.
+  The file is in the program because:
+    Entry point of type library '@testing-library/jest-dom' specified in compilerOptions
+error TS2688: Cannot find type definition file for 'vite/client'.
+  The file is in the program because:
+    Entry point of type library 'vite/client' specified in compilerOptions
+error TS2688: Cannot find type definition file for 'vitest/globals'.
+  The file is in the program because:
+    Entry point of type library 'vitest/globals' specified in compilerOptions
+error TS6053: File 'C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend/node_modules/typescript/lib/lib.dom.d.ts' not found.
+  The file is in the program because:
+    Library 'lib.dom.d.ts' specified in compilerOptions
+error TS6053: File 'C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend/node_modules/typescript/lib/lib.dom.iterable.d.ts' not found.
+  The file is in the program because:
+    Library 'lib.dom.iterable.d.ts' specified in compilerOptions
+error TS6053: File 'C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend/node_modules/typescript/lib/lib.es2022.d.ts' not found.
+  The file is in the program because:
+    Library 'lib.es2022.d.ts' specified in compilerOptions
+error TS6053: File 'C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend/node_modules/typescript/lib/lib.es2023.d.ts' not found.
+  The file is in the program because:
+    Library 'lib.es2023.d.ts' specified in compilerOptions

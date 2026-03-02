@@ -1,0 +1,27 @@
+
+> frontend@0.0.0 test:run
+> vitest run
+
+[31m[7m[31m MISSING DEPENDENCY [31m[27m Cannot find dependency 'jsdom'
+
+[39m
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/frontend[39m
+
+node:internal/modules/esm/resolve:274
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\tinypool\dist\utils-De75vAgL.js' imported from C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\frontend\node_modules\tinypool\dist\entry\process.js
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:737:20)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:714:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:293:38)
+    at #link (node:internal/modules/esm/module_job:208:49)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/Users/hjjmj/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/AI_Chatbot/frontend/node_modules/tinypool/dist/utils-De75vAgL.js'
+}
+
+Node.js v24.11.1

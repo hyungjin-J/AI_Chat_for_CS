@@ -1,9 +1,10 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Build deterministic artifact index and optionally fail when stale."""
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -17,6 +18,8 @@ DEFAULT_ARTIFACT_ROOT = Path("docs/review/mvp_verification_pack/artifacts")
 DEFAULT_ARCHIVE_ROOT = Path("docs/review/mvp_verification_pack/archive")
 DEFAULT_ARCHIVE_MANIFEST = DEFAULT_ARCHIVE_ROOT / "_ARCHIVE_MANIFEST.json"
 DEFAULT_ARCHIVE_KEEP = 1
+ARCHIVE_LAYOUT_VERSION = 2
+SIDECAR_MANIFEST_SUFFIX = ".manifest.json"
 PINNED_CONTRACT_PATH = Path("scripts/contracts/fixed_artifact_paths.json")
 PINNED_DOC_PATHS = [
     Path("docs/review/mvp_verification_pack/00_EXEC_SUMMARY.md"),
@@ -26,6 +29,14 @@ PINNED_DOC_PATHS = [
     Path("docs/review/verification_pack/README.md"),
     Path("docs/MVP_IMPLEMENTATION_REVIEW_PACK.md"),
 ]
+START_HERE_ITEMS = (
+    ("release_gate_dashboard_md", "release_gate_dashboard.md"),
+    ("release_gate_dashboard_json", "release_gate_dashboard.json"),
+    ("spec_impl_coverage_report_md", "spec_impl_coverage_report.md"),
+    ("spec_impl_coverage_gate_json", "spec_impl_coverage_gate.json"),
+    ("index_md", "_INDEX.md"),
+    ("index_json", "_INDEX.json"),
+)
 
 GROUP_ORDER = {
     "gate": 0,
@@ -38,6 +49,14 @@ DATE_TOKEN_RE = re.compile(r"20\d{2}(?:\d{2}|[xX]{2})(?:\d{2}|[xX]{2})?")
 WAVE_TOKEN_RE = re.compile(r"wave(\d+)")
 BACKTICK_PATH_RE = re.compile(r"`([^`\r\n]+)`")
 BUNDLE_NAME_RE = re.compile(r"^(.+?)__(\d{8}T\d{6}Z)$")
+SIDECAR_REQUIRED_FIELDS = (
+    "zip_sha256",
+    "created_at_kst",
+    "source_commit",
+    "family_name",
+    "included_files",
+    "excluded_files",
+)
 
 
 @dataclass(frozen=True)
@@ -77,6 +96,17 @@ def to_repo_relative(repo_root: Path, path: Path) -> str:
         return normalize(path.resolve().relative_to(repo_root.resolve()).as_posix())
     except ValueError:
         return normalize(path.resolve().as_posix())
+
+
+def hash_file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        while True:
+            chunk = handle.read(65536)
+            if not chunk:
+                break
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def parse_date_token(token: str) -> tuple[int, int, int]:
@@ -265,6 +295,180 @@ def parse_bundle_family(bundle_path: Path) -> str:
     return bundle_path.stem
 
 
+def is_legacy_bundle_path(path: Path, archive_root: Path) -> bool:
+    try:
+        rel = path.resolve().relative_to((archive_root / "bundles").resolve())
+    except ValueError:
+        return False
+    return len(rel.parts) >= 2
+
+
+def is_sidecar_manifest_path(path: Path, archive_root: Path) -> bool:
+    if path.name == "_ARCHIVE_MANIFEST.json":
+        return False
+    if not path.name.endswith(SIDECAR_MANIFEST_SUFFIX):
+        return False
+    try:
+        rel = path.resolve().relative_to(archive_root.resolve())
+    except ValueError:
+        return False
+    if not rel.parts:
+        return False
+    return rel.parts[0] != "bundles"
+
+
+def is_sidecar_zip_path(path: Path, archive_root: Path) -> bool:
+    if path.suffix.lower() != ".zip":
+        return False
+    if is_legacy_bundle_path(path, archive_root):
+        return False
+    try:
+        rel = path.resolve().relative_to(archive_root.resolve())
+    except ValueError:
+        return False
+    return bool(rel.parts) and rel.parts[0] != "bundles"
+
+
+def sidecar_manifest_to_zip_path(manifest_path: Path) -> Path:
+    if not manifest_path.name.endswith(SIDECAR_MANIFEST_SUFFIX):
+        return manifest_path.with_suffix(".zip")
+    stem = manifest_path.name[: -len(SIDECAR_MANIFEST_SUFFIX)]
+    return manifest_path.with_name(f"{stem}.zip")
+
+
+def scan_sidecar_archive_payload(archive_root: Path, repo_root: Path) -> dict:
+    manifests: list[Path] = []
+    if archive_root.exists():
+        manifests = sorted(
+            [
+                path
+                for path in archive_root.rglob(f"*{SIDECAR_MANIFEST_SUFFIX}")
+                if path.is_file() and is_sidecar_manifest_path(path, archive_root)
+            ],
+            key=lambda item: path_key(item.as_posix()),
+        )
+
+    archive_entries: list[dict] = []
+    archived_paths: list[str] = []
+
+    for manifest_path in manifests:
+        manifest_rel = to_repo_relative(repo_root, manifest_path)
+        zip_path = sidecar_manifest_to_zip_path(manifest_path)
+        zip_rel = to_repo_relative(repo_root, zip_path)
+
+        try:
+            payload = json.loads(manifest_path.read_text(encoding="utf-8", errors="strict"))
+        except (OSError, json.JSONDecodeError):
+            payload = {}
+
+        included_raw = payload.get("included_files", [])
+        included_paths: list[str] = []
+        if isinstance(included_raw, list):
+            for item in included_raw:
+                if not isinstance(item, dict):
+                    continue
+                rel = normalize(str(item.get("path", "")))
+                if rel and is_posix_relative(rel):
+                    included_paths.append(rel)
+
+        archived_paths.extend(included_paths)
+        family_name = str(payload.get("family_name", "")) or manifest_path.parent.name
+        archive_entries.append(
+            {
+                "family_name": family_name,
+                "zip_path": zip_rel,
+                "manifest_path": manifest_rel,
+                "created_at_kst": str(payload.get("created_at_kst", "")),
+                "source_commit": str(payload.get("source_commit", "")),
+                "zip_sha256": str(payload.get("zip_sha256", "")),
+                "included_file_count": len(included_paths),
+                "included_paths": sorted(set(included_paths), key=path_key),
+            }
+        )
+
+    archive_entries = sorted(
+        archive_entries,
+        key=lambda item: (
+            path_key(str(item.get("family_name", ""))),
+            path_key(str(item.get("manifest_path", ""))),
+        ),
+    )
+    archived_paths = sorted(set(archived_paths), key=path_key)
+
+    family_map: dict[str, list[dict]] = {}
+    for entry in archive_entries:
+        family = str(entry.get("family_name", "misc"))
+        family_map.setdefault(family, []).append(entry)
+
+    archive_families: list[dict] = []
+    latest_archives: list[dict] = []
+    for family in sorted(family_map.keys(), key=path_key):
+        entries = sorted(
+            family_map[family],
+            key=lambda item: path_key(str(item.get("manifest_path", ""))),
+        )
+        latest = entries[-1]
+        archive_families.append(
+            {
+                "family_name": family,
+                "archive_count": len(entries),
+                "latest_zip_path": latest.get("zip_path", ""),
+                "latest_manifest_path": latest.get("manifest_path", ""),
+                "latest_created_at_kst": latest.get("created_at_kst", ""),
+                "latest_source_commit": latest.get("source_commit", ""),
+                "archives": [
+                    {
+                        "zip_path": item.get("zip_path", ""),
+                        "manifest_path": item.get("manifest_path", ""),
+                        "created_at_kst": item.get("created_at_kst", ""),
+                        "source_commit": item.get("source_commit", ""),
+                        "included_file_count": item.get("included_file_count", 0),
+                    }
+                    for item in entries
+                ],
+            }
+        )
+        latest_archives.append(
+            {
+                "family_name": family,
+                "zip_path": latest.get("zip_path", ""),
+                "manifest_path": latest.get("manifest_path", ""),
+                "created_at_kst": latest.get("created_at_kst", ""),
+                "source_commit": latest.get("source_commit", ""),
+                "included_file_count": latest.get("included_file_count", 0),
+            }
+        )
+
+    recent_sidecar_archives = sorted(
+        archive_entries,
+        key=lambda item: (
+            str(item.get("created_at_kst", "")),
+            path_key(str(item.get("manifest_path", ""))),
+        ),
+        reverse=True,
+    )[:10]
+
+    return {
+        "manifest_count": len(manifests),
+        "archive_count": len(archive_entries),
+        "archived_file_count": len(archived_paths),
+        "archives": archive_entries,
+        "archive_families": archive_families,
+        "latest_archives": latest_archives,
+        "recent_sidecar_archives": [
+            {
+                "family_name": item.get("family_name", ""),
+                "zip_path": item.get("zip_path", ""),
+                "manifest_path": item.get("manifest_path", ""),
+                "created_at_kst": item.get("created_at_kst", ""),
+                "included_file_count": item.get("included_file_count", 0),
+            }
+            for item in recent_sidecar_archives
+        ],
+        "archived_paths": archived_paths,
+    }
+
+
 def build_archive_manifest_payload(archive_root: Path, repo_root: Path) -> dict:
     bundles: list[dict] = []
     archived_files: list[dict] = []
@@ -404,6 +608,7 @@ def build_index_payload(
     archive_keep_latest_per_extension: int,
     archive_manifest_path: Path,
     archive_manifest_payload: dict,
+    sidecar_payload: dict,
     pinned_paths: set[str],
 ) -> dict:
     archived_paths = {
@@ -411,6 +616,13 @@ def build_index_payload(
         for item in archive_manifest_payload.get("archived_files", [])
         if normalize(str(item.get("original_path", "")))
     }
+    archived_paths.update(
+        {
+            normalize(path)
+            for path in sidecar_payload.get("archived_paths", [])
+            if normalize(path)
+        }
+    )
     archive_exclusions = set(pinned_paths) | archived_paths
 
     groups = build_group_payload(
@@ -418,6 +630,32 @@ def build_index_payload(
         archive_keep_latest_per_extension=archive_keep_latest_per_extension,
         archive_exclusions=archive_exclusions,
     )
+    indexed_paths = {entry.path for entry in entries}
+    start_here = []
+    for key, rel_path in START_HERE_ITEMS:
+        if key in {"index_md", "index_json"}:
+            present = True
+        else:
+            present = rel_path in indexed_paths
+        start_here.append({"key": key, "path": rel_path, "present": present})
+    release_gate_dashboard = {
+        "markdown_path": "release_gate_dashboard.md",
+        "json_path": "release_gate_dashboard.json",
+        "markdown_present": "release_gate_dashboard.md" in indexed_paths,
+        "json_present": "release_gate_dashboard.json" in indexed_paths,
+    }
+    spec_impl_coverage = {
+        "report_markdown_path": "spec_impl_coverage_report.md",
+        "report_json_path": "spec_impl_coverage_report.json",
+        "report_text_path": "spec_impl_coverage_report.txt",
+        "gate_json_path": "spec_impl_coverage_gate.json",
+        "gate_text_path": "spec_impl_coverage_gate.txt",
+        "report_markdown_present": "spec_impl_coverage_report.md" in indexed_paths,
+        "report_json_present": "spec_impl_coverage_report.json" in indexed_paths,
+        "report_text_present": "spec_impl_coverage_report.txt" in indexed_paths,
+        "gate_json_present": "spec_impl_coverage_gate.json" in indexed_paths,
+        "gate_text_present": "spec_impl_coverage_gate.txt" in indexed_paths,
+    }
 
     latest_files: list[str] = []
     archive_candidates: list[str] = []
@@ -442,6 +680,7 @@ def build_index_payload(
 
     return {
         "artifact_root": normalize(artifact_root.as_posix()),
+        "archive_layout_version": ARCHIVE_LAYOUT_VERSION,
         "indexed_file_count": len(entries),
         "archive_keep_latest_per_extension": archive_keep_latest_per_extension,
         "archive_manifest_path": normalize(archive_manifest_path.as_posix()),
@@ -449,6 +688,9 @@ def build_index_payload(
         "archive_summary": {
             "bundle_count": archive_manifest_payload.get("bundle_count", 0),
             "archived_file_count": archive_manifest_payload.get("archived_file_count", 0),
+            "sidecar_manifest_count": sidecar_payload.get("manifest_count", 0),
+            "sidecar_archive_count": sidecar_payload.get("archive_count", 0),
+            "sidecar_archived_file_count": sidecar_payload.get("archived_file_count", 0),
             "recent_bundles": [
                 {
                     "bundle_path": item.get("bundle_path", ""),
@@ -457,7 +699,13 @@ def build_index_payload(
                 }
                 for item in recent_bundles
             ],
+            "recent_sidecar_archives": sidecar_payload.get("recent_sidecar_archives", []),
         },
+        "archive_families": sidecar_payload.get("archive_families", []),
+        "latest_archives": sidecar_payload.get("latest_archives", []),
+        "start_here": start_here,
+        "release_gate_dashboard": release_gate_dashboard,
+        "spec_impl_coverage": spec_impl_coverage,
         "groups": groups,
         "latest_files": latest_files,
         "archive_candidates": archive_candidates,
@@ -469,6 +717,7 @@ def render_markdown(payload: dict) -> str:
         "# Artifact Index",
         "",
         f"- artifact_root: `{payload['artifact_root']}`",
+        f"- archive_layout_version: {payload['archive_layout_version']}",
         f"- indexed_file_count: {payload['indexed_file_count']}",
         f"- archive_keep_latest_per_extension: {payload['archive_keep_latest_per_extension']}",
         f"- latest_files_count: {len(payload['latest_files'])}",
@@ -476,10 +725,23 @@ def render_markdown(payload: dict) -> str:
         f"- pinned_paths_count: {payload['pinned_paths_count']}",
         f"- archive_manifest_path: `{payload['archive_manifest_path']}`",
         "",
+        "## Start Here",
+    ]
+    for item in payload.get("start_here", []):
+        marker = "present" if item.get("present") else "missing"
+        lines.append(f"- {item['key']}: `{item['path']}` ({marker})")
+
+    lines.extend(
+        [
+            "",
         "## Archive Summary",
         f"- bundle_count: {payload['archive_summary']['bundle_count']}",
         f"- archived_file_count: {payload['archive_summary']['archived_file_count']}",
-    ]
+        f"- sidecar_manifest_count: {payload['archive_summary']['sidecar_manifest_count']}",
+        f"- sidecar_archive_count: {payload['archive_summary']['sidecar_archive_count']}",
+        f"- sidecar_archived_file_count: {payload['archive_summary']['sidecar_archived_file_count']}",
+        ]
+    )
 
     lines.append("- recent_bundles:")
     recent_bundles = payload["archive_summary"].get("recent_bundles", [])
@@ -492,6 +754,34 @@ def render_markdown(payload: dict) -> str:
             )
     else:
         lines.append("  - (none)")
+
+    lines.append("- recent_sidecar_archives:")
+    recent_sidecars = payload["archive_summary"].get("recent_sidecar_archives", [])
+    if recent_sidecars:
+        for item in recent_sidecars:
+            lines.append(
+                "  - "
+                f"`{item['zip_path']}` "
+                f"(family={item['family_name']}, manifest=`{item['manifest_path']}`, "
+                f"file_count={item['included_file_count']})"
+            )
+    else:
+        lines.append("  - (none)")
+
+    lines.append("")
+    lines.append("## Latest Archives By Family")
+    latest_archives = payload.get("latest_archives", [])
+    if latest_archives:
+        for item in latest_archives:
+            lines.append(
+                "- "
+                f"{item['family_name']}: zip=`{item['zip_path']}`, "
+                f"manifest=`{item['manifest_path']}`, "
+                f"created_at_kst={item['created_at_kst']}, "
+                f"file_count={item['included_file_count']}"
+            )
+    else:
+        lines.append("- (none)")
 
     lines.append("")
     lines.append("## Latest Files")
@@ -550,6 +840,7 @@ def build_gate_payload(
     expected_json: str,
     archive_manifest_path: Path,
     expected_archive_manifest: str,
+    archive_root: Path,
     repo_root: Path,
 ) -> dict:
     violations: list[Violation] = []
@@ -625,6 +916,136 @@ def build_gate_payload(
                         )
                     )
 
+        sidecar_manifests = sorted(
+            [
+                path
+                for path in archive_root.rglob(f"*{SIDECAR_MANIFEST_SUFFIX}")
+                if path.is_file() and is_sidecar_manifest_path(path, archive_root)
+            ],
+            key=lambda item: path_key(item.as_posix()),
+        )
+        sidecar_zips = sorted(
+            [
+                path
+                for path in archive_root.rglob("*.zip")
+                if path.is_file() and is_sidecar_zip_path(path, archive_root)
+            ],
+            key=lambda item: path_key(item.as_posix()),
+        )
+
+        if sidecar_manifests or sidecar_zips:
+            for zip_path in sidecar_zips:
+                expected_manifest = zip_path.with_name(
+                    f"{zip_path.stem}{SIDECAR_MANIFEST_SUFFIX}"
+                )
+                if not expected_manifest.exists():
+                    violations.append(
+                        Violation(
+                            code="ARCHIVE_SIDECAR_MANIFEST_MISSING",
+                            path=to_repo_relative(repo_root, expected_manifest),
+                            details="sidecar zip exists without sibling manifest",
+                        )
+                    )
+
+            for manifest_path in sidecar_manifests:
+                manifest_rel = to_repo_relative(repo_root, manifest_path)
+                zip_path = sidecar_manifest_to_zip_path(manifest_path)
+                zip_rel = to_repo_relative(repo_root, zip_path)
+
+                try:
+                    sidecar_payload = json.loads(
+                        manifest_path.read_text(encoding="utf-8", errors="strict")
+                    )
+                except json.JSONDecodeError:
+                    violations.append(
+                        Violation(
+                            code="ARCHIVE_MANIFEST_INVALID_JSON",
+                            path=manifest_rel,
+                            details="sidecar manifest is not valid JSON",
+                        )
+                    )
+                    continue
+
+                missing_fields = [
+                    field
+                    for field in SIDECAR_REQUIRED_FIELDS
+                    if field not in sidecar_payload
+                ]
+                if missing_fields:
+                    violations.append(
+                        Violation(
+                            code="ARCHIVE_MANIFEST_REQUIRED_FIELD_MISSING",
+                            path=manifest_rel,
+                            details=f"missing required fields: {','.join(missing_fields)}",
+                        )
+                    )
+                    continue
+
+                if not zip_path.exists():
+                    violations.append(
+                        Violation(
+                            code="ARCHIVE_ZIP_MISSING",
+                            path=zip_rel,
+                            details="sidecar manifest exists but zip file is missing",
+                        )
+                    )
+                    continue
+
+                actual_sha = hash_file_sha256(zip_path)
+                expected_sha = normalize(str(sidecar_payload.get("zip_sha256", "")))
+                if actual_sha != expected_sha:
+                    violations.append(
+                        Violation(
+                            code="ARCHIVE_ZIP_SHA256_MISMATCH",
+                            path=zip_rel,
+                            details="manifest zip_sha256 does not match actual zip hash",
+                        )
+                    )
+
+                included_payload = sidecar_payload.get("included_files", [])
+                included_paths: set[str] = set()
+                if isinstance(included_payload, list):
+                    for item in included_payload:
+                        if not isinstance(item, dict):
+                            continue
+                        rel = normalize(str(item.get("path", "")))
+                        if rel and is_posix_relative(rel):
+                            included_paths.add(rel)
+
+                zip_members: set[str] = set()
+                try:
+                    with zipfile.ZipFile(zip_path, "r") as zf:
+                        for member in zf.namelist():
+                            rel = normalize(member)
+                            if rel.endswith("/"):
+                                continue
+                            if rel and is_posix_relative(rel):
+                                zip_members.add(rel)
+                except zipfile.BadZipFile:
+                    violations.append(
+                        Violation(
+                            code="ARCHIVE_INCLUDED_LIST_MISMATCH",
+                            path=zip_rel,
+                            details="zip cannot be read for included_files verification",
+                        )
+                    )
+                    continue
+
+                if included_paths != zip_members:
+                    missing_in_manifest = sorted(zip_members - included_paths, key=path_key)
+                    extra_in_manifest = sorted(included_paths - zip_members, key=path_key)
+                    violations.append(
+                        Violation(
+                            code="ARCHIVE_INCLUDED_LIST_MISMATCH",
+                            path=manifest_rel,
+                            details=(
+                                "included_files path list differs from zip members "
+                                f"(missing_in_manifest={missing_in_manifest}, "
+                                f"extra_in_manifest={extra_in_manifest})"
+                            ),
+                        )
+                    )
+
     return {
         "status": "PASS" if not violations else "FAIL",
         "check_mode": check_mode,
@@ -633,6 +1054,9 @@ def build_gate_payload(
         "archive_manifest_path": normalize(archive_manifest_path.as_posix()),
         "archive_bundle_count": payload["archive_summary"]["bundle_count"],
         "archived_file_count": payload["archive_summary"]["archived_file_count"],
+        "archive_sidecar_manifest_count": payload["archive_summary"]["sidecar_manifest_count"],
+        "archive_sidecar_count": payload["archive_summary"]["sidecar_archive_count"],
+        "archive_sidecar_archived_file_count": payload["archive_summary"]["sidecar_archived_file_count"],
         "index_md_path": normalize(md_path.as_posix()),
         "index_json_path": normalize(json_path.as_posix()),
         "violation_count": len(violations),
@@ -649,6 +1073,9 @@ def render_gate_text(payload: dict) -> str:
         f"archive_manifest_path={payload['archive_manifest_path']}",
         f"archive_bundle_count={payload['archive_bundle_count']}",
         f"archived_file_count={payload['archived_file_count']}",
+        f"archive_sidecar_manifest_count={payload['archive_sidecar_manifest_count']}",
+        f"archive_sidecar_count={payload['archive_sidecar_count']}",
+        f"archive_sidecar_archived_file_count={payload['archive_sidecar_archived_file_count']}",
         f"index_md_path={payload['index_md_path']}",
         f"index_json_path={payload['index_json_path']}",
         f"violation_count={payload['violation_count']}",
@@ -732,6 +1159,7 @@ def main() -> int:
     entries = scan_artifacts(artifact_root)
     pinned_paths = load_pinned_paths(repo_root, artifact_root)
     archive_manifest_payload = build_archive_manifest_payload(archive_root, repo_root)
+    sidecar_payload = scan_sidecar_archive_payload(archive_root, repo_root)
 
     index_payload = build_index_payload(
         artifact_root,
@@ -739,6 +1167,7 @@ def main() -> int:
         archive_keep_latest_per_extension=args.archive_keep_latest_per_extension,
         archive_manifest_path=archive_manifest_path,
         archive_manifest_payload=archive_manifest_payload,
+        sidecar_payload=sidecar_payload,
         pinned_paths=pinned_paths,
     )
 
@@ -760,6 +1189,7 @@ def main() -> int:
         expected_json=index_json,
         archive_manifest_path=archive_manifest_path,
         expected_archive_manifest=archive_manifest_json,
+        archive_root=archive_root,
         repo_root=repo_root,
     )
 

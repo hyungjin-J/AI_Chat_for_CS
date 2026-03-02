@@ -1,0 +1,106 @@
+.......usage: python.exe -m unittest [-h] [--method {docker-exec,local}]
+                              [--compose-file COMPOSE_FILE]
+                              [--compose-service COMPOSE_SERVICE]
+                              [--database DATABASE] [--db-user DB_USER]
+                              [--db-password DB_PASSWORD] [--host HOST]
+                              [--port PORT] [--tenant-id TENANT_ID]
+                              [--top-k TOP_K] [--query-count QUERY_COUNT]
+                              [--probe-values PROBE_VALUES] [--seed SEED]
+                              [--baseline-json BASELINE_JSON]
+                              [--max-recall-drop MAX_RECALL_DROP]
+                              [--max-p95-regression-ratio MAX_P95_REGRESSION_RATIO]
+                              [--artifact-dir ARTIFACT_DIR]
+                              [--artifact-date ARTIFACT_DATE]
+                              [--output-txt OUTPUT_TXT]
+                              [--output-json OUTPUT_JSON] [--ci]
+                              [--ci-row-count CI_ROW_COUNT]
+                              [--ci-dimensions CI_DIMENSIONS]
+python.exe -m unittest: error: argument --probe-values: probe value is not an integer: abc
+..
+----------------------------------------------------------------------
+Ran 9 tests in 0.083s
+System.Management.Automation.RemoteException
+OK
+vector_recall_latency_bench
+status=PASS
+method=docker-exec
+ci_mode=False
+tenant_id=00000000-0000-0000-0000-000000000001
+row_count=20
+top_k=2
+query_count=2
+probe_values=1,2
+probe_results=2
+violation_count=0
+probe=1 recall_at_k=1.000000 p50_ms=11.000 p95_ms=11.900
+probe=2 recall_at_k=0.750000 p50_ms=12.000 p95_ms=12.900
+baseline.enabled=False
+vector_recall_latency_bench
+status=FAIL
+method=docker-exec
+ci_mode=False
+tenant_id=00000000-0000-0000-0000-000000000001
+row_count=1
+top_k=2
+query_count=2
+probe_values=1,2
+probe_results=0
+violation_count=1
+baseline.enabled=False
+- [BENCH_DATA_INSUFFICIENT] insufficient eligible rows for benchmark :: row_count=1 required=2
+vector_recall_latency_bench
+status=FAIL
+method=docker-exec
+ci_mode=False
+tenant_id=00000000-0000-0000-0000-000000000001
+row_count=20
+top_k=2
+query_count=2
+probe_values=1,2
+probe_results=2
+violation_count=1
+probe=1 recall_at_k=1.000000 p50_ms=22.500 p95_ms=23.850
+probe=2 recall_at_k=0.750000 p50_ms=22.500 p95_ms=22.950
+baseline.enabled=True
+baseline.path=C:/Users/hjjmj/AppData/Local/Temp/tmp33bqlbv3/baseline.json
+baseline.status=FAIL
+baseline.recall_drop=0.000000
+baseline.p95_regression_ratio=2.385000
+- [BENCH_LATENCY_REGRESSION] p95 latency regression exceeds allowed ratio :: ratio=2.385000 threshold=1.300000
+vector_recall_latency_bench
+status=FAIL
+method=docker-exec
+ci_mode=False
+tenant_id=00000000-0000-0000-0000-000000000001
+row_count=20
+top_k=2
+query_count=2
+probe_values=1,2
+probe_results=2
+violation_count=1
+probe=1 recall_at_k=0.000000 p50_ms=10.000 p95_ms=10.900
+probe=2 recall_at_k=0.000000 p50_ms=11.000 p95_ms=11.900
+baseline.enabled=True
+baseline.path=C:/Users/hjjmj/AppData/Local/Temp/tmpwpg200wf/baseline.json
+baseline.status=FAIL
+baseline.recall_drop=1.000000
+baseline.p95_regression_ratio=0.908333
+- [BENCH_RECALL_REGRESSION] recall@k regression exceeds allowed drop :: drop=1.000000 threshold=0.030000
+vector_recall_latency_bench
+status=PASS
+method=docker-exec
+ci_mode=False
+tenant_id=00000000-0000-0000-0000-000000000001
+row_count=20
+top_k=2
+query_count=2
+probe_values=1,2
+probe_results=2
+violation_count=0
+probe=1 recall_at_k=1.000000 p50_ms=11.000 p95_ms=11.900
+probe=2 recall_at_k=0.750000 p50_ms=12.000 p95_ms=12.900
+baseline.enabled=True
+baseline.path=C:/Users/hjjmj/AppData/Local/Temp/tmpi_ikgkip/baseline.json
+baseline.status=PASS
+baseline.recall_drop=0.000000
+baseline.p95_regression_ratio=0.850000

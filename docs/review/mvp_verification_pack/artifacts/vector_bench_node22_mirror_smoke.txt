@@ -1,0 +1,43 @@
+path=C:\Users\hjjmj\OneDrive\???? ???\AI_Chatbot
+non_ascii_chars=??????
+check_workspace_path_ascii
+status=WARNING
+non_ascii_count=4
+recommendation=Use an ASCII-only temp workspace for Node22 frontend npm test/build runs.
+[WARNING] Non-ASCII workspace path detected.
+[WARNING] Node package manager execution can fail on Unicode paths in some setups.
+[WARNING] source workspace: C:\Users\hjjmj\OneDrive\���� ȭ��\AI_Chatbot
+[WARNING] ASCII mirror target: C:\Users\hjjmj\AppData\Local\Temp\AI_Chatbot_ascii_workspace
+[RUN] mirror workspace to ASCII path
+[WARNING] git working tree has uncommitted changes:  M .github/workflows/db-backup-restore-nightly.yml,  M .github/workflows/pr-smoke-contract.yml,  M .github/workflows/release-nightly-full.yml,  M chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md,  M chatGPT/DB_READINESS_EXECUTION_AND_PROCESS_PLAN_KO.md
+[WARNING] node runtime mismatch (expected from .nvmrc=22.12.0, current=24.11.1).
+[GUIDE] Expected Node version (.nvmrc): 22.12.0
+[GUIDE] Fix runtime version with: nvm install 22.12.0 && nvm use 22.12.0
+[GUIDE] Verify again with: python scripts/check_node_version.py --nvmrc .nvmrc --package-json frontend/package.json --check-runtime
+[INFO] task=smoke: fast preflight only (no install/test/build/dev).
+[INFO] node bootstrap automation is disabled; validation/guidance only.
+[SKIP] frontend commands (all disabled for selected task/options)
+mirror_and_run_frontend
+status=PASS
+task=smoke
+source_root=C:\Users\hjjmj\OneDrive\���� ȭ��\AI_Chatbot
+run_root=C:\Users\hjjmj\AppData\Local\Temp\AI_Chatbot_ascii_workspace
+path_mode=mirrored
+mirror_requested=True
+mirror_performed=True
+smoke_mode=True
+dry_run=False
+git_clean=false
+node_required_version=22.12.0
+node_runtime_version=24.11.1
+node_check_status=WARNING
+node_bootstrap_ran=False
+npm_ci_ran=False
+npm_test_ran=False
+npm_build_ran=False
+npm_dev_ran=False
+package_manager=npm
+package_manager_source=lockfile:package-lock.json
+install_command=npm ci --prefer-offline --no-audit --fund=false
+artifact_path=C:\Users\hjjmj\OneDrive\���� ȭ��\AI_Chatbot\docs\review\mvp_verification_pack\artifacts\node22_unicode_mirror_helper_smoke.txt
+[OK] artifact written: C:\Users\hjjmj\OneDrive\���� ȭ��\AI_Chatbot\docs\review\mvp_verification_pack\artifacts\node22_unicode_mirror_helper_smoke.txt

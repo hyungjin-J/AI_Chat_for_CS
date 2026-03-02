@@ -37,7 +37,10 @@ public class OpsEventService {
         "audit_export_downloaded",
         "audit_export_expired",
         "scheduler_lock_recovered",
-        "scheduler_lock_recovery_failed"
+        "scheduler_lock_recovery_failed",
+        "kb_index_latency_ms",
+        "kb_index_fail_rate",
+        "parser_error_rate"
     );
 
     private final OpsEventStore opsRepository;

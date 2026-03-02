@@ -5,12 +5,28 @@
   "manifest_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json",
   "manifest_bundle_count": 12,
   "manifest_archived_file_count": 29,
-  "started_at_utc": "20260226T134545Z",
-  "candidate_count": 0,
-  "eligible_count": 0,
-  "archived_file_count": 0,
-  "created_bundle_count": 0,
-  "created_bundles": [],
+  "sidecar_manifest_count": 1,
+  "sidecar_archive_count": 1,
+  "sidecar_archived_file_count": 1,
+  "started_at_utc": "20260227T045203Z",
+  "candidate_count": 1,
+  "eligible_count": 1,
+  "retention_excluded_count": 0,
+  "retention_excluded": [],
+  "archived_file_count": 1,
+  "created_bundle_count": 1,
+  "created_bundles": [
+    {
+      "bundle_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.zip",
+      "manifest_path": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.manifest.json",
+      "family": "archive_policy_rollout_report",
+      "file_count": 1,
+      "members": [
+        "archive_policy_rollout_report_20260220.txt"
+      ],
+      "excluded_files": []
+    }
+  ],
   "skipped_pinned_count": 0,
   "skipped_pinned": [],
   "skipped_already_archived_count": 0,
@@ -19,7 +35,7 @@
   "skipped_missing": [],
   "refresh_index": true,
   "refresh_index_exit_code": 0,
-  "refresh_index_stdout": "artifact_index_gate\nstatus=PASS\ncheck_mode=False\nindexed_file_count=340\narchive_manifest_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json\narchive_bundle_count=12\narchived_file_count=29\nindex_md_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.md\nindex_json_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.json\nviolation_count=0\n",
+  "refresh_index_stdout": "artifact_index_gate\nstatus=PASS\ncheck_mode=False\nindexed_file_count=345\narchive_manifest_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/archive/_ARCHIVE_MANIFEST.json\narchive_bundle_count=12\narchived_file_count=29\narchive_sidecar_manifest_count=1\narchive_sidecar_count=1\narchive_sidecar_archived_file_count=1\nindex_md_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.md\nindex_json_path=C:/Users/hjjmj/OneDrive/���� ȭ��/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.json\nviolation_count=0\n",
   "refresh_index_stderr": "",
   "violation_count": 0,
   "violations": []

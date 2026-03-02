@@ -1,0 +1,98 @@
+name: perf-sse-nightly
+
+on:
+  schedule:
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: perf-sse-nightly
+  cancel-in-progress: false
+
+jobs:
+  perf-sse-measure-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    env:
+      COMPOSE_FILE: infra/docker-compose.yml
+      PERF_BASE_URL: http://localhost:8080
+      PERF_TENANT_KEY: demo-tenant
+      PERF_LOGIN_ID: agent1
+      PERF_PASSWORD: agent1-pass
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Ensure directories
+        shell: bash
+        run: |
+          mkdir -p perf/out
+          mkdir -p docs/review/mvp_verification_pack/artifacts
+
+      - name: Run SSE perf gate with compose bootstrap (always-write result contract)
+        shell: bash
+        run: |
+          date_tag="$(date -u +%Y%m%d)"
+          gate_txt="docs/review/mvp_verification_pack/artifacts/perf_sse_gate_${date_tag}.txt"
+          gate_json="docs/review/mvp_verification_pack/artifacts/perf_sse_gate_${date_tag}.json"
+          {
+            echo "PERF_GATE_TXT=$gate_txt"
+            echo "PERF_GATE_JSON=$gate_json"
+          } >> "$GITHUB_ENV"
+
+          python scripts/run_perf_sse_gate.py \
+            --base-url "$PERF_BASE_URL" \
+            --tenant-key "$PERF_TENANT_KEY" \
+            --login-id "$PERF_LOGIN_ID" \
+            --password "$PERF_PASSWORD" \
+            --sse-vus 2 \
+            --sse-duration 45s \
+            --rate-limit-start-time 45s \
+            --rate-limit-iterations 6 \
+            --bootstrap-compose \
+            --compose-file "$COMPOSE_FILE" \
+            --backend-sse-concurrency-max-per-user 2 \
+            --backend-sse-hold-ms 2500 \
+            --require-docker \
+            --result-json perf/out/result.json \
+            --thresholds perf/thresholds.yaml \
+            --gate-txt "$gate_txt" \
+            --gate-json "$gate_json"
+
+      - name: Compose logs
+        if: always()
+        shell: bash
+        run: |
+          docker compose -f "$COMPOSE_FILE" logs --no-color postgres redis backend \
+            > docs/review/mvp_verification_pack/artifacts/perf_sse_compose_logs.txt || true
+
+      - name: Upload perf artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-sse-nightly-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            perf/out/result.json
+            docs/review/mvp_verification_pack/artifacts/perf_sse_gate_*.json
+            docs/review/mvp_verification_pack/artifacts/perf_sse_gate_*.txt
+            docs/review/mvp_verification_pack/artifacts/perf_sse_compose_logs.txt
+
+      - name: Compose down clean volume
+        if: always()
+        shell: bash
+        run: |
+          docker compose -f "$COMPOSE_FILE" down -v
+          exit 0

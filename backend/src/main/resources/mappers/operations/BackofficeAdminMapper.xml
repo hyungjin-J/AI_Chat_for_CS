@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aichatbot.contexts.operations.domain.mapper.BackofficeAdminMapper">
+
+    <resultMap id="AdminResourceRowMap" type="com.aichatbot.contexts.operations.domain.AdminResourceRow">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="resource_type" javaType="java.lang.String"/>
+            <arg column="resource_key" javaType="java.lang.String"/>
+            <arg column="status" javaType="java.lang.String"/>
+            <arg column="payload_json" javaType="java.lang.String"/>
+            <arg column="active_flag" javaType="java.lang.Boolean"/>
+            <arg column="last_rotated_at" javaType="java.time.Instant"/>
+            <arg column="created_by" javaType="java.util.UUID"/>
+            <arg column="updated_by" javaType="java.util.UUID"/>
+            <arg column="created_at" javaType="java.time.Instant"/>
+            <arg column="updated_at" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="OpsTraceRowMap" type="com.aichatbot.contexts.operations.domain.OpsTraceRow">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="trace_id" javaType="java.util.UUID"/>
+            <arg column="event_type" javaType="java.lang.String"/>
+            <arg column="metric_key" javaType="java.lang.String"/>
+            <arg column="metric_value" javaType="java.lang.Long"/>
+            <arg column="dimensions_json" javaType="java.lang.String"/>
+            <arg column="event_time" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="OpsMetricSummaryRowMap" type="com.aichatbot.contexts.operations.domain.OpsMetricSummaryRow">
+        <constructor>
+            <arg column="metric_key" javaType="java.lang.String"/>
+            <arg column="metric_value" javaType="java.lang.Long"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="OpsRollbackRowMap" type="com.aichatbot.contexts.operations.domain.OpsRollbackRow">
+        <constructor>
+            <arg column="id" javaType="java.util.UUID"/>
+            <arg column="tenant_id" javaType="java.util.UUID"/>
+            <arg column="target_type" javaType="java.lang.String"/>
+            <arg column="target_id" javaType="java.lang.String"/>
+            <arg column="status" javaType="java.lang.String"/>
+            <arg column="reason" javaType="java.lang.String"/>
+            <arg column="requested_by" javaType="java.util.UUID"/>
+            <arg column="created_at" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insertAdminResource">
+        INSERT INTO tb_admin_resource(
+            id,
+            tenant_id,
+            resource_type,
+            resource_key,
+            status,
+            payload_json,
+            active_flag,
+            last_rotated_at,
+            created_by,
+            updated_by,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{resourceType},
+            #{resourceKey},
+            #{status},
+            #{payloadJson},
+            #{activeFlag},
+            #{lastRotatedAt},
+            #{createdBy},
+            #{updatedBy},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <update id="updateAdminResource">
+        UPDATE tb_admin_resource
+        SET status = #{status},
+            payload_json = #{payloadJson},
+            active_flag = #{activeFlag},
+            last_rotated_at = #{lastRotatedAt},
+            updated_by = #{updatedBy},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND resource_type = #{resourceType}
+          AND resource_key = #{resourceKey}
+    </update>
+
+    <select id="findAdminResource" resultMap="AdminResourceRowMap">
+        SELECT id,
+               tenant_id,
+               resource_type,
+               resource_key,
+               status,
+               payload_json,
+               active_flag,
+               last_rotated_at,
+               created_by,
+               updated_by,
+               created_at,
+               updated_at
+        FROM tb_admin_resource
+        WHERE tenant_id = #{tenantId}
+          AND resource_type = #{resourceType}
+          AND resource_key = #{resourceKey}
+    </select>
+
+    <select id="listAdminResources" resultMap="AdminResourceRowMap">
+        SELECT id,
+               tenant_id,
+               resource_type,
+               resource_key,
+               status,
+               payload_json,
+               active_flag,
+               last_rotated_at,
+               created_by,
+               updated_by,
+               created_at,
+               updated_at
+        FROM tb_admin_resource
+        WHERE tenant_id = #{tenantId}
+          AND resource_type = #{resourceType}
+        ORDER BY updated_at DESC, resource_key ASC
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
+    <update id="deactivateResourcesByType">
+        UPDATE tb_admin_resource
+        SET active_flag = FALSE,
+            updated_by = #{updatedBy},
+            updated_at = #{updatedAt}
+        WHERE tenant_id = #{tenantId}
+          AND resource_type = #{resourceType}
+          AND active_flag = TRUE
+    </update>
+
+    <select id="findOpsTraces" resultMap="OpsTraceRowMap">
+        SELECT id,
+               trace_id,
+               event_type,
+               metric_key,
+               metric_value,
+               CAST(dimensions_json AS VARCHAR) AS dimensions_json,
+               event_time
+        FROM tb_ops_event
+        WHERE tenant_id = #{tenantId}
+          <if test="fromUtc != null">
+              AND event_time &gt;= #{fromUtc}
+          </if>
+          <if test="toUtc != null">
+              AND event_time &lt;= #{toUtc}
+          </if>
+          <if test="keyword != null and keyword != ''">
+              AND (
+                  LOWER(metric_key) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+                  OR LOWER(event_type) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+                  OR LOWER(CAST(trace_id AS VARCHAR)) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+                  OR LOWER(CAST(dimensions_json AS VARCHAR)) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+              )
+          </if>
+        ORDER BY event_time DESC
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
+    <select id="findOpsMetricSummary" resultMap="OpsMetricSummaryRowMap">
+        SELECT metric_key,
+               SUM(metric_value) AS metric_value
+        FROM tb_api_metric_hourly
+        WHERE tenant_id = #{tenantId}
+          <if test="fromUtc != null">
+              AND hour_bucket_utc &gt;= #{fromUtc}
+          </if>
+          <if test="toUtc != null">
+              AND hour_bucket_utc &lt;= #{toUtc}
+          </if>
+        GROUP BY metric_key
+        ORDER BY metric_key ASC
+    </select>
+
+    <insert id="insertOpsRollback">
+        INSERT INTO tb_ops_rollback(
+            id,
+            tenant_id,
+            target_type,
+            target_id,
+            status,
+            reason,
+            requested_by,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            #{id},
+            #{tenantId},
+            #{targetType},
+            #{targetRef},
+            #{status},
+            #{reason},
+            #{requestedBy},
+            #{createdAt},
+            #{createdAt}
+        )
+    </insert>
+
+    <select id="findRecentRollbacks" resultMap="OpsRollbackRowMap">
+        SELECT id,
+               tenant_id,
+               target_type,
+               target_id,
+               status,
+               reason,
+               requested_by,
+               created_at
+        FROM tb_ops_rollback
+        WHERE tenant_id = #{tenantId}
+        ORDER BY created_at DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

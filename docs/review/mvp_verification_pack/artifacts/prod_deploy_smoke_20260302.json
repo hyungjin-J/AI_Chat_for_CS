@@ -1,0 +1,36 @@
+{
+  "status": "SKIPPED",
+  "reason_code": "DOCKER_ENGINE_DOWN",
+  "remediation_hint": "Start Docker Desktop/Engine, verify `docker info` returns Server details, then rerun smoke.",
+  "docker_unavailable_policy": "skipped",
+  "ssot_compose_file": "infra/compose/production/docker-compose.prod.yml",
+  "base_url": "http://localhost:8080",
+  "health_path": "/actuator/health",
+  "health_url": "http://localhost:8080/actuator/health",
+  "started_at_utc": "2026-03-02T13:23:59Z",
+  "finished_at_utc": "2026-03-02T13:24:00Z",
+  "flyway_row_count": null,
+  "health_contract": {
+    "without_trace_expected_status": 409,
+    "without_trace_status": null,
+    "with_trace_expected_status": 200,
+    "with_trace_status": null,
+    "warmup_expected_status": 200,
+    "warmup_status": null
+  },
+  "commands": [
+    {
+      "name": "docker_info",
+      "command": "docker info",
+      "exit_code": 1,
+      "duration_ms": 312,
+      "stdout_tail": "Client:\n Version:    29.2.0\n Context:    desktop-linux\n Debug Mode: true\n Plugins:\n  ai: Docker AI Agent - Ask Gordon (Docker Inc.)\n    Version:  v1.17.2\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-ai.exe\n  buildx: Docker Buildx (Docker Inc.)\n    Version:  v0.31.1-desktop.1\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-buildx.exe\n  compose: Docker Compose (Docker Inc.)\n    Version:  v5.0.2\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-compose.exe\n  debug: Get a shell into any image or container (Docker Inc.)\n    Version:  0.0.47\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-debug.exe\n  desktop: Docker Desktop commands (Docker Inc.)\n    Version:  v0.3.0\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-desktop.exe\n  extension: Manages Docker extensions (Docker Inc.)\n    Version:  v0.2.31\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-extension.exe\n  init: Creates Docker-related starter files for your project (Docker Inc.)\n    Version:  v1.4.0\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-init.exe\n  mcp: Docker MCP Plugin (Docker Inc.)\n    Version:  v0.38.0\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-mcp.exe\n  model: Docker Model Runner (Docker Inc.)\n    Version:  v1.0.8\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-model.exe\n  offload: Docker Offload (Docker Inc.)\n    Version:  v0.5.42\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-offload.exe\n  pass: Docker Pass Secrets Manager Plugin (beta) (Docker Inc.)\n    Version:  v0.0.24\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-pass.exe\n  sandbox: Docker Sandbox (Docker Inc.)\n    Version:  v0.11.0\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-sandbox.exe\n  sbom: View the packaged-based Software Bill Of Materials (SBOM) for an image (Anchore Inc.)\n    Version:  0.6.0\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-sbom.exe\n  scout: Docker Scout (Docker Inc.)\n    Version:  v1.19.0\n    Path:     C:\\Program Files\\Docker\\cli-plugins\\docker-scout.exe\n\nServer:",
+      "stderr_tail": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+    }
+  ],
+  "probes": {
+    "warmup": null,
+    "without_trace": null,
+    "with_trace": null
+  }
+}

@@ -1,0 +1,10 @@
+e2e_smoke_trace_samples
+status=FAIL
+reason_code=TARGET_UNREACHABLE
+remediation_hint=Start backend and ensure base_url is reachable before running E2E smoke.
+generated_at_utc=2026-03-02T15:55:49.967382Z
+base_url=http://localhost:8080
+target_tenant_key=demo-tenant
+effective_auth_tenant_key=demo-tenant
+failure=BOOTSTRAP stage=preflight_base_url error_code=TARGET_UNREACHABLE message=base_url was unreachable during preflight runbook=docs/ops/runbook/README.md
+runbook_on_failure=docs/ops/runbook/README.md

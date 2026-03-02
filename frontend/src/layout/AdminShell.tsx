@@ -28,6 +28,7 @@ export function AdminShell() {
                     <NavLink to="/admin/audit">Audit Logs</NavLink>
                     <NavLink to="/admin/blocks">Blocks</NavLink>
                     <NavLink to="/admin/sessions">Sessions</NavLink>
+                    <NavLink to="/admin/spec-coverage">Spec Coverage</NavLink>
                     {showRbac && <NavLink to="/admin/rbac">RBAC Matrix</NavLink>}
                 </aside>
                 <section className="console-content">

@@ -14,7 +14,7 @@ $npmVersion = (npm -v).Trim()
 npm_version=$npmVersion
 "@ | Out-File -FilePath "$artifactDir\node_runtime_discipline_check.txt" -Encoding utf8
 $nodeGateOutput = "$artifactDir\phase2_1_2_node_ssot_check.txt"
-python scripts/check_node_version.py `
+python scripts/assert_node_ssot.py `
     --nvmrc .nvmrc `
     --package-json frontend/package.json `
     --check-runtime `
@@ -29,7 +29,16 @@ Gate report: $nodeGateOutput
 "@
 }
 
-Write-Host "[2/23] workpack + specialized agent report contract"
+Write-Host "[2/25] env contract gate"
+python scripts/validate_env_contract.py `
+    --env-example .env.example `
+    --output-txt "$artifactDir\env_contract_check.txt" `
+    --output-json "$artifactDir\env_contract_check.json"
+if ($LASTEXITCODE -ne 0) {
+    throw "env contract gate failed: exit_code=$LASTEXITCODE"
+}
+
+Write-Host "[3/25] workpack + specialized agent report contract"
 python scripts/assert_workpack_agent_report_contract.py `
     --use-git-diff `
     --output-txt "$artifactDir\workpack_agent_contract_v2.txt" `

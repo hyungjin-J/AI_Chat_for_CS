@@ -1,5 +1,5 @@
 verify_mapper_namespaces
 status=PASS
-mapper_interface_count=22
-xml_mapper_count=22
+mapper_interface_count=24
+xml_mapper_count=24
 violation_count=0

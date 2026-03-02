@@ -1,0 +1,17 @@
+{
+  "status": "FAIL",
+  "reason_code": "DATA_UNAVAILABLE",
+  "generated_at_utc": "2026-03-02T13:21:37.063983Z",
+  "report_path": "eval/out/latest/report.json",
+  "thresholds_path": "eval/thresholds.yaml",
+  "violation_count": 1,
+  "violations": [
+    {
+      "code": "DATA_UNAVAILABLE",
+      "metric": "preflight",
+      "message": "precondition failed before metric evaluation",
+      "actual": "admin_login_failed tenant=demo-tenant status=0 error_code= message=network_error=[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+      "expected": "status=PASS"
+    }
+  ]
+}

@@ -1,0 +1,3005 @@
+openapi: 3.0.3
+info:
+  title: AI_Chatbot API Skeleton
+  version: 0.1.0-skeleton
+  description: Auto-generated skeleton from workbook; schemas are intentionally coarse.
+servers:
+- url: http://localhost:8080
+paths:
+  /v1/admin/audit-logs:
+    get:
+      operationId: opsAuditLogQuery
+      summary: Admin audit log query
+      description: Search admin audit events with trace and actor filters.
+      tags:
+      - 운영 관측 통합
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-AUDIT-LOG-QUERY
+      x-source-row: 84
+  /v1/admin/audit-logs/chain-verify:
+    get:
+      operationId: opsAuditChainVerify
+      summary: Audit hash chain ??
+      description: tenant ??? audit hash chain? ???? ??? ??? ????.
+      tags:
+      - ?? ?? ??
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-AUDIT-CHAIN-VERIFY
+      x-source-row: 98
+  /v1/admin/audit-logs/export:
+    get:
+      operationId: opsAuditLogExport
+      summary: Audit ?? ????
+      description: Legacy synchronous export for small scope only. Use async export-jobs for production-scale payloads.
+      tags:
+      - ?? ?? ??
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-AUDIT-LOG-EXPORT
+      x-source-row: 97
+  /v1/admin/audit-logs/export-jobs:
+    post:
+      operationId: opsAuditExportJobCreate
+      summary: Audit export job create (async)
+      description: Create async audit export job with tenant/date/range limits.
+      tags:
+      - ?? ?? ??
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-AUDIT-EXPORT-JOB-CREATE
+      x-source-row: 99
+  /v1/admin/audit-logs/export-jobs/{job_id}:
+    get:
+      operationId: opsAuditExportJobStatus
+      summary: Audit export job status
+      description: Check async export job status and error details.
+      tags:
+      - ?? ?? ??
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-AUDIT-EXPORT-JOB-STATUS
+      x-source-row: 100
+  /v1/admin/audit-logs/export-jobs/{job_id}/download:
+    get:
+      operationId: opsAuditExportJobDownload
+      summary: Audit export job download
+      description: Download completed export payload from DB spool.
+      tags:
+      - ?? ?? ??
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-AUDIT-EXPORT-JOB-DOWNLOAD
+      x-source-row: 101
+  /v1/admin/audit-logs/{audit_id}/diff:
+    get:
+      operationId: opsAuditChangeDiff
+      summary: Admin audit change diff
+      description: Get before/after diff payload for one audit event.
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: audit_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-AUDIT-CHANGE-DIFF
+      x-source-row: 85
+  /v1/admin/change-notices/{notice_id}/publish:
+    post:
+      operationId: opsChangeNoticePublish
+      summary: 변경 공지 발행
+      description: 변경 공지 발행 기능 제공
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: notice_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: OPS-CHANGE-NOTICE-PUBLISH
+      x-source-row: 59
+  /v1/admin/dashboard/series:
+    get:
+      operationId: opsAdminDashboardSeries
+      summary: Admin dashboard time-series
+      description: Time-series KPI query for dashboard widgets.
+      tags:
+      - 운영 관측 통합
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-ADMIN-DASHBOARD-SERIES
+      x-source-row: 76
+  /v1/admin/dashboard/summary:
+    get:
+      operationId: opsAdminDashboardSummary
+      summary: Admin dashboard summary
+      description: Manager/System Admin dashboard summary (traffic, latency, error, cost).
+      tags:
+      - 운영 관측 통합
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-ADMIN-DASHBOARD-SUMMARY
+      x-source-row: 75
+  /v1/admin/deploy-approvals:
+    post:
+      operationId: opsDeployApprovalCreate
+      summary: 배포 승인 요청
+      description: 배포 승인 요청 기능 제공
+      tags:
+      - 운영 관측 통합
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: OPS-DEPLOY-APPROVAL-CREATE
+      x-source-row: 57
+  /v1/admin/deploy-approvals/{approval_id}/actions/{action}:
+    post:
+      operationId: opsDeployApprovalAct
+      summary: 배포 승인 처리
+      description: 배포 승인 처리 기능 제공
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: approval_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: action
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: OPS-DEPLOY-APPROVAL-ACT
+      x-source-row: 58
+  /v1/admin/errors/catalog/{error_code}:
+    put:
+      operationId: opsErrorCatalogUpsert
+      summary: 에러코드 카탈로그 관리
+      description: 에러코드 카탈로그 관리 기능 제공
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: error_code
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: OPS-ERROR-CATALOG-UPSERT
+      x-source-row: 56
+  /v1/admin/kb/documents:
+    get:
+      operationId: kbDocList
+      summary: 문서 목록 조회
+      description: 문서 목록 조회 기능 제공
+      tags:
+      - 지식베이스 관리
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: KB-DOC-LIST
+      x-source-row: 25
+    post:
+      operationId: kbDocUpload
+      summary: 문서 업로드
+      description: 문서 업로드 기능 제공
+      tags:
+      - 지식베이스 관리
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: KB-DOC-UPLOAD
+      x-source-row: 24
+  /v1/admin/kb/documents/{doc_id}/approve:
+    post:
+      operationId: kbDocApprove
+      summary: 문서 승인
+      description: 문서 승인 기능 제공
+      tags:
+      - 지식베이스 관리
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: KB-DOC-APPROVE
+      x-source-row: 26
+  /v1/admin/kb/documents/{doc_id}/versions/{version}/rollback:
+    post:
+      operationId: kbDocRollback
+      summary: 문서 버전 롤백
+      description: 문서 버전 롤백 기능 제공
+      tags:
+      - 지식베이스 관리
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: KB-DOC-ROLLBACK
+      x-source-row: 27
+  /v1/admin/kb/index-operations:
+    get:
+      operationId: opsKbIndexStatus
+      summary: KB indexing operation status
+      description: Query ingest/index/vector lifecycle status with failures.
+      tags:
+      - 지식베이스 관리
+      parameters:
+      - name: kb_id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-KB-INDEX-STATUS
+      x-source-row: 81
+  /v1/admin/kb/reindex:
+    post:
+      operationId: kbReindexRequest
+      summary: 재색인 요청
+      description: 재색인 요청 기능 제공
+      tags:
+      - 지식베이스 관리
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: KB-REINDEX-REQUEST
+      x-source-row: 28
+  /v1/admin/kb/reindex/{job_id}:
+    get:
+      operationId: kbReindexStatus
+      summary: 재색인 상태 조회
+      description: 재색인 상태 조회 기능 제공
+      tags:
+      - 지식베이스 관리
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: KB-REINDEX-STATUS
+      x-source-row: 29
+  /v1/admin/kb/search/test:
+    post:
+      operationId: kbHybridSearchTest
+      summary: 하이브리드 검색 테스트
+      description: 하이브리드 검색 테스트 기능 제공
+      tags:
+      - 지식베이스 관리
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: KB-HYBRID-SEARCH-TEST
+      x-source-row: 30
+  /v1/admin/mcp/servers/{server_id}:
+    put:
+      operationId: mcpServerUpsert
+      summary: MCP 서버 등록/수정
+      description: MCP 서버 등록/수정 기능 제공
+      tags:
+      - Tool MCP 연동
+      parameters:
+      - name: server_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: MCP-SERVER-UPSERT
+      x-source-row: 50
+  /v1/admin/models:
+    get:
+      operationId: admModelList
+      summary: 모델 목록 조회
+      description: 모델 목록 조회 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-MODEL-LIST
+      x-source-row: 38
+    post:
+      operationId: admModelCreate
+      summary: 모델 등록
+      description: 모델 등록 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-MODEL-CREATE
+      x-source-row: 39
+  /v1/admin/models/{model_id}/activate:
+    post:
+      operationId: admModelActivate
+      summary: 활성 모델 전환
+      description: 활성 모델 전환 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-MODEL-ACTIVATE
+      x-source-row: 40
+  /v1/admin/models/{model_id}/rollback:
+    post:
+      operationId: admModelRollback
+      summary: 활성 모델 롤백
+      description: 활성 모델 롤백 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-MODEL-ROLLBACK
+      x-source-row: 41
+  /v1/admin/policies/{policy_id}:
+    put:
+      operationId: admPolicyUpdate
+      summary: 정책/프롬프트 업데이트
+      description: 정책/프롬프트 업데이트 기능 제공
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-POLICY-UPDATE
+      x-source-row: 37
+  /v1/admin/provider-keys/{provider}:
+    put:
+      operationId: admProviderKeyUpsert
+      summary: Provider 키 등록/수정
+      description: Provider 키 등록/수정 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      parameters:
+      - name: provider
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-PROVIDER-KEY-UPSERT
+      x-source-row: 44
+  /v1/admin/provider-keys/{provider}/rotate:
+    post:
+      operationId: admProviderKeyRotate
+      summary: Provider 키 회전
+      description: Provider 키 회전 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      parameters:
+      - name: provider
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-PROVIDER-KEY-ROTATE
+      x-source-row: 45
+  /v1/admin/providers/{provider_id}/secret-ref:
+    post:
+      operationId: admProviderSecretrefBind
+      summary: Provider secret_ref bind
+      description: Bind/rotate provider secret reference (never plaintext key).
+      tags:
+      - LLM 모델 시크릿 관리
+      parameters:
+      - name: provider_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-PROVIDER-SECRETREF-BIND
+      x-source-row: 80
+  /v1/admin/rbac/approval-requests:
+    get:
+      operationId: admRbacApprovalRequestList
+      summary: RBAC ?? ?? ??
+      description: RBAC ?? ??(PENDING/APPLIED/REJECTED) ??? ????.
+      tags:
+      - ?? ?? ??
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-RBAC-APPROVAL-REQUEST-LIST
+      x-source-row: 94
+  /v1/admin/rbac/approval-requests/{request_id}/approve:
+    post:
+      operationId: admRbacApprovalRequestApprove
+      summary: RBAC ?? ?? ??
+      description: SYSTEM_ADMIN ?? 1?? ????, 2? ?? ? matrix ????.
+      tags:
+      - ?? ?? ??
+      parameters:
+      - name: request_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-RBAC-APPROVAL-REQUEST-APPROVE
+      x-source-row: 95
+  /v1/admin/rbac/approval-requests/{request_id}/reject:
+    post:
+      operationId: admRbacApprovalRequestReject
+      summary: RBAC ?? ?? ??
+      description: RBAC ?? ??? ?? ????.
+      tags:
+      - ?? ?? ??
+      parameters:
+      - name: request_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-RBAC-APPROVAL-REQUEST-REJECT
+      x-source-row: 96
+  /v1/admin/rbac/matrix/{resource_key}:
+    put:
+      operationId: admRbacMatrixUpsert
+      summary: Admin RBAC matrix change request create
+      description: Create RBAC matrix change request; apply only after two distinct SYSTEM_ADMIN approvals.
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: resource_key
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-RBAC-MATRIX-UPSERT
+      x-source-row: 86
+  /v1/admin/routing-rules/test:
+    post:
+      operationId: admRoutingRuleTest
+      summary: 라우팅 룰 테스트
+      description: 라우팅 룰 테스트 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-ROUTING-RULE-TEST
+      x-source-row: 43
+  /v1/admin/routing-rules/{rule_id}:
+    put:
+      operationId: admRoutingRuleUpsert
+      summary: 라우팅 룰 등록/수정
+      description: 라우팅 룰 등록/수정 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-ROUTING-RULE-UPSERT
+      x-source-row: 42
+  /v1/admin/templates:
+    get:
+      operationId: tmpTemplateList
+      summary: 템플릿 목록 조회
+      description: 템플릿 목록 조회 기능 제공
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: TMP-TEMPLATE-LIST
+      x-source-row: 31
+    post:
+      operationId: tmpTemplateCreate
+      summary: 템플릿 생성
+      description: 템플릿 생성 기능 제공
+      tags:
+      - 템플릿 정책 관리
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: TMP-TEMPLATE-CREATE
+      x-source-row: 32
+  /v1/admin/templates/{template_id}/approve:
+    post:
+      operationId: tmpTemplateApprove
+      summary: 템플릿 승인
+      description: 템플릿 승인 기능 제공
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: TMP-TEMPLATE-APPROVE
+      x-source-row: 33
+  /v1/admin/templates/{template_id}/deploy:
+    post:
+      operationId: tmpTemplateDeploy
+      summary: 템플릿 배포
+      description: 템플릿 배포 기능 제공
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: TMP-TEMPLATE-DEPLOY
+      x-source-row: 34
+  /v1/admin/templates/{template_id}/rollback:
+    post:
+      operationId: tmpTemplateRollback
+      summary: 템플릿 롤백
+      description: 템플릿 롤백 기능 제공
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: TMP-TEMPLATE-ROLLBACK
+      x-source-row: 35
+  /v1/admin/tenants/{tenant_id}/quota:
+    put:
+      operationId: admTenantQuotaUpsert
+      summary: Tenant quota upsert
+      description: Create/update tenant quota and effective period.
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: tenant_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-TENANT-QUOTA-UPSERT
+      x-source-row: 83
+  /v1/admin/tenants/{tenant_id}/usage-report:
+    get:
+      operationId: opsTenantBillingReport
+      summary: Tenant billing/usage report
+      description: Daily/monthly usage and estimated cost report by tenant.
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: tenant_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: granularity
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: include_quota
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-TENANT-BILLING-REPORT
+      x-source-row: 82
+  /v1/admin/tools/allowlist/{tool_name}:
+    put:
+      operationId: toolAllowlistUpdate
+      summary: Tool allowlist 변경
+      description: Tool allowlist 변경 기능 제공
+      tags:
+      - Tool MCP 연동
+      parameters:
+      - name: tool_name
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: TOOL-ALLOWLIST-UPDATE
+      x-source-row: 49
+  /v1/admin/version-bundles:
+    get:
+      operationId: admVersionBundleList
+      summary: Version bundle list
+      description: List policy/template/prompt bundles with status and active flag.
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: active
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-VERSION-BUNDLE-LIST
+      x-source-row: 77
+  /v1/admin/version-bundles/{bundle_id}/activate:
+    post:
+      operationId: admVersionBundleActivate
+      summary: Version bundle activate
+      description: Activate approved version bundle in production path.
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: bundle_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-VERSION-BUNDLE-ACTIVATE
+      x-source-row: 78
+  /v1/admin/version-bundles/{bundle_id}/rollback:
+    post:
+      operationId: admVersionBundleRollback
+      summary: Version bundle rollback
+      description: Rollback to previous approved bundle version.
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: bundle_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - ADMIN
+      x-program-id: ADM-VERSION-BUNDLE-ROLLBACK
+      x-source-row: 79
+  /v1/attachments/presign:
+    post:
+      operationId: apiAttachmentPresign
+      summary: 첨부 URL 발급
+      description: 첨부 URL 발급 기능 제공
+      tags:
+      - 첨부 파일
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - CUSTOMER
+      x-program-id: API-ATTACHMENT-PRESIGN
+      x-source-row: 17
+  /v1/attachments/{attachment_id}/complete:
+    post:
+      operationId: apiAttachmentComplete
+      summary: 첨부 업로드 완료
+      description: 첨부 업로드 완료 기능 제공
+      tags:
+      - 첨부 파일
+      parameters:
+      - name: attachment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - CUSTOMER
+      x-program-id: API-ATTACHMENT-COMPLETE
+      x-source-row: 18
+  /v1/auth/login:
+    post:
+      operationId: apiAuthLogin
+      summary: 로그인 토큰 발급
+      description: JWT ??? + Access/Refresh ?? ??. rate-limit(tenant+ip) ? lockout ??? ???? trace_id? ? ?? ????.
+      tags:
+      - 인증 및 세션
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      x-access-level: PUBLIC
+      x-rbac-roles: []
+      x-program-id: API-AUTH-LOGIN
+      x-source-row: 2
+  /v1/auth/logout:
+    post:
+      operationId: apiAuthLogout
+      summary: 로그아웃
+      description: ???? ? refresh ?? revoke + ?? ??. CSRF Origin allowlist ?? ??.
+      tags:
+      - 인증 및 세션
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles: []
+      x-program-id: API-AUTH-LOGOUT
+      x-source-row: 4
+  /v1/auth/mfa/recovery-codes/regenerate:
+    post:
+      operationId: apiAuthMfaRecoveryRegenerate
+      summary: MFA recovery code ???
+      description: OPS/ADMIN ?? ??? recovery code? ?????.
+      tags:
+      - ?? ? ??
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles: []
+      x-program-id: API-AUTH-MFA-RECOVERY-REGENERATE
+      x-source-row: 90
+  /v1/auth/mfa/totp/activate:
+    post:
+      operationId: apiAuthMfaTotpActivate
+      summary: MFA TOTP ???
+      description: ?? TOTP ??? ???? MFA? ???? ? ??? ????.
+      tags:
+      - ?? ? ??
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      x-access-level: PUBLIC
+      x-rbac-roles: []
+      x-program-id: API-AUTH-MFA-TOTP-ACTIVATE
+      x-source-row: 88
+  /v1/auth/mfa/totp/enroll:
+    post:
+      operationId: apiAuthMfaTotpEnroll
+      summary: MFA TOTP ?? ??
+      description: MFA setup ticket ???? TOTP secret/otpauth URI? ????.
+      tags:
+      - ?? ? ??
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      x-access-level: PUBLIC
+      x-rbac-roles: []
+      x-program-id: API-AUTH-MFA-TOTP-ENROLL
+      x-source-row: 87
+  /v1/auth/mfa/verify:
+    post:
+      operationId: apiAuthMfaVerify
+      summary: MFA 2? ??
+      description: MFA challenge(TOTP/recovery code)? ??? ?? ??? ??? ????.
+      tags:
+      - ?? ? ??
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      x-access-level: PUBLIC
+      x-rbac-roles: []
+      x-program-id: API-AUTH-MFA-VERIFY
+      x-source-row: 89
+  /v1/auth/refresh:
+    post:
+      operationId: apiAuthRefresh
+      summary: Access Token 재발급
+      description: Refresh ?? ??(CAS) + ??? ??. cookie ??, body fallback? ?? ?? ??.
+      tags:
+      - 인증 및 세션
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      x-access-level: PUBLIC
+      x-rbac-roles: []
+      x-program-id: API-AUTH-REFRESH
+      x-source-row: 3
+  /v1/auth/sessions:
+    get:
+      operationId: apiAuthSessionsList
+      summary: '? ?? ?? ??'
+      description: ?? ??? ?? ?? ?? ??? ????.
+      tags:
+      - ?? ? ??
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles: []
+      x-program-id: API-AUTH-SESSIONS-LIST
+      x-source-row: 91
+  /v1/auth/sessions/revoke-others:
+    post:
+      operationId: apiAuthSessionsRevokeOthers
+      summary: ?? ?? ?? ??
+      description: ?? ??? ??? ??? ??? ?? revoke??.
+      tags:
+      - ?? ? ??
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles: []
+      x-program-id: API-AUTH-SESSIONS-REVOKE-OTHERS
+      x-source-row: 93
+  /v1/auth/sessions/{session_id}:
+    delete:
+      operationId: apiAuthSessionsRevoke
+      summary: ?? ?? ??
+      description: ??? ??? revoke??(?? ??).
+      tags:
+      - ?? ? ??
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles: []
+      x-program-id: API-AUTH-SESSIONS-REVOKE
+      x-source-row: 92
+  /v1/chat/bootstrap:
+    get:
+      operationId: apiSessionBootstrap
+      summary: 채팅 부트스트랩
+      description: 채팅 부트스트랩 기능 제공
+      tags:
+      - 인증 및 세션
+      parameters:
+      - name: channel_id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: locale
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: host
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tenant_key
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - CUSTOMER
+      x-program-id: API-SESSION-BOOTSTRAP
+      x-source-row: 8
+  /v1/integrations/crm/handoffs:
+    post:
+      operationId: intHandoffSync
+      summary: CRM 핸드오프 동기화
+      description: CRM 핸드오프 동기화 기능 제공
+      tags:
+      - 운영 관측 통합
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: INT-HANDOFF-SYNC
+      x-source-row: 60
+  /v1/internal/events/ingest:
+    post:
+      operationId: opsEventIngest
+      summary: 이벤트 수집
+      description: 이벤트 수집 기능 제공
+      tags:
+      - 운영 관측 통합
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: OPS-EVENT-INGEST
+      x-source-row: 55
+  /v1/internal/mcp/call:
+    post:
+      operationId: mcpCallProxy
+      summary: MCP 호출 프록시
+      description: MCP 호출 프록시 기능 제공
+      tags:
+      - Tool MCP 연동
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: MCP-CALL-PROXY
+      x-source-row: 52
+  /v1/internal/tools/execute:
+    post:
+      operationId: toolCallExecute
+      summary: Tool 실행
+      description: Tool 실행 기능 제공
+      tags:
+      - Tool MCP 연동
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: TOOL-CALL-EXECUTE
+      x-source-row: 47
+  /v1/internal/tools/validate:
+    post:
+      operationId: toolCallValidate
+      summary: Tool 파라미터 검증
+      description: Tool 파라미터 검증 기능 제공
+      tags:
+      - Tool MCP 연동
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: TOOL-CALL-VALIDATE
+      x-source-row: 48
+  /v1/ops/blocks/{block_id}:
+    put:
+      operationId: opsBlockUpsert
+      summary: Account/IP Block Upsert (temp/permanent)
+      description: ??/IP ?? ???? upsert. ???? ???? ?? ???/?? ??.
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: block_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-BLOCK-UPSERT
+      x-source-row: 72
+  /v1/ops/llm/providers/health:
+    get:
+      operationId: llmProviderHealth
+      summary: Provider 상태 조회
+      description: Provider 상태 조회 기능 제공
+      tags:
+      - LLM 모델 시크릿 관리
+      parameters:
+      - name: verbose
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: LLM-PROVIDER-HEALTH
+      x-source-row: 46
+  /v1/ops/llm/providers/{provider}/kill-switch:
+    post:
+      operationId: opsProviderKillswitch
+      summary: LLM Provider Kill-Switch
+      description: Immediate action API to stop routing to a specific model provider.
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: provider
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-PROVIDER-KILLSWITCH
+      x-source-row: 73
+  /v1/ops/mcp/servers/{server_id}/health:
+    get:
+      operationId: mcpServerHealth
+      summary: MCP 서버 헬스체크
+      description: MCP 서버 헬스체크 기능 제공
+      tags:
+      - Tool MCP 연동
+      parameters:
+      - name: server_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: verbose
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: MCP-SERVER-HEALTH
+      x-source-row: 51
+  /v1/ops/metrics/summary:
+    get:
+      operationId: opsMetricSummary
+      summary: 운영 지표 요약
+      description: 운영 지표 요약 기능 제공
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-METRIC-SUMMARY
+      x-source-row: 54
+  /v1/ops/rollbacks:
+    post:
+      operationId: opsRollbackTrigger
+      summary: Policy/Prompt/KB Rollback Trigger
+      description: Immediate action API to trigger rollback for policy/prompt/KB versions.
+      tags:
+      - 운영 관측 통합
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-ROLLBACK-TRIGGER
+      x-source-row: 74
+  /v1/ops/traces:
+    get:
+      operationId: opsTraceQuery
+      summary: 추적 로그 조회
+      description: 추적 로그 조회 기능 제공
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: OPS-TRACE-QUERY
+      x-source-row: 53
+  /v1/ops/workflow/reports:
+    get:
+      operationId: intWorkflowReport
+      summary: 통합 워크플로 리포트
+      description: 통합 워크플로 리포트 기능 제공
+      tags:
+      - 운영 관측 통합
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - OPS
+      x-program-id: INT-WORKFLOW-REPORT
+      x-source-row: 61
+  /v1/rag/answer:
+    post:
+      operationId: apiRagAnswer
+      summary: 근거 기반 답변 생성
+      description: 근거 기반 답변 생성 기능 제공
+      tags:
+      - RAG 검색 응답
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: API-RAG-ANSWER
+      x-source-row: 20
+  /v1/rag/answers/{answer_id}/citations:
+    get:
+      operationId: apiRagCitationsGet
+      summary: 인용 근거 조회
+      description: 인용 근거 조회 기능 제공
+      tags:
+      - RAG 검색 응답
+      parameters:
+      - name: answer_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - AGENT
+      x-program-id: API-RAG-CITATIONS-GET
+      x-source-row: 21
+  /v1/rag/clarify/suggest:
+    post:
+      operationId: apiRagClarifySuggest
+      summary: 명확화 질문 제안
+      description: 명확화 질문 제안 기능 제공
+      tags:
+      - RAG 검색 응답
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: API-RAG-CLARIFY-SUGGEST
+      x-source-row: 23
+  /v1/rag/query/classify:
+    post:
+      operationId: apiRagQueryClassify
+      summary: 질의 의도 분류
+      description: 질의 의도 분류 기능 제공
+      tags:
+      - RAG 검색 응답
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: API-RAG-QUERY-CLASSIFY
+      x-source-row: 22
+  /v1/rag/retrieve:
+    post:
+      operationId: apiRagRetrieve
+      summary: RAG 검색
+      description: RAG 검색 기능 제공
+      tags:
+      - RAG 검색 응답
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - SYSTEM
+      x-program-id: API-RAG-RETRIEVE
+      x-source-row: 19
+  /v1/sessions:
+    post:
+      operationId: apiSessionCreate
+      summary: 세션 생성
+      description: 세션 생성 기능 제공
+      tags:
+      - 인증 및 세션
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - CUSTOMER
+      x-program-id: API-SESSION-CREATE
+      x-source-row: 5
+  /v1/sessions/{session_id}:
+    get:
+      operationId: apiSessionGet
+      summary: 세션 조회
+      description: 세션 조회 기능 제공
+      tags:
+      - 인증 및 세션
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - CUSTOMER
+      x-program-id: API-SESSION-GET
+      x-source-row: 6
+  /v1/sessions/{session_id}/close:
+    post:
+      operationId: apiSessionClose
+      summary: 세션 종료
+      description: 세션 종료 기능 제공
+      tags:
+      - 인증 및 세션
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - CUSTOMER
+      x-program-id: API-SESSION-CLOSE
+      x-source-row: 7
+  /v1/sessions/{session_id}/csat:
+    post:
+      operationId: apiCsatPost
+      summary: CSAT 제출
+      description: CSAT 제출 기능 제공
+      tags:
+      - 메시지 대화
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - CUSTOMER
+      x-program-id: API-CSAT-POST
+      x-source-row: 13
+  /v1/sessions/{session_id}/handoff:
+    post:
+      operationId: apiHandoffRequest
+      summary: 상담원 전환 요청
+      description: 상담원 전환 요청 기능 제공
+      tags:
+      - 메시지 대화
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - CUSTOMER
+      x-program-id: API-HANDOFF-REQUEST
+      x-source-row: 14
+  /v1/sessions/{session_id}/messages:
+    get:
+      operationId: apiMessageList
+      summary: 메시지 목록
+      description: 메시지 목록 기능 제공
+      tags:
+      - 메시지 대화
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - AGENT
+      x-program-id: API-MESSAGE-LIST
+      x-source-row: 11
+    post:
+      operationId: apiMessagePost
+      summary: 질문 전송
+      description: 질문 전송 기능 제공
+      tags:
+      - 메시지 대화
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - AGENT
+      x-program-id: API-MESSAGE-POST
+      x-source-row: 9
+  /v1/sessions/{session_id}/messages/{message_id}/retry:
+    post:
+      operationId: apiMessageRetry
+      summary: 질문 재전송
+      description: 질문 재전송 기능 제공
+      tags:
+      - 메시지 대화
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: message_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Workbook skeleton response (202)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - AGENT
+      x-program-id: API-MESSAGE-RETRY
+      x-source-row: 10
+  /v1/sessions/{session_id}/messages/{message_id}/stream:
+    get:
+      operationId: apiStreamSse
+      summary: 답변 스트리밍
+      description: 답변 스트리밍 기능 제공
+      tags:
+      - 스트리밍 SSE
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: message_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: last_event_id
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            text/event-stream:
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - AGENT
+      x-program-id: API-STREAM-SSE
+      x-source-row: 15
+  /v1/sessions/{session_id}/messages/{message_id}/stream/resume:
+    get:
+      operationId: apiStreamResume
+      summary: 스트리밍 재개
+      description: 스트리밍 재개 기능 제공
+      tags:
+      - 스트리밍 SSE
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: message_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: last_event_id
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workbook skeleton response (200)
+          content:
+            text/event-stream:
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - AGENT
+      x-program-id: API-STREAM-RESUME
+      x-source-row: 16
+  /v1/sessions/{session_id}/quick-replies/{quick_reply_id}:
+    post:
+      operationId: apiQuickreplyPost
+      summary: 퀵리플라이 전송
+      description: 퀵리플라이 전송 기능 제공
+      tags:
+      - 메시지 대화
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: quick_reply_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - AGENT
+      x-program-id: API-QUICKREPLY-POST
+      x-source-row: 12
+  /v1/sessions/{session_id}/template-recommendations:
+    post:
+      operationId: tmpRecommendButton
+      summary: 템플릿 추천(버튼 전용)
+      description: 템플릿 추천(버튼 전용) 기능 제공
+      tags:
+      - 템플릿 정책 관리
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Workbook skeleton response (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+      security:
+      - bearerAuth: []
+      x-access-level: AUTHENTICATED
+      x-rbac-roles:
+      - AGENT
+      x-program-id: TMP-RECOMMEND-BUTTON
+      x-source-row: 36
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

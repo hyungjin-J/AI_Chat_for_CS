@@ -1,0 +1,7 @@
+npm error code EBADENGINE
+npm error engine Unsupported engine
+npm error engine Not compatible with your version of node/npm: frontend@0.0.0
+npm error notsup Not compatible with your version of node/npm: frontend@0.0.0
+npm error notsup Required: {"node":"22.12.0"}
+npm error notsup Actual:   {"npm":"11.6.2","node":"v24.11.1"}
+npm error A complete log of this run can be found in: C:\Users\hjjmj\AppData\Local\npm-cache\_logs\2026-03-02T06_01_47_320Z-debug-0.log

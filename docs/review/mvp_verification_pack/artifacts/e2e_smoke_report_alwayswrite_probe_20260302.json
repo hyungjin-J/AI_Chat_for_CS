@@ -1,0 +1,33 @@
+{
+  "generated_at_utc": "2026-03-02T12:03:02.282343Z",
+  "base_url": "http://127.0.0.1:18080",
+  "target_tenant_key": "demo-tenant",
+  "auth_tenant_key": "demo-tenant",
+  "effective_auth_tenant_key": "demo-tenant",
+  "role": "AGENT",
+  "status": "FAIL",
+  "summary": {
+    "scenario_total": 1,
+    "scenario_pass": 0,
+    "scenario_fail": 1
+  },
+  "scenarios": [
+    {
+      "scenario_id": "BOOTSTRAP",
+      "name": "bootstrap-login-and-prechecks",
+      "status": "FAIL",
+      "stage": "http_connect",
+      "trace_id": "",
+      "error_code": "",
+      "message": "http request failed",
+      "runbook": "docs/ops/runbook/README.md",
+      "details": {
+        "url": "http://127.0.0.1:18080/v1/auth/login",
+        "method": "POST",
+        "reason": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다"
+      }
+    }
+  ],
+  "trace_context": {},
+  "runbook_on_failure": "docs/ops/runbook/README.md"
+}

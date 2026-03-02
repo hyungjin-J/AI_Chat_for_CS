@@ -1,0 +1,16 @@
+perf_gate
+status=FAIL
+reason_code=RESULT_FILE_MISSING
+reason_detail=[Errno 2] No such file or directory: 'perf\\out\\__missing_result__.json'
+remediation_hint=Check perf runner preflight and regenerate result.json.
+generated_at_utc=2026-03-02T12:49:27.758147Z
+result_file=perf/out/__missing_result__.json
+thresholds_file=perf/thresholds.yaml
+point_count=0
+metric_count=0
+assertion_count=0
+violation_count=1
+metrics:
+assertions:
+violations:
+- [Errno 2] No such file or directory: 'perf\\out\\__missing_result__.json'

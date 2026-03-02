@@ -38,7 +38,7 @@ class NotionManualExceptionGateTest(unittest.TestCase):
                 [
                     "python",
                     str(SCRIPT_PATH),
-                    "--status-json",
+                    "--status-file",
                     str(status_path),
                     "--manual-patch",
                     str(missing_patch),
@@ -107,7 +107,7 @@ class NotionManualExceptionGateTest(unittest.TestCase):
                 [
                     "python",
                     str(SCRIPT_PATH),
-                    "--status-json",
+                    "--status-file",
                     str(status_path),
                     "--manual-patch",
                     str(patch_path),
@@ -124,6 +124,74 @@ class NotionManualExceptionGateTest(unittest.TestCase):
             self.assertNotEqual(proc.returncode, 0)
             self.assertIn("notion_blocked_status.json", proc.stdout)
             self.assertIn("field 'reason' is empty", proc.stdout)
+
+    def test_status_json_alias_still_supported(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            status_path = root / "notion_blocked_status.json"
+            patch_path = root / "notion_manual_patch.md"
+            spec_sync = root / "spec_sync_report.md"
+            preflight_ref = root / "preflight.json"
+            preflight_ref.write_text("{}", encoding="utf-8")
+
+            status_path.write_text(
+                textwrap.dedent(
+                    f"""\
+                    {{
+                      "status": "BLOCKED_AUTOMATION",
+                      "reason": "NOTION_AUTH_TOKEN_MISSING",
+                      "detected_at_kst": "2026-02-22 00:00:00 +09:00",
+                      "preflight_ref": "{preflight_ref.as_posix()}"
+                    }}
+                    """
+                ),
+                encoding="utf-8",
+            )
+            patch_path.write_text(
+                textwrap.dedent(
+                    """\
+                    - Last synced at: 2026-02-22 00:00:00 +09:00
+                    - Source file: docs/references/Development environment.csv
+                    - Version: abc1234
+                    - Change summary:
+                      1. sample
+                    https://www.notion.so/sample
+                    """
+                ),
+                encoding="utf-8",
+            )
+            spec_sync.write_text(
+                textwrap.dedent(
+                    """\
+                    notion_blocked_status.json
+                    notion_manual_patch.md
+                    BLOCKED_AUTOMATION
+                    Phase2.1
+                    """
+                ),
+                encoding="utf-8",
+            )
+
+            proc = subprocess.run(
+                [
+                    "python",
+                    str(SCRIPT_PATH),
+                    "--status-json",
+                    str(status_path),
+                    "--manual-patch",
+                    str(patch_path),
+                    "--spec-sync",
+                    str(spec_sync),
+                ],
+                cwd=root,
+                check=False,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+            self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+            self.assertIn("status=PASS", proc.stdout)
 
 
 if __name__ == "__main__":

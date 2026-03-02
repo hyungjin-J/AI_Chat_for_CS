@@ -1,0 +1,98 @@
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>if "Windows_NT" == "Windows_NT" setlocal
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>set DIRNAME=C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend\ 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>if "C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend\" == "" set DIRNAME=. 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>set APP_BASE_NAME=gradlew 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>set APP_HOME=C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend\ 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>for %i in ("C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend\") do set APP_HOME=%~fi 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>set APP_HOME=C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend\ 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m" 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>if defined JAVA_HOME goto findJavaFromJavaHome 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>set JAVA_EXE=java.exe 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>java.exe -version  1>NUL 2>&1 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>if 0 EQU 0 goto execute 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>"java.exe" "-Xmx64m" "-Xms64m"   "-Dorg.gradle.appname=gradlew" -jar "C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend\\gradle\wrapper\gradle-wrapper.jar" test --no-daemon 
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :compileTestJava UP-TO-DATE
+
+> Task :lintUuidMapperParams
+[uuid-lint] PASS: checked_mapper_files=24 violations=0
+[uuid-lint] allowlist=['login_id', 'loginid']
+
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+> Task :test
+
+2026-03-02T14:48:28.030+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@c808207, started on Mon Mar 02 14:47:41 KST 2026
+2026-03-02T14:48:28.082+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-03-02T14:48:28.085+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-03-02T14:48:28.088+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@3eff5c32, started on Mon Mar 02 14:47:52 KST 2026
+2026-03-02T14:48:28.123+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-03-02T14:48:28.124+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2026-03-02T14:48:28.125+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@32836c7e, started on Mon Mar 02 14:47:56 KST 2026
+2026-03-02T14:48:28.140+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-03-02T14:48:28.141+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2026-03-02T14:48:28.141+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@47c90585, started on Mon Mar 02 14:47:58 KST 2026
+2026-03-02T14:48:28.151+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-03-02T14:48:28.151+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2026-03-02T14:48:28.151+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2fe12b04, started on Mon Mar 02 14:48:00 KST 2026
+2026-03-02T14:48:28.161+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-03-02T14:48:28.162+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+2026-03-02T14:48:28.162+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@5aef3960, started on Mon Mar 02 14:48:01 KST 2026
+2026-03-02T14:48:28.178+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
+2026-03-02T14:48:28.178+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+2026-03-02T14:48:28.179+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@379327f3, started on Mon Mar 02 14:48:02 KST 2026
+2026-03-02T14:48:28.189+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
+2026-03-02T14:48:28.190+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+2026-03-02T14:48:28.190+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@6aa53438, started on Mon Mar 02 14:48:04 KST 2026
+2026-03-02T14:48:28.203+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown initiated...
+2026-03-02T14:48:28.203+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown completed.
+2026-03-02T14:48:28.204+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@1af064a4, started on Mon Mar 02 14:48:05 KST 2026
+2026-03-02T14:48:28.216+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Shutdown initiated...
+2026-03-02T14:48:28.217+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Shutdown completed.
+2026-03-02T14:48:28.217+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@4df85d38, started on Mon Mar 02 14:48:08 KST 2026
+2026-03-02T14:48:28.231+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Shutdown initiated...
+2026-03-02T14:48:28.232+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Shutdown completed.
+2026-03-02T14:48:28.232+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@3b1769a7, started on Mon Mar 02 14:48:11 KST 2026
+2026-03-02T14:48:28.244+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown initiated...
+2026-03-02T14:48:28.245+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown completed.
+2026-03-02T14:48:28.245+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@59e5c9b8, started on Mon Mar 02 14:48:19 KST 2026
+2026-03-02T14:48:28.257+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown initiated...
+2026-03-02T14:48:28.257+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown completed.
+2026-03-02T14:48:28.257+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@41a1a8f6, started on Mon Mar 02 14:48:20 KST 2026
+2026-03-02T14:48:28.264+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown initiated...
+2026-03-02T14:48:28.264+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown completed.
+2026-03-02T14:48:28.265+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@7da00771, started on Mon Mar 02 14:48:22 KST 2026
+2026-03-02T14:48:28.274+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown initiated...
+2026-03-02T14:48:28.275+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown completed.
+2026-03-02T14:48:28.275+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@37e2e6a, started on Mon Mar 02 14:48:24 KST 2026
+2026-03-02T14:48:28.281+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown initiated...
+2026-03-02T14:48:28.283+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown completed.
+2026-03-02T14:48:28.283+09:00 DEBUG 15216 --- [backend] [ionShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@762963f5, started on Mon Mar 02 14:48:26 KST 2026
+2026-03-02T14:48:28.294+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Shutdown initiated...
+2026-03-02T14:48:28.296+09:00  INFO 15216 --- [backend] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Shutdown completed.
+
+BUILD SUCCESSFUL in 1m
+5 actionable tasks: 2 executed, 3 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.0/userguide/configuration_cache_enabling.html
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>if 0 EQU 0 goto mainEnd 
+
+C:\Users\hjjmj\OneDrive\바탕 화면\AI_Chatbot\backend>if "Windows_NT" == "Windows_NT" endlocal

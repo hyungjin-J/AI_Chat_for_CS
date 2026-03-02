@@ -10,7 +10,7 @@ This document is for operators and reviewers who need deterministic evidence tha
 - RTO: 60 minutes
 - RPO: 24 hours
 
-These are operational target assumptions for rehearsal and incident response planning.
+These defaults are fixed in both script output (`rto_minutes`, `rpo_hours`) and workflow operations.
 
 ## 3) Preconditions Checklist
 - Docker Desktop is available and running.
@@ -33,6 +33,19 @@ Expected outputs:
 - `docs/review/mvp_verification_pack/artifacts/db_backup_restore_rehearsal_YYYYMMDD.txt`
 - `docs/review/mvp_verification_pack/artifacts/db_backup_restore_rehearsal_YYYYMMDD.json`
 
+Key metadata in report:
+- `rto_minutes=60`
+- `rpo_hours=24`
+- `dump_size_bytes`, `dump_sha256`, `dump_created_at_utc`
+- `seed_strategy`, `seed_table`, `seed_inserted_row_count`, `fallback_reason`
+
+## 4-A) Weekly Automation
+- Weekly workflow: `.github/workflows/db-backup-restore-weekly.yml`
+- Schedule: weekly at **Monday 02:00 KST** (UTC cron: `0 17 * * 0`)
+- Manual trigger: `workflow_dispatch`
+- Legacy nightly workflow (`db-backup-restore-nightly.yml`) is dispatch-only to avoid duplicate scheduled runs.
+- Uploaded artifacts are limited to txt/json reports; dump payload files are excluded by policy.
+
 ## 5) Manual Recovery Procedure (Step-by-Step)
 1. Reset environment:
 ```powershell
@@ -46,24 +59,31 @@ docker compose -f infra/docker-compose.yml up -d postgres redis
 ```powershell
 docker compose -f infra/docker-compose.yml --profile db-tools run --rm flyway
 ```
-4. Create dump inside container and copy to host:
+4. Optional safe seed insert:
+- The rehearsal script attempts information-schema based safe-row insertion.
+- If no safe insert target is found, it falls back to:
+  - `flyway_schema_history` row count
+  - `vector` extension presence
+  - core table existence check
+- Fallback reason is recorded in the report.
+5. Create dump inside container and copy to host:
 ```powershell
 docker compose -f infra/docker-compose.yml exec -T -e PGPASSWORD=local-dev-only-password postgres `
   pg_dump -U aichatbot -d aichatbot -F c -f /tmp/db_backup_restore_source.dump
 docker compose -f infra/docker-compose.yml cp postgres:/tmp/db_backup_restore_source.dump tmp/db_backup_restore/manual.dump
 ```
-5. Destroy source and recreate blank instance:
+6. Destroy source and recreate blank instance:
 ```powershell
 docker compose -f infra/docker-compose.yml down -v
 docker compose -f infra/docker-compose.yml up -d postgres redis
 ```
-6. Restore dump:
+7. Restore dump:
 ```powershell
 docker compose -f infra/docker-compose.yml cp tmp/db_backup_restore/manual.dump postgres:/tmp/db_backup_restore_target.dump
 docker compose -f infra/docker-compose.yml exec -T -e PGPASSWORD=local-dev-only-password postgres `
   pg_restore -U aichatbot -d aichatbot --clean --if-exists --no-owner --no-privileges /tmp/db_backup_restore_target.dump
 ```
-7. Validate migration chain and smoke:
+8. Validate migration chain and smoke:
 ```powershell
 docker compose -f infra/docker-compose.yml --profile db-tools run --rm flyway `
   -url=jdbc:postgresql://postgres:5432/aichatbot `
@@ -86,6 +106,8 @@ python scripts/db_smoke_test.py `
   - Action: check Docker daemon state and compose logs.
 - `FLYWAY_MIGRATE_FAILED` / `FLYWAY_VALIDATE_FAILED`: migration chain failed.
   - Action: inspect flyway output and schema history.
+- `SAFE_SEED_*`: safe insert or fallback validation failed.
+  - Action: inspect `safe_seed_*` checks and fallback reason in rehearsal json.
 - `PG_DUMP_*` / `PG_RESTORE_*`: backup or restore command failed.
   - Action: verify credentials, dump path, and container permissions.
 - `DB_SMOKE_*`: post-restore smoke failed.
@@ -93,7 +115,11 @@ python scripts/db_smoke_test.py `
 - `CORE_QUERY_*`: deterministic seed/index validations failed.
   - Action: inspect seed migrations and index migration coverage.
 
-## 7) Rollback Flow
+## 7) Retry and Rollback Flow
+Retry policy:
+- First failure: immediate one-time retry.
+- Same failure code persists: stop auto-retry and classify by failure code group before next attempt.
+
 If restore fails or post-restore verification fails:
 
 ```powershell
@@ -119,9 +145,33 @@ Fail criteria:
 - `status=FAIL`
 - Any violation entry with actionable code/details
 
-## 9) Security Notes
+## 9) Post-Restore Operations Query Pack
+After restore + smoke PASS, run the read-only operations query pack for runtime sanity checks:
+
+```powershell
+Get-Content docs/ops/sql/DB_OPERATIONS_QUERIES.sql -Raw | `
+  docker compose -f infra/docker-compose.yml exec -T postgres `
+    psql -U aichatbot -d aichatbot
+```
+
+Save to evidence artifact:
+
+```powershell
+$artifact = "docs/review/mvp_verification_pack/artifacts/db_operations_queries_$(Get-Date -Format yyyyMMdd_HHmmss).txt"
+Get-Content docs/ops/sql/DB_OPERATIONS_QUERIES.sql -Raw | `
+  docker compose -f infra/docker-compose.yml exec -T postgres `
+    psql -U aichatbot -d aichatbot | Tee-Object -FilePath $artifact
+```
+
+Use this pack for:
+- connection/lock/long transaction triage
+- slow query diagnostics (`pg_stat_statements` if installed, fallback query otherwise)
+- index/autovacuum/table-size checks
+- replication/archiver indicators
+
+## 10) Security Notes
 - Dump files are temporary by default and deleted unless `--keep-dump` is set.
+- Dump payload files (`*.dump`) are not uploaded in CI artifacts.
 - Never commit dump payloads.
 - Keep DB credentials and tokens in environment/secret stores only.
 - Do not include sensitive payloads in evidence artifacts.
-

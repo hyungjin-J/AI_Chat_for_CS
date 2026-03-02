@@ -1,10 +1,10 @@
 # IMPLEMENTATION GUIDE FOR CHATGPT
 
-- updated_at_kst: 2026-02-27 01:29:32 +09:00
+- updated_at_kst: 2026-03-01 17:13:24 +09:00
 - base_commit_hash: 97f7502
-- current_head_short: 3d56064
+- current_head_short: 2eced8e
 - release_tag: 2026.03XX-quality-hardening-workpack
-- branch: main
+- branch: utf8-wave8-to-29
 
 ## 0) Change Summary (Added/Changed/Fixed/Removed, 10 lines)
 - Added: Wave10 canonical UTF-8 normalization for 3 canonical spec CSV files via explicit override flow.
@@ -16,6 +16,7 @@
 - Changed: `utf8_full_scan_ratchet_gate.txt/json` regenerated and remained PASS with baseline 0.
 - Added: deterministic artifact index outputs (`_INDEX.md/.json`) for latest gate evidence navigation.
 - Added: fail-closed `artifact_index_gate.txt/json` that detects stale/missing index artifacts.
+- Added: `scripts/build_release_gate_dashboard.py` with deterministic `release_gate_dashboard.md/.json` outputs.
 - Added: `scripts/mirror_and_run_frontend.ps1` one-command helper for unicode-path-safe frontend execution.
 - Changed: `docs/ops/NODE22_UNICODE_WORKSPACE_GUIDE.md` to document helper usage and smoke mode command.
 - Added: PostgreSQL readiness hardening (`pgvector` image, Flyway db-tools profile, V10/V11 migrations).
@@ -30,6 +31,17 @@
 - Added: `docs/ops/PGVECTOR_OPERATIONS.md` for IVFFlat operations baseline, probe tuning, and index maintenance runbook.
 - Added: `scripts/vector_recall_latency_bench.py` + `scripts/tests/test_vector_recall_latency_bench.py`.
 - Changed: `docs/ops/DB_LOCAL_DEV.md` with PGVECTOR benchmark execution examples and baseline delta comparison flow.
+- Added: `.github/workflows/db-backup-restore-weekly.yml` and switched `db-backup-restore-nightly.yml` to dispatch-only.
+- Changed: `scripts/db_backup_restore_rehearsal.py` with fixed RTO/RPO metadata, safe-seed fallback checks, and dump metadata capture.
+- Changed: `scripts/mirror_and_run_frontend.py` to smoke-first mode with git-clean and Node runtime guidance.
+- Added: sidecar archive policy (`ARTIFACTS_ARCHIVE_POLICY.md`) and sidecar integrity validation in artifact index/check scripts.
+- Changed: spec-sync gate workflow wiring (`pr-smoke-contract`/`release-nightly-full`) to rely on strict defaults in script.
+- Added: vector benchmark monitoring gate artifacts (`vector_bench_monitoring_gate.txt/json`) via `vector-bench-nightly` always-run summary step.
+- Changed: all `chatGPT/*` handoff docs were synchronized to the same baseline metadata and evidence references.
+- Added: `scripts/spec_impl_coverage_report.py` and `scripts/assert_spec_impl_coverage.py` for Must-first Spec -> Implementation visibility and merge-block enforcement.
+- Added: 2026-03-01 same-session sync of `chatGPT/*`, `spec_sync_report.md`, and Notion metadata pages.
+- Added: same-day Notion evidence artifact `docs/review/mvp_verification_pack/artifacts/notion_sync_evidence_20260301.md`.
+- Changed: session metadata now tracks `current_head_short: 2eced8e` with working-tree progress context.
 
 ## 1) Scope Implemented
 This continuation covers:
@@ -55,11 +67,11 @@ Files:
 Behavior:
 - Builds ReqID SSOT from requirements CSV.
 - Validates ReqID references in Summary CSV.
-- Parses API workbook `전체API목록` `비고` field for `ReqID:` and `ReqID+:` tokens.
+- Parses API workbook `?꾩껜API紐⑸줉` `鍮꾧퀬` field for `ReqID:` and `ReqID+:` tokens.
 - Scans UIUX/DB workbooks for ReqID-like tokens and validates against SSOT.
 - Verifies curated terminology consistency: `secret_ref`, ROLE taxonomy, error payload fields, SSE tokens, trace/tenant headers.
 - Detects explicit variant mismatches (`safeResponse`, `traceId`, `tenantKey`, `errorCode`).
-- Scans UIUX `94_미매핑처분` mapping columns for placeholders (`-`, `TODO`, `placeholder`, blank, to-be-defined markers, etc.).
+- Scans UIUX `94_誘몃ℓ?묒쿂遺? mapping columns for placeholders (`-`, `to-do`, `placeholder`, blank, to-be-defined markers, etc.).
 
 Outputs:
 - `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.txt`
@@ -74,7 +86,8 @@ Files:
 Behavior:
 - Detects canonical spec file changes via git diff.
 - Requires `spec_sync_report.md` change when canonical spec changes are present.
-- Optionally validates metadata tokens: Last synced at / Source file / Version or commit / Change summary.
+- Mandatory fail-closed metadata validation per changed canonical file:
+  Last synced at (KST `+09:00`) / Source file / Version(or commit)=HEAD / Notion URL exact match / Change summary(3~10 lines).
 
 Outputs:
 - `docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt`
@@ -145,6 +158,8 @@ Behavior:
 - Groups artifacts by gate/report/summary/evidence/misc families.
 - Selects latest evidence by filename wave/date heuristic (not filesystem mtime).
 - Emits optional archive candidates without deleting existing audit trails.
+- Pins dashboard discovery in `_INDEX.md` via `## Start Here` and publishes stable `release_gate_dashboard` key in `_INDEX.json`.
+- Publishes stable `spec_impl_coverage` key in `_INDEX.json` for tooling lookup.
 - `--check` mode fails when `_INDEX.md` or `_INDEX.json` is stale/missing.
 
 Outputs:
@@ -152,6 +167,54 @@ Outputs:
 - `docs/review/mvp_verification_pack/artifacts/_INDEX.json`
 - `docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt`
 - `docs/review/mvp_verification_pack/artifacts/artifact_index_gate.json`
+
+### 2.14 Release Gate Dashboard
+Files:
+- `scripts/build_release_gate_dashboard.py`
+- `scripts/tests/test_build_release_gate_dashboard.py`
+- `scripts/tests/fixtures/release_dashboard/base/artifacts/*`
+- `.github/workflows/pr-smoke-contract.yml`
+- `.github/workflows/release-nightly-full.yml`
+- `docs/review/mvp_verification_pack/ARTIFACTS_HYGIENE.md`
+
+Behavior:
+- Generates one-page operator view of critical gates with `PASS/FAIL/MISSING/ERROR`.
+- Reads structured gate JSON first, then falls back to TXT first-lines parsing when JSON is absent.
+- Includes baseline snapshot (domain, UTF-8 full-scan, API added/removed) and first-triage artifact links.
+- Returns exit code `0` always (reporting-only), while encoding true statuses in JSON.
+- Is regenerated in CI with `if: always()` before artifact upload.
+
+Outputs:
+- `docs/review/mvp_verification_pack/artifacts/release_gate_dashboard.md`
+- `docs/review/mvp_verification_pack/artifacts/release_gate_dashboard.json`
+- `docs/review/mvp_verification_pack/artifacts/release_gate_dashboard_rollout_report_20260228.txt`
+
+### 2.15 Spec -> Implementation Coverage Gate
+Files:
+- `scripts/spec_impl_coverage_report.py`
+- `scripts/assert_spec_impl_coverage.py`
+- `scripts/tests/test_spec_impl_coverage_report.py`
+- `scripts/tests/test_assert_spec_impl_coverage.py`
+- `.github/workflows/pr-smoke-contract.yml`
+- `.github/workflows/release-nightly-full.yml`
+
+Behavior:
+- Reads API workbook (`?꾩껜API紐⑸줉`) and parses `ReqID:` / `ReqID+:` from `鍮꾧퀬`.
+- Maps API row importance from requirements CSV (`Must/Should/Unknown`).
+- Computes deterministic coverage signals per API row:
+  - `backend_implemented` (Spring mapping heuristic, class+method path aware)
+  - `frontend_referenced` (frontend source endpoint reference)
+  - `tests_present` (test source endpoint/controller reference)
+- Produces Must red/green list and missing-signal table for release-readiness triage.
+- Gate is fail-closed for Must rows missing backend implementation.
+
+Outputs:
+- `docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.txt`
+- `docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.json`
+- `docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.md`
+- `docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.json`
+- `docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_rollout_report_20260301.txt`
 
 ### 2.8 Node22 Unicode Path Mirror Helper
 Files:
@@ -246,6 +309,72 @@ Output contract:
 - optional baseline reference:
   - `docs/review/mvp_verification_pack/artifacts/vector_recall_latency_bench_baseline.json`
 
+### 2.13 Delta Sync (2026-02-27, current worktree)
+Files:
+- `.github/workflows/db-backup-restore-weekly.yml`
+- `.github/workflows/db-backup-restore-nightly.yml`
+- `.github/workflows/pr-smoke-contract.yml`
+- `.github/workflows/release-nightly-full.yml`
+- `.github/workflows/vector-bench-nightly.yml`
+- `scripts/db_backup_restore_rehearsal.py`
+- `scripts/build_artifact_index.py`
+- `scripts/archive_artifacts.py`
+- `scripts/mirror_and_run_frontend.py`
+- `scripts/tests/test_vector_bench_workflow.py`
+- `docs/ops/DB_BACKUP_RESTORE_RUNBOOK.md`
+- `docs/ops/NODE22_UNICODE_WORKSPACE_GUIDE.md`
+- `docs/dev/DEV_ENVIRONMENT.md`
+- `docs/review/mvp_verification_pack/ARTIFACTS_HYGIENE.md`
+- `docs/review/mvp_verification_pack/ARTIFACTS_ARCHIVE_POLICY.md`
+- `frontend/README.md`
+- `frontend/package.json`
+
+Behavior:
+- DB backup/restore rehearsal is now weekly scheduled (Monday 02:00 KST) and nightly job is manual-only to avoid duplicate schedule noise.
+- Rehearsal payload now includes fixed SLO metadata (`rto_minutes=60`, `rpo_hours=24`), dump metadata (`size/sha256/created_at`), and safe-seed insert/fallback verification.
+- Sensitive values in rehearsal command/output are redacted before persistence.
+- Artifact archiving moved to sidecar layout (`<date>_<family>.zip` + `<date>_<family>.manifest.json`) with required fields and SHA256 integrity checks.
+- Artifact gate now fail-closes on sidecar inconsistencies: missing manifest/zip, hash mismatch, invalid JSON, or `included_files` mismatch.
+- Archive retention exceptions keep latest `gate/summary/report` per family while preserving copy-only (no deletion) behavior.
+- Node22 unicode mirror runner now uses smoke mode as primary path (`--smoke`), emits fixed smoke artifact by default, and provides runtime mismatch guidance instead of auto bootstrap.
+- `assert_spec_sync_report_updated.py` now enforces metadata + Notion evidence checks by default (workflow flags removed) and uses explicit canonical file-to-Notion mapping including UIUX workbook.
+- `vector-bench-nightly.yml` now emits monitoring-only gate artifacts (`vector_bench_monitoring_gate.txt/json`) even when benchmark step fails, improving triage traceability without PR merge coupling.
+
+Outputs:
+- `docs/review/mvp_verification_pack/artifacts/archive_policy_rollout_report_20260227.txt`
+- `docs/review/mvp_verification_pack/artifacts/archive_policy_rollout_report_20260220.txt`
+- `docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.manifest.json`
+- `docs/review/mvp_verification_pack/artifacts/node22_unicode_mirror_helper_smoke.txt`
+- `docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/artifact_archive_report.txt`
+- `docs/review/mvp_verification_pack/artifacts/artifact_archive_report.json`
+- `docs/review/mvp_verification_pack/artifacts/vector_bench_monitoring_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/vector_bench_monitoring_gate.json`
+- `docs/review/mvp_verification_pack/artifacts/vector_bench_workflow_tests.txt`
+- `docs/review/mvp_verification_pack/artifacts/vector_bench_spec_consistency_check.txt`
+- `docs/review/mvp_verification_pack/artifacts/vector_bench_spec_sync_gate.txt`
+- `docs/review/mvp_verification_pack/artifacts/vector_bench_utf8_strict_gate.txt`
+- `scripts/tests/test_archive_artifacts.py`
+- `scripts/tests/test_mirror_and_run_frontend.py`
+
+### 2.16 Session Sync (2026-03-01, Notion + ChatGPT Files)
+Files:
+- `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
+- `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
+- `chatGPT/DB_READINESS_EXECUTION_AND_PROCESS_PLAN_KO.md`
+- `spec_sync_report.md`
+- `docs/review/mvp_verification_pack/artifacts/notion_sync_evidence_20260301.md`
+
+Behavior:
+- Refreshed handoff metadata timestamps and commit pointers to current head (`2eced8e`) while preserving fail-closed SSOT rules.
+- Appended `Session Update (2026-03-01 Progress Sync)` blocks to all mapped Notion pages for sync traceability.
+- Kept canonical spec schema unchanged in this session (metadata/evidence synchronization only).
+
+Outputs:
+- `docs/review/mvp_verification_pack/artifacts/notion_sync_evidence_20260301.md`
+- `spec_sync_report.md`
+
 ## 3) Validation Gates
 | Gate | Status | Evidence |
 |---|---|---|
@@ -260,6 +389,7 @@ Output contract:
 | Node22 unicode mirror helper smoke | PASS | `docs/review/mvp_verification_pack/artifacts/node22_unicode_mirror_helper_smoke.txt` |
 | Scaffold smoke | PASS | `docs/review/mvp_verification_pack/artifacts/scaffold_contract_smoke.txt` |
 | Spec consistency check | PASS | `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.txt` |
+| Spec implementation coverage gate | FAIL (expected, Must gaps visible) | `docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.txt` |
 | Spec sync report update gate | PASS | `docs/review/mvp_verification_pack/artifacts/spec_sync_report_gate.txt` |
 | ChatGPT handoff update gate | PASS | `docs/review/mvp_verification_pack/artifacts/chatgpt_handoff_update_gate.txt` |
 | Quality validation summary | PASS | `docs/review/mvp_verification_pack/artifacts/quality_workpack_validation_summary.txt` |
@@ -272,7 +402,7 @@ Output contract:
 ## 5) Remaining Risks Top5
 1. Node22 unicode-path instability can still impact developers who skip ASCII workspace mitigation.
 2. Terminology checks are curated and deterministic but still cover only approved contract token sets.
-3. Notion synchronization traceability still depends on explicit report discipline.
+3. Notion sync is now fail-closed through mandatory `spec_sync_report` checks; remaining risk is external Notion service/API availability.
 4. Large artifact inventory can hide regressions without periodic curation.
 5. PGVECTOR recall-latency benchmark is local-only today; CI/nightly automation is not yet wired.
 
@@ -281,7 +411,7 @@ Output contract:
 2. Extend Node workspace guide with one-command mirror-and-run helper.
 3. Tighten evidence curation for stale artifact cleanup and easier gate reading.
 4. Incrementally strengthen automation around sync and handoff completeness checks.
-5. Add summarized release-ready gate dashboard output for operators.
+5. Add lightweight trend stubs (dated artifact names only) for DB backup/restore and vector bench monitoring.
 
 ## 7) Safety Confirmation
 - No ROLE taxonomy change.
@@ -295,3 +425,4 @@ Output contract:
 ## 8) Conflict Resolution Note (SSOT)
 - In conflict, latest artifacts under `docs/review/mvp_verification_pack/artifacts/*` take precedence.
 - `spec_sync_report.md` remains the sync log precedence target for spec/document synchronization conflicts.
+

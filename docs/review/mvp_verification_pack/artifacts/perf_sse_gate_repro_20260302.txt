@@ -1,0 +1,13 @@
+perf_gate
+status=FAIL
+generated_at_utc=2026-03-02T12:40:34.427443Z
+result_file=perf/out/result.json
+thresholds_file=perf/thresholds.yaml
+point_count=0
+metric_count=0
+assertion_count=0
+violation_count=1
+metrics:
+assertions:
+violations:
+- [Errno 2] No such file or directory: 'perf\\out\\result.json'

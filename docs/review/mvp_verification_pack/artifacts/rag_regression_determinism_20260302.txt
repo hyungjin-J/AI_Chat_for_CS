@@ -1,0 +1,6 @@
+﻿rag_regression_determinism_check
+date=20260302
+run=1 status=PASS reason=OK case_pass_rate=1.0 policy_violation_rate=0.0
+run=2 status=PASS reason=OK case_pass_rate=1.0 policy_violation_rate=0.0
+run=3 status=PASS reason=OK case_pass_rate=1.0 policy_violation_rate=0.0
+result=PASS

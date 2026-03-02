@@ -7,6 +7,7 @@ import com.aichatbot.platform.observability.TraceGuard;
 import com.aichatbot.platform.privacy.PiiMaskingService;
 import com.aichatbot.platform.tenancy.TenantContext;
 import com.aichatbot.contexts.knowledge.rag.application.RagAnswerService;
+import com.aichatbot.contexts.knowledge.rag.application.RagAuxiliaryService;
 import com.aichatbot.contexts.knowledge.rag.application.RagIdempotencyRegistry;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -26,17 +27,20 @@ public class RagController {
 
     private final RagIdempotencyRegistry ragIdempotencyRegistry;
     private final RagAnswerService ragAnswerService;
+    private final RagAuxiliaryService ragAuxiliaryService;
     private final AppProperties appProperties;
     private final PiiMaskingService piiMaskingService;
 
     public RagController(
         RagIdempotencyRegistry ragIdempotencyRegistry,
         RagAnswerService ragAnswerService,
+        RagAuxiliaryService ragAuxiliaryService,
         AppProperties appProperties,
         PiiMaskingService piiMaskingService
     ) {
         this.ragIdempotencyRegistry = ragIdempotencyRegistry;
         this.ragAnswerService = ragAnswerService;
+        this.ragAuxiliaryService = ragAuxiliaryService;
         this.appProperties = appProperties;
         this.piiMaskingService = piiMaskingService;
     }
@@ -104,6 +108,22 @@ public class RagController {
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED)
             .body(new RagAcceptedResponse("accepted", answerId.toString(), traceId));
+    }
+
+    @PostMapping("/query/classify")
+    public ResponseEntity<RagAuxiliaryResponse> classifyQuery(
+        @Valid @RequestBody RagQueryClassifyRequest request
+    ) {
+        UUID tenantId = UUID.fromString(TenantContext.getTenantId());
+        return ResponseEntity.ok(ragAuxiliaryService.classify(tenantId, request));
+    }
+
+    @PostMapping("/clarify/suggest")
+    public ResponseEntity<RagAuxiliaryResponse> suggestClarify(
+        @Valid @RequestBody RagClarifySuggestRequest request
+    ) {
+        UUID tenantId = UUID.fromString(TenantContext.getTenantId());
+        return ResponseEntity.ok(ragAuxiliaryService.suggestClarify(tenantId, request));
     }
 
     private String requireIdempotencyKey(String idempotencyKey) {

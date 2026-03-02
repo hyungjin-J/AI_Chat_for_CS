@@ -1,0 +1,45 @@
+﻿kb_pipeline_integration
+status=PARTIAL_PASS
+generated_at_local=2026-03-02T20:05:00+09:00
+scope=PR-I kb ingest->approve->index->rollback hardening
+
+Implemented:
+- async kb index queue with idempotency/retry/dead-letter
+- pipeline state columns (QUEUED/RUNNING/INDEXED/RETRY_WAIT/FAILED)
+- admin status/error visibility for document + reindex jobs
+- scheduler worker with distributed lock key: kb_index_pipeline_worker
+- runbook added: docs/ops/runbook/playbooks/kb_index_failure_incident.md
+
+Verification:
+1) backend targeted contract/integration tests
+   command: cd backend && ./gradlew.bat test --no-daemon --tests com.aichatbot.channels.backoffice.presentation.AdminKbContractTest --tests com.aichatbot.contexts.knowledge.rag.application.KbIndexPipelineIntegrationTest
+   result: PASS
+
+2) backend full tests
+   command: cd backend && ./gradlew.bat test --no-daemon
+   result: PASS
+
+3) spec impl coverage report
+   command: python scripts/spec_impl_coverage_report.py --root .
+   result: PASS
+
+4) spec impl coverage gate
+   command: python scripts/assert_spec_impl_coverage.py --report-json docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.json --output-txt docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.txt --output-json docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.json
+   result: PASS
+
+5) spec consistency
+   command: python scripts/spec_consistency_check.py
+   result: PASS
+
+6) E2E smoke (PR-E compatibility check)
+   command A: powershell -ExecutionPolicy Bypass -File scripts/run_ops_e2e_smoke.ps1
+   result: FAIL (docker_engine_not_running)
+
+   command B (fallback): python e2e/api_smoke/run_e2e_smoke.py --base-url http://localhost:8080 --tenant-key demo-tenant --role AGENT --skip-db-check --skip-log-check --output-report-json docs/review/mvp_verification_pack/artifacts/e2e_smoke_report_20260302.json --output-trace-txt docs/review/mvp_verification_pack/artifacts/e2e_smoke_trace_samples_20260302.txt
+   result: FAIL
+   failing_scenarios: S1(s1_stream_contract), S6(s6_fail_closed)
+   summary: missing token/citation events in S1 and missing error event in S6 under current local runtime profile.
+
+Follow-up required:
+- run full compose-based E2E after Docker engine is available
+- investigate S1/S6 stream contract mismatch before Go-Live

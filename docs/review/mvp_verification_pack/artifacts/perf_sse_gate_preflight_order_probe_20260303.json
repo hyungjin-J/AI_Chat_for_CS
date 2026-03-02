@@ -1,0 +1,18 @@
+{
+  "status": "FAIL",
+  "reason_code": "TARGET_UNREACHABLE",
+  "reason_detail": "stage=preflight_health detail=health_network_error=[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+  "remediation_hint": "Ensure backend is running and /health returns 200 with trace/tenant headers.",
+  "generated_at_utc": "2026-03-02T15:33:02.682364Z",
+  "result_file": "perf/out/result_preflight_order_probe.json",
+  "thresholds_file": "perf/thresholds.yaml",
+  "point_count": 0,
+  "metric_count": 0,
+  "assertion_count": 0,
+  "violation_count": 1,
+  "metrics": {},
+  "assertions": [],
+  "violations": [
+    "TARGET_UNREACHABLE: stage=preflight_health detail=health_network_error=[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다"
+  ]
+}

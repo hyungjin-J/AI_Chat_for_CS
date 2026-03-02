@@ -98,6 +98,23 @@ class LintChatGptHandoffDocsTest(unittest.TestCase):
         self.assertNotEqual(code, 0)
         self.assertTrue(any(v["code"] == "DOC_CONTROL_CHAR" for v in payload["violations"]))
 
+    def test_tab_character_fails(self) -> None:
+        root = self.prepare_workspace()
+        evidence_path = "docs/review/mvp_verification_pack/artifacts/e2_tab.txt"
+        (root / evidence_path).write_text("ok\n", encoding="utf-8")
+
+        doc = build_doc(
+            updated_at="2026-02-22 00:00:00 +09:00",
+            evidence_path=evidence_path,
+            extra_line="tab\tcharacter",
+        )
+        (root / "chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md").write_text(doc, encoding="utf-8")
+        (root / "chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md").write_text(doc, encoding="utf-8")
+
+        code, payload = self.run_lint(root)
+        self.assertNotEqual(code, 0)
+        self.assertTrue(any(v["code"] == "DOC_TAB_CHARACTER" for v in payload["violations"]))
+
     def test_trace_id_typo_fails(self) -> None:
         root = self.prepare_workspace()
         evidence_path = "docs/review/mvp_verification_pack/artifacts/e3.txt"
@@ -108,6 +125,23 @@ class LintChatGptHandoffDocsTest(unittest.TestCase):
             updated_at="2026-02-22 00:00:00 +09:00",
             evidence_path=evidence_path,
             extra_line=f"{typo_key}: typo",
+        )
+        (root / "chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md").write_text(doc, encoding="utf-8")
+        (root / "chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md").write_text(doc, encoding="utf-8")
+
+        code, payload = self.run_lint(root)
+        self.assertNotEqual(code, 0)
+        self.assertTrue(any(v["code"] == "DOC_TRACE_TYPO" for v in payload["violations"]))
+
+    def test_trace_id_additional_typo_fails(self) -> None:
+        root = self.prepare_workspace()
+        evidence_path = "docs/review/mvp_verification_pack/artifacts/e3b.txt"
+        (root / evidence_path).write_text("ok\n", encoding="utf-8")
+
+        doc = build_doc(
+            updated_at="2026-02-22 00:00:00 +09:00",
+            evidence_path=evidence_path,
+            extra_line="trcae_id: typo",
         )
         (root / "chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md").write_text(doc, encoding="utf-8")
         (root / "chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md").write_text(doc, encoding="utf-8")

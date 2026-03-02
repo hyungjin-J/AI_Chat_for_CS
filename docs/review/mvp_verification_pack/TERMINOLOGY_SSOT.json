@@ -1,0 +1,68 @@
+{
+  "required_exact_tokens": {
+    "secret_ref": [
+      "secret_ref"
+    ],
+    "snake_case_contract_fields": [
+      "trace_id",
+      "tenant_key"
+    ]
+  },
+  "forbidden_variants": {
+    "error_payload": [
+      [
+        "errorCode",
+        "error_code"
+      ]
+    ],
+    "sse_event_types": [
+      [
+        "safeResponse",
+        "safe_response"
+      ],
+      [
+        "safe-response",
+        "safe_response"
+      ]
+    ],
+    "snake_case_contract_fields": [
+      [
+        "traceId",
+        "trace_id"
+      ],
+      [
+        "traceID",
+        "trace_id"
+      ],
+      [
+        "tenantKey",
+        "tenant_key"
+      ]
+    ]
+  },
+  "required_headers": {
+    "required": [
+      "X-Trace-Id",
+      "X-Tenant-Key"
+    ],
+    "optional": [
+      "Idempotency-Key",
+      "Last-Event-ID"
+    ]
+  },
+  "sse_event_types": [
+    "token",
+    "tool",
+    "citation",
+    "done",
+    "error",
+    "heartbeat",
+    "safe_response"
+  ],
+  "error_payload_fields": [
+    "error_code",
+    "message",
+    "trace_id",
+    "details"
+  ]
+}

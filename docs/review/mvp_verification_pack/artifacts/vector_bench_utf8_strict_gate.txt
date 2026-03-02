@@ -1,0 +1,4 @@
+assert_utf8_strict
+status=PASS
+scanned_file_count=351
+violation_count=0

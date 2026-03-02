@@ -1,25 +1,47 @@
 {
-  "generated_at": "2026-02-17T11:19:08.675671+00:00",
+  "generated_at": "2026-03-02T05:07:16.189640+00:00",
   "summary": {
     "req_id": {
       "total": 78,
       "missing": 1
     },
     "api_endpoint": {
-      "total": 71,
-      "missing": 0
+      "total": 86,
+      "missing": 15
     },
     "db_table": {
-      "total": 61,
-      "missing": 0
+      "total": 66,
+      "missing": 5
     }
   },
   "missing": {
     "req_ids": [
       "API-403"
     ],
-    "api_endpoints": [],
-    "db_tables": []
+    "api_endpoints": [
+      "/v1/admin/audit-logs/chain-verify",
+      "/v1/admin/audit-logs/export",
+      "/v1/admin/audit-logs/export-jobs",
+      "/v1/admin/audit-logs/export-jobs/{job_id}",
+      "/v1/admin/audit-logs/export-jobs/{job_id}/download",
+      "/v1/admin/rbac/approval-requests",
+      "/v1/admin/rbac/approval-requests/{request_id}/approve",
+      "/v1/admin/rbac/approval-requests/{request_id}/reject",
+      "/v1/auth/mfa/recovery-codes/regenerate",
+      "/v1/auth/mfa/totp/activate",
+      "/v1/auth/mfa/totp/enroll",
+      "/v1/auth/mfa/verify",
+      "/v1/auth/sessions",
+      "/v1/auth/sessions/revoke-others",
+      "/v1/auth/sessions/{session_id}"
+    ],
+    "db_tables": [
+      "TB_AUDIT_EXPORT_CHUNK",
+      "TB_AUDIT_EXPORT_JOB",
+      "TB_OPS_BLOCK",
+      "TB_RBAC_MATRIX",
+      "TB_SCHEDULER_LOCK"
+    ]
   },
   "sources": {
     "requirements_csv": "C:\\Users\\hjjmj\\OneDrive\\바탕 화면\\AI_Chatbot\\docs\\references\\CS AI Chatbot_Requirements Statement.csv",

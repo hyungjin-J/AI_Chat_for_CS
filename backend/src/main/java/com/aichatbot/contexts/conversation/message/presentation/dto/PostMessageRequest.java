@@ -13,5 +13,11 @@ public record PostMessageRequest(
     String clientNonce,
     Integer topK
 ) {
+    @Override
+    public String toString() {
+        int attachmentCount = attachments == null ? 0 : attachments.size();
+        return "PostMessageRequest[text=<redacted>, attachmentsCount=" + attachmentCount
+            + ", clientNonce=<redacted>, topK=" + topK + "]";
+    }
 }
 

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "family_name": "archive_policy_rollout_report",
+  "created_at_kst": "2026-02-27 13:52:03 +09:00",
+  "source_commit": "e45bb78ea7f4240dd7502d7da8b925827ae7c9a2",
+  "zip_path": "docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.zip",
+  "manifest_path": "docs/review/mvp_verification_pack/archive/archive_policy_rollout_report/20260227_archive_policy_rollout_report.manifest.json",
+  "zip_sha256": "311242aeb5e4a4ec2a10c9445bf00c9c65c8d42622cfab96318d7dcbae983f6b",
+  "included_files": [
+    {
+      "path": "archive_policy_rollout_report_20260220.txt",
+      "sha256": "8bf5f9ab8f2ec18a4ed55cd13dfe8a54d76e1c6cc8ba8eab78079093539192d8"
+    }
+  ],
+  "excluded_files": []
+}

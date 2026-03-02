@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -77,6 +78,15 @@ public class TraceIdFilter extends OncePerRequestFilter {
             details
         );
         response.getWriter().write(objectMapper.writeValueAsString(body));
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        return Objects.equals(uri, "/health")
+            || uri.startsWith("/actuator/health")
+            || Objects.equals(uri, "/actuator/prometheus")
+            || uri.startsWith("/error");
     }
 }
 

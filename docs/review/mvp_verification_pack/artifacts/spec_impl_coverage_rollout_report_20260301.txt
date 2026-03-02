@@ -1,0 +1,26 @@
+spec_impl_coverage_rollout_report
+date_kst=2026-03-01
+status=completed
+
+changes
+- Added scripts/spec_impl_coverage_report.py (Spec -> Implementation coverage report generator)
+- Added scripts/assert_spec_impl_coverage.py (Must backend implementation fail-closed gate)
+- Added tests:
+  - scripts/tests/test_spec_impl_coverage_report.py
+  - scripts/tests/test_assert_spec_impl_coverage.py
+- Wired PR/nightly workflows:
+  - .github/workflows/pr-smoke-contract.yml
+  - .github/workflows/release-nightly-full.yml
+- Updated artifact index surface:
+  - scripts/build_artifact_index.py
+  - scripts/tests/test_build_artifact_index.py
+
+local_run_commands
+- python scripts/spec_impl_coverage_report.py --root . --report-txt docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.txt --report-json docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.json --report-md docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.md
+- python scripts/assert_spec_impl_coverage.py --report-json docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_report.json --output-txt docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.txt --output-json docs/review/mvp_verification_pack/artifacts/spec_impl_coverage_gate.json
+- python scripts/build_release_gate_dashboard.py --artifacts-dir docs/review/mvp_verification_pack/artifacts
+- python scripts/build_artifact_index.py --check --artifact-root docs/review/mvp_verification_pack/artifacts --index-md docs/review/mvp_verification_pack/artifacts/_INDEX.md --index-json docs/review/mvp_verification_pack/artifacts/_INDEX.json --gate-output-txt docs/review/mvp_verification_pack/artifacts/artifact_index_gate.txt --gate-output-json docs/review/mvp_verification_pack/artifacts/artifact_index_gate.json
+
+notes
+- Current gate status is FAIL because Must APIs missing backend mappings are present by design.
+- Existing invariant gates remained PASS after refresh (domain/application boundary, utf8 full scan, spec consistency, spec sync, artifact index).

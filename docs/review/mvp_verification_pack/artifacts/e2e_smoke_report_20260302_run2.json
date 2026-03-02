@@ -1,0 +1,190 @@
+{
+  "generated_at_utc": "2026-03-02T12:03:57.918223Z",
+  "base_url": "http://localhost:8080",
+  "target_tenant_key": "demo-tenant",
+  "auth_tenant_key": "demo-tenant",
+  "effective_auth_tenant_key": "demo-tenant",
+  "role": "AGENT",
+  "status": "PASS",
+  "summary": {
+    "scenario_total": 6,
+    "scenario_pass": 6,
+    "scenario_fail": 0
+  },
+  "scenarios": [
+    {
+      "scenario_id": "S1",
+      "name": "session-message-sse-citations-close",
+      "status": "PASS",
+      "stage": "complete",
+      "trace_id": "cec43863-e878-4d94-9bf4-86d518aa602c",
+      "error_code": "",
+      "message": "S1 passed",
+      "runbook": "docs/ops/runbook/README.md",
+      "details": {
+        "session_id": "cf274833-42a3-4e52-b824-80a2efd6edc3",
+        "message_id": "ce3f1f7d-afe6-4e25-8b68-3275476883e3",
+        "event_types": [
+          "heartbeat",
+          "tool",
+          "tool",
+          "citation",
+          "citation",
+          "token",
+          "token",
+          "done"
+        ],
+        "db_stream_event_types": [
+          "tool",
+          "tool",
+          "citation",
+          "citation",
+          "token",
+          "token",
+          "done"
+        ],
+        "citation_count": 2
+      }
+    },
+    {
+      "scenario_id": "S2",
+      "name": "network-drop-and-resume",
+      "status": "PASS",
+      "stage": "complete",
+      "trace_id": "78ea2512-bc3c-45d1-bf6c-30ca8d70f949",
+      "error_code": "",
+      "message": "S2 passed",
+      "runbook": "docs/ops/runbook/README.md",
+      "details": {
+        "session_id": "4265eccf-3bad-461c-9ebd-4b808b79418a",
+        "message_id": "093b3f6d-1a88-4300-b9a5-939766e1adee",
+        "partial_event_ids": [
+          "0",
+          "1",
+          "2"
+        ],
+        "resumed_event_ids": [
+          "3",
+          "4",
+          "5",
+          "6",
+          "7"
+        ],
+        "resumed_event_types": [
+          "citation",
+          "citation",
+          "token",
+          "token",
+          "done"
+        ]
+      }
+    },
+    {
+      "scenario_id": "S3",
+      "name": "pii-masking-in-storage-log-response",
+      "status": "PASS",
+      "stage": "complete",
+      "trace_id": "2390a33b-8749-4c48-863a-e5fdd7652b1b",
+      "error_code": "",
+      "message": "S3 passed",
+      "runbook": "docs/ops/runbook/README.md",
+      "details": {
+        "session_id": "934dc575-2c46-47cb-8a45-ede94fcc79e1",
+        "message_id": "5b4f66a6-91e8-4717-b919-478a6b4a9152",
+        "stream_event_types": [
+          "heartbeat",
+          "tool",
+          "tool",
+          "citation",
+          "citation",
+          "token",
+          "token",
+          "done"
+        ],
+        "db_masked_query_present": true,
+        "db_masked_excerpt_present": true,
+        "log_check_skipped": false,
+        "db_check_skipped": false
+      }
+    },
+    {
+      "scenario_id": "S4",
+      "name": "tenant-isolation-cross-tenant-session-read",
+      "status": "PASS",
+      "stage": "complete",
+      "trace_id": "1d2febbd-9773-450a-877e-33e9f9721696",
+      "error_code": "",
+      "message": "S4 passed",
+      "runbook": "docs/ops/runbook/README.md",
+      "details": {
+        "session_id": "cf274833-42a3-4e52-b824-80a2efd6edc3",
+        "auth_tenant_key": "demo-tenant",
+        "cross_tenant_key": "tenant-a",
+        "status": 403
+      }
+    },
+    {
+      "scenario_id": "S5",
+      "name": "rbac-403-for-admin-endpoint",
+      "status": "PASS",
+      "stage": "complete",
+      "trace_id": "5080170e-1872-4ffc-a2b9-79d2244b26e3",
+      "error_code": "",
+      "message": "S5 passed",
+      "runbook": "docs/ops/runbook/README.md",
+      "details": {
+        "path": "/v1/admin/templates",
+        "status": 403
+      }
+    },
+    {
+      "scenario_id": "S6",
+      "name": "answer-contract-fail-closed",
+      "status": "PASS",
+      "stage": "complete",
+      "trace_id": "f40b506e-ce92-4119-8ca3-88b1c7fe9832",
+      "error_code": "AI-009-409-EVIDENCE",
+      "message": "S6 passed",
+      "runbook": "docs/ops/runbook/README.md",
+      "details": {
+        "session_id": "e251db30-59bd-4107-bc5a-0b841bf0b24a",
+        "message_id": "bf1ad22e-a96f-4cf0-abd5-3fd0bcdd1828",
+        "event_types": [
+          "heartbeat",
+          "tool",
+          "safe_response",
+          "error",
+          "done"
+        ],
+        "error_codes": [
+          "AI-009-409-EVIDENCE"
+        ]
+      }
+    }
+  ],
+  "trace_context": {
+    "flow_trace_id": "cec43863-e878-4d94-9bf4-86d518aa602c",
+    "flow_session_id": "cf274833-42a3-4e52-b824-80a2efd6edc3",
+    "flow_message_id": "ce3f1f7d-afe6-4e25-8b68-3275476883e3",
+    "flow_event_types": [
+      "heartbeat",
+      "tool",
+      "tool",
+      "citation",
+      "citation",
+      "token",
+      "token",
+      "done"
+    ],
+    "flow_db_stream_event_types": [
+      "tool",
+      "tool",
+      "citation",
+      "citation",
+      "token",
+      "token",
+      "done"
+    ]
+  },
+  "runbook_on_failure": "docs/ops/runbook/README.md"
+}

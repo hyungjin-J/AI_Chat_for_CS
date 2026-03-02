@@ -1,0 +1,5 @@
+env_contract_validation
+status=PASS
+env_example=.env.example
+required_keys=19
+violation_count=0

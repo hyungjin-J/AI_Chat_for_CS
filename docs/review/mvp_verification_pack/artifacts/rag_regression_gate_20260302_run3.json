@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "reason_code": "OK",
+  "generated_at_utc": "2026-03-02T12:35:54.993617Z",
+  "report_path": "eval/out/determinism_run3/report.json",
+  "thresholds_path": "eval/thresholds.yaml",
+  "violation_count": 0,
+  "violations": []
+}

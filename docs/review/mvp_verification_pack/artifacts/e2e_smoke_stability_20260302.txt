@@ -1,0 +1,4 @@
+﻿run=1 status=PASS s1=PASS s6=PASS file=docs\review\mvp_verification_pack\artifacts\e2e_smoke_report_20260302_run1.json
+run=2 status=PASS s1=PASS s6=PASS file=docs\review\mvp_verification_pack\artifacts\e2e_smoke_report_20260302_run2.json
+run=3 status=PASS s1=PASS s6=PASS file=docs\review\mvp_verification_pack\artifacts\e2e_smoke_report_20260302_run3.json
+

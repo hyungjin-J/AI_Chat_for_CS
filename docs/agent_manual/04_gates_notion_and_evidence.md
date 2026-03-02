@@ -27,6 +27,12 @@ Ensure every control action leaves auditable evidence.
   - `docs/review/mvp_verification_pack/artifacts/orchestrator_control_*.json`
 - Date suffix is not used for these fixed control artifacts.
 
+## Terminology Extension Rule
+- Curated terminology checks are SSOT-driven:
+  - `docs/review/mvp_verification_pack/TERMINOLOGY_SSOT.json`
+- Extension process and PR checklist:
+  - `docs/review/mvp_verification_pack/TERMINOLOGY_SSOT.md`
+
 ## Security and Data Rules
 - Never store real tokens, secrets, or PII.
 - Examples must use `<REDACTED>` only.

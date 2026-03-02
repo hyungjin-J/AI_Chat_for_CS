@@ -1,0 +1,4687 @@
+{
+  "status": "PASS",
+  "generated_at_utc": "2026-03-01T15:28:41+09:00",
+  "metadata": {
+    "git_head_short": "2eced8e",
+    "git_branch": "utf8-wave8-to-29",
+    "requirements": "docs/references/CS AI Chatbot_Requirements Statement.csv",
+    "api_workbook": "docs/references/google_ready_api_spec_v0.3_20260216.xlsx",
+    "api_sheet": "전체API목록",
+    "backend_root": "backend/src/main/java",
+    "backend_test_root": "backend/src/test",
+    "frontend_root": "frontend/src",
+    "max_matches_per_signal": 5
+  },
+  "summary": {
+    "total_api_rows": 90,
+    "must_api_rows": 86,
+    "overall": {
+      "backend_implemented_count": 87,
+      "frontend_referenced_count": 90,
+      "tests_present_count": 57,
+      "fully_covered_count": 57,
+      "backend_implemented_rate_pct": 96.67,
+      "frontend_referenced_rate_pct": 100.0,
+      "tests_present_rate_pct": 63.33,
+      "fully_covered_rate_pct": 63.33
+    },
+    "must_only": {
+      "backend_implemented_count": 86,
+      "frontend_referenced_count": 86,
+      "tests_present_count": 56,
+      "fully_covered_count": 56,
+      "backend_implemented_rate_pct": 100.0,
+      "frontend_referenced_rate_pct": 100.0,
+      "tests_present_rate_pct": 65.12,
+      "fully_covered_rate_pct": 65.12,
+      "must_backend_missing_count": 0
+    }
+  },
+  "must_green_program_ids": [
+    "ADM-MODEL-ACTIVATE",
+    "ADM-MODEL-CREATE",
+    "ADM-MODEL-LIST",
+    "ADM-MODEL-ROLLBACK",
+    "ADM-POLICY-UPDATE",
+    "ADM-PROVIDER-KEY-ROTATE",
+    "ADM-PROVIDER-KEY-UPSERT",
+    "ADM-PROVIDER-SECRETREF-BIND",
+    "ADM-RBAC-APPROVAL-REQUEST-APPROVE",
+    "ADM-RBAC-APPROVAL-REQUEST-LIST",
+    "ADM-RBAC-MATRIX-UPSERT",
+    "ADM-ROUTING-RULE-TEST",
+    "ADM-ROUTING-RULE-UPSERT",
+    "ADM-TENANT-QUOTA-UPSERT",
+    "ADM-VERSION-BUNDLE-ACTIVATE",
+    "ADM-VERSION-BUNDLE-LIST",
+    "ADM-VERSION-BUNDLE-ROLLBACK",
+    "API-AUTH-LOGIN",
+    "API-AUTH-REFRESH",
+    "API-MESSAGE-LIST",
+    "API-MESSAGE-POST",
+    "API-MESSAGE-RETRY",
+    "API-QUICKREPLY-POST",
+    "API-RAG-ANSWER",
+    "API-RAG-CITATIONS-GET",
+    "API-RAG-RETRIEVE",
+    "API-SESSION-BOOTSTRAP",
+    "API-SESSION-CLOSE",
+    "API-SESSION-CREATE",
+    "API-SESSION-GET",
+    "API-STREAM-RESUME",
+    "API-STREAM-SSE",
+    "INT-WORKFLOW-REPORT",
+    "KB-DOC-APPROVE",
+    "KB-DOC-LIST",
+    "KB-DOC-ROLLBACK",
+    "KB-DOC-UPLOAD",
+    "KB-REINDEX-REQUEST",
+    "LLM-PROVIDER-HEALTH",
+    "MCP-SERVER-HEALTH",
+    "OPS-ADMIN-DASHBOARD-SUMMARY",
+    "OPS-AUDIT-EXPORT-JOB-CREATE",
+    "OPS-AUDIT-EXPORT-JOB-DOWNLOAD",
+    "OPS-AUDIT-EXPORT-JOB-STATUS",
+    "OPS-EVENT-INGEST",
+    "OPS-KB-INDEX-STATUS",
+    "OPS-METRIC-SUMMARY",
+    "OPS-PROVIDER-KILLSWITCH",
+    "OPS-ROLLBACK-TRIGGER",
+    "OPS-TENANT-BILLING-REPORT",
+    "OPS-TRACE-QUERY",
+    "TMP-TEMPLATE-APPROVE",
+    "TMP-TEMPLATE-CREATE",
+    "TMP-TEMPLATE-DEPLOY",
+    "TMP-TEMPLATE-LIST",
+    "TMP-TEMPLATE-ROLLBACK"
+  ],
+  "must_red_program_ids": [
+    "ADM-RBAC-APPROVAL-REQUEST-REJECT",
+    "API-ATTACHMENT-COMPLETE",
+    "API-ATTACHMENT-PRESIGN",
+    "API-AUTH-LOGOUT",
+    "API-AUTH-MFA-RECOVERY-REGENERATE",
+    "API-AUTH-MFA-TOTP-ACTIVATE",
+    "API-AUTH-MFA-TOTP-ENROLL",
+    "API-AUTH-MFA-VERIFY",
+    "API-AUTH-SESSIONS-LIST",
+    "API-AUTH-SESSIONS-REVOKE",
+    "API-AUTH-SESSIONS-REVOKE-OTHERS",
+    "API-CSAT-POST",
+    "API-HANDOFF-REQUEST",
+    "API-RAG-CLARIFY-SUGGEST",
+    "API-RAG-QUERY-CLASSIFY",
+    "INT-HANDOFF-SYNC",
+    "OPS-ADMIN-DASHBOARD-SERIES",
+    "OPS-AUDIT-CHAIN-VERIFY",
+    "OPS-AUDIT-CHANGE-DIFF",
+    "OPS-AUDIT-LOG-EXPORT",
+    "OPS-AUDIT-LOG-QUERY",
+    "OPS-BLOCK-UPSERT",
+    "OPS-CHANGE-NOTICE-PUBLISH",
+    "OPS-DEPLOY-APPROVAL-ACT",
+    "OPS-DEPLOY-APPROVAL-CREATE",
+    "OPS-ERROR-CATALOG-UPSERT",
+    "TMP-RECOMMEND-BUTTON",
+    "TOOL-ALLOWLIST-UPDATE",
+    "TOOL-CALL-EXECUTE",
+    "TOOL-CALL-VALIDATE"
+  ],
+  "missing_must_apis": [
+    {
+      "row_index": 4,
+      "program_id": "API-AUTH-LOGOUT",
+      "method": "POST",
+      "endpoint": "/v1/auth/logout",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 13,
+      "program_id": "API-CSAT-POST",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/csat",
+      "req_ids": [
+        "API-005",
+        "INT-003",
+        "UI-007"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 14,
+      "program_id": "API-HANDOFF-REQUEST",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/handoff",
+      "req_ids": [
+        "API-006",
+        "INT-003",
+        "SEC-002",
+        "UI-007"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 17,
+      "program_id": "API-ATTACHMENT-PRESIGN",
+      "method": "POST",
+      "endpoint": "/v1/attachments/presign",
+      "req_ids": [
+        "API-007",
+        "SEC-003",
+        "UI-003"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 18,
+      "program_id": "API-ATTACHMENT-COMPLETE",
+      "method": "POST",
+      "endpoint": "/v1/attachments/{attachment_id}/complete",
+      "req_ids": [
+        "API-007",
+        "KB-001",
+        "UI-003"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 22,
+      "program_id": "API-RAG-QUERY-CLASSIFY",
+      "method": "POST",
+      "endpoint": "/v1/rag/query/classify",
+      "req_ids": [
+        "LLM-002",
+        "RAG-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 23,
+      "program_id": "API-RAG-CLARIFY-SUGGEST",
+      "method": "POST",
+      "endpoint": "/v1/rag/clarify/suggest",
+      "req_ids": [
+        "RAG-002",
+        "UI-006"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 36,
+      "program_id": "TMP-RECOMMEND-BUTTON",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/template-recommendations",
+      "req_ids": [
+        "TMP-001",
+        "TMP-005",
+        "TOOL-003"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 47,
+      "program_id": "TOOL-CALL-EXECUTE",
+      "method": "POST",
+      "endpoint": "/v1/internal/tools/execute",
+      "req_ids": [
+        "TOOL-001",
+        "TOOL-002",
+        "TOOL-003"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 48,
+      "program_id": "TOOL-CALL-VALIDATE",
+      "method": "POST",
+      "endpoint": "/v1/internal/tools/validate",
+      "req_ids": [
+        "TOOL-002",
+        "TOOL-003"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 49,
+      "program_id": "TOOL-ALLOWLIST-UPDATE",
+      "method": "PUT",
+      "endpoint": "/v1/admin/tools/allowlist/{tool_name}",
+      "req_ids": [
+        "SEC-002",
+        "TOOL-001",
+        "TOOL-003"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 56,
+      "program_id": "OPS-ERROR-CATALOG-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/admin/errors/catalog/{error_code}",
+      "req_ids": [
+        "ADM-003",
+        "SYS-003",
+        "UI-006"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 57,
+      "program_id": "OPS-DEPLOY-APPROVAL-CREATE",
+      "method": "POST",
+      "endpoint": "/v1/admin/deploy-approvals",
+      "req_ids": [
+        "ADM-006",
+        "INT-001"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 58,
+      "program_id": "OPS-DEPLOY-APPROVAL-ACT",
+      "method": "POST",
+      "endpoint": "/v1/admin/deploy-approvals/{approval_id}/actions/{action}",
+      "req_ids": [
+        "ADM-006",
+        "INT-001"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 59,
+      "program_id": "OPS-CHANGE-NOTICE-PUBLISH",
+      "method": "POST",
+      "endpoint": "/v1/admin/change-notices/{notice_id}/publish",
+      "req_ids": [
+        "ADM-006",
+        "INT-001",
+        "UI-007"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 60,
+      "program_id": "INT-HANDOFF-SYNC",
+      "method": "POST",
+      "endpoint": "/v1/integrations/crm/handoffs",
+      "req_ids": [
+        "API-006",
+        "INT-002",
+        "INT-003"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 72,
+      "program_id": "OPS-BLOCK-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/ops/blocks/{block_id}",
+      "req_ids": [
+        "OPS-003",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 76,
+      "program_id": "OPS-ADMIN-DASHBOARD-SERIES",
+      "method": "GET",
+      "endpoint": "/v1/admin/dashboard/series",
+      "req_ids": [
+        "OPS-100"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 84,
+      "program_id": "OPS-AUDIT-LOG-QUERY",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs",
+      "req_ids": [
+        "OPS-103"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 85,
+      "program_id": "OPS-AUDIT-CHANGE-DIFF",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs/{audit_id}/diff",
+      "req_ids": [
+        "OPS-103"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 87,
+      "program_id": "API-AUTH-MFA-TOTP-ENROLL",
+      "method": "POST",
+      "endpoint": "/v1/auth/mfa/totp/enroll",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 88,
+      "program_id": "API-AUTH-MFA-TOTP-ACTIVATE",
+      "method": "POST",
+      "endpoint": "/v1/auth/mfa/totp/activate",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 89,
+      "program_id": "API-AUTH-MFA-VERIFY",
+      "method": "POST",
+      "endpoint": "/v1/auth/mfa/verify",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 90,
+      "program_id": "API-AUTH-MFA-RECOVERY-REGENERATE",
+      "method": "POST",
+      "endpoint": "/v1/auth/mfa/recovery-codes/regenerate",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 91,
+      "program_id": "API-AUTH-SESSIONS-LIST",
+      "method": "GET",
+      "endpoint": "/v1/auth/sessions",
+      "req_ids": [
+        "SEC-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 92,
+      "program_id": "API-AUTH-SESSIONS-REVOKE",
+      "method": "DELETE",
+      "endpoint": "/v1/auth/sessions/{session_id}",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 93,
+      "program_id": "API-AUTH-SESSIONS-REVOKE-OTHERS",
+      "method": "POST",
+      "endpoint": "/v1/auth/sessions/revoke-others",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 96,
+      "program_id": "ADM-RBAC-APPROVAL-REQUEST-REJECT",
+      "method": "POST",
+      "endpoint": "/v1/admin/rbac/approval-requests/{request_id}/reject",
+      "req_ids": [
+        "ADM-100",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 97,
+      "program_id": "OPS-AUDIT-LOG-EXPORT",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs/export",
+      "req_ids": [
+        "OPS-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    },
+    {
+      "row_index": 98,
+      "program_id": "OPS-AUDIT-CHAIN-VERIFY",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs/chain-verify",
+      "req_ids": [
+        "OPS-001",
+        "SEC-002"
+      ],
+      "missing_signals": [
+        "tests_present"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "row_index": 2,
+      "program_id": "API-AUTH-LOGIN",
+      "method": "POST",
+      "endpoint": "/v1/auth/login",
+      "endpoint_normalized": "/v1/auth/login",
+      "req_ids": [
+        "API-007",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-007": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 64,
+          "snippet": "@PostMapping(\"/login\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 941,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/login\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 61,
+          "snippet": "load): Promise<LoginResult> { const result = await generatedApiClient.POST(\"/v1/auth/login\", { body: { login_id: payload.loginId, password"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminKbContractTest.java",
+          "line": 167,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/auth/login\") .header(\"X-Trace-Id\", traceId) .header(\"X-Ten"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 164,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/auth/login\") .header(\"X-Trace-Id\", traceId) .header(\"X-Ten"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminTemplatePolicyContractTest.java",
+          "line": 101,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/auth/login\") .header(\"X-Trace-Id\", traceId) .header(\"X-Ten"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AuditExportJobContractTest.java",
+          "line": 125,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/auth/login\") .header(\"X-Trace-Id\", traceId) .header(\"X-Ten"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/BackofficeAclTenantIsolationTest.java",
+          "line": 64,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/auth/login\") .header(\"X-Trace-Id\", traceId) .header(\"X-Ten"
+        }
+      ]
+    },
+    {
+      "row_index": 3,
+      "program_id": "API-AUTH-REFRESH",
+      "method": "POST",
+      "endpoint": "/v1/auth/refresh",
+      "endpoint_normalized": "/v1/auth/refresh",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 83,
+          "snippet": "@PostMapping(\"/refresh\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1061,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/refresh\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 96,
+          "snippet": "y: string): Promise<string> { const result = await generatedApiClient.POST(\"/v1/auth/refresh\", { body: { client_type: \"web\", client_nonce: c"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/identity/presentation/AuthHardeningContractTest.java",
+          "line": 119,
+          "snippet": "shed.get(\"access_token\").asText()).isNotBlank(); mockMvc.perform(post(\"/v1/auth/refresh\") .header(\"X-Trace-Id\", \"82000000-0000-4000-8000-000000000003\")"
+        }
+      ]
+    },
+    {
+      "row_index": 4,
+      "program_id": "API-AUTH-LOGOUT",
+      "method": "POST",
+      "endpoint": "/v1/auth/logout",
+      "endpoint_normalized": "/v1/auth/logout",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 110,
+          "snippet": "@PostMapping(\"/logout\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 961,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/logout\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 121,
+          "snippet": "te().tenantKey; try { const result = await generatedApiClient.POST(\"/v1/auth/logout\", { body: { client_type: \"web\", cli"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 5,
+      "program_id": "API-SESSION-CREATE",
+      "method": "POST",
+      "endpoint": "/v1/sessions",
+      "endpoint_normalized": "/v1/sessions",
+      "req_ids": [
+        "API-002",
+        "SYS-001",
+        "UI-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-002": "Must",
+        "SYS-001": "Must",
+        "UI-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 69,
+          "snippet": "@PostMapping(\"/sessions\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1521,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 91,
+          "snippet": "): Promise<SessionResponse> { const result = await generatedApiClient.POST(\"/v1/sessions\", { body: {}, headers: generatedHeaders(true), }); retu"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/billing/presentation/BudgetEnforcementHttpTest.java",
+          "line": 91,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageAnswerContractNegativeFlowTest.java",
+          "line": 232,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageFlowContractTest.java",
+          "line": 149,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/PiiEndToEndContractTest.java",
+          "line": 211,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/SseConcurrencyLimitContractTest.java",
+          "line": 186,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 6,
+      "program_id": "API-SESSION-GET",
+      "method": "GET",
+      "endpoint": "/v1/sessions/{session_id}",
+      "endpoint_normalized": "/v1/sessions/{}",
+      "req_ids": [
+        "API-002",
+        "SYS-001",
+        "UI-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-002": "Must",
+        "SYS-001": "Must",
+        "UI-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 91,
+          "snippet": "@GetMapping(\"/sessions/{session_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1541,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 102,
+          "snippet": "g): Promise<SessionResponse> { const result = await generatedApiClient.GET(\"/v1/sessions/{session_id}\", { params: { path: { session_id: sessionId"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/session/presentation/UuidAccessContractTest.java",
+          "line": 38,
+          "snippet": "1-pass\", \"10111111-1111-4111-8111-111111111111\"); mockMvc.perform(get(\"/v1/sessions/{session_id}\", \"abc\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 7,
+      "program_id": "API-SESSION-CLOSE",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/close",
+      "endpoint_normalized": "/v1/sessions/{}/close",
+      "req_ids": [
+        "API-002",
+        "OPS-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-002": "Must",
+        "OPS-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 145,
+          "snippet": "@PostMapping(\"/sessions/{session_id}/close\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1561,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/close\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 169,
+          "snippet": "Id: string, reason: string) { const result = await generatedApiClient.POST(\"/v1/sessions/{session_id}/close\", { params: { path: { session_id: sessionId"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/session/presentation/SessionActionContractTest.java",
+          "line": 36,
+          "snippet": "sToken, \"71000000-0000-4000-8000-000000000002\"); mockMvc.perform(post(\"/v1/sessions/{session_id}/close\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 8,
+      "program_id": "API-SESSION-BOOTSTRAP",
+      "method": "GET",
+      "endpoint": "/v1/chat/bootstrap",
+      "endpoint_normalized": "/v1/chat/bootstrap",
+      "req_ids": [
+        "API-001",
+        "SYS-001",
+        "SYS-002",
+        "UI-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-001": "Must",
+        "SYS-001": "Must",
+        "SYS-002": "Must",
+        "UI-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 58,
+          "snippet": "@GetMapping(\"/chat/bootstrap\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1141,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/chat/bootstrap\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 81,
+          "snippet": "unction fetchChatBootstrap() { const result = await generatedApiClient.GET(\"/v1/chat/bootstrap\", { headers: generatedHeaders(), }); return unwrapGenerated<Rec"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageFlowContractTest.java",
+          "line": 81,
+          "snippet": "1-pass\", \"55555555-5555-4555-8555-555555555555\"); mockMvc.perform(get(\"/v1/chat/bootstrap\") .header(\"Authorization\", \"Bearer \" + adminAccessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/identity/presentation/AuthHardeningContractTest.java",
+          "line": 103,
+          "snippet": "andExpect(jsonPath(\"$.status\").value(\"APPLIED\")); mockMvc.perform(get(\"/v1/chat/bootstrap\") .header(\"Authorization\", \"Bearer \" + agentToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/platform/observability/TraceIdContractTest.java",
+          "line": 74,
+          "snippet": "derMissing() throws Exception { MvcResult result = mockMvc.perform(get(\"/v1/chat/bootstrap\")) .andExpect(status().isForbidden()) .andExpect(header"
+        }
+      ]
+    },
+    {
+      "row_index": 9,
+      "program_id": "API-MESSAGE-POST",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/messages",
+      "endpoint_normalized": "/v1/sessions/{}/messages",
+      "req_ids": [
+        "API-003",
+        "KB-001",
+        "UI-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-003": "Must",
+        "KB-001": "Must",
+        "UI-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 120,
+          "snippet": "@PostMapping(\"/sessions/{session_id}/messages\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1621,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/messages\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 120,
+          "snippet": "se<MessageAcceptedResponse> { const result = await generatedApiClient.POST(\"/v1/sessions/{session_id}/messages\", { params: { path: { session_id: sessionId"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/billing/presentation/BudgetEnforcementHttpTest.java",
+          "line": 47,
+          "snippet": "1)에서 예산 초과를 검증해야 레거시 경로 제거 후에도 정책이 유지됨을 보장할 수 있다. mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageAnswerContractNegativeFlowTest.java",
+          "line": 245,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageFlowContractTest.java",
+          "line": 43,
+          "snippet": "sToken, traceSession); MvcResult messageResult = mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/PiiEndToEndContractTest.java",
+          "line": 225,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/SseConcurrencyLimitContractTest.java",
+          "line": 199,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 10,
+      "program_id": "API-MESSAGE-RETRY",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/messages/{message_id}/retry",
+      "endpoint_normalized": "/v1/sessions/{}/messages/{}/retry",
+      "req_ids": [
+        "API-003",
+        "UI-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-003": "Must",
+        "UI-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 159,
+          "snippet": "@PostMapping(\"/sessions/{session_id}/messages/{message_id}/retry\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1645,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/messages/{message_id}/retry\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 185,
+          "snippet": "Id: string, reason: string) { const result = await generatedApiClient.POST(\"/v1/sessions/{session_id}/messages/{message_id}/retry\", { params: { path: { session_id: sessionId"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/session/presentation/SessionActionContractTest.java",
+          "line": 59,
+          "snippet": "olicy\", \"72000000-0000-4000-8000-000000000003\"); mockMvc.perform(post(\"/v1/sessions/{session_id}/messages/{message_id}/retry\", sessionId, messageId) .header(\"Authorization\", \"Bearer \" + ac"
+        }
+      ]
+    },
+    {
+      "row_index": 11,
+      "program_id": "API-MESSAGE-LIST",
+      "method": "GET",
+      "endpoint": "/v1/sessions/{session_id}/messages",
+      "endpoint_normalized": "/v1/sessions/{}/messages",
+      "req_ids": [
+        "API-001",
+        "UI-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-001": "Must",
+        "UI-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 104,
+          "snippet": "@GetMapping(\"/sessions/{session_id}/messages\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1621,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/messages\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 120,
+          "snippet": "se<MessageAcceptedResponse> { const result = await generatedApiClient.POST(\"/v1/sessions/{session_id}/messages\", { params: { path: { session_id: sessionId"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/billing/presentation/BudgetEnforcementHttpTest.java",
+          "line": 47,
+          "snippet": "1)에서 예산 초과를 검증해야 레거시 경로 제거 후에도 정책이 유지됨을 보장할 수 있다. mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageAnswerContractNegativeFlowTest.java",
+          "line": 245,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageFlowContractTest.java",
+          "line": 43,
+          "snippet": "sToken, traceSession); MvcResult messageResult = mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/PiiEndToEndContractTest.java",
+          "line": 225,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/SseConcurrencyLimitContractTest.java",
+          "line": 199,
+          "snippet": "ng traceId) throws Exception { MvcResult result = mockMvc.perform(post(\"/v1/sessions/{session_id}/messages\", sessionId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 12,
+      "program_id": "API-QUICKREPLY-POST",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/quick-replies/{quick_reply_id}",
+      "endpoint_normalized": "/v1/sessions/{}/quick-replies/{}",
+      "req_ids": [
+        "API-003",
+        "UI-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-003": "Must",
+        "UI-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 175,
+          "snippet": "@PostMapping(\"/sessions/{session_id}/quick-replies/{quick_reply_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1705,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/quick-replies/{quick_reply_id}\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 202,
+          "snippet": "ickReplyId: string, text: string) { const response = await httpClient.post(`/v1/sessions/${sessionId}/quick-replies/${quickReplyId}`, { text }); return response.data; } export async function postCsat(sessio"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/session/presentation/SessionActionContractTest.java",
+          "line": 82,
+          "snippet": "eplyId = \"73000000-0000-4000-8000-000000000099\"; mockMvc.perform(post(\"/v1/sessions/{session_id}/quick-replies/{quick_reply_id}\", sessionId, quickReplyId) .header(\"Authorization\", \"Bearer \" +"
+        }
+      ]
+    },
+    {
+      "row_index": 13,
+      "program_id": "API-CSAT-POST",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/csat",
+      "endpoint_normalized": "/v1/sessions/{}/csat",
+      "req_ids": [
+        "API-005",
+        "INT-003",
+        "UI-007"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-005": "Must",
+        "INT-003": "Must",
+        "UI-007": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 191,
+          "snippet": "@PostMapping(\"/sessions/{session_id}/csat\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1581,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/csat\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 207,
+          "snippet": ", score: number, comment: string) { const response = await httpClient.post(`/v1/sessions/${sessionId}/csat`, { score, comment }); return response.data; } export async function reque"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 14,
+      "program_id": "API-HANDOFF-REQUEST",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/handoff",
+      "endpoint_normalized": "/v1/sessions/{}/handoff",
+      "req_ids": [
+        "API-006",
+        "INT-003",
+        "SEC-002",
+        "UI-007"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-006": "Should",
+        "INT-003": "Must",
+        "SEC-002": "Must",
+        "UI-007": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/SessionController.java",
+          "line": 205,
+          "snippet": "@PostMapping(\"/sessions/{session_id}/handoff\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1601,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/handoff\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 212,
+          "snippet": "essionId: string, reason: string) { const response = await httpClient.post(`/v1/sessions/${sessionId}/handoff`, { reason }); return response.data; } export async function requestAttach"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 15,
+      "program_id": "API-STREAM-SSE",
+      "method": "GET",
+      "endpoint": "/v1/sessions/{session_id}/messages/{message_id}/stream",
+      "endpoint_normalized": "/v1/sessions/{}/messages/{}/stream",
+      "req_ids": [
+        "API-004",
+        "RAG-001",
+        "UI-004"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-004": "Must",
+        "RAG-001": "Must",
+        "UI-004": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/message/presentation/MessageStreamV1Controller.java",
+          "line": 28,
+          "snippet": "@GetMapping(value = \"/stream\", produces = MediaType.TEXT_EVENT_STREAM_VALUE)"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1665,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/messages/{message_id}/stream\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 155,
+          "snippet": "sessionId: string, messageId: string): Promise<string> { return getSseText(`/v1/sessions/${sessionId}/messages/${messageId}/stream`); } export async function resumeConversationMessage( sessionId: string,"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageAnswerContractNegativeFlowTest.java",
+          "line": 264,
+          "snippet": "ing traceId) throws Exception { MvcResult result = mockMvc.perform(get(\"/v1/sessions/{session_id}/messages/{message_id}/stream\", sessionId, messageId) .header(\"Authorization\", \"Bearer \" + ac"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/MessageFlowContractTest.java",
+          "line": 62,
+          "snippet": "g()).get(\"id\").asText(); MvcResult streamResult = mockMvc.perform(get(\"/v1/sessions/{session_id}/messages/{message_id}/stream\", sessionId, answerId) .header(\"Authorization\", \"Bearer \" + acc"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/PiiEndToEndContractTest.java",
+          "line": 245,
+          "snippet": "ing traceId) throws Exception { MvcResult result = mockMvc.perform(get(\"/v1/sessions/{session_id}/messages/{message_id}/stream\", sessionId, messageId) .header(\"Authorization\", \"Bearer \" + ac"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/SseConcurrencyLimitContractTest.java",
+          "line": 74,
+          "snippet": "oncurrency rejection. Thread.sleep(150L); mockMvc.perform(get(\"/v1/sessions/{session_id}/messages/{message_id}/stream\", sessionId, answerMessageId) .header(\"Authorization\", \"Bearer"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/SseResumeContractTest.java",
+          "line": 131,
+          "snippet": "if (lastEventId == null) { MvcResult result = mockMvc.perform(get(\"/v1/sessions/{session_id}/messages/{message_id}/stream\", sessionId, messageId) .header(\"Authorization\", \"Bearer \""
+        }
+      ]
+    },
+    {
+      "row_index": 16,
+      "program_id": "API-STREAM-RESUME",
+      "method": "GET",
+      "endpoint": "/v1/sessions/{session_id}/messages/{message_id}/stream/resume",
+      "endpoint_normalized": "/v1/sessions/{}/messages/{}/stream/resume",
+      "req_ids": [
+        "API-004",
+        "UI-005"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-004": "Must",
+        "UI-005": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/message/presentation/MessageStreamV1Controller.java",
+          "line": 46,
+          "snippet": "@GetMapping(value = \"/stream/resume\", produces = MediaType.TEXT_EVENT_STREAM_VALUE)"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1685,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/messages/{message_id}/stream/resume\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 164,
+          "snippet": "g> { const query = encodeURIComponent(lastEventId); const resumePath = `/v1/sessions/${sessionId}/messages/${messageId}/stream/resume`; return getSseText(`${resumePath}?last_event_id=${query}`, lastEventId); }"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/conversation/message/presentation/SseResumeContractTest.java",
+          "line": 140,
+          "snippet": "etContentAsString(); } MvcResult result = mockMvc.perform(get(\"/v1/sessions/{session_id}/messages/{message_id}/stream/resume\", sessionId, messageId) .queryParam(\"last_event_id\", String.val"
+        }
+      ]
+    },
+    {
+      "row_index": 17,
+      "program_id": "API-ATTACHMENT-PRESIGN",
+      "method": "POST",
+      "endpoint": "/v1/attachments/presign",
+      "endpoint_normalized": "/v1/attachments/presign",
+      "req_ids": [
+        "API-007",
+        "SEC-003",
+        "UI-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-007": "Must",
+        "SEC-003": "Must",
+        "UI-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/message/presentation/AttachmentController.java",
+          "line": 18,
+          "snippet": "@PostMapping(\"/presign\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 901,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/attachments/presign\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 217,
+          "snippet": "ring, contentType = \"text/plain\") { const response = await httpClient.post(\"/v1/attachments/presign\", { file_name: fileName, content_type: contentType, });"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 18,
+      "program_id": "API-ATTACHMENT-COMPLETE",
+      "method": "POST",
+      "endpoint": "/v1/attachments/{attachment_id}/complete",
+      "endpoint_normalized": "/v1/attachments/{}/complete",
+      "req_ids": [
+        "API-007",
+        "KB-001",
+        "UI-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-007": "Must",
+        "KB-001": "Must",
+        "UI-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/message/presentation/AttachmentController.java",
+          "line": 31,
+          "snippet": "@PostMapping(\"/{attachment_id}/complete\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 921,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/attachments/{attachment_id}/complete\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 225,
+          "snippet": "eAttachment(attachmentId: string) { const response = await httpClient.post(`/v1/attachments/${attachmentId}/complete`); return response.data; } export async function classifyRagQuery(query: s"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 19,
+      "program_id": "API-RAG-RETRIEVE",
+      "method": "POST",
+      "endpoint": "/v1/rag/retrieve",
+      "endpoint_normalized": "/v1/rag/retrieve",
+      "req_ids": [
+        "AI-004",
+        "KB-002",
+        "KB-003",
+        "RAG-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "AI-004": "Must",
+        "KB-002": "Must",
+        "KB-003": "Should",
+        "RAG-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/knowledge/rag/presentation/RagController.java",
+          "line": 48,
+          "snippet": "@PostMapping(\"/retrieve\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1501,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/rag/retrieve\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 245,
+          "snippet": "tedResponse> { const response = await httpClient.post<RagAcceptedResponse>(\"/v1/rag/retrieve\", { query, top_k: topK, }); return response.data; } ex"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/identity/security/RbacTenantMatrixTest.java",
+          "line": 101,
+          "snippet": "Arguments.of( \"rag:retrieve\", post(\"/v1/rag/retrieve\") .header(\"X-Trace-Id\", \"71000000-0000-4000-8000-0000000000"
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/knowledge/rag/presentation/RagApiContractTest.java",
+          "line": 42,
+          "snippet": "} \"\"\"; MvcResult first = mockMvc.perform(post(\"/v1/rag/retrieve\") .header(\"X-Trace-Id\", \"11111111-1111-4111-8111-111111111111\")"
+        }
+      ]
+    },
+    {
+      "row_index": 20,
+      "program_id": "API-RAG-ANSWER",
+      "method": "POST",
+      "endpoint": "/v1/rag/answer",
+      "endpoint_normalized": "/v1/rag/answer",
+      "req_ids": [
+        "AI-004",
+        "AI-009",
+        "API-008",
+        "CCH-001",
+        "CCH-002",
+        "KB-002",
+        "KB-003",
+        "LLM-001",
+        "RAG-001",
+        "RAG-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "AI-004": "Must",
+        "AI-009": "Must",
+        "API-008": "Must",
+        "CCH-001": "Must",
+        "CCH-002": "Must",
+        "KB-002": "Must",
+        "KB-003": "Should",
+        "LLM-001": "Should",
+        "RAG-001": "Must",
+        "RAG-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/knowledge/rag/presentation/RagController.java",
+          "line": 76,
+          "snippet": "@PostMapping(\"/answer\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1421,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/rag/answer\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 253,
+          "snippet": "esponse = await httpClient.post<RagAcceptedResponse | Record<string, unknown>>(\"/v1/rag/answer\", { query, top_k: topK, answer_contract: {"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/knowledge/rag/presentation/RagApiContractTest.java",
+          "line": 69,
+          "snippet": "seWhenEvidenceBelowThreshold() throws Exception { mockMvc.perform(post(\"/v1/rag/answer\") .header(\"X-Trace-Id\", \"33333333-3333-4333-8333-333333333333\")"
+        }
+      ]
+    },
+    {
+      "row_index": 21,
+      "program_id": "API-RAG-CITATIONS-GET",
+      "method": "GET",
+      "endpoint": "/v1/rag/answers/{answer_id}/citations",
+      "endpoint_normalized": "/v1/rag/answers/{}/citations",
+      "req_ids": [
+        "RAG-001",
+        "RAG-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "RAG-001": "Must",
+        "RAG-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/knowledge/rag/presentation/CitationController.java",
+          "line": 27,
+          "snippet": "@GetMapping(\"/{answer_id}/citations\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1441,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/rag/answers/{answer_id}/citations\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 266,
+          "snippet": "listRagCitations(answerId: string) { const response = await httpClient.get(`/v1/rag/answers/${answerId}/citations`, { params: { limit: 10 }, }); return response.data; } export"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/knowledge/rag/presentation/RagApiContractTest.java",
+          "line": 104,
+          "snippet": "ponse().getContentAsString()).get(\"id\").asText(); mockMvc.perform(get(\"/v1/rag/answers/{answer_id}/citations\", retrieveId) .queryParam(\"limit\", \"1\") .header"
+        }
+      ]
+    },
+    {
+      "row_index": 22,
+      "program_id": "API-RAG-QUERY-CLASSIFY",
+      "method": "POST",
+      "endpoint": "/v1/rag/query/classify",
+      "endpoint_normalized": "/v1/rag/query/classify",
+      "req_ids": [
+        "LLM-002",
+        "RAG-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "LLM-002": "Must",
+        "RAG-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/knowledge/rag/presentation/RagController.java",
+          "line": 113,
+          "snippet": "@PostMapping(\"/query/classify\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1481,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/rag/query/classify\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 230,
+          "snippet": "n classifyRagQuery(query: string) { const response = await httpClient.post(\"/v1/rag/query/classify\", { query }); return response.data; } export async function suggestRagClar"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 23,
+      "program_id": "API-RAG-CLARIFY-SUGGEST",
+      "method": "POST",
+      "endpoint": "/v1/rag/clarify/suggest",
+      "endpoint_normalized": "/v1/rag/clarify/suggest",
+      "req_ids": [
+        "RAG-002",
+        "UI-006"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "RAG-002": "Must",
+        "UI-006": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/knowledge/rag/presentation/RagController.java",
+          "line": 121,
+          "snippet": "@PostMapping(\"/clarify/suggest\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1461,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/rag/clarify/suggest\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 235,
+          "snippet": "suggestRagClarify(query: string) { const response = await httpClient.post(\"/v1/rag/clarify/suggest\", { query }); return response.data; } export async function requestTemplat"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 24,
+      "program_id": "KB-DOC-UPLOAD",
+      "method": "POST",
+      "endpoint": "/v1/admin/kb/documents",
+      "endpoint_normalized": "/v1/admin/kb/documents",
+      "req_ids": [
+        "API-007",
+        "KB-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-007": "Must",
+        "KB-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminKbController.java",
+          "line": 48,
+          "snippet": "@PostMapping(\"/documents\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 269,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/kb/documents\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 190,
+          "snippet": "e<KbDocumentItem> { const response = await httpClient.post<KbDocumentItem>(\"/v1/admin/kb/documents\", { title: payload.title, source_type: payload.sourceType,"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminKbContractTest.java",
+          "line": 44,
+          "snippet": ".asText(); MvcResult uploadResult = mockMvc.perform(post(\"/v1/admin/kb/documents\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 25,
+      "program_id": "KB-DOC-LIST",
+      "method": "GET",
+      "endpoint": "/v1/admin/kb/documents",
+      "endpoint_normalized": "/v1/admin/kb/documents",
+      "req_ids": [
+        "KB-001",
+        "KB-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "KB-001": "Must",
+        "KB-003": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminKbController.java",
+          "line": 108,
+          "snippet": "@GetMapping(\"/documents\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 269,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/kb/documents\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 190,
+          "snippet": "e<KbDocumentItem> { const response = await httpClient.post<KbDocumentItem>(\"/v1/admin/kb/documents\", { title: payload.title, source_type: payload.sourceType,"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminKbContractTest.java",
+          "line": 44,
+          "snippet": ".asText(); MvcResult uploadResult = mockMvc.perform(post(\"/v1/admin/kb/documents\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 26,
+      "program_id": "KB-DOC-APPROVE",
+      "method": "POST",
+      "endpoint": "/v1/admin/kb/documents/{doc_id}/approve",
+      "endpoint_normalized": "/v1/admin/kb/documents/{}/approve",
+      "req_ids": [
+        "ADM-002",
+        "KB-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-002": "Should",
+        "KB-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminKbController.java",
+          "line": 138,
+          "snippet": "@PostMapping(\"/documents/{doc_id}/approve\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 293,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/kb/documents/{doc_id}/approve\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 216,
+          "snippet": "oveKbDocument(documentId: string) { const response = await httpClient.post(`/v1/admin/kb/documents/${documentId}/approve`); return response.data; } export async function rollbackKbDocumentVersion"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminKbContractTest.java",
+          "line": 77,
+          "snippet": ".andExpect(jsonPath(\"$.items\").isArray()); mockMvc.perform(post(\"/v1/admin/kb/documents/{doc_id}/approve\", documentId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 27,
+      "program_id": "KB-DOC-ROLLBACK",
+      "method": "POST",
+      "endpoint": "/v1/admin/kb/documents/{doc_id}/versions/{version}/rollback",
+      "endpoint_normalized": "/v1/admin/kb/documents/{}/versions/{}/rollback",
+      "req_ids": [
+        "ADM-006",
+        "KB-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-006": "Should",
+        "KB-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminKbController.java",
+          "line": 165,
+          "snippet": "@PostMapping(\"/documents/{doc_id}/versions/{version}/rollback\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 313,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/kb/documents/{doc_id}/versions/{version}/rollback\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 221,
+          "snippet": "umentId: string, version: number) { const response = await httpClient.post(`/v1/admin/kb/documents/${documentId}/versions/${version}/rollback`); return response.data; } export async function requestKbReindex(note?: s"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminKbContractTest.java",
+          "line": 101,
+          "snippet": "dExpect(jsonPath(\"$.result\").value(\"approved\")); mockMvc.perform(post(\"/v1/admin/kb/documents/{doc_id}/versions/{version}/rollback\", documentId, versionNo) .header(\"Authorization\", \"Bearer \" + a"
+        }
+      ]
+    },
+    {
+      "row_index": 28,
+      "program_id": "KB-REINDEX-REQUEST",
+      "method": "POST",
+      "endpoint": "/v1/admin/kb/reindex",
+      "endpoint_normalized": "/v1/admin/kb/reindex",
+      "req_ids": [
+        "ETL-001",
+        "KB-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ETL-001": "Should",
+        "KB-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminKbController.java",
+          "line": 195,
+          "snippet": "@PostMapping(\"/reindex\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 353,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/kb/reindex\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 226,
+          "snippet": "obResponse> { const response = await httpClient.post<KbReindexJobResponse>(\"/v1/admin/kb/reindex\", { note: note ?? \"\", }); return response.data; } export async"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminKbContractTest.java",
+          "line": 108,
+          "snippet": "value(\"rolled_back\")); MvcResult reindexResult = mockMvc.perform(post(\"/v1/admin/kb/reindex\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 29,
+      "program_id": "KB-REINDEX-STATUS",
+      "method": "GET",
+      "endpoint": "/v1/admin/kb/reindex/{job_id}",
+      "endpoint_normalized": "/v1/admin/kb/reindex/{}",
+      "req_ids": [
+        "ETL-001",
+        "OPS-002"
+      ],
+      "importance": "Should",
+      "req_importance_breakdown": {
+        "ETL-001": "Should",
+        "OPS-002": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminKbController.java",
+          "line": 226,
+          "snippet": "@GetMapping(\"/reindex/{job_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 373,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/kb/reindex/{job_id}\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 233,
+          "snippet": "JobResponse> { const response = await httpClient.get<KbReindexJobResponse>(`/v1/admin/kb/reindex/${jobId}`); return response.data; } export async function listKbIndexOperations(lim"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminKbContractTest.java",
+          "line": 87,
+          "snippet": "kbIndexPipelineService.processPendingJobs(20); mockMvc.perform(get(\"/v1/admin/kb/reindex/{job_id}\", indexJobId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 30,
+      "program_id": "KB-HYBRID-SEARCH-TEST",
+      "method": "POST",
+      "endpoint": "/v1/admin/kb/search/test",
+      "endpoint_normalized": "/v1/admin/kb/search/test",
+      "req_ids": [
+        "KB-003",
+        "OPS-002"
+      ],
+      "importance": "Should",
+      "req_importance_breakdown": {
+        "KB-003": "Should",
+        "OPS-002": "Should"
+      },
+      "backend_implemented": false,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "backend_implemented",
+        "tests_present"
+      ],
+      "backend_matches": [],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 393,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/kb/search/test\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 31,
+      "program_id": "TMP-TEMPLATE-LIST",
+      "method": "GET",
+      "endpoint": "/v1/admin/templates",
+      "endpoint_normalized": "/v1/admin/templates",
+      "req_ids": [
+        "ADM-002",
+        "TMP-003",
+        "TMP-004"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-002": "Should",
+        "TMP-003": "Must",
+        "TMP-004": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 38,
+          "snippet": "@GetMapping(\"/templates\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 697,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/templates\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 245,
+          "snippet": "sponse> { const response = await httpClient.get<AdminResourceListResponse>(\"/v1/admin/templates\", { params: { limit, offset }, }); return response.data; } exp"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminTemplatePolicyContractTest.java",
+          "line": 40,
+          "snippet": ".asText(); MvcResult createTemplateResult = mockMvc.perform(post(\"/v1/admin/templates\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 32,
+      "program_id": "TMP-TEMPLATE-CREATE",
+      "method": "POST",
+      "endpoint": "/v1/admin/templates",
+      "endpoint_normalized": "/v1/admin/templates",
+      "req_ids": [
+        "ADM-002",
+        "TMP-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-002": "Should",
+        "TMP-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 50,
+          "snippet": "@PostMapping(\"/templates\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 697,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/templates\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 245,
+          "snippet": "sponse> { const response = await httpClient.get<AdminResourceListResponse>(\"/v1/admin/templates\", { params: { limit, offset }, }); return response.data; } exp"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminTemplatePolicyContractTest.java",
+          "line": 40,
+          "snippet": ".asText(); MvcResult createTemplateResult = mockMvc.perform(post(\"/v1/admin/templates\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 33,
+      "program_id": "TMP-TEMPLATE-APPROVE",
+      "method": "POST",
+      "endpoint": "/v1/admin/templates/{template_id}/approve",
+      "endpoint_normalized": "/v1/admin/templates/{}/approve",
+      "req_ids": [
+        "ADM-002",
+        "SEC-002",
+        "TMP-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-002": "Should",
+        "SEC-002": "Must",
+        "TMP-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 64,
+          "snippet": "@PostMapping(\"/templates/{template_id}/approve\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 721,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/templates/{template_id}/approve\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 257,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/templates/${templateId}/approve`); return response.data; } export async function deployTemplate(templateId"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminTemplatePolicyContractTest.java",
+          "line": 64,
+          "snippet": ".andExpect(jsonPath(\"$.items\").isArray()); mockMvc.perform(post(\"/v1/admin/templates/{template_id}/approve\", templateId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 34,
+      "program_id": "TMP-TEMPLATE-DEPLOY",
+      "method": "POST",
+      "endpoint": "/v1/admin/templates/{template_id}/deploy",
+      "endpoint_normalized": "/v1/admin/templates/{}/deploy",
+      "req_ids": [
+        "ADM-006",
+        "INT-001",
+        "TMP-004"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-006": "Should",
+        "INT-001": "Must",
+        "TMP-004": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 73,
+          "snippet": "@PostMapping(\"/templates/{template_id}/deploy\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 741,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/templates/{template_id}/deploy\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 262,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/templates/${templateId}/deploy`); return response.data; } export async function rollbackTemplate(template"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminTemplatePolicyContractTest.java",
+          "line": 71,
+          "snippet": "dExpect(jsonPath(\"$.status\").value(\"APPROVED\")); mockMvc.perform(post(\"/v1/admin/templates/{template_id}/deploy\", templateId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 35,
+      "program_id": "TMP-TEMPLATE-ROLLBACK",
+      "method": "POST",
+      "endpoint": "/v1/admin/templates/{template_id}/rollback",
+      "endpoint_normalized": "/v1/admin/templates/{}/rollback",
+      "req_ids": [
+        "ADM-006",
+        "TMP-004"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-006": "Should",
+        "TMP-004": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 82,
+          "snippet": "@PostMapping(\"/templates/{template_id}/rollback\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 761,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/templates/{template_id}/rollback\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 267,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/templates/${templateId}/rollback`); return response.data; } export async function updatePolicy(policyId: st"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminTemplatePolicyContractTest.java",
+          "line": 78,
+          "snippet": "dExpect(jsonPath(\"$.status\").value(\"DEPLOYED\")); mockMvc.perform(post(\"/v1/admin/templates/{template_id}/rollback\", templateId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 36,
+      "program_id": "TMP-RECOMMEND-BUTTON",
+      "method": "POST",
+      "endpoint": "/v1/sessions/{session_id}/template-recommendations",
+      "endpoint_normalized": "/v1/sessions/{}/template-recommendations",
+      "req_ids": [
+        "TMP-001",
+        "TMP-005",
+        "TOOL-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "TMP-001": "Must",
+        "TMP-005": "Should",
+        "TOOL-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/conversation/session/presentation/TemplateRecommendationController.java",
+          "line": 24,
+          "snippet": "@PostMapping(\"/template-recommendations\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1725,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/sessions/{session_id}/template-recommendations\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 240,
+          "snippet": "sessionId: string, query: string) { const response = await httpClient.post(`/v1/sessions/${sessionId}/template-recommendations`, { query }); return response.data; } export async function retrieveRag(qu"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 37,
+      "program_id": "ADM-POLICY-UPDATE",
+      "method": "PUT",
+      "endpoint": "/v1/admin/policies/{policy_id}",
+      "endpoint_normalized": "/v1/admin/policies/{}",
+      "req_ids": [
+        "ADM-003",
+        "SEC-003",
+        "TMP-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-003": "Must",
+        "SEC-003": "Must",
+        "TMP-002": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 91,
+          "snippet": "@PutMapping(\"/policies/{policy_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 497,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/policies/{policy_id}\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 272,
+          "snippet": "ceResponse> { const response = await httpClient.put<AdminResourceResponse>(`/v1/admin/policies/${policyId}`, payload); return response.data; } export async function listModels(limit"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminTemplatePolicyContractTest.java",
+          "line": 85,
+          "snippet": "xpect(jsonPath(\"$.status\").value(\"ROLLED_BACK\")); mockMvc.perform(put(\"/v1/admin/policies/{policy_id}\", \"answer_contract\") .header(\"Authorization\", \"Bearer \" + acces"
+        }
+      ]
+    },
+    {
+      "row_index": 38,
+      "program_id": "ADM-MODEL-LIST",
+      "method": "GET",
+      "endpoint": "/v1/admin/models",
+      "endpoint_normalized": "/v1/admin/models",
+      "req_ids": [
+        "ADM-001",
+        "LLM-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-001": "Must",
+        "LLM-001": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 108,
+          "snippet": "@GetMapping(\"/models\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 433,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/models\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 277,
+          "snippet": "sponse> { const response = await httpClient.get<AdminResourceListResponse>(\"/v1/admin/models\", { params: { limit, offset }, }); return response.data; } exp"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 43,
+          "snippet": ".asText(); MvcResult createModelResult = mockMvc.perform(post(\"/v1/admin/models\") .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 39,
+      "program_id": "ADM-MODEL-CREATE",
+      "method": "POST",
+      "endpoint": "/v1/admin/models",
+      "endpoint_normalized": "/v1/admin/models",
+      "req_ids": [
+        "ADM-001",
+        "LLM-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-001": "Must",
+        "LLM-001": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 120,
+          "snippet": "@PostMapping(\"/models\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 433,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/models\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 277,
+          "snippet": "sponse> { const response = await httpClient.get<AdminResourceListResponse>(\"/v1/admin/models\", { params: { limit, offset }, }); return response.data; } exp"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 43,
+          "snippet": ".asText(); MvcResult createModelResult = mockMvc.perform(post(\"/v1/admin/models\") .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 40,
+      "program_id": "ADM-MODEL-ACTIVATE",
+      "method": "POST",
+      "endpoint": "/v1/admin/models/{model_id}/activate",
+      "endpoint_normalized": "/v1/admin/models/{}/activate",
+      "req_ids": [
+        "ADM-001",
+        "ADM-006",
+        "LLM-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-001": "Must",
+        "ADM-006": "Should",
+        "LLM-001": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 134,
+          "snippet": "@PostMapping(\"/models/{model_id}/activate\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 457,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/models/{model_id}/activate\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 289,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/models/${modelId}/activate`); return response.data; } export async function rollbackModel(modelId: st"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 67,
+          "snippet": ".andExpect(jsonPath(\"$.items\").isArray()); mockMvc.perform(post(\"/v1/admin/models/{model_id}/activate\", modelId) .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 41,
+      "program_id": "ADM-MODEL-ROLLBACK",
+      "method": "POST",
+      "endpoint": "/v1/admin/models/{model_id}/rollback",
+      "endpoint_normalized": "/v1/admin/models/{}/rollback",
+      "req_ids": [
+        "ADM-001",
+        "ADM-006",
+        "LLM-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-001": "Must",
+        "ADM-006": "Should",
+        "LLM-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 143,
+          "snippet": "@PostMapping(\"/models/{model_id}/rollback\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 477,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/models/{model_id}/rollback\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 294,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/models/${modelId}/rollback`); return response.data; } export async function upsertRoutingRule(ruleId:"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 74,
+          "snippet": "andExpect(jsonPath(\"$.status\").value(\"ACTIVE\")); mockMvc.perform(post(\"/v1/admin/models/{model_id}/rollback\", modelId) .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 42,
+      "program_id": "ADM-ROUTING-RULE-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/admin/routing-rules/{rule_id}",
+      "endpoint_normalized": "/v1/admin/routing-rules/{}",
+      "req_ids": [
+        "ADM-004",
+        "LLM-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-004": "Should",
+        "LLM-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 152,
+          "snippet": "@PutMapping(\"/routing-rules/{rule_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 657,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/routing-rules/test\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 299,
+          "snippet": "ceResponse> { const response = await httpClient.put<AdminResourceResponse>(`/v1/admin/routing-rules/${ruleId}`, payload); return response.data; } export async function testRoutingRule("
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 81,
+          "snippet": "xpect(jsonPath(\"$.status\").value(\"ROLLED_BACK\")); mockMvc.perform(put(\"/v1/admin/routing-rules/{rule_id}\", \"default-rule\") .header(\"Authorization\", \"Bearer \" + adminTok"
+        }
+      ]
+    },
+    {
+      "row_index": 43,
+      "program_id": "ADM-ROUTING-RULE-TEST",
+      "method": "POST",
+      "endpoint": "/v1/admin/routing-rules/test",
+      "endpoint_normalized": "/v1/admin/routing-rules/test",
+      "req_ids": [
+        "ADM-004",
+        "LLM-002",
+        "LLM-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-004": "Should",
+        "LLM-002": "Must",
+        "LLM-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 169,
+          "snippet": "@PostMapping(\"/routing-rules/test\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 657,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/routing-rules/test\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 304,
+          "snippet": "leId?: string; prompt?: string }) { const response = await httpClient.post(\"/v1/admin/routing-rules/test\", payload); return response.data; } export async function upsertProviderKe"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 95,
+          "snippet": "onPath(\"$.resource_key\").value(\"default-rule\")); mockMvc.perform(post(\"/v1/admin/routing-rules/test\") .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 44,
+      "program_id": "ADM-PROVIDER-KEY-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/admin/provider-keys/{provider}",
+      "endpoint_normalized": "/v1/admin/provider-keys/{}",
+      "req_ids": [
+        "ADM-005",
+        "SEC-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-005": "Should",
+        "SEC-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 185,
+          "snippet": "@PutMapping(\"/provider-keys/{provider}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 517,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/provider-keys/{provider}\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 309,
+          "snippet": "ceResponse> { const response = await httpClient.put<AdminResourceResponse>(`/v1/admin/provider-keys/${provider}`, { secret_ref: secretRef, }); return response.data; } export"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 109,
+          "snippet": "andExpect(jsonPath(\"$.result\").value(\"MATCHED\")); mockMvc.perform(put(\"/v1/admin/provider-keys/{provider}\", \"ollama\") .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 45,
+      "program_id": "ADM-PROVIDER-KEY-ROTATE",
+      "method": "POST",
+      "endpoint": "/v1/admin/provider-keys/{provider}/rotate",
+      "endpoint_normalized": "/v1/admin/provider-keys/{}/rotate",
+      "req_ids": [
+        "ADM-005",
+        "OPS-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-005": "Should",
+        "OPS-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 202,
+          "snippet": "@PostMapping(\"/provider-keys/{provider}/rotate\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 537,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/provider-keys/{provider}/rotate\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 316,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/provider-keys/${provider}/rotate`); return response.data; } export async function bindProviderSecretRef(pro"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 122,
+          "snippet": "ect(jsonPath(\"$.resource_key\").value(\"ollama\")); mockMvc.perform(post(\"/v1/admin/provider-keys/{provider}/rotate\", \"ollama\") .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 46,
+      "program_id": "LLM-PROVIDER-HEALTH",
+      "method": "GET",
+      "endpoint": "/v1/ops/llm/providers/health",
+      "endpoint_normalized": "/v1/ops/llm/providers/health",
+      "req_ids": [
+        "LLM-001",
+        "LLM-003",
+        "OPS-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "LLM-001": "Should",
+        "LLM-003": "Must",
+        "OPS-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/OpsAdminController.java",
+          "line": 34,
+          "snippet": "@GetMapping(\"/llm/providers/health\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1281,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/ops/llm/providers/health\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 328,
+          "snippet": "sync function listProviderHealth() { const response = await httpClient.get(\"/v1/ops/llm/providers/health\"); return response.data; } export async function setProviderKillSwitch(pro"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 142,
+          "snippet": "pect(jsonPath(\"$.resource_key\").value(\"ollama\")); mockMvc.perform(get(\"/v1/ops/llm/providers/health\") .header(\"Authorization\", \"Bearer \" + opsToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 47,
+      "program_id": "TOOL-CALL-EXECUTE",
+      "method": "POST",
+      "endpoint": "/v1/internal/tools/execute",
+      "endpoint_normalized": "/v1/internal/tools/execute",
+      "req_ids": [
+        "TOOL-001",
+        "TOOL-002",
+        "TOOL-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "TOOL-001": "Must",
+        "TOOL-002": "Must",
+        "TOOL-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/operations/presentation/InternalOpsController.java",
+          "line": 38,
+          "snippet": "@PostMapping(\"/tools/execute\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1221,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/internal/tools/execute\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 48,
+      "program_id": "TOOL-CALL-VALIDATE",
+      "method": "POST",
+      "endpoint": "/v1/internal/tools/validate",
+      "endpoint_normalized": "/v1/internal/tools/validate",
+      "req_ids": [
+        "TOOL-002",
+        "TOOL-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "TOOL-002": "Must",
+        "TOOL-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/operations/presentation/InternalOpsController.java",
+          "line": 44,
+          "snippet": "@PostMapping(\"/tools/validate\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1241,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/internal/tools/validate\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 49,
+      "program_id": "TOOL-ALLOWLIST-UPDATE",
+      "method": "PUT",
+      "endpoint": "/v1/admin/tools/allowlist/{tool_name}",
+      "endpoint_normalized": "/v1/admin/tools/allowlist/{}",
+      "req_ids": [
+        "SEC-002",
+        "TOOL-001",
+        "TOOL-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "SEC-002": "Must",
+        "TOOL-001": "Must",
+        "TOOL-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 258,
+          "snippet": "@PutMapping(\"/tools/allowlist/{tool_name}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 821,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/tools/allowlist/{tool_name}\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 50,
+      "program_id": "MCP-SERVER-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/admin/mcp/servers/{server_id}",
+      "endpoint_normalized": "/v1/admin/mcp/servers/{}",
+      "req_ids": [
+        "ADM-004",
+        "MCP-001",
+        "MCP-002"
+      ],
+      "importance": "Should",
+      "req_importance_breakdown": {
+        "ADM-004": "Should",
+        "MCP-001": "Should",
+        "MCP-002": "Should"
+      },
+      "backend_implemented": false,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "backend_implemented",
+        "tests_present"
+      ],
+      "backend_matches": [],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 413,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/mcp/servers/{server_id}\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 51,
+      "program_id": "MCP-SERVER-HEALTH",
+      "method": "GET",
+      "endpoint": "/v1/ops/mcp/servers/{server_id}/health",
+      "endpoint_normalized": "/v1/ops/mcp/servers/{}/health",
+      "req_ids": [
+        "MCP-002",
+        "OPS-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "MCP-002": "Should",
+        "OPS-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/OpsAdminController.java",
+          "line": 145,
+          "snippet": "@GetMapping(\"/mcp/servers/{server_id}/health\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1321,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/ops/mcp/servers/{server_id}/health\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 278,
+          "snippet": "hMcpServerHealth(serverId: string) { const response = await httpClient.get(`/v1/ops/mcp/servers/${serverId}/health`); return response.data; } export async function fetchTenantUsageReport(te"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 95,
+          "snippet": "(jsonPath(\"$.recent_rollback_count\").isNumber()); mockMvc.perform(get(\"/v1/ops/mcp/servers/{server_id}/health\", \"notion\") .header(\"Authorization\", \"Bearer \" + opsToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 52,
+      "program_id": "MCP-CALL-PROXY",
+      "method": "POST",
+      "endpoint": "/v1/internal/mcp/call",
+      "endpoint_normalized": "/v1/internal/mcp/call",
+      "req_ids": [
+        "INT-002",
+        "MCP-001",
+        "MCP-002"
+      ],
+      "importance": "Should",
+      "req_importance_breakdown": {
+        "INT-002": "Should",
+        "MCP-001": "Should",
+        "MCP-002": "Should"
+      },
+      "backend_implemented": false,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "backend_implemented",
+        "tests_present"
+      ],
+      "backend_matches": [],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1201,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/internal/mcp/call\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 53,
+      "program_id": "OPS-TRACE-QUERY",
+      "method": "GET",
+      "endpoint": "/v1/ops/traces",
+      "endpoint_normalized": "/v1/ops/traces",
+      "req_ids": [
+        "OPS-001",
+        "SYS-004"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SYS-004": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/OpsAdminController.java",
+          "line": 70,
+          "snippet": "@GetMapping(\"/traces\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1381,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/ops/traces\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 340,
+          "snippet": "limit?: number; offset?: number }) { const response = await httpClient.get(\"/v1/ops/traces\", { params: params ?? {}, }); return response.data; } export a"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 59,
+          "snippet": ")) .andExpect(status().isAccepted()); mockMvc.perform(get(\"/v1/ops/traces\") .header(\"Authorization\", \"Bearer \" + opsToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 54,
+      "program_id": "OPS-METRIC-SUMMARY",
+      "method": "GET",
+      "endpoint": "/v1/ops/metrics/summary",
+      "endpoint_normalized": "/v1/ops/metrics/summary",
+      "req_ids": [
+        "OPS-002",
+        "SYS-004"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-002": "Should",
+        "SYS-004": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/OpsAdminController.java",
+          "line": 98,
+          "snippet": "@GetMapping(\"/metrics/summary\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1341,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/ops/metrics/summary\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 347,
+          "snippet": "romUtc?: string; toUtc?: string }) { const response = await httpClient.get(\"/v1/ops/metrics/summary\", { params: { from_utc: params?.fromUtc, to_utc"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 66,
+          "snippet": ".andExpect(jsonPath(\"$.items\").isArray()); mockMvc.perform(get(\"/v1/ops/metrics/summary\") .header(\"Authorization\", \"Bearer \" + opsToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 55,
+      "program_id": "OPS-EVENT-INGEST",
+      "method": "POST",
+      "endpoint": "/v1/internal/events/ingest",
+      "endpoint_normalized": "/v1/internal/events/ingest",
+      "req_ids": [
+        "OPS-001",
+        "SYS-004"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SYS-004": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/operations/presentation/InternalOpsController.java",
+          "line": 25,
+          "snippet": "@PostMapping(\"/events/ingest\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1181,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/internal/events/ingest\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 357,
+          "snippet": "ions?: Record<string, unknown> }) { const response = await httpClient.post(\"/v1/internal/events/ingest\", { event_type: payload.eventType, metric_key: payload.metricKe"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 43,
+          "snippet": ".get(\"access_token\") .asText(); mockMvc.perform(post(\"/v1/internal/events/ingest\") .header(\"X-Trace-Id\", \"d1000000-0000-4000-8000-000000000003\")"
+        }
+      ]
+    },
+    {
+      "row_index": 56,
+      "program_id": "OPS-ERROR-CATALOG-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/admin/errors/catalog/{error_code}",
+      "endpoint_normalized": "/v1/admin/errors/catalog/{}",
+      "req_ids": [
+        "ADM-003",
+        "SYS-003",
+        "UI-006"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-003": "Must",
+        "SYS-003": "Must",
+        "UI-006": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 275,
+          "snippet": "@PutMapping(\"/errors/catalog/{error_code}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 249,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/errors/catalog/{error_code}\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 57,
+      "program_id": "OPS-DEPLOY-APPROVAL-CREATE",
+      "method": "POST",
+      "endpoint": "/v1/admin/deploy-approvals",
+      "endpoint_normalized": "/v1/admin/deploy-approvals",
+      "req_ids": [
+        "ADM-006",
+        "INT-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-006": "Should",
+        "INT-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 293,
+          "snippet": "@PostMapping(\"/deploy-approvals\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 209,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/deploy-approvals\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 58,
+      "program_id": "OPS-DEPLOY-APPROVAL-ACT",
+      "method": "POST",
+      "endpoint": "/v1/admin/deploy-approvals/{approval_id}/actions/{action}",
+      "endpoint_normalized": "/v1/admin/deploy-approvals/{}/actions/{}",
+      "req_ids": [
+        "ADM-006",
+        "INT-001"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-006": "Should",
+        "INT-001": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 309,
+          "snippet": "@PostMapping(\"/deploy-approvals/{approval_id}/actions/{action}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 229,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/deploy-approvals/{approval_id}/actions/{action}\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 59,
+      "program_id": "OPS-CHANGE-NOTICE-PUBLISH",
+      "method": "POST",
+      "endpoint": "/v1/admin/change-notices/{notice_id}/publish",
+      "endpoint_normalized": "/v1/admin/change-notices/{}/publish",
+      "req_ids": [
+        "ADM-006",
+        "INT-001",
+        "UI-007"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-006": "Should",
+        "INT-001": "Must",
+        "UI-007": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 326,
+          "snippet": "@PostMapping(\"/change-notices/{notice_id}/publish\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 149,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/change-notices/{notice_id}/publish\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 60,
+      "program_id": "INT-HANDOFF-SYNC",
+      "method": "POST",
+      "endpoint": "/v1/integrations/crm/handoffs",
+      "endpoint_normalized": "/v1/integrations/crm/handoffs",
+      "req_ids": [
+        "API-006",
+        "INT-002",
+        "INT-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "API-006": "Should",
+        "INT-002": "Should",
+        "INT-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/operations/presentation/IntegrationController.java",
+          "line": 18,
+          "snippet": "@PostMapping(\"/handoffs\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1161,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/integrations/crm/handoffs\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 61,
+      "program_id": "INT-WORKFLOW-REPORT",
+      "method": "GET",
+      "endpoint": "/v1/ops/workflow/reports",
+      "endpoint_normalized": "/v1/ops/workflow/reports",
+      "req_ids": [
+        "INT-001",
+        "INT-002",
+        "OPS-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "INT-001": "Must",
+        "INT-002": "Should",
+        "OPS-002": "Should"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/OpsAdminController.java",
+          "line": 127,
+          "snippet": "@GetMapping(\"/workflow/reports\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1401,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/ops/workflow/reports\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 273,
+          "snippet": "ync function fetchWorkflowReport() { const response = await httpClient.get(\"/v1/ops/workflow/reports\"); return response.data; } export async function fetchMcpServerHealth(serv"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 88,
+          "snippet": "dExpect(jsonPath(\"$.status\").value(\"REQUESTED\")); mockMvc.perform(get(\"/v1/ops/workflow/reports\") .header(\"Authorization\", \"Bearer \" + opsToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 72,
+      "program_id": "OPS-BLOCK-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/ops/blocks/{block_id}",
+      "endpoint_normalized": "/v1/ops/blocks/{}",
+      "req_ids": [
+        "OPS-003",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-003": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/operations/presentation/OpsBlockController.java",
+          "line": 40,
+          "snippet": "@PutMapping(\"/{block_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1261,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/ops/blocks/{block_id}\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 454,
+          "snippet": "tatus?: string; reason?: string }) { const response = await httpClient.put(`/v1/ops/blocks/${encodeURIComponent(blockValue)}`, { block_type: payload.blockType, block_value: blockValue,"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 73,
+      "program_id": "OPS-PROVIDER-KILLSWITCH",
+      "method": "POST",
+      "endpoint": "/v1/ops/llm/providers/{provider}/kill-switch",
+      "endpoint_normalized": "/v1/ops/llm/providers/{}/kill-switch",
+      "req_ids": [
+        "ADM-003",
+        "LLM-003",
+        "OPS-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-003": "Must",
+        "LLM-003": "Must",
+        "OPS-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/OpsAdminController.java",
+          "line": 43,
+          "snippet": "@PostMapping(\"/llm/providers/{provider}/kill-switch\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1301,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/ops/llm/providers/{provider}/kill-switch\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 333,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/ops/llm/providers/${provider}/kill-switch`, { enabled, }); return response.data; } export async function"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 149,
+          "snippet": ".andExpect(jsonPath(\"$.items\").isArray()); mockMvc.perform(post(\"/v1/ops/llm/providers/{provider}/kill-switch\", \"ollama\") .header(\"Authorization\", \"Bearer \" + opsToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 74,
+      "program_id": "OPS-ROLLBACK-TRIGGER",
+      "method": "POST",
+      "endpoint": "/v1/ops/rollbacks",
+      "endpoint_normalized": "/v1/ops/rollbacks",
+      "req_ids": [
+        "ADM-003",
+        "KB-003",
+        "OPS-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-003": "Must",
+        "KB-003": "Should",
+        "OPS-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/OpsAdminController.java",
+          "line": 110,
+          "snippet": "@PostMapping(\"/rollbacks\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1361,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/ops/rollbacks\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 367,
+          "snippet": "getId: string; reason?: string }) { const response = await httpClient.post(\"/v1/ops/rollbacks\", { target_type: payload.targetType, target_id: payload.targetI"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 73,
+          "snippet": ".andExpect(jsonPath(\"$.items\").isArray()); mockMvc.perform(post(\"/v1/ops/rollbacks\") .header(\"Authorization\", \"Bearer \" + opsToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 75,
+      "program_id": "OPS-ADMIN-DASHBOARD-SUMMARY",
+      "method": "GET",
+      "endpoint": "/v1/admin/dashboard/summary",
+      "endpoint_normalized": "/v1/admin/dashboard/summary",
+      "req_ids": [
+        "ADM-100",
+        "OPS-100"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-100": "Must",
+        "OPS-100": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 51,
+          "snippet": "@GetMapping(\"/dashboard/summary\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 189,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/dashboard/summary\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 134,
+          "snippet": "esponse> { const response = await httpClient.get<DashboardSummaryResponse>(\"/v1/admin/dashboard/summary\", { params: { tenant_id: params.tenantId, from_"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/BackofficeAclTenantIsolationTest.java",
+          "line": 53,
+          "snippet": ".get(\"access_token\") .asText(); mockMvc.perform(get(\"/v1/admin/dashboard/summary\") .queryParam(\"tenant_id\", \"81000000-0000-4000-8000-00000000009"
+        },
+        {
+          "path": "frontend/src/api/httpClient.test.ts",
+          "line": 59,
+          "snippet": "AxiosRequestConfig[\"adapter\"]; const response = await httpClient.get(\"/v1/admin/dashboard/summary\"); expect(response.data).toEqual({ ok: true }); expect(vi.mocke"
+        }
+      ]
+    },
+    {
+      "row_index": 76,
+      "program_id": "OPS-ADMIN-DASHBOARD-SERIES",
+      "method": "GET",
+      "endpoint": "/v1/admin/dashboard/series",
+      "endpoint_normalized": "/v1/admin/dashboard/series",
+      "req_ids": [
+        "OPS-100"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-100": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 70,
+          "snippet": "@GetMapping(\"/dashboard/series\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 169,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/dashboard/series\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 149,
+          "snippet": "Response> { const response = await httpClient.get<DashboardSeriesResponse>(\"/v1/admin/dashboard/series\", { params: { tenant_id: params.tenantId, from_"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 77,
+      "program_id": "ADM-VERSION-BUNDLE-LIST",
+      "method": "GET",
+      "endpoint": "/v1/admin/version-bundles",
+      "endpoint_normalized": "/v1/admin/version-bundles",
+      "req_ids": [
+        "ADM-101"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-101": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 228,
+          "snippet": "@GetMapping(\"/version-bundles\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 841,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/version-bundles\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 376,
+          "snippet": "sponse> { const response = await httpClient.get<AdminResourceListResponse>(\"/v1/admin/version-bundles\", { params: { limit, offset }, }); return response.data; } exp"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 102,
+          "snippet": "andExpect(jsonPath(\"$.status\").value(\"healthy\")); mockMvc.perform(get(\"/v1/admin/version-bundles\") .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 78,
+      "program_id": "ADM-VERSION-BUNDLE-ACTIVATE",
+      "method": "POST",
+      "endpoint": "/v1/admin/version-bundles/{bundle_id}/activate",
+      "endpoint_normalized": "/v1/admin/version-bundles/{}/activate",
+      "req_ids": [
+        "ADM-101",
+        "OPS-103"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-101": "Must",
+        "OPS-103": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 240,
+          "snippet": "@PostMapping(\"/version-bundles/{bundle_id}/activate\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 861,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/version-bundles/{bundle_id}/activate\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 383,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/version-bundles/${bundleId}/activate`); return response.data; } export async function rollbackVersionBundle(bun"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 108,
+          "snippet": "nant\")) .andExpect(status().isOk()); mockMvc.perform(post(\"/v1/admin/version-bundles/{bundle_id}/activate\", \"bundle-2026-03\") .header(\"Authorization\", \"Bearer \" + adminT"
+        }
+      ]
+    },
+    {
+      "row_index": 79,
+      "program_id": "ADM-VERSION-BUNDLE-ROLLBACK",
+      "method": "POST",
+      "endpoint": "/v1/admin/version-bundles/{bundle_id}/rollback",
+      "endpoint_normalized": "/v1/admin/version-bundles/{}/rollback",
+      "req_ids": [
+        "ADM-101",
+        "OPS-103"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-101": "Must",
+        "OPS-103": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 249,
+          "snippet": "@PostMapping(\"/version-bundles/{bundle_id}/rollback\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 881,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/version-bundles/{bundle_id}/rollback\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 388,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/version-bundles/${bundleId}/rollback`); return response.data; } export async function upsertRbacMatrix(resource"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/OpsIncidentContractTest.java",
+          "line": 115,
+          "snippet": "andExpect(jsonPath(\"$.status\").value(\"ACTIVE\")); mockMvc.perform(post(\"/v1/admin/version-bundles/{bundle_id}/rollback\", \"bundle-2026-03\") .header(\"Authorization\", \"Bearer \" + adminT"
+        }
+      ]
+    },
+    {
+      "row_index": 80,
+      "program_id": "ADM-PROVIDER-SECRETREF-BIND",
+      "method": "POST",
+      "endpoint": "/v1/admin/providers/{provider_id}/secret-ref",
+      "endpoint_normalized": "/v1/admin/providers/{}/secret-ref",
+      "req_ids": [
+        "ADM-102",
+        "SEC-003"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-102": "Must",
+        "SEC-003": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminConfigController.java",
+          "line": 211,
+          "snippet": "@PostMapping(\"/providers/{provider_id}/secret-ref\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 557,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/providers/{provider_id}/secret-ref\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 321,
+          "snippet": "eResponse> { const response = await httpClient.post<AdminResourceResponse>(`/v1/admin/providers/${providerId}/secret-ref`, { secret_ref: secretRef, }); return response.data; } export"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminModelRoutingProviderContractTest.java",
+          "line": 129,
+          "snippet": "ndExpect(jsonPath(\"$.status\").value(\"ROTATED\")); mockMvc.perform(post(\"/v1/admin/providers/{provider_id}/secret-ref\", \"ollama\") .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 81,
+      "program_id": "OPS-KB-INDEX-STATUS",
+      "method": "GET",
+      "endpoint": "/v1/admin/kb/index-operations",
+      "endpoint_normalized": "/v1/admin/kb/index-operations",
+      "req_ids": [
+        "OPS-101"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-101": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminKbController.java",
+          "line": 234,
+          "snippet": "@GetMapping(\"/index-operations\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 333,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/kb/index-operations\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 238,
+          "snippet": "e> { const response = await httpClient.get<KbReindexOperationListResponse>(\"/v1/admin/kb/index-operations\", { params: { limit }, }); return response.data; } export asyn"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AdminKbContractTest.java",
+          "line": 135,
+          "snippet": "atus\").value(\"DONE\")); MvcResult indexOpsResult = mockMvc.perform(get(\"/v1/admin/kb/index-operations\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 82,
+      "program_id": "OPS-TENANT-BILLING-REPORT",
+      "method": "GET",
+      "endpoint": "/v1/admin/tenants/{tenant_id}/usage-report",
+      "endpoint_normalized": "/v1/admin/tenants/{}/usage-report",
+      "req_ids": [
+        "OPS-102"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-102": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/billing/presentation/AdminTenantBillingController.java",
+          "line": 37,
+          "snippet": "@GetMapping(\"/{tenant_id}/usage-report\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 801,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/tenants/{tenant_id}/usage-report\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 283,
+          "snippet": "enantUsageReport(tenantId: string) { const response = await httpClient.get(`/v1/admin/tenants/${tenantId}/usage-report`, { params: { include_quota: true, }, }); r"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/billing/presentation/TenantBillingRbacTest.java",
+          "line": 85,
+          "snippet": "eReadOps = \"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb\"; mockMvc.perform(get(\"/v1/admin/tenants/tenant-a/usage-report\") .header(\"X-Trace-Id\", traceReadOps) .header(\""
+        },
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/identity/security/RbacTenantMatrixTest.java",
+          "line": 115,
+          "snippet": "Arguments.of( \"admin:usage-report\", get(\"/v1/admin/tenants/{tenant_id}/usage-report\", \"demo-tenant\") .header(\"X-Trace-Id\", \"71000000-0000-4000-"
+        }
+      ]
+    },
+    {
+      "row_index": 83,
+      "program_id": "ADM-TENANT-QUOTA-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/admin/tenants/{tenant_id}/quota",
+      "endpoint_normalized": "/v1/admin/tenants/{}/quota",
+      "req_ids": [
+        "ADM-100",
+        "OPS-102"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-100": "Must",
+        "OPS-102": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/billing/presentation/AdminTenantBillingController.java",
+          "line": 63,
+          "snippet": "@PutMapping(\"/{tenant_id}/quota\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 781,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/tenants/{tenant_id}/quota\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/specCoverageApi.ts",
+          "line": 298,
+          "snippet": "= new Date().toISOString(); const response = await httpClient.put( `/v1/admin/tenants/${tenantId}/quota`, { max_qps: payload.maxQps, max_daily_tokens:"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/billing/presentation/TenantBillingRbacTest.java",
+          "line": 107,
+          "snippet": "on\": \"THROTTLE_429\" } \"\"\"; mockMvc.perform(put(\"/v1/admin/tenants/tenant-a/quota\") .header(\"X-Trace-Id\", traceWriteOps) .header("
+        }
+      ]
+    },
+    {
+      "row_index": 84,
+      "program_id": "OPS-AUDIT-LOG-QUERY",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs",
+      "endpoint_normalized": "/v1/admin/audit-logs",
+      "req_ids": [
+        "OPS-103"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-103": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 88,
+          "snippet": "@GetMapping(\"/audit-logs\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 9,
+          "snippet": ". * Do not make direct changes to the file. */ export interface paths { \"/v1/admin/audit-logs\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 166,
+          "snippet": "archResponse> { const response = await httpClient.get<AuditSearchResponse>(\"/v1/admin/audit-logs\", { params: { tenant_id: params.tenantId, from_"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 85,
+      "program_id": "OPS-AUDIT-CHANGE-DIFF",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs/{audit_id}/diff",
+      "endpoint_normalized": "/v1/admin/audit-logs/{}/diff",
+      "req_ids": [
+        "OPS-103"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-103": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 135,
+          "snippet": "@GetMapping(\"/audit-logs/{audit_id}/diff\")"
+        },
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 235,
+          "snippet": "@GetMapping(\"/audit-logs/export-jobs/{job_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 129,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/audit-logs/{audit_id}/diff\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 179,
+          "snippet": "itDiffResponse> { const response = await httpClient.get<AuditDiffResponse>(`/v1/admin/audit-logs/${auditId}/diff`); return response.data; } export async function uploadKbDocument(payload:"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 86,
+      "program_id": "ADM-RBAC-MATRIX-UPSERT",
+      "method": "PUT",
+      "endpoint": "/v1/admin/rbac/matrix/{resource_key}",
+      "endpoint_normalized": "/v1/admin/rbac/matrix/{}",
+      "req_ids": [
+        "ADM-100",
+        "OPS-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-100": "Must",
+        "OPS-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminRbacController.java",
+          "line": 36,
+          "snippet": "@PutMapping(\"/matrix/{resource_key}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 637,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/rbac/matrix/{resource_key}\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 393,
+          "snippet": "Level: string; allowed: boolean }) { const response = await httpClient.put(`/v1/admin/rbac/matrix/${resourceKey}`, { role_code: payload.roleCode, admin_level: payload.adminLeve"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/identity/presentation/AuthHardeningContractTest.java",
+          "line": 57,
+          "snippet": "token\").asText(); MvcResult createRequestResult = mockMvc.perform(put(\"/v1/admin/rbac/matrix/admin.dashboard.summary\") .header(\"Authorization\", \"Bearer \" + adminToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 87,
+      "program_id": "API-AUTH-MFA-TOTP-ENROLL",
+      "method": "POST",
+      "endpoint": "/v1/auth/mfa/totp/enroll",
+      "endpoint_normalized": "/v1/auth/mfa/totp/enroll",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 134,
+          "snippet": "@PostMapping(\"/mfa/totp/enroll\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1021,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/mfa/totp/enroll\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 147,
+          "snippet": "Promise<MfaEnrollResponse> { const result = await generatedApiClient.POST(\"/v1/auth/mfa/totp/enroll\", { body: { mfa_ticket_id: mfaTicketId }, headers: buildGenerat"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 88,
+      "program_id": "API-AUTH-MFA-TOTP-ACTIVATE",
+      "method": "POST",
+      "endpoint": "/v1/auth/mfa/totp/activate",
+      "endpoint_normalized": "/v1/auth/mfa/totp/activate",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 155,
+          "snippet": "@PostMapping(\"/mfa/totp/activate\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1001,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/mfa/totp/activate\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 161,
+          "snippet": "ing): Promise<AuthResponse> { const result = await generatedApiClient.POST(\"/v1/auth/mfa/totp/activate\", { body: { mfa_ticket_id: mfaTicketId, totp_code: totpCode, client_typ"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 89,
+      "program_id": "API-AUTH-MFA-VERIFY",
+      "method": "POST",
+      "endpoint": "/v1/auth/mfa/verify",
+      "endpoint_normalized": "/v1/auth/mfa/verify",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 179,
+          "snippet": "@PostMapping(\"/mfa/verify\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1041,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/mfa/verify\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 190,
+          "snippet": "{ const response = await axios.post<AuthResponse>( `${API_BASE_URL}/v1/auth/mfa/verify`, { mfa_ticket_id: mfaTicketId, totp_code: totp"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 90,
+      "program_id": "API-AUTH-MFA-RECOVERY-REGENERATE",
+      "method": "POST",
+      "endpoint": "/v1/auth/mfa/recovery-codes/regenerate",
+      "endpoint_normalized": "/v1/auth/mfa/recovery-codes/regenerate",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 204,
+          "snippet": "@PostMapping(\"/mfa/recovery-codes/regenerate\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 981,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/mfa/recovery-codes/regenerate\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 91,
+      "program_id": "API-AUTH-SESSIONS-LIST",
+      "method": "GET",
+      "endpoint": "/v1/auth/sessions",
+      "endpoint_normalized": "/v1/auth/sessions",
+      "req_ids": [
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 218,
+          "snippet": "@GetMapping(\"/sessions\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1081,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/sessions\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 232,
+          "snippet": "t response = await axios.get<{ items: SessionItem[] }>( `${API_BASE_URL}/v1/auth/sessions`, { withCredentials: true, headers: {"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 92,
+      "program_id": "API-AUTH-SESSIONS-REVOKE",
+      "method": "DELETE",
+      "endpoint": "/v1/auth/sessions/{session_id}",
+      "endpoint_normalized": "/v1/auth/sessions/{}",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 237,
+          "snippet": "@DeleteMapping(\"/sessions/{session_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1101,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/sessions/revoke-others\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 246,
+          "snippet": "Key, sessionFamilyId } = getAuthState(); await axios.delete(`${API_BASE_URL}/v1/auth/sessions/${sessionId}`, { withCredentials: true, params: { current_sessio"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 93,
+      "program_id": "API-AUTH-SESSIONS-REVOKE-OTHERS",
+      "method": "POST",
+      "endpoint": "/v1/auth/sessions/revoke-others",
+      "endpoint_normalized": "/v1/auth/sessions/revoke-others",
+      "req_ids": [
+        "OPS-001",
+        "SEC-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/contexts/identity/presentation/AuthController.java",
+          "line": 258,
+          "snippet": "@PostMapping(\"/sessions/revoke-others\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 1101,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/auth/sessions/revoke-others\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/authApi.ts",
+          "line": 262,
+          "snippet": "ssionFamilyId } = getAuthState(); await axios.post( `${API_BASE_URL}/v1/auth/sessions/revoke-others`, { current_session_id: sessionFamilyId }, { withCr"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 94,
+      "program_id": "ADM-RBAC-APPROVAL-REQUEST-LIST",
+      "method": "GET",
+      "endpoint": "/v1/admin/rbac/approval-requests",
+      "endpoint_normalized": "/v1/admin/rbac/approval-requests",
+      "req_ids": [
+        "ADM-100",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-100": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminRbacController.java",
+          "line": 71,
+          "snippet": "@GetMapping(\"/approval-requests\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 577,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/rbac/approval-requests\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 416,
+          "snippet": "const response = await httpClient.get<{ items: RbacApprovalRequestItem[] }>(\"/v1/admin/rbac/approval-requests\", { params: { status: status || undefined }, }); return respons"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/BackofficeAclTenantIsolationTest.java",
+          "line": 39,
+          "snippet": ".get(\"access_token\") .asText(); mockMvc.perform(get(\"/v1/admin/rbac/approval-requests\") .header(\"Authorization\", \"Bearer \" + opsToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 95,
+      "program_id": "ADM-RBAC-APPROVAL-REQUEST-APPROVE",
+      "method": "POST",
+      "endpoint": "/v1/admin/rbac/approval-requests/{request_id}/approve",
+      "endpoint_normalized": "/v1/admin/rbac/approval-requests/{}/approve",
+      "req_ids": [
+        "ADM-100",
+        "OPS-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-100": "Must",
+        "OPS-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminRbacController.java",
+          "line": 103,
+          "snippet": "@PostMapping(\"/approval-requests/{request_id}/approve\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 597,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/rbac/approval-requests/{request_id}/approve\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 423,
+          "snippet": "uestId: string, comment?: string) { const response = await httpClient.post(`/v1/admin/rbac/approval-requests/${requestId}/approve`, { comment: comment ?? \"\", }); return response.data; } export"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/contexts/identity/presentation/AuthHardeningContractTest.java",
+          "line": 77,
+          "snippet": ".get(\"request_id\") .asText(); mockMvc.perform(post(\"/v1/admin/rbac/approval-requests/{request_id}/approve\", requestId) .header(\"Authorization\", \"Bearer \" + admin2Token)"
+        }
+      ]
+    },
+    {
+      "row_index": 96,
+      "program_id": "ADM-RBAC-APPROVAL-REQUEST-REJECT",
+      "method": "POST",
+      "endpoint": "/v1/admin/rbac/approval-requests/{request_id}/reject",
+      "endpoint_normalized": "/v1/admin/rbac/approval-requests/{}/reject",
+      "req_ids": [
+        "ADM-100",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "ADM-100": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminRbacController.java",
+          "line": 133,
+          "snippet": "@PostMapping(\"/approval-requests/{request_id}/reject\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 617,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/rbac/approval-requests/{request_id}/reject\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 430,
+          "snippet": "uestId: string, comment?: string) { const response = await httpClient.post(`/v1/admin/rbac/approval-requests/${requestId}/reject`, { comment: comment ?? \"\", }); return response.data; } export"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 97,
+      "program_id": "OPS-AUDIT-LOG-EXPORT",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs/export",
+      "endpoint_normalized": "/v1/admin/audit-logs/export",
+      "req_ids": [
+        "OPS-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 153,
+          "snippet": "@GetMapping(\"/audit-logs/export\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 49,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/audit-logs/export\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 98,
+      "program_id": "OPS-AUDIT-CHAIN-VERIFY",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs/chain-verify",
+      "endpoint_normalized": "/v1/admin/audit-logs/chain-verify",
+      "req_ids": [
+        "OPS-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": false,
+      "missing_signals": [
+        "tests_present"
+      ],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 273,
+          "snippet": "@GetMapping(\"/audit-logs/chain-verify\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 29,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/audit-logs/chain-verify\": { parameters: { query?: never; header?: never"
+        }
+      ],
+      "test_matches": []
+    },
+    {
+      "row_index": 99,
+      "program_id": "OPS-AUDIT-EXPORT-JOB-CREATE",
+      "method": "POST",
+      "endpoint": "/v1/admin/audit-logs/export-jobs",
+      "endpoint_normalized": "/v1/admin/audit-logs/export-jobs",
+      "req_ids": [
+        "OPS-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 210,
+          "snippet": "@PostMapping(\"/audit-logs/export-jobs\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 69,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/audit-logs/export-jobs\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 437,
+          "snippet": "se> { const response = await httpClient.post<AuditExportJobCreateResponse>(\"/v1/admin/audit-logs/export-jobs\", payload); return response.data; } export async function getAuditExportJo"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AuditExportJobContractTest.java",
+          "line": 42,
+          "snippet": "ccess_token\").asText(); MvcResult createResult = mockMvc.perform(post(\"/v1/admin/audit-logs/export-jobs\") .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 100,
+      "program_id": "OPS-AUDIT-EXPORT-JOB-STATUS",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs/export-jobs/{job_id}",
+      "endpoint_normalized": "/v1/admin/audit-logs/export-jobs/{}",
+      "req_ids": [
+        "OPS-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 135,
+          "snippet": "@GetMapping(\"/audit-logs/{audit_id}/diff\")"
+        },
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 235,
+          "snippet": "@GetMapping(\"/audit-logs/export-jobs/{job_id}\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 89,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/audit-logs/export-jobs/{job_id}\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 442,
+          "snippet": "nse> { const response = await httpClient.get<AuditExportJobStatusResponse>(`/v1/admin/audit-logs/export-jobs/${jobId}`); return response.data; } export async function downloadAuditExportJob(jo"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AuditExportJobContractTest.java",
+          "line": 62,
+          "snippet": "auditExportJobService.processPendingJobs(20); mockMvc.perform(get(\"/v1/admin/audit-logs/export-jobs/{job_id}\", jobId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    },
+    {
+      "row_index": 101,
+      "program_id": "OPS-AUDIT-EXPORT-JOB-DOWNLOAD",
+      "method": "GET",
+      "endpoint": "/v1/admin/audit-logs/export-jobs/{job_id}/download",
+      "endpoint_normalized": "/v1/admin/audit-logs/export-jobs/{}/download",
+      "req_ids": [
+        "OPS-001",
+        "SEC-002"
+      ],
+      "importance": "Must",
+      "req_importance_breakdown": {
+        "OPS-001": "Must",
+        "SEC-002": "Must"
+      },
+      "backend_implemented": true,
+      "frontend_referenced": true,
+      "tests_present": true,
+      "missing_signals": [],
+      "backend_matches": [
+        {
+          "path": "backend/src/main/java/com/aichatbot/channels/backoffice/presentation/AdminOpsDashboardController.java",
+          "line": 255,
+          "snippet": "@GetMapping(\"/audit-logs/export-jobs/{job_id}/download\")"
+        }
+      ],
+      "frontend_matches": [
+        {
+          "path": "frontend/src/api/generated/openapi.ts",
+          "line": 109,
+          "snippet": "head?: never; patch?: never; trace?: never; }; \"/v1/admin/audit-logs/export-jobs/{job_id}/download\": { parameters: { query?: never; header?: never"
+        },
+        {
+          "path": "frontend/src/shared/api/adminApi.ts",
+          "line": 447,
+          "snippet": "obId: string): Promise<Blob> { const response = await httpClient.get<Blob>(`/v1/admin/audit-logs/export-jobs/${jobId}/download`, { responseType: \"blob\", }); return response.data; } export a"
+        }
+      ],
+      "test_matches": [
+        {
+          "path": "backend/src/test/java/com/aichatbot/channels/backoffice/presentation/AuditExportJobContractTest.java",
+          "line": 69,
+          "snippet": ".andExpect(jsonPath(\"$.status\").value(\"DONE\")); mockMvc.perform(get(\"/v1/admin/audit-logs/export-jobs/{job_id}/download\", jobId) .header(\"Authorization\", \"Bearer \" + accessToken)"
+        }
+      ]
+    }
+  ]
+}

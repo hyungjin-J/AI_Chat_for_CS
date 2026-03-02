@@ -1,0 +1,23 @@
+{
+  "metrics": {
+    "citation_coverage_rate": {
+      "min": 0.80
+    },
+    "fail_closed_rate": {
+      "min": 0.10,
+      "max": 0.80
+    },
+    "policy_violation_rate": {
+      "max": 0.00
+    },
+    "answer_contract_pass_rate": {
+      "min": 0.50
+    },
+    "latency_p95_ms": {
+      "max": 5000.0
+    },
+    "case_pass_rate": {
+      "min": 0.80
+    }
+  }
+}

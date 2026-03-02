@@ -522,3 +522,132 @@
   - `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_report.txt`
   - `docs/review/mvp_verification_pack/artifacts/spec_consistency_check_pass.txt`
   - `docs/review/mvp_verification_pack/artifacts/release_check_report.json`
+
+## 19) Session (2026-02-27 Spec Sync Catch-up)
+- Last synced at: 2026-02-27 17:34:51 +09:00
+- Source file:
+  - `docs/references/Summary of key features.csv`
+  - `docs/references/CS AI Chatbot_Requirements Statement.csv`
+  - `docs/references/Development environment.csv`
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+  - `docs/references/CS_AI_CHATBOT_DB.xlsx`
+  - `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+- Version(or commit): git commit `e45bb78ea7f4240dd7502d7da8b925827ae7c9a2`
+- Changed spec files:
+  - `docs/references/Summary of key features.csv`
+  - `docs/references/CS AI Chatbot_Requirements Statement.csv`
+  - `docs/references/Development environment.csv`
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+  - `docs/references/CS_AI_CHATBOT_DB.xlsx`
+  - `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+- Change summary:
+  1. Summary CSV: `AI-004` 중요도/난이도/유형 갱신, `API-403` Phase 확정(`PHASE1`), `KB-003` placeholder 정규화.
+  2. Requirements/Development CSV: UTF-8 BOM 제거 및 헤더 정규화(구조/스키마 변경 없음).
+  3. API/DB/UIUX XLSX: 워크북 재직렬화 반영(시트 XML 변경), 셀 값 기준 구조적 계약 변경 없음.
+
+### 19.1 Notion Sync Results
+- Summary page (`https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149`): DONE
+  - Session block: `Session Update (2026-02-27 Spec Sync Catch-up)`
+- Requirements/API page (`https://www.notion.so/2ed405a3a720816594e4dc34972174ec`): DONE
+  - Session block: `Session Update (2026-02-27 Spec Sync Catch-up)`
+- Development page (`https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7`): DONE
+  - Session block: `Session Update (2026-02-27 Spec Sync Catch-up)`
+- DB page (`https://www.notion.so/2ed405a3a720812180d9d508b77f31a4`): DONE
+  - Session block: `Session Update (2026-02-27 Spec Sync Catch-up)`
+- UIUX page (`https://www.notion.so/2ee405a3a72080a58c93d967ef0f2444`): DONE
+  - Session block: `Session Update (2026-02-27 Spec Sync Catch-up)`
+
+### 19.2 Validation
+- Notion fetch 재검증 시 5개 대상 페이지 모두에서 `Session Update (2026-02-27 Spec Sync Catch-up)` 확인.
+- fail-closed 기준(스펙 변경 시 Notion 동기화) 충족.
+
+## 20) Session (2026-02-28 Dashboard & Evidence Sync)
+- Last synced at: 2026-02-28 19:20:00 +09:00
+- Source file:
+  - `docs/references/Summary of key features.csv`
+  - `docs/references/CS AI Chatbot_Requirements Statement.csv`
+  - `docs/references/Development environment.csv`
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+  - `docs/references/CS_AI_CHATBOT_DB.xlsx`
+  - `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+- Version(or commit): git commit `e45bb78ea7f4240dd7502d7da8b925827ae7c9a2`
+- Change summary:
+  1. 2026-02-27 기준 스펙 동기화 상태를 재검증하고 5개 Notion 매핑 페이지 + UIUX 페이지에 2026-02-28 세션 메타데이터를 반영했다.
+  2. Release Gate Dashboard 도입에 맞춰 운영자 증적 읽기 순서(대시보드 → 인덱스 → 상세 아티팩트)를 동기화했다.
+  3. 스펙 파일 구조/시트/컬럼 변경 없이 Notion 메타데이터와 동기화 증적만 갱신했다.
+
+### 20.1 Notion Sync Results
+- Summary page (`https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149`): DONE
+  - Session block: `Session Update (2026-02-28 Dashboard & Evidence Sync)`
+- Requirements/API page (`https://www.notion.so/2ed405a3a720816594e4dc34972174ec`): DONE
+  - Session block: `Session Update (2026-02-28 Dashboard & Evidence Sync)`
+- Development page (`https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7`): DONE
+  - Session block: `Session Update (2026-02-28 Dashboard & Evidence Sync)`
+- DB page (`https://www.notion.so/2ed405a3a720812180d9d508b77f31a4`): DONE
+  - Session block: `Session Update (2026-02-28 Dashboard & Evidence Sync)`
+- UIUX page (`https://www.notion.so/2ee405a3a72080a58c93d967ef0f2444`): DONE
+  - Session block: `Session Update (2026-02-28 Dashboard & Evidence Sync)`
+
+### 20.2 Evidence
+- `docs/review/mvp_verification_pack/artifacts/notion_sync_evidence_20260228.md`
+- `docs/review/mvp_verification_pack/artifacts/release_gate_dashboard.md`
+- `docs/review/mvp_verification_pack/artifacts/release_gate_dashboard.json`
+- `docs/review/mvp_verification_pack/artifacts/_INDEX.md`
+- `docs/review/mvp_verification_pack/artifacts/_INDEX.json`
+
+## 21) Session (2026-03-01 Progress Sync)
+- Last synced at: 2026-03-01 17:13:24 +09:00
+- Source file:
+  - `docs/references/Summary of key features.csv`
+  - `docs/references/CS AI Chatbot_Requirements Statement.csv`
+  - `docs/references/Development environment.csv`
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+  - `docs/references/CS_AI_CHATBOT_DB.xlsx`
+  - `docs/uiux/CS_RAG_UI_UX_설계서.xlsx`
+- Version(or commit): git commit `2eced8e` (working tree)
+- Change summary:
+  1. `chatGPT/*` handoff 3종과 `spec_sync_report.md`를 현재 진행 이력 기준으로 동기화했다.
+  2. Notion 매핑 페이지 5종(요약/요구사항/개발환경/DB/UIUX)에 `Session Update (2026-03-01 Progress Sync)` 메타 블록을 반영했다.
+  3. 이번 세션에서 canonical spec CSV/XLSX의 구조/시트/컬럼 변경은 없으며, 동기화 메타와 증적만 갱신했다.
+
+### 21.1 Notion Sync Results
+- Summary page (`https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149`): DONE
+  - Session block: `Session Update (2026-03-01 Progress Sync)`
+- Requirements/API page (`https://www.notion.so/2ed405a3a720816594e4dc34972174ec`): DONE
+  - Session block: `Session Update (2026-03-01 Progress Sync)`
+- Development page (`https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7`): DONE
+  - Session block: `Session Update (2026-03-01 Progress Sync)`
+- DB page (`https://www.notion.so/2ed405a3a720812180d9d508b77f31a4`): DONE
+  - Session block: `Session Update (2026-03-01 Progress Sync)`
+- UIUX page (`https://www.notion.so/2ee405a3a72080a58c93d967ef0f2444`): DONE
+  - Session block: `Session Update (2026-03-01 Progress Sync)`
+
+### 21.2 Evidence
+- `docs/review/mvp_verification_pack/artifacts/notion_sync_evidence_20260301.md`
+- `chatGPT/CHATGPT_SELF_CONTAINED_BRIEFING_EN.md`
+- `chatGPT/IMPLEMENTATION_GUIDE_FOR_CHATGPT.md`
+- `chatGPT/DB_READINESS_EXECUTION_AND_PROCESS_PLAN_KO.md`
+
+## 22) Session (2026-03-02 Full Gate Rerun)
+- Last synced at: 2026-03-02 22:35:00 +09:00
+- Source file:
+  - `docs/references/Summary of key features.csv`
+  - `docs/references/CS AI Chatbot_Requirements Statement.csv`
+  - `docs/references/Development environment.csv`
+  - `docs/references/google_ready_api_spec_v0.3_20260216.xlsx`
+  - `docs/references/CS_AI_CHATBOT_DB.xlsx`
+- Version(or commit): git commit `2eced8e1a30627f52055d54d813a30ff02edfae1` (working tree)
+- Change summary:
+  1. Revalidated canonical spec-to-Notion evidence for all changed canonical spec files after full gate rerun.
+  2. Refreshed same-day evidence linkage so spec sync gate can resolve HEAD commit metadata deterministically.
+  3. Kept source workbook/CSV structure unchanged; this session updated sync metadata and evidence only.
+
+### 22.1 Notion Sync Results
+- Summary page (`https://www.notion.so/2ed405a3a72081d594b2c3738b3c8149`): BLOCKED_AUTOMATION
+- Requirements/API page (`https://www.notion.so/2ed405a3a720816594e4dc34972174ec`): BLOCKED_AUTOMATION
+- Development page (`https://www.notion.so/2ed405a3a72081d198e6f648e508b6e7`): BLOCKED_AUTOMATION
+- DB page (`https://www.notion.so/2ed405a3a720812180d9d508b77f31a4`): BLOCKED_AUTOMATION
+  - Manual evidence path used in artifacts for this session.
+
+### 22.2 Evidence
+- `docs/review/mvp_verification_pack/artifacts/notion_sync_evidence_20260302.md`

@@ -1,0 +1,2 @@
+spec_consistency_check
+status=PASS

@@ -10,11 +10,18 @@ import com.aichatbot.platform.tenancy.TenantContext;
 import com.aichatbot.sharedkernel.util.UuidParser;
 import com.aichatbot.contexts.conversation.message.application.MessageGenerationResult;
 import com.aichatbot.contexts.conversation.message.application.MessageView;
+import com.aichatbot.contexts.conversation.session.application.CoreSessionActionService;
 import com.aichatbot.contexts.conversation.message.presentation.dto.MessageAcceptedResponse;
 import com.aichatbot.contexts.conversation.message.presentation.dto.MessageListResponse;
 import com.aichatbot.contexts.conversation.session.application.ConversationView;
 import com.aichatbot.contexts.conversation.session.application.SessionService;
+import com.aichatbot.contexts.conversation.session.presentation.dto.CoreSessionActionResponse;
+import com.aichatbot.contexts.conversation.session.presentation.dto.CsatPostRequest;
 import com.aichatbot.contexts.conversation.session.presentation.dto.CreateSessionRequest;
+import com.aichatbot.contexts.conversation.session.presentation.dto.HandoffRequest;
+import com.aichatbot.contexts.conversation.session.presentation.dto.MessageRetryRequest;
+import com.aichatbot.contexts.conversation.session.presentation.dto.QuickReplyPostRequest;
+import com.aichatbot.contexts.conversation.session.presentation.dto.SessionCloseRequest;
 import com.aichatbot.contexts.conversation.session.presentation.dto.SessionResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -35,10 +42,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class SessionController {
 
     private final SessionService sessionService;
+    private final CoreSessionActionService coreSessionActionService;
     private final IdempotencyService idempotencyService;
 
-    public SessionController(SessionService sessionService, IdempotencyService idempotencyService) {
+    public SessionController(
+        SessionService sessionService,
+        CoreSessionActionService coreSessionActionService,
+        IdempotencyService idempotencyService
+    ) {
         this.sessionService = sessionService;
+        this.coreSessionActionService = coreSessionActionService;
         this.idempotencyService = idempotencyService;
     }
 
@@ -125,6 +138,80 @@ public class SessionController {
             result.answerMessageId(),
             conversationId.toString(),
             TraceGuard.requireTraceId()
+        );
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+    }
+
+    @PostMapping("/sessions/{session_id}/close")
+    public ResponseEntity<CoreSessionActionResponse> closeSession(
+        @PathVariable("session_id") String sessionId,
+        @Valid @RequestBody SessionCloseRequest request
+    ) {
+        UUID tenantId = UUID.fromString(TenantContext.getTenantId());
+        CoreSessionActionResponse response = coreSessionActionService.closeSession(
+            tenantId,
+            UuidParser.parseRequired(sessionId, "session_id"),
+            request
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/sessions/{session_id}/messages/{message_id}/retry")
+    public ResponseEntity<CoreSessionActionResponse> retryMessage(
+        @PathVariable("session_id") String sessionId,
+        @PathVariable("message_id") String messageId,
+        @Valid @RequestBody MessageRetryRequest request
+    ) {
+        UUID tenantId = UUID.fromString(TenantContext.getTenantId());
+        CoreSessionActionResponse response = coreSessionActionService.retryMessage(
+            tenantId,
+            UuidParser.parseRequired(sessionId, "session_id"),
+            UuidParser.parseRequired(messageId, "message_id"),
+            request
+        );
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+    }
+
+    @PostMapping("/sessions/{session_id}/quick-replies/{quick_reply_id}")
+    public ResponseEntity<CoreSessionActionResponse> postQuickReply(
+        @PathVariable("session_id") String sessionId,
+        @PathVariable("quick_reply_id") String quickReplyId,
+        @Valid @RequestBody QuickReplyPostRequest request
+    ) {
+        UUID tenantId = UUID.fromString(TenantContext.getTenantId());
+        CoreSessionActionResponse response = coreSessionActionService.postQuickReply(
+            tenantId,
+            UuidParser.parseRequired(sessionId, "session_id"),
+            UuidParser.parseRequired(quickReplyId, "quick_reply_id"),
+            request
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/sessions/{session_id}/csat")
+    public ResponseEntity<CoreSessionActionResponse> postCsat(
+        @PathVariable("session_id") String sessionId,
+        @Valid @RequestBody CsatPostRequest request
+    ) {
+        UUID tenantId = UUID.fromString(TenantContext.getTenantId());
+        CoreSessionActionResponse response = coreSessionActionService.postCsat(
+            tenantId,
+            UuidParser.parseRequired(sessionId, "session_id"),
+            request
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/sessions/{session_id}/handoff")
+    public ResponseEntity<CoreSessionActionResponse> requestHandoff(
+        @PathVariable("session_id") String sessionId,
+        @Valid @RequestBody HandoffRequest request
+    ) {
+        UUID tenantId = UUID.fromString(TenantContext.getTenantId());
+        CoreSessionActionResponse response = coreSessionActionService.requestHandoff(
+            tenantId,
+            UuidParser.parseRequired(sessionId, "session_id"),
+            request
         );
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }

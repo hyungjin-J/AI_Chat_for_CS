@@ -1,5 +1,11 @@
 import axios from "axios";
 import { clearAuthState, getAuthState, resetStale401Count, setAuthState } from "../auth/authStore";
+import {
+    buildGeneratedHeaders,
+    generatedApiClient,
+    makeIdempotencyKey,
+    makeTraceId,
+} from "../../api/generated/client";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
 
@@ -29,101 +35,101 @@ export type LoginResult =
     | { status: "mfa_required" | "mfa_setup_required"; mfaTicketId: string };
 
 function traceId(): string {
-    return crypto.randomUUID();
+    return makeTraceId();
 }
 
 function idempotencyKey(): string {
-    return crypto.randomUUID();
+    return makeIdempotencyKey();
+}
+
+type GeneratedClientResult<T> = {
+    data?: T;
+    error?: unknown;
+    response: Response;
+};
+
+function unwrapGenerated<T>(result: GeneratedClientResult<T>, endpoint: string): T {
+    if (result.response.ok && result.data !== undefined) {
+        return result.data;
+    }
+    const detail =
+        typeof result.error === "string" ? result.error : JSON.stringify(result.error ?? {});
+    throw new Error(`generated_client_request_failed endpoint=${endpoint} status=${result.response.status} detail=${detail}`);
 }
 
 export async function login(payload: LoginPayload): Promise<LoginResult> {
-    const response = await axios.post<AuthResponse>(
-        `${API_BASE_URL}/v1/auth/login`,
-        {
+    const result = await generatedApiClient.POST("/v1/auth/login", {
+        body: {
             login_id: payload.loginId,
             password: payload.password,
             client_type: payload.clientType,
             channel_id: "agent-console",
             client_nonce: crypto.randomUUID(),
         },
-        {
-            withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-                "X-Tenant-Key": payload.tenantKey,
-                "X-Trace-Id": traceId(),
-                "Idempotency-Key": idempotencyKey(),
-            },
-        },
-    );
+        headers: buildGeneratedHeaders({
+            tenantKey: payload.tenantKey,
+            includeIdempotencyKey: true,
+        }),
+    });
+    const auth = unwrapGenerated<AuthResponse>(result as GeneratedClientResult<AuthResponse>, "/v1/auth/login");
 
-    if (response.data.result === "mfa_required" || response.data.result === "mfa_setup_required") {
+    if (auth.result === "mfa_required" || auth.result === "mfa_setup_required") {
         return {
-            status: response.data.result,
-            mfaTicketId: response.data.mfa_ticket_id ?? "",
+            status: auth.result,
+            mfaTicketId: auth.mfa_ticket_id ?? "",
         };
     }
 
     setAuthState({
         tenantKey: payload.tenantKey,
-        accessToken: response.data.access_token,
-        sessionFamilyId: response.data.session_family_id ?? "",
-        roles: response.data.roles ?? [],
-        adminLevel: response.data.admin_level ?? "",
-        permissionVersion: response.data.permission_version ?? 0,
+        accessToken: auth.access_token,
+        sessionFamilyId: auth.session_family_id ?? "",
+        roles: auth.roles ?? [],
+        adminLevel: auth.admin_level ?? "",
+        permissionVersion: auth.permission_version ?? 0,
         stalePermission401Count: 0,
     });
     return { status: "accepted" };
 }
 
 export async function refreshToken(tenantKey: string): Promise<string> {
-    const response = await axios.post<AuthResponse>(
-        `${API_BASE_URL}/v1/auth/refresh`,
-        {
+    const result = await generatedApiClient.POST("/v1/auth/refresh", {
+        body: {
             client_type: "web",
             client_nonce: crypto.randomUUID(),
         },
-        {
-            withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-                "X-Tenant-Key": tenantKey,
-                "X-Trace-Id": traceId(),
-                "Idempotency-Key": idempotencyKey(),
-            },
-        },
-    );
+        headers: buildGeneratedHeaders({
+            tenantKey,
+            includeIdempotencyKey: true,
+        }),
+    });
+    const auth = unwrapGenerated<AuthResponse>(result as GeneratedClientResult<AuthResponse>, "/v1/auth/refresh");
     setAuthState({
-        accessToken: response.data.access_token,
-        sessionFamilyId: response.data.session_family_id ?? "",
-        roles: response.data.roles ?? [],
-        adminLevel: response.data.admin_level ?? "",
-        permissionVersion: response.data.permission_version ?? 0,
+        accessToken: auth.access_token,
+        sessionFamilyId: auth.session_family_id ?? "",
+        roles: auth.roles ?? [],
+        adminLevel: auth.admin_level ?? "",
+        permissionVersion: auth.permission_version ?? 0,
     });
     resetStale401Count();
-    return response.data.access_token;
+    return auth.access_token;
 }
 
 export async function logout(): Promise<void> {
     const tenantKey = getAuthState().tenantKey;
     try {
-        await axios.post(
-            `${API_BASE_URL}/v1/auth/logout`,
-            {
+        const result = await generatedApiClient.POST("/v1/auth/logout", {
+            body: {
                 client_type: "web",
                 client_nonce: crypto.randomUUID(),
                 reason: "user_requested_logout",
             },
-            {
-                withCredentials: true,
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Tenant-Key": tenantKey,
-                    "X-Trace-Id": traceId(),
-                    "Idempotency-Key": idempotencyKey(),
-                },
-            },
-        );
+            headers: buildGeneratedHeaders({
+                tenantKey,
+                includeIdempotencyKey: true,
+            }),
+        });
+        unwrapGenerated<Record<string, unknown>>(result as GeneratedClientResult<Record<string, unknown>>, "/v1/auth/logout");
     } finally {
         clearAuthState();
     }
@@ -138,45 +144,40 @@ export type MfaEnrollResponse = {
 };
 
 export async function enrollMfaTotp(tenantKey: string, mfaTicketId: string): Promise<MfaEnrollResponse> {
-    const response = await axios.post<MfaEnrollResponse>(
-        `${API_BASE_URL}/v1/auth/mfa/totp/enroll`,
-        { mfa_ticket_id: mfaTicketId },
-        {
-            withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-                "X-Tenant-Key": tenantKey,
-                "X-Trace-Id": traceId(),
-                "Idempotency-Key": idempotencyKey(),
-            },
-        },
+    const result = await generatedApiClient.POST("/v1/auth/mfa/totp/enroll", {
+        body: { mfa_ticket_id: mfaTicketId },
+        headers: buildGeneratedHeaders({
+            tenantKey,
+            includeIdempotencyKey: true,
+        }),
+    });
+    return unwrapGenerated<MfaEnrollResponse>(
+        result as GeneratedClientResult<MfaEnrollResponse>,
+        "/v1/auth/mfa/totp/enroll",
     );
-    return response.data;
 }
 
 export async function activateMfaTotp(tenantKey: string, mfaTicketId: string, totpCode: string): Promise<AuthResponse> {
-    const response = await axios.post<AuthResponse>(
-        `${API_BASE_URL}/v1/auth/mfa/totp/activate`,
-        { mfa_ticket_id: mfaTicketId, totp_code: totpCode, client_type: "web" },
-        {
-            withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-                "X-Tenant-Key": tenantKey,
-                "X-Trace-Id": traceId(),
-                "Idempotency-Key": idempotencyKey(),
-            },
-        },
+    const result = await generatedApiClient.POST("/v1/auth/mfa/totp/activate", {
+        body: { mfa_ticket_id: mfaTicketId, totp_code: totpCode, client_type: "web" },
+        headers: buildGeneratedHeaders({
+            tenantKey,
+            includeIdempotencyKey: true,
+        }),
+    });
+    const response = unwrapGenerated<AuthResponse>(
+        result as GeneratedClientResult<AuthResponse>,
+        "/v1/auth/mfa/totp/activate",
     );
     setAuthState({
         tenantKey,
-        accessToken: response.data.access_token,
-        sessionFamilyId: response.data.session_family_id ?? "",
-        roles: response.data.roles ?? [],
-        adminLevel: response.data.admin_level ?? "",
-        permissionVersion: response.data.permission_version ?? 0,
+        accessToken: response.access_token,
+        sessionFamilyId: response.session_family_id ?? "",
+        roles: response.roles ?? [],
+        adminLevel: response.admin_level ?? "",
+        permissionVersion: response.permission_version ?? 0,
     });
-    return response.data;
+    return response;
 }
 
 export async function verifyMfa(

@@ -1,0 +1,7 @@
+case_id,tenant_key,user_role,query,expected_policy_bundle,requires_citation,notes
+RAG-REG-001,demo-tenant,AGENT,refund policy for unopened product,CS_STANDARD,1,expect=answer;top_k=3
+RAG-REG-002,demo-tenant,AGENT,shipping delay compensation guide,CS_STANDARD,1,expect=answer;top_k=3
+RAG-REG-003,demo-tenant,AGENT,subscription cancellation deadline policy,CS_POLICY_GUARD,1,expect=answer;top_k=3
+RAG-REG-004,demo-tenant,AGENT,zzzzzz qqqqq knowledge not found token,CS_FAIL_CLOSED_STRICT,0,expect=fail_closed;top_k=1
+RAG-REG-005,demo-tenant,AGENT,handoff criteria to human agent policy,CS_STANDARD,1,expect=answer;top_k=3
+RAG-REG-006,demo-tenant,AGENT,zzzzzz qqqqq knowledge not found token,CS_FAIL_CLOSED_STRICT,0,expect=fail_closed;top_k=1;deterministic=no_evidence_probe

@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import json
 import subprocess
@@ -10,6 +10,14 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ARCHIVE_SCRIPT_PATH = REPO_ROOT / "scripts" / "archive_artifacts.py"
+REQUIRED_MANIFEST_FIELDS = {
+    "zip_sha256",
+    "created_at_kst",
+    "source_commit",
+    "family_name",
+    "included_files",
+    "excluded_files",
+}
 
 
 def write_text(path: Path, content: str = "x\n") -> None:
@@ -47,14 +55,21 @@ def write_index_payload(
     payload = {
         "artifact_root": str(artifact_root),
         "indexed_file_count": len(family_map),
+        "archive_layout_version": 2,
         "archive_keep_latest_per_extension": 1,
         "archive_manifest_path": str(archive_root / "_ARCHIVE_MANIFEST.json"),
         "pinned_paths_count": 0,
         "archive_summary": {
             "bundle_count": 0,
             "archived_file_count": 0,
+            "sidecar_manifest_count": 0,
+            "sidecar_archive_count": 0,
+            "sidecar_archived_file_count": 0,
             "recent_bundles": [],
+            "recent_sidecar_archives": [],
         },
+        "archive_families": [],
+        "latest_archives": [],
         "groups": [
             {
                 "group": "report",
@@ -113,25 +128,49 @@ def load_report_json(artifact_root: Path) -> dict:
     return json.loads((artifact_root / "artifact_archive_report.json").read_text(encoding="utf-8"))
 
 
+def list_sidecar_manifests(archive_root: Path) -> list[Path]:
+    return sorted(
+        [
+            path
+            for path in archive_root.rglob("*.manifest.json")
+            if path.is_file() and path.name != "_ARCHIVE_MANIFEST.json"
+        ]
+    )
+
+
+def list_sidecar_zips(archive_root: Path) -> list[Path]:
+    bundles_dir = (archive_root / "bundles").resolve()
+    result: list[Path] = []
+    for path in archive_root.rglob("*.zip"):
+        if not path.is_file():
+            continue
+        try:
+            path.resolve().relative_to(bundles_dir)
+            continue
+        except ValueError:
+            result.append(path)
+    return sorted(result)
+
+
 class ArchiveArtifactsTest(unittest.TestCase):
-    def test_archives_family_bundle_and_removes_sources(self) -> None:
+    def test_archives_family_bundle_copy_only_and_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             artifacts = Path(tmp) / "docs/review/mvp_verification_pack/artifacts"
             archive_root = Path(tmp) / "docs/review/mvp_verification_pack/archive"
 
-            wave_json = "utf8_normalization_wave2_report.json"
-            wave_md = "utf8_normalization_wave2_report.md"
-            write_text(artifacts / wave_json, "{}\n")
-            write_text(artifacts / wave_md, "# wave2\n")
+            older = "utf8_normalization_wave2_report.json"
+            latest = "utf8_normalization_wave3_report.json"
+            write_text(artifacts / older, '{"v":2}\n')
+            write_text(artifacts / latest, '{"v":3}\n')
 
             family_map = {
-                wave_json: "utf8_normalization_waveN_report",
-                wave_md: "utf8_normalization_waveN_report",
+                older: "utf8_normalization_waveN_report",
+                latest: "utf8_normalization_waveN_report",
             }
             index_path = write_index_payload(
                 artifact_root=artifacts,
                 archive_root=archive_root,
-                candidates=[wave_json, wave_md],
+                candidates=[older, latest],
                 family_map=family_map,
             )
 
@@ -141,34 +180,51 @@ class ArchiveArtifactsTest(unittest.TestCase):
             report = load_report_json(artifacts)
             self.assertEqual(report["status"], "PASS")
             self.assertEqual(report["created_bundle_count"], 1)
-            self.assertEqual(report["archived_file_count"], 2)
-            self.assertFalse((artifacts / wave_json).exists())
-            self.assertFalse((artifacts / wave_md).exists())
+            self.assertEqual(report["archived_file_count"], 1)
+            self.assertTrue((artifacts / older).exists())
+            self.assertTrue((artifacts / latest).exists())
+            self.assertIn(latest, report["retention_excluded"])
 
-            bundles = list((archive_root / "bundles").rglob("*.zip"))
-            self.assertEqual(len(bundles), 1)
-            with zipfile.ZipFile(bundles[0], "r") as zf:
+            sidecar_zips = list_sidecar_zips(archive_root)
+            sidecar_manifests = list_sidecar_manifests(archive_root)
+            self.assertEqual(len(sidecar_zips), 1)
+            self.assertEqual(len(sidecar_manifests), 1)
+
+            with zipfile.ZipFile(sidecar_zips[0], "r") as zf:
                 members = sorted(zf.namelist())
-            self.assertEqual(members, [wave_json, wave_md])
+            self.assertEqual(members, [older])
 
-    def test_skips_pinned_candidates(self) -> None:
+            manifest_payload = json.loads(sidecar_manifests[0].read_text(encoding="utf-8"))
+            self.assertTrue(REQUIRED_MANIFEST_FIELDS.issubset(set(manifest_payload.keys())))
+            self.assertRegex(
+                str(manifest_payload["created_at_kst"]),
+                r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \+09:00$",
+            )
+            self.assertRegex(str(manifest_payload["source_commit"]), r"^[0-9a-f]{40}$")
+            self.assertEqual([item["path"] for item in manifest_payload["included_files"]], [older])
+            self.assertIn(latest, manifest_payload["excluded_files"])
+
+    def test_skips_pinned_candidates_and_keeps_sources(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             artifacts = Path(tmp) / "docs/review/mvp_verification_pack/artifacts"
             archive_root = Path(tmp) / "docs/review/mvp_verification_pack/archive"
 
             pinned_rel = "phase2_1_2_frontend_build_output.txt"
-            candidate_rel = "utf8_normalization_wave2_report.json"
+            older = "utf8_normalization_wave2_report.json"
+            latest = "utf8_normalization_wave3_report.json"
             write_text(artifacts / pinned_rel, "keep\n")
-            write_text(artifacts / candidate_rel, "archive\n")
+            write_text(artifacts / older, '{"v":2}\n')
+            write_text(artifacts / latest, '{"v":3}\n')
 
             family_map = {
                 pinned_rel: "phase2_1_2_frontend_build_output",
-                candidate_rel: "utf8_normalization_waveN_report",
+                older: "utf8_normalization_waveN_report",
+                latest: "utf8_normalization_waveN_report",
             }
             index_path = write_index_payload(
                 artifact_root=artifacts,
                 archive_root=archive_root,
-                candidates=[pinned_rel, candidate_rel],
+                candidates=[pinned_rel, older, latest],
                 family_map=family_map,
             )
 
@@ -180,21 +236,26 @@ class ArchiveArtifactsTest(unittest.TestCase):
             self.assertGreaterEqual(report["skipped_pinned_count"], 1)
             self.assertIn(pinned_rel, report["skipped_pinned"])
             self.assertTrue((artifacts / pinned_rel).exists())
-            self.assertFalse((artifacts / candidate_rel).exists())
+            self.assertTrue((artifacts / older).exists())
 
     def test_idempotent_second_run_is_noop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             artifacts = Path(tmp) / "docs/review/mvp_verification_pack/artifacts"
             archive_root = Path(tmp) / "docs/review/mvp_verification_pack/archive"
 
-            candidate_rel = "utf8_normalization_wave2_report.json"
-            write_text(artifacts / candidate_rel, "archive\n")
+            older = "utf8_normalization_wave2_report.json"
+            latest = "utf8_normalization_wave3_report.json"
+            write_text(artifacts / older, '{"v":2}\n')
+            write_text(artifacts / latest, '{"v":3}\n')
 
-            family_map = {candidate_rel: "utf8_normalization_waveN_report"}
+            family_map = {
+                older: "utf8_normalization_waveN_report",
+                latest: "utf8_normalization_waveN_report",
+            }
             index_path = write_index_payload(
                 artifact_root=artifacts,
                 archive_root=archive_root,
-                candidates=[candidate_rel],
+                candidates=[older, latest],
                 family_map=family_map,
             )
 
@@ -203,14 +264,14 @@ class ArchiveArtifactsTest(unittest.TestCase):
             first_report = load_report_json(artifacts)
             self.assertEqual(first_report["created_bundle_count"], 1)
 
-            first_bundle_count = len(list((archive_root / "bundles").rglob("*.zip")))
+            first_zip_count = len(list_sidecar_zips(archive_root))
             second = run_archive_script(artifacts, archive_root, index_path, refresh_index=False)
             self.assertEqual(second.returncode, 0, msg=second.stdout + second.stderr)
             second_report = load_report_json(artifacts)
             self.assertEqual(second_report["created_bundle_count"], 0)
             self.assertGreaterEqual(second_report["skipped_already_archived_count"], 1)
-            second_bundle_count = len(list((archive_root / "bundles").rglob("*.zip")))
-            self.assertEqual(first_bundle_count, second_bundle_count)
+            second_zip_count = len(list_sidecar_zips(archive_root))
+            self.assertEqual(first_zip_count, second_zip_count)
 
 
 if __name__ == "__main__":

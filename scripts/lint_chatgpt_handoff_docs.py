@@ -13,7 +13,15 @@ from pathlib import Path, PurePosixPath
 
 REQUIRED_META_KEYS = ("updated_at_kst", "base_commit_hash", "release_tag", "branch")
 UPDATED_AT_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \+09:00$")
-RACE_ID_PATTERN = re.compile(r"\brace_id\b", re.IGNORECASE)
+PLACEHOLDER_PATTERN = re.compile(r"\$kst|\bTBD\b|\bTODO\b|<\s*placeholder\s*>", re.IGNORECASE)
+TAB_PATTERN = re.compile(r"\t")
+DISALLOWED_CONTROL_CHAR_PATTERN = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F]")
+TRACE_ID_TYPO_PATTERNS = (
+    re.compile(r"\brace_id\b", re.IGNORECASE),
+    re.compile(r"\btrcae_id\b", re.IGNORECASE),
+    re.compile(r"\btarce_id\b", re.IGNORECASE),
+    re.compile(r"\btrce_id\b", re.IGNORECASE),
+)
 ARTIFACT_ROOT = "docs/review/mvp_verification_pack/artifacts/"
 ALLOWED_NON_ARTIFACT_EVIDENCE = {"spec_sync_report.md"}
 ARTIFACT_PATH_PATTERN = re.compile(r"docs/review/mvp_verification_pack/artifacts/[A-Za-z0-9._/\-]+")
@@ -23,9 +31,14 @@ FORBIDDEN_LITERAL_PATTERNS = (
     re.compile(r"NOTION_TOKEN"),
     re.compile(r"OPENAI_API_KEY"),
     re.compile(r"ACCESS_TOKEN"),
+    re.compile(r"AWS_SECRET_ACCESS_KEY"),
     re.compile(r"refresh_token\s*=", re.IGNORECASE),
     re.compile(r"api_key\s*=", re.IGNORECASE),
     re.compile(r"Bearer\s+[A-Za-z0-9._\-]+"),
+    re.compile(r"\bghp_[A-Za-z0-9]{20,}\b"),
+    re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+    re.compile(r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\b"),
+    re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
     re.compile(r"\bsk-[A-Za-z0-9]{10,}\b"),
     re.compile(r"\b01[0-9]-\d{3,4}-\d{4}\b"),
     re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"),
@@ -133,40 +146,51 @@ def lint_file(path: Path) -> tuple[list[Violation], list[WarningItem], dict]:
     text = path.read_text(encoding="utf-8", errors="strict")
     lines = text.splitlines()
 
-    # C0 control chars: only LF/CR allowed (tab forbidden).
+    # C0 control chars: only LF/CR allowed in docs. Tabs are forbidden.
     for line_idx, line in enumerate(lines, start=1):
-        for ch in line:
-            code = ord(ch)
-            if code < 32:
-                violations.append(
-                    Violation(
-                        file=path.as_posix(),
-                        code="DOC_CONTROL_CHAR",
-                        message=f"C0 control char U+{code:04X} is forbidden",
-                        line=line_idx,
-                    )
+        if TAB_PATTERN.search(line):
+            violations.append(
+                Violation(
+                    file=path.as_posix(),
+                    code="DOC_TAB_CHARACTER",
+                    message="tab character is forbidden; replace with spaces",
+                    line=line_idx,
                 )
+            )
+        for match in DISALLOWED_CONTROL_CHAR_PATTERN.finditer(line):
+            code = ord(match.group(0))
+            violations.append(
+                Violation(
+                    file=path.as_posix(),
+                    code="DOC_CONTROL_CHAR",
+                    message=f"C0 control char U+{code:04X} is forbidden",
+                    line=line_idx,
+                )
+            )
 
-    # Placeholder / typo checks.
+    # Placeholder / trace typo checks.
     for line_idx, line in enumerate(lines, start=1):
-        if "$kst" in line or "TBD" in line:
+        if PLACEHOLDER_PATTERN.search(line):
             violations.append(
                 Violation(
                     file=path.as_posix(),
                     code="DOC_PLACEHOLDER",
-                    message="placeholder value found",
+                    message="placeholder metadata/value found",
                     line=line_idx,
                 )
             )
-        if RACE_ID_PATTERN.search(line):
-            violations.append(
-                Violation(
-                    file=path.as_posix(),
-                    code="DOC_TRACE_TYPO",
-                    message="race_id typo detected; trace_id only",
-                    line=line_idx,
+
+        for typo_pattern in TRACE_ID_TYPO_PATTERNS:
+            if typo_pattern.search(line):
+                violations.append(
+                    Violation(
+                        file=path.as_posix(),
+                        code="DOC_TRACE_TYPO",
+                        message="trace_id typo detected; use trace_id only",
+                        line=line_idx,
+                    )
                 )
-            )
+                break
 
     # Metadata checks.
     meta = parse_meta(lines)

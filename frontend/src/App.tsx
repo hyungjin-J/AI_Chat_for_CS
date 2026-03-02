@@ -7,6 +7,7 @@ import { AdminSessionsPage } from "./pages/AdminSessionsPage";
 import { ForbiddenPage } from "./pages/ForbiddenPage";
 import { LoginPage } from "./pages/LoginPage";
 import { OpsBlockPage } from "./pages/OpsBlockPage";
+import { SpecCoverageOpsPage } from "./pages/SpecCoverageOpsPage";
 import { RequireAuth } from "./routes/RequireAuth";
 import "./index.css";
 
@@ -24,6 +25,7 @@ function App() {
                     <Route path="blocks" element={<OpsBlockPage />} />
                     <Route path="sessions" element={<AdminSessionsPage />} />
                     <Route path="rbac" element={<AdminRbacPage />} />
+                    <Route path="spec-coverage" element={<SpecCoverageOpsPage />} />
                 </Route>
             </Route>
 

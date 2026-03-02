@@ -64,6 +64,11 @@ select {
     width: 100%;
 }
 
+.result-box {
+    min-height: 220px;
+    white-space: pre;
+}
+
 button {
     border: none;
     border-radius: 10px;
@@ -81,6 +86,12 @@ button:disabled {
 
 .error {
     color: var(--danger);
+}
+
+.hint {
+    color: var(--muted);
+    margin: 2px 0 10px;
+    font-size: 12px;
 }
 
 .console-shell {

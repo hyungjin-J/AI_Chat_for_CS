@@ -1,0 +1,485 @@
+{
+  "metadata": {
+    "git_head_short": "2eced8e",
+    "git_branch": "utf8-wave8-to-29",
+    "artifacts_dir": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts",
+    "index_json": "C:/Users/hjjmj/OneDrive/바탕 화면/AI_Chatbot/docs/review/mvp_verification_pack/artifacts/_INDEX.json"
+  },
+  "summary": {
+    "overall_status": "FAIL",
+    "status_counts": {
+      "PASS": 10,
+      "FAIL": 4,
+      "SKIPPED": 3,
+      "MISSING": 0,
+      "ERROR": 0
+    },
+    "gate_count": 17
+  },
+  "gates": [
+    {
+      "key": "domain_layer_boundary_gate",
+      "name": "Domain layer boundary gate",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "domain_layer_boundary_gate.json",
+          "exists": true,
+          "declared_path": "domain_layer_boundary_gate.json"
+        },
+        {
+          "path": "domain_layer_boundary_gate.txt",
+          "exists": true,
+          "declared_path": "domain_layer_boundary_gate.txt"
+        }
+      ],
+      "primary_evidence": "domain_layer_boundary_gate.json",
+      "key_metric": "baseline_violation_count=0, new_violation_count=0, current_violation_count=0",
+      "parsed_fields": {
+        "baseline_violation_count": 0,
+        "current_violation_count": 0,
+        "new_violation_count": 0,
+        "status": "PASS"
+      }
+    },
+    {
+      "key": "application_port_boundary_gate",
+      "name": "Application port boundary gate",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "application_port_boundary_gate.json",
+          "exists": true,
+          "declared_path": "application_port_boundary_gate.json"
+        },
+        {
+          "path": "application_port_boundary_gate.txt",
+          "exists": true,
+          "declared_path": "application_port_boundary_gate.txt"
+        }
+      ],
+      "primary_evidence": "application_port_boundary_gate.json",
+      "key_metric": "baseline_violation_count=0, new_violation_count=0, current_violation_count=0",
+      "parsed_fields": {
+        "baseline_violation_count": 0,
+        "current_violation_count": 0,
+        "new_violation_count": 0,
+        "status": "PASS"
+      }
+    },
+    {
+      "key": "continuation_utf8_strict_gate",
+      "name": "UTF-8 strict decode gate",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "continuation_utf8_strict_gate.json",
+          "exists": true,
+          "declared_path": "continuation_utf8_strict_gate.json"
+        },
+        {
+          "path": "continuation_utf8_strict_gate.txt",
+          "exists": true,
+          "declared_path": "continuation_utf8_strict_gate.txt"
+        }
+      ],
+      "primary_evidence": "continuation_utf8_strict_gate.json",
+      "key_metric": "violation_count=0, scanned_file_count=141",
+      "parsed_fields": {
+        "scanned_file_count": 141,
+        "status": "PASS",
+        "violation_count": 0
+      }
+    },
+    {
+      "key": "utf8_full_scan_ratchet_gate",
+      "name": "UTF-8 full-scan ratchet gate",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "utf8_full_scan_ratchet_gate.json",
+          "exists": true,
+          "declared_path": "utf8_full_scan_ratchet_gate.json"
+        },
+        {
+          "path": "utf8_full_scan_ratchet_gate.txt",
+          "exists": true,
+          "declared_path": "utf8_full_scan_ratchet_gate.txt"
+        }
+      ],
+      "primary_evidence": "utf8_full_scan_ratchet_gate.json",
+      "key_metric": "baseline_violation_count=0, new_violation_count=0, violation_count=0, scanned_file_count=1169",
+      "parsed_fields": {
+        "baseline_violation_count": 0,
+        "new_violation_count": 0,
+        "scanned_file_count": 1169,
+        "status": "PASS",
+        "violation_count": 0
+      }
+    },
+    {
+      "key": "spec_consistency_check_report",
+      "name": "Spec consistency check",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "spec_consistency_check_report.json",
+          "exists": true,
+          "declared_path": "spec_consistency_check_report.json"
+        },
+        {
+          "path": "spec_consistency_check_pass.txt",
+          "exists": true,
+          "declared_path": "spec_consistency_check_pass.txt"
+        },
+        {
+          "path": "spec_consistency_check_report.txt",
+          "exists": true,
+          "declared_path": "spec_consistency_check_report.txt"
+        }
+      ],
+      "primary_evidence": "spec_consistency_check_report.json",
+      "key_metric": "violation_count=0",
+      "parsed_fields": {
+        "status": "PASS",
+        "violation_count": 0
+      }
+    },
+    {
+      "key": "spec_sync_report_gate",
+      "name": "Spec sync report gate",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "spec_sync_report_gate.json",
+          "exists": true,
+          "declared_path": "spec_sync_report_gate.json"
+        },
+        {
+          "path": "spec_sync_report_gate.txt",
+          "exists": true,
+          "declared_path": "spec_sync_report_gate.txt"
+        }
+      ],
+      "primary_evidence": "spec_sync_report_gate.json",
+      "key_metric": "spec_changed_count=5, evidence_section_count=23",
+      "parsed_fields": {
+        "evidence_section_count": 23,
+        "spec_changed_count": 5,
+        "status": "PASS"
+      }
+    },
+    {
+      "key": "spec_impl_coverage_gate",
+      "name": "Spec implementation coverage gate",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "spec_impl_coverage_gate.json",
+          "exists": true,
+          "declared_path": "spec_impl_coverage_gate.json"
+        },
+        {
+          "path": "spec_impl_coverage_gate.txt",
+          "exists": true,
+          "declared_path": "spec_impl_coverage_gate.txt"
+        }
+      ],
+      "primary_evidence": "spec_impl_coverage_gate.json",
+      "key_metric": "must_api_rows=86, must_backend_missing_count=0, must_tests_missing_count=0",
+      "parsed_fields": {
+        "must_api_rows": 86,
+        "must_backend_missing_count": 0,
+        "must_tests_missing_count": 0,
+        "status": "PASS",
+        "violation_count": 0
+      }
+    },
+    {
+      "key": "artifact_index_gate",
+      "name": "Artifact index gate",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "artifact_index_gate.json",
+          "exists": true,
+          "declared_path": "artifact_index_gate.json"
+        },
+        {
+          "path": "artifact_index_gate.txt",
+          "exists": true,
+          "declared_path": "artifact_index_gate.txt"
+        }
+      ],
+      "primary_evidence": "artifact_index_gate.json",
+      "key_metric": "indexed_file_count=499, violation_count=0",
+      "parsed_fields": {
+        "indexed_file_count": 499,
+        "status": "PASS",
+        "violation_count": 0
+      }
+    },
+    {
+      "key": "artifact_archive_report",
+      "name": "Artifact archive report",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "artifact_archive_report.json",
+          "exists": true,
+          "declared_path": "artifact_archive_report.json"
+        },
+        {
+          "path": "artifact_archive_report.txt",
+          "exists": true,
+          "declared_path": "artifact_archive_report.txt"
+        }
+      ],
+      "primary_evidence": "artifact_archive_report.json",
+      "key_metric": "archived_file_count=1, violation_count=0",
+      "parsed_fields": {
+        "archived_file_count": 1,
+        "status": "PASS",
+        "violation_count": 0
+      }
+    },
+    {
+      "key": "node22_unicode_mirror_helper_smoke",
+      "name": "Node22 unicode mirror helper smoke",
+      "status": "PASS",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "node22_unicode_mirror_helper_smoke.txt",
+          "exists": true,
+          "declared_path": "node22_unicode_mirror_helper_smoke.txt"
+        }
+      ],
+      "primary_evidence": "node22_unicode_mirror_helper_smoke.txt",
+      "key_metric": "path_mode=mirrored, node_check_status=WARNING, mirror_performed=True",
+      "parsed_fields": {
+        "mirror_performed": "True",
+        "node_check_status": "WARNING",
+        "path_mode": "mirrored",
+        "status": "PASS"
+      }
+    },
+    {
+      "key": "db_local_readiness_smoke",
+      "name": "DB local readiness smoke",
+      "status": "SKIPPED",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "db_local_readiness_smoke.json",
+          "exists": true,
+          "declared_path": "db_local_readiness_smoke.json"
+        },
+        {
+          "path": "db_local_readiness_smoke.txt",
+          "exists": true,
+          "declared_path": "db_local_readiness_smoke.txt"
+        }
+      ],
+      "primary_evidence": "db_local_readiness_smoke.json",
+      "key_metric": "reason_code=DOCKER_ENGINE_DOWN, method=docker-exec, violation_count=1",
+      "parsed_fields": {
+        "method": "docker-exec",
+        "reason_code": "DOCKER_ENGINE_DOWN",
+        "status": "SKIPPED",
+        "violation_count": 1
+      }
+    },
+    {
+      "key": "db_backend_health_trace_gate",
+      "name": "DB backend health trace gate",
+      "status": "SKIPPED",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "db_backend_health_trace_gate.json",
+          "exists": true,
+          "declared_path": "db_backend_health_trace_gate.json"
+        },
+        {
+          "path": "db_backend_health_trace_gate.txt",
+          "exists": true,
+          "declared_path": "db_backend_health_trace_gate.txt"
+        }
+      ],
+      "primary_evidence": "db_backend_health_trace_gate.json",
+      "key_metric": "reason_code=DOCKER_ENGINE_DOWN, violation_count=1",
+      "parsed_fields": {
+        "reason_code": "DOCKER_ENGINE_DOWN",
+        "status": "SKIPPED",
+        "violation_count": 1
+      }
+    },
+    {
+      "key": "prod_deploy_smoke",
+      "name": "Production deploy smoke",
+      "status": "SKIPPED",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "prod_deploy_smoke_20260303.json",
+          "exists": true,
+          "declared_path": "prod_deploy_smoke_*.json"
+        },
+        {
+          "path": "prod_deploy_smoke_20260303.txt",
+          "exists": true,
+          "declared_path": "prod_deploy_smoke_*.txt"
+        }
+      ],
+      "primary_evidence": "prod_deploy_smoke_20260303.json",
+      "key_metric": "reason_code=DOCKER_ENGINE_DOWN",
+      "parsed_fields": {
+        "reason_code": "DOCKER_ENGINE_DOWN",
+        "status": "SKIPPED"
+      }
+    },
+    {
+      "key": "e2e_smoke",
+      "name": "Operational E2E smoke",
+      "status": "FAIL",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "e2e_smoke_report_20260303.json",
+          "exists": true,
+          "declared_path": "e2e_smoke_report_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].json"
+        },
+        {
+          "path": "e2e_smoke_trace_samples_20260303.txt",
+          "exists": true,
+          "declared_path": "e2e_smoke_trace_samples_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].txt"
+        }
+      ],
+      "primary_evidence": "e2e_smoke_report_20260303.json",
+      "key_metric": "reason_code=TARGET_UNREACHABLE, status=FAIL",
+      "parsed_fields": {
+        "reason_code": "TARGET_UNREACHABLE",
+        "status": "FAIL"
+      }
+    },
+    {
+      "key": "rag_regression_gate",
+      "name": "RAG regression gate",
+      "status": "FAIL",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "rag_regression_gate_20260303.json",
+          "exists": true,
+          "declared_path": "rag_regression_gate_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].json"
+        },
+        {
+          "path": "rag_regression_gate_20260303.txt",
+          "exists": true,
+          "declared_path": "rag_regression_gate_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].txt"
+        }
+      ],
+      "primary_evidence": "rag_regression_gate_20260303.json",
+      "key_metric": "reason_code=TARGET_UNREACHABLE, violation_count=1",
+      "parsed_fields": {
+        "reason_code": "TARGET_UNREACHABLE",
+        "status": "FAIL",
+        "violation_count": 1
+      }
+    },
+    {
+      "key": "perf_sse_gate",
+      "name": "SSE perf gate",
+      "status": "FAIL",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "perf_sse_gate_20260303_actual.json",
+          "exists": true,
+          "declared_path": "perf_sse_gate_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_actual.json"
+        },
+        {
+          "path": "perf_sse_gate_20260303.txt",
+          "exists": true,
+          "declared_path": "perf_sse_gate_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].txt"
+        }
+      ],
+      "primary_evidence": "perf_sse_gate_20260303_actual.json",
+      "key_metric": "reason_code=TARGET_UNREACHABLE, violation_count=1",
+      "parsed_fields": {
+        "reason_code": "TARGET_UNREACHABLE",
+        "status": "FAIL",
+        "violation_count": 1
+      }
+    },
+    {
+      "key": "audit_chain_verifier",
+      "name": "Audit chain verifier",
+      "status": "FAIL",
+      "reason": "",
+      "evidence": [
+        {
+          "path": "golive_audit_chain_verify_20260303.json",
+          "exists": true,
+          "declared_path": "golive_audit_chain_verify_*.json"
+        },
+        {
+          "path": "golive_audit_chain_verify_20260303.txt",
+          "exists": true,
+          "declared_path": "golive_audit_chain_verify_*.txt"
+        }
+      ],
+      "primary_evidence": "golive_audit_chain_verify_20260303.json",
+      "key_metric": "violation_count=1, checked_rows=0, failure_count=0",
+      "parsed_fields": {
+        "checked_rows": 0,
+        "failure_count": 0,
+        "status": "FAIL",
+        "violation_count": 1
+      }
+    }
+  ],
+  "baseline_snapshot": {
+    "domain_purity_baseline": {
+      "expected": 0,
+      "value": 0,
+      "source": "domain_layer_boundary_gate.json"
+    },
+    "utf8_full_scan_baseline": {
+      "expected": 0,
+      "value": 0,
+      "source": "utf8_full_scan_ratchet_gate.json"
+    },
+    "public_api_compare": {
+      "value": "added=0, removed=0",
+      "source": "phase2_2_3_public_api_compare.txt"
+    }
+  },
+  "triage": {
+    "failing_gates": [
+      "Operational E2E smoke",
+      "RAG regression gate",
+      "SSE perf gate",
+      "Audit chain verifier"
+    ],
+    "priority_artifacts": [
+      "artifact_index_gate.json",
+      "artifact_index_gate.txt",
+      "spec_sync_report_gate.json",
+      "spec_sync_report_gate.txt",
+      "spec_consistency_check_report.json",
+      "spec_consistency_check_pass.txt",
+      "release_gate_dashboard.json"
+    ]
+  }
+}

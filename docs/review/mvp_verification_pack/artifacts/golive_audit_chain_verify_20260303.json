@@ -1,0 +1,24 @@
+{
+  "status": "FAIL",
+  "tenant_key": "demo-tenant",
+  "tenant_id": "",
+  "from_utc": "2026-01-01T00:00:00Z",
+  "to_utc": "2026-12-31T23:59:59Z",
+  "method": "docker-exec",
+  "database": "aichatbot",
+  "checked_rows": 0,
+  "failure_count": 0,
+  "failure_samples": [],
+  "checks": {
+    "tenant_lookup": "FAIL"
+  },
+  "violation_count": 1,
+  "violations": [
+    {
+      "code": "TENANT_LOOKUP_FAILED",
+      "message": "failed to resolve tenant_id from tenant_key",
+      "details": "command=docker compose -f infra/docker-compose.yml exec -T -e PGPASSWORD=***REDACTED*** postgres psql -U aichatbot -d aichatbot -v ON_ERROR_STOP=1 -At -c SELECT id::text FROM tb_tenant WHERE tenant_key = 'demo-tenant' LIMIT 1;\nstdout=\nstderr=error during connect: Get \"http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.51/containers/json?filters=%7B%22label%22%3A%7B%22com.docker.compose.config-hash%22%3Atrue%2C%22com.docker.compose.project%3Dinfra%22%3Atrue%2C%22com.docker.compose.service%3Dpostgres%22%3Atrue%7D%7D\": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+    }
+  ],
+  "verified_at_utc": "2026-03-02T15:56:25.796845Z"
+}

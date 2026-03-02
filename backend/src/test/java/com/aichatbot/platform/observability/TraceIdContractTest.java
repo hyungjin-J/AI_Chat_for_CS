@@ -71,8 +71,8 @@ class TraceIdContractTest {
 
     @Test
     void shouldGenerateTraceIdWhenHeaderMissing() throws Exception {
-        MvcResult result = mockMvc.perform(get("/health"))
-            .andExpect(status().isOk())
+        MvcResult result = mockMvc.perform(get("/v1/chat/bootstrap"))
+            .andExpect(status().isForbidden())
             .andExpect(header().exists("X-Trace-Id"))
             .andReturn();
 
@@ -86,7 +86,7 @@ class TraceIdContractTest {
 
     @Test
     void shouldReturn409WhenTraceIdFormatInvalid() throws Exception {
-        mockMvc.perform(get("/health")
+        mockMvc.perform(get("/v1/chat/bootstrap")
                 .header("X-Trace-Id", "not-a-uuid"))
             .andExpect(status().isConflict())
             .andExpect(jsonPath("$.error_code").value("SYS-004-409-TRACE"))

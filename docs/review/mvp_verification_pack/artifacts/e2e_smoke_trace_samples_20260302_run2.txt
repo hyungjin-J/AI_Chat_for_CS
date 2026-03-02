@@ -1,0 +1,30 @@
+e2e_smoke_trace_samples
+status=PASS
+generated_at_utc=2026-03-02T12:03:57.918223Z
+base_url=http://localhost:8080
+target_tenant_key=demo-tenant
+effective_auth_tenant_key=demo-tenant
+s1.kb_seed=tenant=demo-tenant,document_id=ac47b198-b482-596d-9de7-4c325bfa4be9,version_id=7f87f0d5-7428-5398-b9ed-0a434ecd567c,chunk_id=03b4ee38-dcbe-52b8-85f0-29e14507217c,approved_chunks=3
+s1.trace_id=cec43863-e878-4d94-9bf4-86d518aa602c
+s1.session_id=cf274833-42a3-4e52-b824-80a2efd6edc3
+s1.message_id=ce3f1f7d-afe6-4e25-8b68-3275476883e3
+s1.sse_event_types=heartbeat,tool,tool,citation,citation,token,token,done
+s1.db_message_trace_id=cec43863-e878-4d94-9bf4-86d518aa602c
+s1.db_rag_trace_id=cec43863-e878-4d94-9bf4-86d518aa602c
+s1.db_stream_events=tool,tool,citation,citation,token,token,done
+s2.trace_id=78ea2512-bc3c-45d1-bf6c-30ca8d70f949
+s2.resume_trace_id=e86d68c4-946a-47c3-8453-4d2d9acbed2e
+s2.last_event_id=2
+s2.resumed_event_ids=3,4,5,6,7
+s3.trace_id=2390a33b-8749-4c48-863a-e5fdd7652b1b
+s3.session_id=934dc575-2c46-47cb-8a45-ede94fcc79e1
+s3.message_id=5b4f66a6-91e8-4717-b919-478a6b4a9152
+s3.pii_patterns=email/phone/order
+s3.masked_query_preview=refund policy. contact ***@*** or ***-**** order ORDER-***
+s3.masked_excerpt_preview=[DOC] refund_and_delivery_policy | ver=1 | chunk=2/3 | source=policy | category=CS | effective=***-**** | owner=ops-team
+[SECTION] refund_and_delivery_policy
+fo
+s4.trace_id=1d2febbd-9773-450a-877e-33e9f9721696 cross_tenant=tenant-a status=403
+s5.trace_id=5080170e-1872-4ffc-a2b9-79d2244b26e3 path=/v1/admin/templates status=403
+s6.trace_id=f40b506e-ce92-4119-8ca3-88b1c7fe9832 event_types=heartbeat,tool,safe_response,error,done error_codes=AI-009-409-EVIDENCE
+runbook_on_failure=docs/ops/runbook/README.md

@@ -23,7 +23,49 @@ def load_module():
     return module
 
 
-def make_success_runner(module, *, fail_migrate: bool = False, role_count: int = 5):
+def make_success_runner(
+    module,
+    *,
+    fail_migrate: bool = False,
+    role_count: int = 5,
+    seed_mode: str = "inserted",
+    smoke_status: str = "PASS",
+):
+    seed_columns = [
+        {
+            "table_name": "tb_data_retention_policy",
+            "column_name": "table_name",
+            "data_type": "character varying",
+            "is_nullable": "NO",
+            "column_default": None,
+            "ordinal_position": 1,
+        },
+        {
+            "table_name": "tb_data_retention_policy",
+            "column_name": "retention_days",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "column_default": None,
+            "ordinal_position": 2,
+        },
+        {
+            "table_name": "tb_data_retention_policy",
+            "column_name": "enabled",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "column_default": "true",
+            "ordinal_position": 3,
+        },
+        {
+            "table_name": "tb_data_retention_policy",
+            "column_name": "updated_at",
+            "data_type": "timestamp without time zone",
+            "is_nullable": "NO",
+            "column_default": "CURRENT_TIMESTAMP",
+            "ordinal_position": 4,
+        },
+    ]
+
     def _run(command: list[str], cwd: Path | None = None):
         del cwd
         if "migrate" in command and "flyway" in command:
@@ -48,14 +90,30 @@ def make_success_runner(module, *, fail_migrate: bool = False, role_count: int =
             json_path.parent.mkdir(parents=True, exist_ok=True)
             txt_path.parent.mkdir(parents=True, exist_ok=True)
             json_path.write_text(
-                json.dumps({"status": "PASS", "violation_count": 0, "violations": []}, ensure_ascii=False) + "\n",
+                json.dumps({"status": smoke_status, "violation_count": 0, "violations": []}, ensure_ascii=False) + "\n",
                 encoding="utf-8",
             )
-            txt_path.write_text("db_smoke_test\nstatus=PASS\n", encoding="utf-8")
+            txt_path.write_text(f"db_smoke_test\nstatus={smoke_status}\n", encoding="utf-8")
             return module.CommandResult(returncode=0, stdout="db smoke pass", stderr="")
 
         if "psql" in command:
             sql = command[-1]
+            if "information_schema.columns AS c" in sql:
+                if seed_mode == "fallback":
+                    return module.CommandResult(returncode=0, stdout="[]\n", stderr="")
+                return module.CommandResult(returncode=0, stdout=json.dumps(seed_columns, ensure_ascii=False) + "\n", stderr="")
+            if "constraint_type = 'FOREIGN KEY'" in sql:
+                return module.CommandResult(returncode=0, stdout="[]\n", stderr="")
+            if sql.startswith('INSERT INTO "tb_data_retention_policy"'):
+                return module.CommandResult(returncode=0, stdout="", stderr="")
+            if 'FROM "tb_data_retention_policy"' in sql and "rehearsal_" in sql:
+                return module.CommandResult(returncode=0, stdout="1\n", stderr="")
+            if "SELECT COUNT(*) FROM flyway_schema_history;" in sql:
+                return module.CommandResult(returncode=0, stdout="11\n", stderr="")
+            if "extname = 'vector'" in sql:
+                return module.CommandResult(returncode=0, stdout="1\n", stderr="")
+            if "FROM information_schema.tables" in sql and "table_name IN (" in sql:
+                return module.CommandResult(returncode=0, stdout="5\n", stderr="")
             if "tenant_key = 'demo-tenant'" in sql:
                 return module.CommandResult(returncode=0, stdout="1\n", stderr="")
             if "COUNT(DISTINCT role_code)" in sql:
@@ -64,7 +122,7 @@ def make_success_runner(module, *, fail_migrate: bool = False, role_count: int =
                 return module.CommandResult(returncode=0, stdout="3\n", stderr="")
             if "FROM tb_kb_chunk_embedding" in sql:
                 return module.CommandResult(returncode=0, stdout="2\n", stderr="")
-            if "flyway_schema_history" in sql:
+            if "flyway_schema_history WHERE success = false" in sql:
                 return module.CommandResult(returncode=0, stdout="0\n", stderr="")
             if "pg_indexes" in sql:
                 return module.CommandResult(returncode=0, stdout="1\n", stderr="")
@@ -127,6 +185,26 @@ class DbBackupRestoreRehearsalTest(unittest.TestCase):
         payload = result["payload"]
         self.assertEqual(payload["status"], "PASS")
         self.assertEqual(payload["violation_count"], 0)
+        self.assertEqual(payload["rto_minutes"], 60)
+        self.assertEqual(payload["rpo_hours"], 24)
+        self.assertEqual(payload["seed_strategy"], "inserted")
+        self.assertEqual(payload["seed_table"], "tb_data_retention_policy")
+        self.assertEqual(payload["seed_inserted_row_count"], 1)
+        self.assertTrue(payload["dump_size_bytes"] > 0)
+        self.assertTrue(payload["dump_created_at_utc"].endswith("Z"))
+        self.assertIn("rto_minutes=60", result["txt_content"])
+        self.assertIn("rpo_hours=24", result["txt_content"])
+
+    def test_fallback_seed_strategy_when_no_safe_target(self) -> None:
+        result = self.run_main_with_runner(make_success_runner(self.module, seed_mode="fallback"))
+        self.assertEqual(result["exit_code"], 0)
+        payload = result["payload"]
+        self.assertEqual(payload["status"], "PASS")
+        self.assertEqual(payload["seed_strategy"], "fallback")
+        self.assertIsNone(payload["seed_table"])
+        self.assertEqual(payload["seed_inserted_row_count"], 0)
+        self.assertIn("no safe insert target", payload["fallback_reason"])
+        self.assertEqual(payload["checks"]["safe_seed_fallback"]["status"], "PASS")
 
     def test_fail_when_flyway_migrate_fails(self) -> None:
         result = self.run_main_with_runner(make_success_runner(self.module, fail_migrate=True))
@@ -145,6 +223,14 @@ class DbBackupRestoreRehearsalTest(unittest.TestCase):
         self.assertTrue(any(v["code"] == "CORE_QUERY_FAILED" for v in payload["violations"]))
         self.assertEqual(payload["checks"]["role_taxonomy_exists"]["status"], "FAIL")
 
+    def test_fail_when_smoke_reports_non_pass(self) -> None:
+        result = self.run_main_with_runner(make_success_runner(self.module, smoke_status="FAIL"))
+        self.assertNotEqual(result["exit_code"], 0)
+        payload = result["payload"]
+        self.assertEqual(payload["status"], "FAIL")
+        self.assertTrue(any(v["code"] == "DB_SMOKE_FAILED" for v in payload["violations"]))
+        self.assertEqual(payload["checks"]["db_smoke_after_restore_exec"]["status"], "PASS")
+
     def test_default_output_filename_rule(self) -> None:
         result = self.run_main_with_runner(make_success_runner(self.module))
         self.assertEqual(result["exit_code"], 0)
@@ -157,6 +243,34 @@ class DbBackupRestoreRehearsalTest(unittest.TestCase):
         payload = result["payload"]
         dump_path = Path(payload["dump_path"])
         self.assertFalse(dump_path.exists())
+
+    def test_command_and_text_masking(self) -> None:
+        masked_command = self.module.command_str(
+            [
+                "docker",
+                "compose",
+                "exec",
+                "-e",
+                "PGPASSWORD=super-secret",
+                "postgres",
+                "psql",
+                "--password",
+                "abcd",
+                "--db-password",
+                "efgh",
+            ]
+        )
+        self.assertNotIn("super-secret", masked_command)
+        self.assertNotIn("abcd", masked_command)
+        self.assertNotIn("efgh", masked_command)
+        self.assertIn("***REDACTED***", masked_command)
+
+        masked_text = self.module.mask_sensitive_text(
+            "PGPASSWORD=super-secret token=my-token --password abc"
+        )
+        self.assertNotIn("super-secret", masked_text)
+        self.assertNotIn("my-token", masked_text)
+        self.assertNotIn(" abc", masked_text)
 
 
 if __name__ == "__main__":

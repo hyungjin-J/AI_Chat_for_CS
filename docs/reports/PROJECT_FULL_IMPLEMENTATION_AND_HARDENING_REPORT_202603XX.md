@@ -223,3 +223,27 @@ PR-B (Runbook/Audit verifier):
 - baseline 대비 추가 변경 파일 목록: `docs/review/mvp_verification_pack/artifacts/golive_dirty_delta.txt`
 - 추적 방식: `golive_git_status_start.txt` 대비 현재 변경 파일셋 비교.
 - Phase2.1 세션 변경 파일 목록: `docs/review/mvp_verification_pack/artifacts/phase2_1_dirty_delta_202603XX.txt`
+
+## Z. Residual Risk Update (2026-03-02)
+
+This section supersedes prior residual risk notes for Go-Live decision review.
+
+### Residual Risks (current)
+
+1. Audit chain verifier gate is PASS after rerun in a healthy Docker/DB environment.
+- Evidence: [golive_audit_chain_verify_20260302.txt](../review/mvp_verification_pack/artifacts/golive_audit_chain_verify_20260302.txt)
+- Evidence: [golive_audit_chain_verify_20260302.json](../review/mvp_verification_pack/artifacts/golive_audit_chain_verify_20260302.json)
+- Aggregated status: [golive_ci_gate_status_20260302.txt](../review/mvp_verification_pack/artifacts/golive_ci_gate_status_20260302.txt)
+
+2. Previous Go/No-Go blocker from audit verifier is resolved.
+- Operational runbook: [audit_chain_integrity_incident.md](../ops/runbook/playbooks/audit_chain_integrity_incident.md)
+- Decision summary: [STATUS_ONEPAGER.md](../review/mvp_verification_pack/STATUS_ONEPAGER.md)
+
+### Gates already satisfied in latest evidence set
+
+- Backend tests PASS: [golive_backend_test_20260302.txt](../review/mvp_verification_pack/artifacts/golive_backend_test_20260302.txt)
+- Frontend tests PASS: [golive_frontend_test_20260302.txt](../review/mvp_verification_pack/artifacts/golive_frontend_test_20260302.txt)
+- Frontend build PASS: [golive_frontend_build_20260302.txt](../review/mvp_verification_pack/artifacts/golive_frontend_build_20260302.txt)
+- Spec consistency PASS: [golive_spec_consistency_20260302.txt](../review/mvp_verification_pack/artifacts/golive_spec_consistency_20260302.txt)
+- Node SSOT check/fail-fast proof: [golive_node_versions_20260302.txt](../review/mvp_verification_pack/artifacts/golive_node_versions_20260302.txt)
+- Notion manual exception gate PASS: [golive_notion_manual_gate_20260302.txt](../review/mvp_verification_pack/artifacts/golive_notion_manual_gate_20260302.txt)
